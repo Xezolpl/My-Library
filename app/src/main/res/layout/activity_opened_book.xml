@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.OpenedBookActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relLay1">
+
+        <ImageView
+            android:id="@+id/bookImage"
+            android:layout_width="160dp"
+            android:layout_height="220dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="80dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="105dp"
+            android:layout_marginRight="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/titleText"
+                android:text="Title placeholder"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/authorText"
+                android:layout_below="@+id/titleText"
+                android:text="Author placeholder"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/pagesText"
+                android:layout_below="@+id/authorText"
+                android:text="Pages:"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/relLay2"
+        android:layout_below="@+id/relLay1">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="10dp">
+            <me.biubiubiu.justifytext.library.JustifyTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/descriptionText"
+                android:text="Lorem ipsum dolor sit amet, consLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae tortor diam. Sed id lorem ut odio vulputate mollis sed sed libero. Morbi in erat ac tellus sagittis facilisis. Nullam non interdum enim, vel ultrices sem. Maecenas laoreet massa et mi dapibus, sed interdum dolor cursus. Curabitur id placerat diam. In bibendum ipsum nec quam eleifend aliquet. Quisque leo felis, tempus eu urna ut, tempor sollicitudin lectus. Fusce in augue leo.Suspendisse imperdiet porta sem a porta. Pellentesque ullamcorper venenatis felis sed ornare. Cras ut orci eu dui accumsan suscipit vel ac purus. Nullam metus augue, condimentum non turpis in, rhoncus suscipit lacus. Duis mauris mi, mollis efficitur purus rutrum, ultricies egestas lorem. Phasellus rutrum ipsum eget mi vehicula aliquet. Vestibulum scelerisque erat sed est feugiat, vitae tempus augue mattis. Integer tempor, ligula vitae commodo aliquam, massa neque iaculis elit, vitae suscipit orci velit at lectus. Vivamus varius volutpat malesuada. Aenean ut iaculis magna, vitae pharetra quam. Sed ligula massa, feugiat ac maximus eget, sagittis et arcu. Sed volutpat consequat augue ut sollicitudin. Donec ac dui nisi. Sed vel lacus ut quam vestibulum malesuada. Proin mollis velit at sollicitudin molestie.ectetur adipiscing elit. Aenean vitae tortor diam. Sed id lorem ut odio vulputate mollis sed sed libero. Morbi in erat ac tellus sagittis facilisis. Nullam non interdum enim, vel ultrices sem. Maecenas laoreet massa et mi dapibus, sed interdum dolor cursus. Curabitur id placerat diam. In bibendum ipsum nec quam eleifend aliquet. Quisque leo felis, tempus eu urna ut, tempor sollicitudin lectus. Fusce in augue leo.Suspendisse imperdiet porta sem a porta. Pellentesque ullamcorper venenatis felis sed ornare. Cras ut orci eu dui accumsan suscipit vel ac purus. Nullam metus augue, condimentum non turpis in, rhoncus suscipit lacus. Duis mauris mi, mollis efficitur purus rutrum, ultricies egestas lorem. Phasellus rutrum ipsum eget mi vehicula aliquet. Vestibulum scelerisque erat sed est feugiat, vitae tempus augue mattis. Integer tempor, ligula vitae commodo aliquam, massa neque iaculis elit, vitae suscipit orci velit at lectus. Vivamus varius volutpat malesuada. Aenean ut iaculis magna, vitae pharetra quam. Sed ligula massa, feugiat ac maximus eget, sagittis et arcu. Sed volutpat consequat augue ut sollicitudin. Donec ac dui nisi. Sed vel lacus ut quam vestibulum malesuada. Proin mollis velit at sollicitudin molestie."
+                android:layout_margin="10dp" />
+        </ScrollView>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relLay2"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="5dp">
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:id="@+id/toReadBtn"
+            android:text="Want to read"
+            android:textSize="13sp"
+            android:layout_marginLeft="11dp"/>
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:id="@+id/currReadingBtn"
+            android:layout_toRightOf="@+id/toReadBtn"
+            android:text="Currently reading"
+            android:textSize="13sp"
+            android:layout_marginLeft="11dp"/>
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:id="@+id/alreadyReadBtn"
+            android:layout_toRightOf="@+id/currReadingBtn"
+            android:text="Already read"
+            android:textSize="13sp"
+            android:layout_marginLeft="11dp"/>
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/favouriteBtn"
+            android:layout_toRightOf="@+id/alreadyReadBtn"
+            android:background="@mipmap/favourite_star"
+            android:layout_marginLeft="11dp"/>
+
+    </RelativeLayout>
+</RelativeLayout>
