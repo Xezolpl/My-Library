@@ -29,6 +29,7 @@ public class BooksTabFragment extends Fragment {
         super();
         this.status = status;
         this.context = context;
+        adapter = new BooksRecViewAdapter(context);
 
     }
 
@@ -39,7 +40,6 @@ public class BooksTabFragment extends Fragment {
 
         //display books
         booksRecView = (RecyclerView) view.findViewById(R.id.booksRecView);
-        adapter = new BooksRecViewAdapter(context);
         booksRecView.setAdapter(adapter);
         booksRecView.setLayoutManager(new GridLayoutManager(context, 2));
 
