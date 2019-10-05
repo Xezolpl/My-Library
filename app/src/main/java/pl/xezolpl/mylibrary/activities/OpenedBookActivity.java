@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,13 +24,16 @@ import pl.xezolpl.mylibrary.utlis.MyUtil;
 
 public class OpenedBookActivity extends AppCompatActivity {
     private static final String TAG = "OpenedBookActivity";
-    private TextView titleText, descriptionText, pagesText, authorText;
-    private ImageView bookImage;
-    private Button toReadBtn, currReadingBtn, alreadyReadBtn, favouriteBtn;
-    private ActionBar actionBar;
+
+    private TextView bookTitle_text, bookDescription_text, bookPages_text, bookAuthor_text;
+    private ImageView book_image;
+    private Button setToRead_btn, setCurrReading_btn, setAlreadyRead_btn, setFavourite_btn;
+
     private BookModel thisBook=null;
     private int id;
     private ArrayList<BookModel> books;
+
+    AllBooksActivity allBooksActivity;
 
     private Context getContext() {
         return this;
@@ -50,16 +52,17 @@ public class OpenedBookActivity extends AppCompatActivity {
     }
 
     private void initWidgets() {
-        titleText = (TextView) findViewById(R.id.titleText);
-        authorText = (TextView) findViewById(R.id.authorText);
-        pagesText = (TextView) findViewById(R.id.pagesText);
-        descriptionText = (TextView) findViewById(R.id.descriptionText);
-        bookImage = (ImageView) findViewById(R.id.bookImage);
+        bookTitle_text = (TextView) findViewById(R.id.bookTitle_text);
+        bookAuthor_text = (TextView) findViewById(R.id.bookAuthor_text);
+        bookPages_text = (TextView) findViewById(R.id.bookPages_text);
+        bookDescription_text = (TextView) findViewById(R.id.bookDescription_text);
 
-        toReadBtn = (Button) findViewById(R.id.toReadBtn);
-        currReadingBtn = (Button) findViewById(R.id.currReadingBtn);
-        alreadyReadBtn = (Button) findViewById(R.id.alreadyReadBtn);
-        favouriteBtn = (Button) findViewById(R.id.favouriteBtn);
+        book_image = (ImageView) findViewById(R.id.book_image);
+
+        setToRead_btn = (Button) findViewById(R.id.setToRead_btn);
+        setCurrReading_btn = (Button) findViewById(R.id.setCurrReading_btn);
+        setAlreadyRead_btn = (Button) findViewById(R.id.setAlreadyRead_btn);
+        setFavourite_btn = (Button) findViewById(R.id.setFavourite_btn);
 
     }
     private void loadBookData(){
@@ -68,16 +71,15 @@ public class OpenedBookActivity extends AppCompatActivity {
         for (BookModel b : books) {
             if (b.getId() == id) {
                 thisBook = b;
-                titleText.setText(b.getTitle());
-                authorText.setText(b.getAuthor());
-                pagesText.setText("Pages: " + b.getPages());
-                descriptionText.setText(b.getDescription());
-                Glide.with(this).asBitmap().load(b.getImageUrl()).into(bookImage);
+                bookTitle_text.setText(b.getTitle());
+                bookAuthor_text.setText(b.getAuthor());
+                bookPages_text.setText("Pages: " + b.getPages());
+                bookDescription_text.setText(b.getDescription());
+                Glide.with(this).asBitmap().load(b.getImageUrl()).into(book_image);
             }
         }
     }
     private void createOnClickListeners(){
-        //AlertDialog building...
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Status change");
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -86,7 +88,7 @@ public class OpenedBookActivity extends AppCompatActivity {
 
             }
         });
-        toReadBtn.setOnClickListener(new View.OnClickListener() {
+        setToRead_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(thisBook.getStatus()== Status.WANT_TO_READ){
@@ -104,9 +106,10 @@ public class OpenedBookActivity extends AppCompatActivity {
                     thisBook.setStatus(Status.WANT_TO_READ);
                 }
                 Toast.makeText(getContext(),"Successfully changed the book status.",Toast.LENGTH_SHORT).show();
+
             }
         });
-        currReadingBtn.setOnClickListener(new View.OnClickListener() {
+        setCurrReading_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(thisBook.getStatus()== Status.CURRENTLY_READING){
@@ -126,7 +129,7 @@ public class OpenedBookActivity extends AppCompatActivity {
                 Toast.makeText(getContext(),"Successfully changed the book status.",Toast.LENGTH_SHORT).show();
             }
         });
-        alreadyReadBtn.setOnClickListener(new View.OnClickListener() {
+        setAlreadyRead_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(thisBook.getStatus()== Status.ALREADY_READ){
@@ -144,9 +147,10 @@ public class OpenedBookActivity extends AppCompatActivity {
                     thisBook.setStatus(Status.ALREADY_READ);
                 }
                 Toast.makeText(getContext(),"Successfully changed the book status.",Toast.LENGTH_SHORT).show();
+
             }
         });
-        favouriteBtn.setOnClickListener(new View.OnClickListener() {
+        setFavourite_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (thisBook.isFavourite()) thisBook.setFavourite(false);

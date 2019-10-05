@@ -123,8 +123,4 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
             relLay = (RelativeLayout) itemView.findViewById(R.id.relLay);
         }
     }
-
-    public ArrayList<BookModel> getBooks() {
-        return books;
-    }
 }

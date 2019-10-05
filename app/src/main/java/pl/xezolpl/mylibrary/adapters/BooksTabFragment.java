@@ -25,6 +25,7 @@ public class BooksTabFragment extends Fragment {
     private Status status;
     private BooksRecViewAdapter adapter;
 
+
     public BooksTabFragment(Context context, Status status) {
         super();
         this.status = status;

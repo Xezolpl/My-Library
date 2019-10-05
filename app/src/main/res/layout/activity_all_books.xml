@@ -14,24 +14,17 @@
                 <androidx.appcompat.widget.Toolbar
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/toolBar">
+                    android:id="@+id/books_toolBar">
                 </androidx.appcompat.widget.Toolbar>
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/search_filter_textEdt"
-                    android:visibility="invisible"
-                    android:hint="Here type what you need ;)"
-                    />
                 <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabLayout"
+                    android:id="@+id/books_tabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?attr/colorPrimary" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.viewpager.widget.ViewPager
-            android:id="@+id/view_pager"
+            android:id="@+id/books_viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">

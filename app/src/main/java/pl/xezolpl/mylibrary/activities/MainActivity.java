@@ -11,7 +11,7 @@ import pl.xezolpl.mylibrary.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button allBooksBtn, currReadingBtn, toReadBtn, alreadyReadBtn, aboutBtn;
+    private Button open_all_books_btn, about_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createOnClickListeners() {
-        allBooksBtn.setOnClickListener(new View.OnClickListener() {
+        open_all_books_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AllBooksActivity.class);
@@ -32,10 +32,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
         private void initWidgets () {
-            allBooksBtn = (Button) findViewById(R.id.allBooksBtn);
-            currReadingBtn = (Button) findViewById(R.id.currReadingBtn);
-            toReadBtn = (Button) findViewById(R.id.toReadBtn);
-            alreadyReadBtn = (Button) findViewById(R.id.alreadyReadBtn);
-            aboutBtn = (Button) findViewById(R.id.aboutBtn);
+            open_all_books_btn = (Button) findViewById(R.id.open_all_books_btn);
+            about_btn = (Button) findViewById(R.id.about_btn);
         }
     }
