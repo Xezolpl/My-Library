@@ -31,7 +31,7 @@ public class AllBooksActivity extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_all_books);
-            initWidgets();
+            initWidgets();//
             setUpViewPager(books_viewPager);
             books_tabLayout.setupWithViewPager(books_viewPager);
 
