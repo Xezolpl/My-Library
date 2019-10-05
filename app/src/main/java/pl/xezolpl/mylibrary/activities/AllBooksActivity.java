@@ -17,7 +17,6 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.BooksRecViewAdapter;
 import pl.xezolpl.mylibrary.adapters.BooksTabFragment;
 import pl.xezolpl.mylibrary.adapters.SectionsPagerAdapter;
-import pl.xezolpl.mylibrary.models.Status;
 
 public class AllBooksActivity extends AppCompatActivity {
 
@@ -27,16 +26,12 @@ public class AllBooksActivity extends AppCompatActivity {
 
         private SectionsPagerAdapter sectionsPagerAdapter;
         private BooksRecViewAdapter recViewAdapter;
-        private BooksTabFragment allBooksFragment, wantToReadBooksFragment,
-                currReadingBooksFragment, alreadyReadBooksFragment;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_all_books);
             initWidgets();
-            initTabFragments();
-            initVariables();
             setUpViewPager(books_viewPager);
             books_tabLayout.setupWithViewPager(books_viewPager);
 
@@ -74,24 +69,12 @@ public class AllBooksActivity extends AppCompatActivity {
             }
         }
 
-        private void initTabFragments() {
-            allBooksFragment = new BooksTabFragment(this, Status.NEUTRAL);
-            wantToReadBooksFragment = new BooksTabFragment(this, Status.WANT_TO_READ);
-            currReadingBooksFragment = new BooksTabFragment(this, Status.CURRENTLY_READING);
-            alreadyReadBooksFragment = new BooksTabFragment(this, Status.ALREADY_READ);
-        }
-
-        private void initVariables() {
-            sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-            recViewAdapter = allBooksFragment.getAdapter();
-        }
-
         private void setUpViewPager(ViewPager viewPager) {
-            sectionsPagerAdapter.addFragment(allBooksFragment, "All books");
-            sectionsPagerAdapter.addFragment(wantToReadBooksFragment, "Want to read books");
-            sectionsPagerAdapter.addFragment(currReadingBooksFragment, "Currently reading books");
-            sectionsPagerAdapter.addFragment(alreadyReadBooksFragment, "Already read books");
+            sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),this);
             viewPager.setAdapter(sectionsPagerAdapter);
+
+            recViewAdapter = ((BooksTabFragment)sectionsPagerAdapter.getItem(0)).getAdapter();
+
             books_viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -99,24 +82,7 @@ public class AllBooksActivity extends AppCompatActivity {
 
                 @Override
                 public void onPageSelected(int position) {
-                    switch (books_viewPager.getCurrentItem()) {
-                        case 0: {
-                            recViewAdapter = allBooksFragment.getAdapter();
-                            break;
-                        }
-                        case 1: {
-                            recViewAdapter = wantToReadBooksFragment.getAdapter();
-                            break;
-                        }
-                        case 2: {
-                            recViewAdapter = currReadingBooksFragment.getAdapter();
-                            break;
-                        }
-                        case 3: {
-                            recViewAdapter = alreadyReadBooksFragment.getAdapter();
-                            break;
-                        }
-                    }
+                    recViewAdapter = ((BooksTabFragment)sectionsPagerAdapter.getItem(position)).getAdapter();
                 }
 
                 @Override
