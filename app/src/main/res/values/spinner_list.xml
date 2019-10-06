@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_array">
+        <item>All books</item>
+        <item>Want to read books</item>
+        <item>Currently reading books</item>
+        <item>Already read books</item>
+    </string-array>
+</resources>
