@@ -10,35 +10,56 @@ import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.List;
+
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.ViewModels.BookViewModel;
 import pl.xezolpl.mylibrary.adapters.BooksRecViewAdapter;
-import pl.xezolpl.mylibrary.adapters.BooksTabFragment;
+import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
 import pl.xezolpl.mylibrary.adapters.SectionsPagerAdapter;
 import pl.xezolpl.mylibrary.dialogs.AddBookDialog;
+import pl.xezolpl.mylibrary.models.Book;
 
 public class AllBooksActivity extends AppCompatActivity {
 
     private androidx.appcompat.widget.Toolbar books_toolBar;
+    private FloatingActionButton fab;
+
     private ViewPager books_viewPager;
     private TabLayout books_tabLayout;
-    private FloatingActionButton fab;
+
     private SectionsPagerAdapter sectionsPagerAdapter;
     private BooksRecViewAdapter recViewAdapter;
+
+    private BookViewModel bookViewModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_books);
+
         initWidgets();
         setUpViewPager(books_viewPager);
         setOnClickListeners();
         books_tabLayout.setupWithViewPager(books_viewPager);
+
+        bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
+
+        bookViewModel.getAllBooks().observe(this, new Observer<List<Book>>() {
+            @Override
+            public void onChanged(List<Book> books) {
+                recViewAdapter.setBooks(books);
+            }
+        });
+
 
     }
 

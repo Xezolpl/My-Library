@@ -22,17 +22,18 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
-import pl.xezolpl.mylibrary.models.BookModel;
+import pl.xezolpl.mylibrary.models.Book;
 
 public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapter.ViewHolder> implements Filterable {
     //variables
     private static final String TAG = "BooksRecViewAdapter";
     private Context context;
-    private ArrayList<BookModel> books = new ArrayList<>();
-    private ArrayList<BookModel> booksFull;
+    private List<Book> books = new ArrayList<>();
+    private List<Book> booksFull;
+    private LayoutInflater inflater;
 
     //methods
-    public void setBooks(ArrayList<BookModel> books) {
+    public void setBooks(List<Book> books) {
         this.books = books;
         booksFull = new ArrayList<>(this.books);//copy of the list
         notifyDataSetChanged();
@@ -40,6 +41,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
 
     public BooksRecViewAdapter(Context context) {
         this.context = context;
+        this.inflater = LayoutInflater.from(context);
     }
 
 
@@ -47,27 +49,26 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.listitem_book_rec_view, parent, false);
-        return new ViewHolder(view);// there may be needed to make support
-        // variable as ViewHolder holder = new ViewHolder(view) and then return it but I am not sure
+        View view = inflater.inflate(R.layout.listitem_book_rec_view, parent, false);
+        return new ViewHolder(view);//
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called");
-        holder.bookTitle.setText(books.get(position).getTitle());
+
+        holder.setData(books.get(position).getTitle(), books.get(position).getImageUrl());
+
         holder.relLay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, OpenedBookActivity.class);
                 intent.putExtra("bookId", books.get(position).getId());
-                Log.d(TAG, String.valueOf(books.get(position).getId()));
+                Log.d(TAG, "Book's id: " + books.get(position).getId());
                 context.startActivity(intent);
             }
         });
-        Glide.with(context).asBitmap().load(books.get(position).getImageUrl()).into(holder.bookImage);
-        // photo as url transformed to bitmap into ImageView bookImage
+
 
     }
 
@@ -84,14 +85,13 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
     Filter booksFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
-            List<BookModel> filteredList = new ArrayList<>();
+            List<Book> filteredList = new ArrayList<>();
             if (charSequence == null || charSequence.length() == 0) {
                 filteredList.addAll(booksFull);
-            }
-            else{
-                String filteredPatern = charSequence.toString().toLowerCase().trim();
-                for (BookModel b : booksFull){
-                    if(b.getTitle().toLowerCase().contains(filteredPatern)){
+            } else {
+                String filteredPattern = charSequence.toString().toLowerCase().trim();
+                for (Book b : booksFull) {
+                    if (b.getTitle().toLowerCase().contains(filteredPattern)) {
                         filteredList.add(b);
                     }
 
@@ -104,9 +104,9 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-        books.clear();
-        books.addAll((List)filterResults.values);
-        notifyDataSetChanged();
+            books.clear();
+            books.addAll((List) filterResults.values);
+            notifyDataSetChanged();
         }
     };
 
@@ -121,6 +121,10 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
             bookImage = (ImageView) itemView.findViewById(R.id.bookImage);
             bookTitle = (TextView) itemView.findViewById(R.id.bookTitle);
             relLay = (RelativeLayout) itemView.findViewById(R.id.relLay);
+        }
+        void setData(String title, String imgUrl){
+            bookTitle.setText(title);
+            Glide.with(context).asBitmap().load(imgUrl).into(bookImage);
         }
     }
 }

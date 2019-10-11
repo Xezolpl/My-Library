@@ -1,4 +1,4 @@
-package pl.xezolpl.mylibrary.adapters;
+package pl.xezolpl.mylibrary.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,22 +12,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.models.BookModel;
-import pl.xezolpl.mylibrary.models.Status;
-import pl.xezolpl.mylibrary.utlis.MyUtil;
+import pl.xezolpl.mylibrary.ViewModels.BookViewModel;
+import pl.xezolpl.mylibrary.adapters.BooksRecViewAdapter;
+import pl.xezolpl.mylibrary.models.Book;
 
 public class BooksTabFragment extends Fragment {
+
     private Context context;
     private RecyclerView booksRecView;
-    private Status status;
+    private int tabBooksStatus;
     private BooksRecViewAdapter adapter;
+    private BookViewModel bookViewModel;
 
-    public BooksTabFragment(Context context, Status status) {
+    public BooksTabFragment(Context context, int tabBooksStatus) {
         super();
-        this.status = status;
+        this.tabBooksStatus = tabBooksStatus;
         this.context = context;
         adapter = new BooksRecViewAdapter(context);
 
@@ -44,28 +46,11 @@ public class BooksTabFragment extends Fragment {
         booksRecView.setLayoutManager(new GridLayoutManager(context, 2));
 
         //fill lists with books
-        MyUtil myUtil = new MyUtil();
-        ArrayList<BookModel> books;
+        List<Book> books;
 
-        switch (status) {
-            case NEUTRAL: {
-                books = myUtil.getAllBooks();
-                break;
-            }
-            case WANT_TO_READ: {
-                books = myUtil.getWantToReadBooks();
-                break;
-            }
-            case CURRENTLY_READING: {
-                books = myUtil.getCurrentlyReadingBooks();
-                break;
-            }
-            case ALREADY_READ: {
-                books = myUtil.getAlreadyReadBooks();
-                break;
-            }
+        switch (tabBooksStatus) {
             default:
-                books = myUtil.getAllBooks();
+                books = bookViewModel.getAllBooks().getValue();
                 break;
         }
         adapter.setBooks(books);

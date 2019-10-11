@@ -12,15 +12,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.models.BookModel;
-import pl.xezolpl.mylibrary.models.Status;
-import pl.xezolpl.mylibrary.utlis.MyUtil;
+import pl.xezolpl.mylibrary.ViewModels.BookViewModel;
+import pl.xezolpl.mylibrary.models.Book;
 
 public class OpenedBookActivity extends AppCompatActivity {
     private static final String TAG = "OpenedBookActivity";
@@ -29,10 +29,10 @@ public class OpenedBookActivity extends AppCompatActivity {
     private ImageView book_image;
     private Button setToRead_btn, setCurrReading_btn, setAlreadyRead_btn, setFavourite_btn;
 
-    private BookModel thisBook=null;
-    private int id;
-    private ArrayList<BookModel> books;
-
+    private Book thisBook=null;
+    private String id;
+    private List<Book> books;
+    private BookViewModel bookViewModel;
     AllBooksActivity allBooksActivity;
 
     private Context getContext() {
@@ -44,10 +44,16 @@ public class OpenedBookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opened_book);
         Intent intent = getIntent();
-        id = intent.getIntExtra("bookId", 0);
+        id = intent.getStringExtra("bookId");
         initWidgets();
         loadBookData();
         createOnClickListeners();
+        bookViewModel.getAllBooks().observe(this, new Observer<List<Book>>() {
+            @Override
+            public void onChanged(List<Book> booksList) {
+                books = booksList;
+            }
+        });
 
     }
 
@@ -66,10 +72,8 @@ public class OpenedBookActivity extends AppCompatActivity {
 
     }
     private void loadBookData(){
-        MyUtil myUtil = new MyUtil();
-        books = myUtil.getAllBooks();
-        for (BookModel b : books) {
-            if (b.getId() == id) {
+        for (Book b : books) {
+            if (b.getId().equals(id)) {
                 thisBook = b;
                 bookTitle_text.setText(b.getTitle());
                 bookAuthor_text.setText(b.getAuthor());
@@ -91,19 +95,19 @@ public class OpenedBookActivity extends AppCompatActivity {
         setToRead_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(thisBook.getStatus()== Status.WANT_TO_READ){
+                if(thisBook.getStatus()== Book.STATUS_WANT_TO_READ){
                     builder.setMessage("This book is currently in to read list. Do you want to " +
                             "remove it from the list?");
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            thisBook.setStatus(Status.NEUTRAL);
+                            thisBook.setStatus(Book.STATUS_NEUTRAL);
                         }
                     });
                     builder.create().show();
                 }
                 else{
-                    thisBook.setStatus(Status.WANT_TO_READ);
+                    thisBook.setStatus(Book.STATUS_WANT_TO_READ);
                 }
                 Toast.makeText(getContext(),"Successfully changed the book status.",Toast.LENGTH_SHORT).show();
 
@@ -112,19 +116,19 @@ public class OpenedBookActivity extends AppCompatActivity {
         setCurrReading_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(thisBook.getStatus()== Status.CURRENTLY_READING){
+                if(thisBook.getStatus()== Book.STATUS_CURRENTLY_READING){
                     builder.setMessage("Your are currently reading this book. Do you want to " +
                             "remove it from the currently reading list?");
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            thisBook.setStatus(Status.NEUTRAL);
+                            thisBook.setStatus(Book.STATUS_NEUTRAL);
                         }
                     });
                     builder.create().show();
                 }
                 else {
-                    thisBook.setStatus(Status.CURRENTLY_READING);
+                    thisBook.setStatus(Book.STATUS_CURRENTLY_READING);
                 }
                 Toast.makeText(getContext(),"Successfully changed the book status.",Toast.LENGTH_SHORT).show();
             }
@@ -132,19 +136,19 @@ public class OpenedBookActivity extends AppCompatActivity {
         setAlreadyRead_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(thisBook.getStatus()== Status.ALREADY_READ){
+                if(thisBook.getStatus()== Book.STATUS_ALREADY_READ){
                     builder.setMessage("You have already read this book. Do you want to " +
                             "remove it from the already read list?");
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            thisBook.setStatus(Status.NEUTRAL);
+                            thisBook.setStatus(Book.STATUS_NEUTRAL);
                         }
                     });
                     builder.create().show();
                 }
                 else {
-                    thisBook.setStatus(Status.ALREADY_READ);
+                    thisBook.setStatus(Book.STATUS_ALREADY_READ);
                 }
                 Toast.makeText(getContext(),"Successfully changed the book status.",Toast.LENGTH_SHORT).show();
 

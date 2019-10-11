@@ -10,7 +10,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.xezolpl.mylibrary.models.Status;
+import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
+import pl.xezolpl.mylibrary.models.Book;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -19,10 +20,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     public SectionsPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
-        addFragment(new BooksTabFragment(context, Status.NEUTRAL),"All books");
-        addFragment(new BooksTabFragment(context, Status.WANT_TO_READ),"Want to read books");
-        addFragment(new BooksTabFragment(context, Status.CURRENTLY_READING),"Currently reading books");
-        addFragment(new BooksTabFragment(context, Status.ALREADY_READ),"Already read books");
+        addFragment(new BooksTabFragment(context, Book.STATUS_NEUTRAL),"All books");
+        addFragment(new BooksTabFragment(context, Book.STATUS_WANT_TO_READ),"Want to read books");
+        addFragment(new BooksTabFragment(context, Book.STATUS_CURRENTLY_READING),"Currently reading books");
+        addFragment(new BooksTabFragment(context, Book.STATUS_ALREADY_READ),"Already read books");
     }
 
     public void addFragment(Fragment fragment, String title){
