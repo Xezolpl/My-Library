@@ -30,6 +30,7 @@ public class BooksTabFragment extends Fragment {
     private BooksRecViewAdapter booksRecViewAdapter;
 
     private BookViewModel bookViewModel;
+    private List<Book> booksList;
 
     public BooksTabFragment(Context context, int tabBooksStatus) {
         super();
@@ -49,6 +50,7 @@ public class BooksTabFragment extends Fragment {
             @Override
             public void onChanged(List<Book> books) {
                 booksRecViewAdapter.setBooks(books);
+                booksList = books;
             }
         });
     }
@@ -68,4 +70,6 @@ public class BooksTabFragment extends Fragment {
     public void setFilter(String filter){
         booksRecViewAdapter.getFilter().filter(filter);
     }
+
+    public List<Book> getBooksList(){return booksList;}
 }
