@@ -10,22 +10,15 @@ import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.List;
-
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.ViewModels.BookViewModel;
-import pl.xezolpl.mylibrary.adapters.BooksRecViewAdapter;
-import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
 import pl.xezolpl.mylibrary.adapters.SectionsPagerAdapter;
 import pl.xezolpl.mylibrary.dialogs.AddBookDialog;
-import pl.xezolpl.mylibrary.models.Book;
+import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
 
 public class AllBooksActivity extends AppCompatActivity {
 
@@ -36,10 +29,6 @@ public class AllBooksActivity extends AppCompatActivity {
     private TabLayout books_tabLayout;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private BooksRecViewAdapter recViewAdapter;
-
-    private BookViewModel bookViewModel;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,16 +39,6 @@ public class AllBooksActivity extends AppCompatActivity {
         setUpViewPager(books_viewPager);
         setOnClickListeners();
         books_tabLayout.setupWithViewPager(books_viewPager);
-
-        bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
-
-        bookViewModel.getAllBooks().observe(this, new Observer<List<Book>>() {
-            @Override
-            public void onChanged(List<Book> books) {
-                recViewAdapter.setBooks(books);
-            }
-        });
-
 
     }
 
@@ -79,12 +58,15 @@ public class AllBooksActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                recViewAdapter.getFilter().filter(s);
+                BooksTabFragment tabFragment = (BooksTabFragment)sectionsPagerAdapter
+                        .getItem(books_viewPager.getCurrentItem());
+                tabFragment.setFilter(s);
                 return false;
             }
         });
         return true;
     }
+
 
     private void initWidgets() {
         books_viewPager =  (ViewPager) findViewById(R.id.books_viewPager);
@@ -100,24 +82,8 @@ public class AllBooksActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: AddBookDialog as a custom class
                 AddBookDialog addBookDialog = new AddBookDialog();
                 addBookDialog.show(getSupportFragmentManager(),"This");
-            }
-        });
-
-        books_viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                recViewAdapter = ((BooksTabFragment) sectionsPagerAdapter.getItem(position)).getAdapter();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
             }
         });
     }
@@ -126,6 +92,6 @@ public class AllBooksActivity extends AppCompatActivity {
     private void setUpViewPager(ViewPager viewPager) {
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(sectionsPagerAdapter);
-        recViewAdapter = ((BooksTabFragment) sectionsPagerAdapter.getItem(0)).getAdapter();
+
     }
 }

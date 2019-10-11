@@ -12,14 +12,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.ViewModels.BookViewModel;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class OpenedBookActivity extends AppCompatActivity {
@@ -31,9 +30,6 @@ public class OpenedBookActivity extends AppCompatActivity {
 
     private Book thisBook=null;
     private String id;
-    private List<Book> books;
-    private BookViewModel bookViewModel;
-    AllBooksActivity allBooksActivity;
 
     private Context getContext() {
         return this;
@@ -43,17 +39,13 @@ public class OpenedBookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opened_book);
+
         Intent intent = getIntent();
         id = intent.getStringExtra("bookId");
+
         initWidgets();
         loadBookData();
         createOnClickListeners();
-        bookViewModel.getAllBooks().observe(this, new Observer<List<Book>>() {
-            @Override
-            public void onChanged(List<Book> booksList) {
-                books = booksList;
-            }
-        });
 
     }
 
@@ -72,6 +64,7 @@ public class OpenedBookActivity extends AppCompatActivity {
 
     }
     private void loadBookData(){
+        List<Book> books = new ArrayList<>();
         for (Book b : books) {
             if (b.getId().equals(id)) {
                 thisBook = b;

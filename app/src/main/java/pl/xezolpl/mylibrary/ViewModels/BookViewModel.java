@@ -17,28 +17,29 @@ public class BookViewModel extends AndroidViewModel {
 
     private BookDao bookDao;
     private LibraryDatabase database;
-    private LiveData<List<Book>> books;
 
     public BookViewModel(@NonNull Application application) {
         super(application);
         database = LibraryDatabase.getDatabase(application);
         bookDao = database.BookDao();
-        books = bookDao.getAllBooks();
     }
 
     public LiveData<List<Book>> getAllBooks() {
-        return books;
+        return bookDao.getAllBooks();
+    }
+    public LiveData<List<Book>> getBookWithStatus(int status) {
+        return bookDao.getBooksWithStatus(status);
     }
 
-    private void insert(Book book) {
+    public void insert(Book book) {
         new InsertAsyncTask(bookDao).execute(book);
     }
 
-    private void update(Book book) {
+    public void update(Book book) {
         new UpdateAsyncTask(bookDao).execute(book);
     }
 
-    private void delete(Book book) {
+    public void delete(Book book) {
         new DeleteAsyncTask(bookDao).execute(book);
     }
 

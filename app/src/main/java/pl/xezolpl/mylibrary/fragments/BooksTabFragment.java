@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,17 +24,33 @@ import pl.xezolpl.mylibrary.models.Book;
 public class BooksTabFragment extends Fragment {
 
     private Context context;
-    private RecyclerView booksRecView;
     private int tabBooksStatus;
-    private BooksRecViewAdapter adapter;
+
+    private RecyclerView booksRecView;
+    private BooksRecViewAdapter booksRecViewAdapter;
+
     private BookViewModel bookViewModel;
 
     public BooksTabFragment(Context context, int tabBooksStatus) {
         super();
         this.tabBooksStatus = tabBooksStatus;
         this.context = context;
-        adapter = new BooksRecViewAdapter(context);
+    }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        booksRecViewAdapter = new BooksRecViewAdapter(context);
+
+        bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
+
+        bookViewModel.getBookWithStatus(tabBooksStatus).observe(this, new Observer<List<Book>>() {
+            @Override
+            public void onChanged(List<Book> books) {
+                booksRecViewAdapter.setBooks(books);
+            }
+        });
     }
 
     @Nullable
@@ -40,25 +58,14 @@ public class BooksTabFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.book_tab_fragment, container, false);
 
-        //display books
         booksRecView = (RecyclerView) view.findViewById(R.id.booksRecView);
-        booksRecView.setAdapter(adapter);
+        booksRecView.setAdapter(booksRecViewAdapter);
         booksRecView.setLayoutManager(new GridLayoutManager(context, 2));
-
-        //fill lists with books
-        List<Book> books;
-
-        switch (tabBooksStatus) {
-            default:
-                books = bookViewModel.getAllBooks().getValue();
-                break;
-        }
-        adapter.setBooks(books);
 
         return view;
     }
 
-    public BooksRecViewAdapter getAdapter() {
-        return adapter;
+    public void setFilter(String filter){
+        booksRecViewAdapter.getFilter().filter(filter);
     }
 }
