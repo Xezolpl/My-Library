@@ -1,5 +1,7 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -19,8 +22,10 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.SectionsPagerAdapter;
 import pl.xezolpl.mylibrary.dialogs.AddBookDialog;
 import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
+import pl.xezolpl.mylibrary.models.Book;
 
 public class AllBooksActivity extends AppCompatActivity {
+    private static final String TAG = "AllBooksActivity";
 
     private androidx.appcompat.widget.Toolbar books_toolBar;
     private FloatingActionButton fab;
@@ -93,5 +98,22 @@ public class AllBooksActivity extends AppCompatActivity {
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(sectionsPagerAdapter);
 
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        BooksTabFragment curTabFragment = (BooksTabFragment)sectionsPagerAdapter.getItem(books_viewPager.getCurrentItem());
+
+        if (requestCode == BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            //ADD NEW NOTE CODE
+        }
+        else if (requestCode == BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK){
+            Book resultBook = (Book) data.getSerializableExtra("resultBook");
+            curTabFragment.getBookViewModel().update(resultBook);
+        }
+        else {
+
+        }
     }
 }

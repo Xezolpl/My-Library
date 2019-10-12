@@ -1,5 +1,6 @@
 package pl.xezolpl.mylibrary.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
+import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapter.ViewHolder> implements Filterable {
@@ -63,10 +65,9 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, OpenedBookActivity.class);
-                //intent.putExtra("bookId", books.get(position).getId());
                 intent.putExtra("book",books.get(position));
-                //Log.d(TAG, "Book's id: " + books.get(position).getId());
-                context.startActivity(intent);
+
+                ((Activity)context).startActivityForResult(intent, BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
             }
         });
 

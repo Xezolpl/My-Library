@@ -26,7 +26,6 @@ public class OpenedBookActivity extends AppCompatActivity {
     private Button setToRead_btn, setCurrReading_btn, setAlreadyRead_btn, setFavourite_btn;
 
     private Book thisBook = null;
-    private String id;
 
     private Context getContext() {
         return this;
@@ -38,7 +37,6 @@ public class OpenedBookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_opened_book);
 
         Intent intent = getIntent();
-        //id = intent.getStringExtra("bookId"); //here is something wrong
         thisBook = (Book) intent.getSerializableExtra("book");
         initWidgets();
         loadBookData();
@@ -70,14 +68,14 @@ public class OpenedBookActivity extends AppCompatActivity {
     }
 
     private void createOnClickListeners() {
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Status change");
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
+            public void onClick(DialogInterface dialogInterface, int i) {}
         });
+
         setToRead_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,9 +93,12 @@ public class OpenedBookActivity extends AppCompatActivity {
                     thisBook.setStatus(Book.STATUS_WANT_TO_READ);
                 }
                 Toast.makeText(getContext(), "Successfully changed the book status.", Toast.LENGTH_SHORT).show();
+                updateBook();
 
             }
         });
+
+
         setCurrReading_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,8 +116,11 @@ public class OpenedBookActivity extends AppCompatActivity {
                     thisBook.setStatus(Book.STATUS_CURRENTLY_READING);
                 }
                 Toast.makeText(getContext(), "Successfully changed the book status.", Toast.LENGTH_SHORT).show();
+                updateBook();
             }
         });
+
+
         setAlreadyRead_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,18 +138,26 @@ public class OpenedBookActivity extends AppCompatActivity {
                     thisBook.setStatus(Book.STATUS_ALREADY_READ);
                 }
                 Toast.makeText(getContext(), "Successfully changed the book status.", Toast.LENGTH_SHORT).show();
-
+                updateBook();
             }
         });
+
+
         setFavourite_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (thisBook.isFavourite()) thisBook.setFavourite(false);
                 else thisBook.setFavourite(true);
+                updateBook();
             }
         });
-    }
 
+    }
+    private void updateBook(){
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("resultBook",thisBook);
+        setResult(RESULT_OK,resultIntent);
+    }
 }
 
 

@@ -21,7 +21,10 @@ import pl.xezolpl.mylibrary.ViewModels.BookViewModel;
 import pl.xezolpl.mylibrary.adapters.BooksRecViewAdapter;
 import pl.xezolpl.mylibrary.models.Book;
 
-public class BooksTabFragment extends Fragment {
+public class BooksTabFragment extends Fragment{
+
+    public static final int NEW_BOOK_ACTIVITY_REQUEST_CODE = 0;
+    public static final int UPDATE_BOOK_ACTIVITY_REQUEST_CODE = 1;
 
     private Context context;
     private int tabBooksStatus;
@@ -30,7 +33,6 @@ public class BooksTabFragment extends Fragment {
     private BooksRecViewAdapter booksRecViewAdapter;
 
     private BookViewModel bookViewModel;
-    private List<Book> booksList;
 
     public BooksTabFragment(Context context, int tabBooksStatus) {
         super();
@@ -50,7 +52,6 @@ public class BooksTabFragment extends Fragment {
             @Override
             public void onChanged(List<Book> books) {
                 booksRecViewAdapter.setBooks(books);
-                booksList = books;
             }
         });
     }
@@ -67,9 +68,10 @@ public class BooksTabFragment extends Fragment {
         return view;
     }
 
-    public void setFilter(String filter){
+    public void setFilter(String filter) {
         booksRecViewAdapter.getFilter().filter(filter);
     }
 
-    public List<Book> getBooksList(){return booksList;}
+
+    public BookViewModel getBookViewModel(){return bookViewModel;}
 }
