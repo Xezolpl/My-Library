@@ -19,8 +19,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.ViewModels.BookViewModel;
 import pl.xezolpl.mylibrary.adapters.SectionsPagerAdapter;
-import pl.xezolpl.mylibrary.dialogs.AddBookDialog;
 import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
 import pl.xezolpl.mylibrary.models.Book;
 
@@ -87,10 +87,10 @@ public class AllBooksActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddBookDialog addBookDialog = new AddBookDialog();
-                addBookDialog.show(getSupportFragmentManager(),"This");
-            }
-        });
+                Intent intent = new Intent(AllBooksActivity.this,AddBookActivity.class);
+                ((Activity)AllBooksActivity.this).startActivityForResult(intent,BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE);
+                }
+            });
     }
 
 
@@ -103,14 +103,15 @@ public class AllBooksActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        BooksTabFragment curTabFragment = (BooksTabFragment)sectionsPagerAdapter.getItem(books_viewPager.getCurrentItem());
+        BookViewModel model = ((BooksTabFragment)sectionsPagerAdapter.getItem(books_viewPager.getCurrentItem())).getBookViewModel();
 
         if (requestCode == BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            //ADD NEW NOTE CODE
+            Book newBook = (Book) data.getSerializableExtra("newBook");
+            model.insert(newBook);
         }
         else if (requestCode == BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             Book resultBook = (Book) data.getSerializableExtra("resultBook");
-            curTabFragment.getBookViewModel().update(resultBook);
+            model.update(resultBook);
         }
         else {
 

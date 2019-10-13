@@ -3,7 +3,11 @@ package pl.xezolpl.mylibrary.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 
@@ -20,11 +25,10 @@ import pl.xezolpl.mylibrary.models.Book;
 
 public class OpenedBookActivity extends AppCompatActivity {
     private static final String TAG = "OpenedBookActivity";
-
     private TextView bookTitle_text, bookDescription_text, bookPages_text, bookAuthor_text;
     private ImageView book_image;
     private Button setToRead_btn, setCurrReading_btn, setAlreadyRead_btn, setFavourite_btn;
-
+    private Toolbar opened_book_toolbar;
     private Book thisBook = null;
 
     private Context getContext() {
@@ -41,7 +45,30 @@ public class OpenedBookActivity extends AppCompatActivity {
         initWidgets();
         loadBookData();
         createOnClickListeners();
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.opened_book_menu, menu);
+
+        MenuItem editItem = menu.findItem(R.id.action_edit);
+        editItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                //TODO: Edit
+                return false;
+            }
+        });
+        MenuItem delItem = menu.findItem(R.id.action_delete);
+        delItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                //AlertDialog.Builder builder;
+                return false;
+            }
+        });
+        return true;
     }
 
     private void initWidgets() {
@@ -57,6 +84,12 @@ public class OpenedBookActivity extends AppCompatActivity {
         setAlreadyRead_btn = (Button) findViewById(R.id.setAlreadyRead_btn);
         setFavourite_btn = (Button) findViewById(R.id.setFavourite_btn);
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            opened_book_toolbar = (Toolbar) findViewById(R.id.opened_book_toolbar);
+            opened_book_toolbar.setTitle(thisBook.getTitle());
+            setSupportActionBar(opened_book_toolbar);
+        }
     }
 
     private void loadBookData() {
