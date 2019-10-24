@@ -21,9 +21,7 @@ public class SelectCoverDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
 
-        //BooksRecViewAdapter adapter = new BooksRecViewAdapter(getContext());
-        //book_covers_rec_view.setAdapter(adapter);
-        //downloadImageFromUri();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.dialog_select_cover,null);

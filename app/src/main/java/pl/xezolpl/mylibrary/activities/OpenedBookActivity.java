@@ -21,6 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class OpenedBookActivity extends AppCompatActivity {
@@ -56,10 +57,12 @@ public class OpenedBookActivity extends AppCompatActivity {
         editItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                //TODO: Edit
+                //I TOTALLY DONT KNOW WHAT CAN I DO
+                allBooksActivity.startActivityForResult(BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE, thisBook);
                 return false;
             }
         });
+
         MenuItem delItem = menu.findItem(R.id.action_delete);
         delItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -186,6 +189,7 @@ public class OpenedBookActivity extends AppCompatActivity {
         });
 
     }
+
     private void updateBook(){
         Intent resultIntent = new Intent();
         resultIntent.putExtra("resultBook",thisBook);

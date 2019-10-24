@@ -10,9 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +29,7 @@ import pl.xezolpl.mylibrary.dialogs.SelectCoverDialog;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class AddBookActivity extends AppCompatActivity {
+    private static final String TAG = "AddBookActivity";
 
     private EditText add_book_title, add_book_author, add_book_description, add_book_pages;
     private Button select_image_btn;
@@ -44,10 +48,18 @@ public class AddBookActivity extends AppCompatActivity {
         setFinishOnTouchOutside(false);
         setOnClickListeners();
 
+        if(getIntent().hasExtra("thisBook")){
+            Book thisBook = (Book) getIntent().getSerializableExtra("thisBook");
+            loadBookData(thisBook);
+        }
+    }
 
-        /*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+    private void loadBookData(Book thisBook) {
+        add_book_title.setText(thisBook.getTitle());
+        add_book_author.setText(thisBook.getAuthor());
+        add_book_description.setText(thisBook.getDescription());
+        add_book_pages.setText(String.valueOf(thisBook.getPages()));
+        Glide.with(this).asBitmap().load(thisBook.getImageUrl()).into(add_book_image);
     }
 
     private void initWidgets() {
@@ -112,9 +124,17 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
     private boolean areValidOutputs() {
+        int pages = 0;
+        try {
+            pages =Integer.valueOf(add_book_pages.getText().toString());
+        }
+        catch (NumberFormatException exc){
+            Toast.makeText(this,"Type pages as a number",Toast.LENGTH_SHORT).show();
+        }
         return (add_book_title.length() > 0 &&
                 add_book_author.length() > 0 &&
-                add_book_description.length() > 0);
+                add_book_description.length() > 0 &&
+                pages!=0);
     }
 
     private void downloadImageFromUri(String address) {
@@ -142,6 +162,5 @@ public class AddBookActivity extends AppCompatActivity {
             add_book_image.setImageBitmap(bitmap);
         }
     }
-
 
 }

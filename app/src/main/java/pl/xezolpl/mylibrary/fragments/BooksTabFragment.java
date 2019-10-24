@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.ViewModels.BookViewModel;
+import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import pl.xezolpl.mylibrary.adapters.BooksRecViewAdapter;
 import pl.xezolpl.mylibrary.models.Book;
 

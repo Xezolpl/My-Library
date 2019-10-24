@@ -1,6 +1,7 @@
 package pl.xezolpl.mylibrary.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,8 +19,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.Serializable;
+
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.ViewModels.BookViewModel;
+import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import pl.xezolpl.mylibrary.adapters.SectionsPagerAdapter;
 import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
 import pl.xezolpl.mylibrary.models.Book;
@@ -29,7 +32,7 @@ public class AllBooksActivity extends AppCompatActivity {
 
     private androidx.appcompat.widget.Toolbar books_toolBar;
     private FloatingActionButton fab;
-
+    private Context context = this;
     private ViewPager books_viewPager;
     private TabLayout books_tabLayout;
 
@@ -87,10 +90,24 @@ public class AllBooksActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AllBooksActivity.this,AddBookActivity.class);
-                ((Activity)AllBooksActivity.this).startActivityForResult(intent,BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE);
+                mStartActivityForResult(BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE,null);
                 }
             });
+    }
+
+    public void mStartActivityForResult(int requestCode, Serializable extraSerializable){
+
+        Intent intent = new Intent(context,AddBookActivity.class);
+
+        if(requestCode == BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE){
+            ((Activity)AllBooksActivity.this).startActivityForResult(intent,BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE);
+        }
+
+        else if(requestCode == BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && !extraSerializable.equals(null)){
+            intent.putExtra("thisBook",extraSerializable);
+            ((Activity)AllBooksActivity.this).startActivityForResult(intent,BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
+        }
+
     }
 
 
@@ -99,6 +116,7 @@ public class AllBooksActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
 
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -1,4 +1,4 @@
-package pl.xezolpl.mylibrary.ViewModels;
+package pl.xezolpl.mylibrary.viewmodels;
 
 import android.app.Application;
 import android.os.AsyncTask;

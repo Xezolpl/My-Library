@@ -38,6 +38,11 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
 
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.5.0'
+    implementation group: 'com.squareup.okio', name: 'okio', version: '1.6.0'
+
+
+
     def roomVersion = '1.1.1'
     implementation "android.arch.persistence.room:runtime:$roomVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
@@ -46,4 +51,6 @@ dependencies {
     def lifecycle_version = "2.1.0"
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
+
+
 }
