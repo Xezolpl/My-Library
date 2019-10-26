@@ -3,4 +3,5 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+    <string name="app_version">Version: 1.0</string>
 </resources>

@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.dialogs.AboutDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +28,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AllBooksActivity.class);
                 startActivity(intent);
+            }
+        });
+        about_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AboutDialog aboutDialog = new AboutDialog();
+                aboutDialog.show(getSupportFragmentManager(), "About application");
             }
         });
     }
