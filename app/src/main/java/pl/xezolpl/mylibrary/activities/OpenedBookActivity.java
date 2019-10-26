@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,6 +27,7 @@ import pl.xezolpl.mylibrary.models.Book;
 
 public class OpenedBookActivity extends AppCompatActivity {
     private static final String TAG = "OpenedBookActivity";
+    public static final int RESULT_DELETE=2;
     private TextView bookTitle_text, bookDescription_text, bookPages_text, bookAuthor_text;
     private ImageView book_image;
     private Button setToRead_btn, setCurrReading_btn, setAlreadyRead_btn, setFavourite_btn;
@@ -57,8 +59,9 @@ public class OpenedBookActivity extends AppCompatActivity {
         editItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                //I TOTALLY DONT KNOW WHAT CAN I DO
-                allBooksActivity.startActivityForResult(BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE, thisBook);
+                Intent intent = new Intent(OpenedBookActivity.this,AddBookActivity.class);
+                intent.putExtra("book",thisBook);
+                startActivityForResult(intent, BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
                 return false;
             }
         });
@@ -67,11 +70,25 @@ public class OpenedBookActivity extends AppCompatActivity {
         delItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                //AlertDialog.Builder builder;
+                Intent intent = new Intent();
+                intent.putExtra("book",thisBook);
+                setResult(RESULT_DELETE,intent);
+                finish();
                 return false;
             }
         });
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            this.setResult(RESULT_OK,data);
+            finish();
+        }
+
+
     }
 
     private void initWidgets() {
@@ -192,7 +209,7 @@ public class OpenedBookActivity extends AppCompatActivity {
 
     private void updateBook(){
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("resultBook",thisBook);
+        resultIntent.putExtra("book",thisBook);
         setResult(RESULT_OK,resultIntent);
     }
 }

@@ -37,6 +37,7 @@ public class AddBookActivity extends AppCompatActivity {
     private Spinner status_spinner;
     private RecyclerView book_covers_rec_view;
     private Button add_book_ok_btn, add_book_cancel_btn;
+    private Book thisBook = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +49,8 @@ public class AddBookActivity extends AppCompatActivity {
         setFinishOnTouchOutside(false);
         setOnClickListeners();
 
-        if(getIntent().hasExtra("thisBook")){
-            Book thisBook = (Book) getIntent().getSerializableExtra("thisBook");
+        if (getIntent().hasExtra("book")) {
+            thisBook = (Book) getIntent().getSerializableExtra("book");
             loadBookData(thisBook);
         }
     }
@@ -90,17 +91,29 @@ public class AddBookActivity extends AppCompatActivity {
         add_book_ok_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(areValidOutputs()){
-                    Book newBook = new Book(add_book_title.getText().toString(),
-                            add_book_author.getText().toString(),
-                            "https://images-na.ssl-images-amazon.com/images/I/51uLvJlKpNL._SX321_BO1,204,203,200_.jpg",
-                            //TODO: MAKE BOOK COVER SELECTING
-                            add_book_description.getText().toString(),
-                            Integer.valueOf(add_book_pages.getText().toString()),
-                            UUID.randomUUID().toString(), status_spinner.getSelectedItemPosition());
+                if (areValidOutputs()) {
+                    if (thisBook == null) {
+                        thisBook = new Book(add_book_title.getText().toString(),
+                                add_book_author.getText().toString(),
+                                "https://images-na.ssl-images-amazon.com/images/I/51uLvJlKpNL._SX321_BO1,204,203,200_.jpg",
+                                //TODO: MAKE BOOK COVER SELECTING
+                                add_book_description.getText().toString(),
+                                Integer.valueOf(add_book_pages.getText().toString()),
+                                UUID.randomUUID().toString(),
+                                status_spinner.getSelectedItemPosition());
+                    } else {
+                        thisBook = new Book(add_book_title.getText().toString(),
+                                add_book_author.getText().toString(),
+                                "https://images-na.ssl-images-amazon.com/images/I/51uLvJlKpNL._SX321_BO1,204,203,200_.jpg",
+                                //TODO: MAKE BOOK COVER SELECTING
+                                add_book_description.getText().toString(),
+                                Integer.valueOf(add_book_pages.getText().toString()),
+                                thisBook.getId(),
+                                status_spinner.getSelectedItemPosition());
+                    }
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra("newBook",newBook);
-                    setResult(RESULT_OK,resultIntent);
+                    resultIntent.putExtra("book", thisBook);
+                    setResult(RESULT_OK, resultIntent);
                     finish();
                 }
 
@@ -126,15 +139,14 @@ public class AddBookActivity extends AppCompatActivity {
     private boolean areValidOutputs() {
         int pages = 0;
         try {
-            pages =Integer.valueOf(add_book_pages.getText().toString());
-        }
-        catch (NumberFormatException exc){
-            Toast.makeText(this,"Type pages as a number",Toast.LENGTH_SHORT).show();
+            pages = Integer.valueOf(add_book_pages.getText().toString());
+        } catch (NumberFormatException exc) {
+            Toast.makeText(this, "Type pages as a number", Toast.LENGTH_SHORT).show();
         }
         return (add_book_title.length() > 0 &&
                 add_book_author.length() > 0 &&
                 add_book_description.length() > 0 &&
-                pages!=0);
+                pages != 0);
     }
 
     private void downloadImageFromUri(String address) {

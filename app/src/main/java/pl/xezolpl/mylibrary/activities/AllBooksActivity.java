@@ -1,7 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,20 +18,17 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
-import java.io.Serializable;
-
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import pl.xezolpl.mylibrary.adapters.SectionsPagerAdapter;
 import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
 import pl.xezolpl.mylibrary.models.Book;
+import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 
 public class AllBooksActivity extends AppCompatActivity {
     private static final String TAG = "AllBooksActivity";
 
     private androidx.appcompat.widget.Toolbar books_toolBar;
     private FloatingActionButton fab;
-    private Context context = this;
     private ViewPager books_viewPager;
     private TabLayout books_tabLayout;
 
@@ -52,6 +48,7 @@ public class AllBooksActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
 
@@ -66,7 +63,7 @@ public class AllBooksActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                BooksTabFragment tabFragment = (BooksTabFragment)sectionsPagerAdapter
+                BooksTabFragment tabFragment = (BooksTabFragment) sectionsPagerAdapter
                         .getItem(books_viewPager.getCurrentItem());
                 tabFragment.setFilter(s);
                 return false;
@@ -75,9 +72,8 @@ public class AllBooksActivity extends AppCompatActivity {
         return true;
     }
 
-
     private void initWidgets() {
-        books_viewPager =  (ViewPager) findViewById(R.id.books_viewPager);
+        books_viewPager = (ViewPager) findViewById(R.id.books_viewPager);
         books_tabLayout = (TabLayout) findViewById(R.id.books_tabLayout);
         fab = (FloatingActionButton) findViewById(R.id.add_book_fab);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -90,24 +86,10 @@ public class AllBooksActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mStartActivityForResult(BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE,null);
-                }
-            });
-    }
-
-    public void mStartActivityForResult(int requestCode, Serializable extraSerializable){
-
-        Intent intent = new Intent(context,AddBookActivity.class);
-
-        if(requestCode == BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE){
-            ((Activity)AllBooksActivity.this).startActivityForResult(intent,BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE);
-        }
-
-        else if(requestCode == BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && !extraSerializable.equals(null)){
-            intent.putExtra("thisBook",extraSerializable);
-            ((Activity)AllBooksActivity.this).startActivityForResult(intent,BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
-        }
-
+                Intent intent = new Intent(AllBooksActivity.this, AddBookActivity.class);
+                startActivityForResult(intent, BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE);
+            }
+        });
     }
 
 
@@ -121,18 +103,15 @@ public class AllBooksActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        BookViewModel model = ((BooksTabFragment)sectionsPagerAdapter.getItem(books_viewPager.getCurrentItem())).getBookViewModel();
+        BookViewModel model = ((BooksTabFragment) sectionsPagerAdapter.getItem(books_viewPager.getCurrentItem())).getBookViewModel();
+        Book book = (Book) data.getSerializableExtra("book");
 
         if (requestCode == BooksTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Book newBook = (Book) data.getSerializableExtra("newBook");
-            model.insert(newBook);
-        }
-        else if (requestCode == BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            Book resultBook = (Book) data.getSerializableExtra("resultBook");
-            model.update(resultBook);
-        }
-        else {
-
+            model.insert(book);
+        } else if (requestCode == BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            model.update(book);
+        } else if (requestCode == BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == OpenedBookActivity.RESULT_DELETE) {
+            model.delete(book);
         }
     }
 }
