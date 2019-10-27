@@ -1,37 +1,32 @@
 package pl.xezolpl.mylibrary.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
-import com.bumptech.glide.Glide;
+import com.google.android.material.tabs.TabLayout;
 
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
+import pl.xezolpl.mylibrary.adapters.TabFragmentPagerAdapter;
+import pl.xezolpl.mylibrary.fragments.BookDetailsTabFragment;
+import pl.xezolpl.mylibrary.fragments.BookNotesTabFragment;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class OpenedBookActivity extends AppCompatActivity {
     private static final String TAG = "OpenedBookActivity";
+
     public static final int RESULT_DELETE=2;
-    private TextView bookTitle_text, bookDescription_text, bookPages_text, bookAuthor_text;
-    private ImageView book_image;
-    private Button setToRead_btn, setCurrReading_btn, setAlreadyRead_btn, setFavourite_btn;
     private Toolbar opened_book_toolbar;
+    private TabLayout opened_book_tablayout;
+    private ViewPager opened_book_viewpager;
+
     private Book thisBook = null;
 
     private Context getContext() {
@@ -45,39 +40,19 @@ public class OpenedBookActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         thisBook = (Book) intent.getSerializableExtra("book");
+
         initWidgets();
-        loadBookData();
-        createOnClickListeners();
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.opened_book_menu, menu);
+        TabFragmentPagerAdapter adapter = new TabFragmentPagerAdapter(getSupportFragmentManager());
 
-        MenuItem editItem = menu.findItem(R.id.action_edit);
-        editItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(OpenedBookActivity.this,AddBookActivity.class);
-                intent.putExtra("book",thisBook);
-                startActivityForResult(intent, BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
-                return false;
-            }
-        });
+        Fragment bookDetailsTabFragment = new BookDetailsTabFragment(thisBook,this);
+        Fragment bookNotesTabFragment = new BookNotesTabFragment(thisBook,this);
 
-        MenuItem delItem = menu.findItem(R.id.action_delete);
-        delItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent();
-                intent.putExtra("book",thisBook);
-                setResult(RESULT_DELETE,intent);
-                finish();
-                return false;
-            }
-        });
-        return true;
+        adapter.addFragment(bookDetailsTabFragment,"Book's details");
+        adapter.addFragment(bookNotesTabFragment,"Book's notes");
+
+        opened_book_viewpager.setAdapter(adapter);
+        opened_book_tablayout.setupWithViewPager(opened_book_viewpager);
     }
 
     @Override
@@ -87,130 +62,16 @@ public class OpenedBookActivity extends AppCompatActivity {
             this.setResult(RESULT_OK,data);
             finish();
         }
-
-
     }
 
     private void initWidgets() {
-        bookTitle_text = (TextView) findViewById(R.id.bookTitle_text);
-        bookAuthor_text = (TextView) findViewById(R.id.bookAuthor_text);
-        bookPages_text = (TextView) findViewById(R.id.bookPages_text);
-        bookDescription_text = (TextView) findViewById(R.id.bookDescription_text);
-
-        book_image = (ImageView) findViewById(R.id.book_image);
-
-        setToRead_btn = (Button) findViewById(R.id.setToRead_btn);
-        setCurrReading_btn = (Button) findViewById(R.id.setCurrReading_btn);
-        setAlreadyRead_btn = (Button) findViewById(R.id.setAlreadyRead_btn);
-        setFavourite_btn = (Button) findViewById(R.id.setFavourite_btn);
-
-
+        opened_book_viewpager = (ViewPager) findViewById(R.id.opened_book_viewpager);
+        opened_book_tablayout = (TabLayout) findViewById(R.id.opened_book_tablayout);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             opened_book_toolbar = (Toolbar) findViewById(R.id.opened_book_toolbar);
             opened_book_toolbar.setTitle(thisBook.getTitle());
             setSupportActionBar(opened_book_toolbar);
         }
-    }
-
-    private void loadBookData() {
-        bookTitle_text.setText(thisBook.getTitle());
-        bookAuthor_text.setText(thisBook.getAuthor());
-        bookPages_text.setText("Pages: " + thisBook.getPages());
-        bookDescription_text.setText(thisBook.getDescription());
-        Glide.with(this).asBitmap().load(thisBook.getImageUrl()).into(book_image);
-    }
-
-    private void createOnClickListeners() {
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Status change");
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {}
-        });
-
-        setToRead_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (thisBook.getStatus() == Book.STATUS_WANT_TO_READ) {
-                    builder.setMessage("This book is currently in to read list. Do you want to " +
-                            "remove it from the list?");
-                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            thisBook.setStatus(Book.STATUS_NEUTRAL);
-                        }
-                    });
-                    builder.create().show();
-                } else {
-                    thisBook.setStatus(Book.STATUS_WANT_TO_READ);
-                }
-                Toast.makeText(getContext(), "Successfully changed the book status.", Toast.LENGTH_SHORT).show();
-                updateBook();
-
-            }
-        });
-
-
-        setCurrReading_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (thisBook.getStatus() == Book.STATUS_CURRENTLY_READING) {
-                    builder.setMessage("Your are currently reading this book. Do you want to " +
-                            "remove it from the currently reading list?");
-                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            thisBook.setStatus(Book.STATUS_NEUTRAL);
-                        }
-                    });
-                    builder.create().show();
-                } else {
-                    thisBook.setStatus(Book.STATUS_CURRENTLY_READING);
-                }
-                Toast.makeText(getContext(), "Successfully changed the book status.", Toast.LENGTH_SHORT).show();
-                updateBook();
-            }
-        });
-
-
-        setAlreadyRead_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (thisBook.getStatus() == Book.STATUS_ALREADY_READ) {
-                    builder.setMessage("You have already read this book. Do you want to " +
-                            "remove it from the already read list?");
-                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            thisBook.setStatus(Book.STATUS_NEUTRAL);
-                        }
-                    });
-                    builder.create().show();
-                } else {
-                    thisBook.setStatus(Book.STATUS_ALREADY_READ);
-                }
-                Toast.makeText(getContext(), "Successfully changed the book status.", Toast.LENGTH_SHORT).show();
-                updateBook();
-            }
-        });
-
-
-        setFavourite_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (thisBook.isFavourite()) thisBook.setFavourite(false);
-                else thisBook.setFavourite(true);
-                updateBook();
-            }
-        });
-
-    }
-
-    private void updateBook(){
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("book",thisBook);
-        setResult(RESULT_OK,resultIntent);
     }
 }
 

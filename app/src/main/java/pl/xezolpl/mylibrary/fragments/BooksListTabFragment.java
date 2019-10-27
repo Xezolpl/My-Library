@@ -21,7 +21,7 @@ import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import pl.xezolpl.mylibrary.adapters.BooksRecViewAdapter;
 import pl.xezolpl.mylibrary.models.Book;
 
-public class BooksTabFragment extends Fragment{
+public class BooksListTabFragment extends Fragment{
 
     public static final int NEW_BOOK_ACTIVITY_REQUEST_CODE = 0;
     public static final int UPDATE_BOOK_ACTIVITY_REQUEST_CODE = 1;
@@ -34,7 +34,7 @@ public class BooksTabFragment extends Fragment{
 
     private BookViewModel bookViewModel;
 
-    public BooksTabFragment(Context context, int tabBooksStatus) {
+    public BooksListTabFragment(int tabBooksStatus, Context context) {
         super();
         this.tabBooksStatus = tabBooksStatus;
         this.context = context;
@@ -59,7 +59,7 @@ public class BooksTabFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.book_tab_fragment, container, false);
+        View view = inflater.inflate(R.layout.tabfragment_books_list, container, false);
 
         booksRecView = (RecyclerView) view.findViewById(R.id.booksRecView);
         booksRecView.setAdapter(booksRecViewAdapter);

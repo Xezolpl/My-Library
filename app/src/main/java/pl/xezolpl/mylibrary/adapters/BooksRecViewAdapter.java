@@ -23,7 +23,7 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
-import pl.xezolpl.mylibrary.fragments.BooksTabFragment;
+import pl.xezolpl.mylibrary.fragments.BooksListTabFragment;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapter.ViewHolder> implements Filterable {
@@ -67,7 +67,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
                 Intent intent = new Intent(context, OpenedBookActivity.class);
                 intent.putExtra("book",books.get(position));
 
-                ((Activity)context).startActivityForResult(intent, BooksTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
+                ((Activity)context).startActivityForResult(intent, BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
             }
         });
 
