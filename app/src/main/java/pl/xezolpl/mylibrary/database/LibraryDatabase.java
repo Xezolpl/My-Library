@@ -7,12 +7,16 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import pl.xezolpl.mylibrary.daos.BookDao;
+import pl.xezolpl.mylibrary.daos.QuoteDao;
 import pl.xezolpl.mylibrary.models.Book;
+import pl.xezolpl.mylibrary.models.Quote;
 
-@Database(entities = Book.class, version = 1, exportSchema = false)
+@Database(entities = {Book.class, Quote.class}, version = 1, exportSchema = false)
 public abstract class LibraryDatabase extends RoomDatabase{
 
     public abstract BookDao BookDao();
+    public abstract QuoteDao QuoteDao();
+
     private static volatile LibraryDatabase libraryDatabaseInstance;
 
     public static LibraryDatabase getDatabase(final Context context){

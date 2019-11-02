@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.OpenedBookActivity"
-    android:layout_marginTop="10dp">
+    tools:context=".activities.OpenedBookActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rel_lay_1">
+        android:id="@+id/rel_lay_1"
+        android:layout_marginTop="10dp">
 
         <ImageView
             android:id="@+id/book_image"

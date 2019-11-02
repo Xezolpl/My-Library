@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="7dp"
+    android:background="@drawable/quote_background1"
+    android:orientation="vertical"
+    android:id="@+id/quote_lay">
+
+    <TextView
+        android:id="@+id/quote_title_txtView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="Title placeholder"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/quote_txtView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/quote_title_txtView"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="65dp"
+        android:layout_marginTop="15dp"
+        android:text="Nie rob drrugiemu co tobie nie miłe."
+        android:textStyle="italic" />
+
+    <RelativeLayout
+        android:id="@+id/category_relLay"
+        android:layout_width="132dp"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/category_imgView"
+            android:layout_width="132dp"
+            android:layout_height="32dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:background="#FF0000" />
+
+        <TextView
+            android:id="@+id/category_txtView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/category_imgView"
+            android:layout_margin="5dp"
+            android:text="category place"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:id="@+id/quote_page_txtView"
+            android:layout_width="132dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/category_txtView"
+            android:layout_alignStart="@+id/category_imgView"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="7dp"
+            android:text="Page: 1234"
+            android:textAlignment="center" />
+    </RelativeLayout>
+
+</RelativeLayout>

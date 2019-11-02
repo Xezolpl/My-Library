@@ -52,7 +52,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.listitem_book_rec_view, parent, false);
-        return new ViewHolder(view);//
+        return new ViewHolder(view);
     }
 
     @Override

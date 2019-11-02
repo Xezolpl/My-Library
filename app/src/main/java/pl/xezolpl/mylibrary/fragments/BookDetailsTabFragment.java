@@ -40,7 +40,7 @@ public class BookDetailsTabFragment extends Fragment {
 
     public BookDetailsTabFragment(Book thisBook, Context context) {
         this.context = context;
-        activity = getActivity();
+        activity = (Activity)context;
         this.thisBook = thisBook;
     }
 

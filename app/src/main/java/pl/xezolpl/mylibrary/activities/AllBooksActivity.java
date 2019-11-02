@@ -97,15 +97,15 @@ public class AllBooksActivity extends AppCompatActivity {
     private void setUpViewPager(ViewPager viewPager) {
         sectionsPagerAdapter = new TabFragmentPagerAdapter(getSupportFragmentManager());
 
-        Fragment allBooksFragment = new BooksListTabFragment(Book.STATUS_NEUTRAL,this);
-        Fragment wantBooksFragment = new BooksListTabFragment(Book.STATUS_WANT_TO_READ,this);
-        Fragment currBooksFragment = new BooksListTabFragment(Book.STATUS_CURRENTLY_READING,this);
-        Fragment alrBooksFragment = new BooksListTabFragment(Book.STATUS_ALREADY_READ,this);
+        Fragment allBooksFragment = new BooksListTabFragment(Book.STATUS_NEUTRAL, this);
+        Fragment wantBooksFragment = new BooksListTabFragment(Book.STATUS_WANT_TO_READ, this);
+        Fragment currBooksFragment = new BooksListTabFragment(Book.STATUS_CURRENTLY_READING, this);
+        Fragment alrBooksFragment = new BooksListTabFragment(Book.STATUS_ALREADY_READ, this);
 
-        sectionsPagerAdapter.addFragment(allBooksFragment,"All books");
-        sectionsPagerAdapter.addFragment(wantBooksFragment,"Want to read books");
-        sectionsPagerAdapter.addFragment(currBooksFragment,"Currently reading books");
-        sectionsPagerAdapter.addFragment(alrBooksFragment,"Already read books");
+        sectionsPagerAdapter.addFragment(allBooksFragment, "All books");
+        sectionsPagerAdapter.addFragment(wantBooksFragment, "Want to read books");
+        sectionsPagerAdapter.addFragment(currBooksFragment, "Currently reading books");
+        sectionsPagerAdapter.addFragment(alrBooksFragment, "Already read books");
 
         viewPager.setAdapter(sectionsPagerAdapter);
     }
@@ -113,16 +113,17 @@ public class AllBooksActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_CANCELED) {
+            BookViewModel model = ((BooksListTabFragment) sectionsPagerAdapter.getItem(books_viewPager.getCurrentItem())).getBookViewModel();
+            Book book = (Book) data.getSerializableExtra("book");
 
-        BookViewModel model = ((BooksListTabFragment) sectionsPagerAdapter.getItem(books_viewPager.getCurrentItem())).getBookViewModel();
-        Book book = (Book) data.getSerializableExtra("book");
-
-        if (requestCode == BooksListTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            model.insert(book);
-        } else if (requestCode == BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            model.update(book);
-        } else if (requestCode == BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == OpenedBookActivity.RESULT_DELETE) {
-            model.delete(book);
+            if (requestCode == BooksListTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                model.insert(book);
+            } else if (requestCode == BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                model.update(book);
+            } else if (requestCode == BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == OpenedBookActivity.RESULT_DELETE) {
+                model.delete(book);
+            }
         }
     }
 }

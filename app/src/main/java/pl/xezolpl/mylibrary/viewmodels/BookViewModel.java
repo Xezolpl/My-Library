@@ -27,6 +27,7 @@ public class BookViewModel extends AndroidViewModel {
     public LiveData<List<Book>> getAllBooks() {
         return bookDao.getAllBooks();
     }
+
     public LiveData<List<Book>> getBookWithStatus(int status) {
         return bookDao.getBooksWithStatus(status);
     }
@@ -44,7 +45,7 @@ public class BookViewModel extends AndroidViewModel {
     }
 
 
-    private class OperationsAsyncTask extends AsyncTask<Book,Void,Void> {
+    private class OperationsAsyncTask extends AsyncTask<Book, Void, Void> {
 
         protected BookDao asyncTaskDao;
 
@@ -58,7 +59,7 @@ public class BookViewModel extends AndroidViewModel {
         }
     }
 
-    private class InsertAsyncTask extends OperationsAsyncTask{
+    private class InsertAsyncTask extends OperationsAsyncTask {
         public InsertAsyncTask(BookDao asyncTaskDao) {
             super(asyncTaskDao);
         }
@@ -70,7 +71,7 @@ public class BookViewModel extends AndroidViewModel {
         }
     }
 
-    private class UpdateAsyncTask extends OperationsAsyncTask{
+    private class UpdateAsyncTask extends OperationsAsyncTask {
         public UpdateAsyncTask(BookDao asyncTaskDao) {
             super(asyncTaskDao);
         }
@@ -82,7 +83,7 @@ public class BookViewModel extends AndroidViewModel {
         }
     }
 
-    private class DeleteAsyncTask extends OperationsAsyncTask{
+    private class DeleteAsyncTask extends OperationsAsyncTask {
         public DeleteAsyncTask(BookDao asyncTaskDao) {
             super(asyncTaskDao);
         }
