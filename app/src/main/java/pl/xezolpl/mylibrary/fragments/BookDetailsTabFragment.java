@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -34,6 +35,8 @@ public class BookDetailsTabFragment extends Fragment {
     private ImageView book_image;
     private Button setToRead_btn, setCurrReading_btn, setAlreadyRead_btn, setFavourite_btn;
     private Book thisBook;
+    private Toolbar opened_book_toolbar;
+
     private Context context;
     private Activity activity;
 
@@ -51,6 +54,7 @@ public class BookDetailsTabFragment extends Fragment {
         initWidgets(view);
         loadBookData();
         createOnClickListeners();
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -81,6 +85,8 @@ public class BookDetailsTabFragment extends Fragment {
                 return false;
             }
         });
+
+
     }
 
     private void initWidgets(View v) {

@@ -1,11 +1,12 @@
 package pl.xezolpl.mylibrary.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,12 +21,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
 import pl.xezolpl.mylibrary.adapters.QuotesRecViewAdapter;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesTabFragment extends Fragment {
     private static final String TAG = "QuotesTabFragment";
+    public static final int ADD_QUOTE_ACTIVITY_REQUEST_CODE=1;
+    public static final int EDIT_QUOTE_ACTIVITY_REQUEST_CODE=2;
 
     private Context context;
     private String bookId;
@@ -71,11 +75,25 @@ public class QuotesTabFragment extends Fragment {
         quotes_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Add NewQuoteActivity (as dialog)", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, AddQuoteActivity.class);
+                startActivityForResult(intent,ADD_QUOTE_ACTIVITY_REQUEST_CODE);
             }
         });
-
-
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode== Activity.RESULT_OK){
+            Quote quote = (Quote) data.getSerializableExtra("quote");
+            if(requestCode==ADD_QUOTE_ACTIVITY_REQUEST_CODE){
+                quoteViewModel.insert(quote);
+            }
+            else if (requestCode == EDIT_QUOTE_ACTIVITY_REQUEST_CODE){
+                quoteViewModel.update(quote);
+            }
+        }
     }
 }

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="520dp"
+    android:layout_centerInParent="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/add_quote_txtView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Add Quote"
+        android:textAlignment="center"
+        android:textSize="40sp" />
+
+    <EditText
+        android:id="@+id/add_quote_title_EditTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_quote_txtView"
+        android:layout_margin="10dp"
+        android:hint="Quote title" />
+
+    <EditText
+        android:id="@+id/add_quote_quote_EditTxt"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@id/add_quote_title_EditTxt"
+        android:layout_margin="10dp"
+        android:hint="Quotation text" />
+
+    <RelativeLayout
+        android:id="@+id/rel_lay1"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@id/add_quote_quote_EditTxt"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/add_quote_page_txtView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="3dp"
+                android:text="Page:"
+                android:textSize="22sp" />
+
+            <EditText
+                android:id="@+id/add_quote_page_EditTxt"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/add_quote_page_txtView" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/rel_lay2"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/rel_lay1"
+        android:layout_margin="10dp">
+
+        <Spinner
+            android:id="@+id/add_quote_category_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2" />
+
+        <Button
+            android:id="@+id/add_quote_add_category_btn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:text="+" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rel_lay2">
+
+        <Button
+            android:id="@+id/add_quote_ok_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="0.5"
+            android:text="OK" />
+
+        <Button
+            android:id="@+id/add_quote_cancel_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="0.5"
+            android:text="Cancel" />
+
+    </LinearLayout>
+
+</RelativeLayout>

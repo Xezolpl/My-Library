@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,8 +19,9 @@ import java.util.List;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.models.Quote;
 
-public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder> {
+public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder> implements View.OnClickListener {
     private static final String TAG = "QuotesRecViewAdapter";
+    private int expandedPosition = -1;
 
     private Context context;
     private LayoutInflater inflater;
@@ -45,23 +47,41 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: ");
 
         Quote q = quotes.get(position);
         holder.setData(q.getTitle(), q.getQuote(), q.getCategory(), q.getPage(), 0xFFFF0000);//TODO: METHOD IN QuoteCategory which takes categoryName and returns QuoteCategory Object
-        holder.quote_lay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Todo: expand mechanic
-            }
-        });
+       /* if (position == expandedPosition) {
+            holder.quote_lay.setVisibility(View.VISIBLE);
+        } else {
+            holder.quote_lay.setVisibility(View.GONE);
+        }
+     */   //TODO: NIE MOZESZ UKRYWAC QUOTE_LAY TYLKO PODZIELIC TO NA DWA OSOBNE LAYOUTY EXPANDED I ZWYKLY I WTEDY TEN EXPANDED DAJESZ DO TEGO IF(VISBLITY)
+    }
+
+    @Override
+    public void onClick(View view) {
+        ViewHolder holder = (ViewHolder) view.getTag();
+
+        // Check for an expanded view, collapse if you find one
+        if (expandedPosition >= 0) {
+            int prev = expandedPosition;
+            notifyItemChanged(prev);
+        }
+        // Set the current position to "expanded"
+        expandedPosition = holder.getAdapterPosition();
+        notifyItemChanged(expandedPosition);
+
+        Toast.makeText(context, "Clicked: "+TAG, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public int getItemCount() {
         return quotes.size();
     }
+
+
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
         private TextView quote_title_txtView, quote_txtView, category_txtView, quote_page_txtView;
@@ -84,7 +104,9 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             category_txtView.setText(category);
             quote_page_txtView.setText("Page: " + page);
             category_imgView.setBackgroundColor(hexdecColor);
-        }
 
+            if (page==0) quote_page_txtView.setVisibility(View.INVISIBLE);
+
+        }
     }
 }

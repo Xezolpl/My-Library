@@ -5,8 +5,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "quotes")
-public class Quote {
+public class Quote implements Serializable {
     @NonNull
     @PrimaryKey
     private String id;

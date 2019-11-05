@@ -28,7 +28,7 @@ import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 public class AllBooksActivity extends AppCompatActivity {
     private static final String TAG = "AllBooksActivity";
 
-    private androidx.appcompat.widget.Toolbar books_toolBar;
+    private Toolbar books_toolBar;
     private FloatingActionButton fab;
     private ViewPager books_viewPager;
     private TabLayout books_tabLayout;
@@ -121,6 +121,9 @@ public class AllBooksActivity extends AppCompatActivity {
                 model.insert(book);
             } else if (requestCode == BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
                 model.update(book);
+                Intent intent = new Intent(AllBooksActivity.this, OpenedBookActivity.class);
+                intent.putExtra("book",book);
+                startActivityForResult(intent, BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
             } else if (requestCode == BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == OpenedBookActivity.RESULT_DELETE) {
                 model.delete(book);
             }

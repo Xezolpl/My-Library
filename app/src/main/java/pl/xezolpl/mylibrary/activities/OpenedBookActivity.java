@@ -59,8 +59,6 @@ public class OpenedBookActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK){
-            this.setResult(RESULT_OK,data);
-            finish();
         }
     }
 
@@ -73,6 +71,7 @@ public class OpenedBookActivity extends AppCompatActivity {
             setSupportActionBar(opened_book_toolbar);
         }
     }
+
 }
 
 
