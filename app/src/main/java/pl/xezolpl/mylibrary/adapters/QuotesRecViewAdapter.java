@@ -8,9 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -18,8 +19,10 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.models.Quote;
+import pl.xezolpl.mylibrary.models.QuoteCategory;
+import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 
-public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder> implements View.OnClickListener {
+public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder>/* implements View.OnClickListener*/ {
     private static final String TAG = "QuotesRecViewAdapter";
     private int expandedPosition = -1;
 
@@ -47,33 +50,32 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: ");
 
         Quote q = quotes.get(position);
-        holder.setData(q.getTitle(), q.getQuote(), q.getCategory(), q.getPage(), 0xFFFF0000);//TODO: METHOD IN QuoteCategory which takes categoryName and returns QuoteCategory Object
-       /* if (position == expandedPosition) {
-            holder.quote_lay.setVisibility(View.VISIBLE);
-        } else {
-            holder.quote_lay.setVisibility(View.GONE);
+        //TODO: METHOD IN QuoteCategory which takes categoryName and returns QuoteCategory Object
+        QuoteCategoryViewModel viewModel = ViewModelProviders.of((FragmentActivity)context).get(QuoteCategoryViewModel.class);
+        int color=0xFF0000;
+        try{
+            QuoteCategory category = viewModel.getCategoryByName(q.getCategory()).getValue();
+            color = category.getColor();
+        } catch (NullPointerException exc){
+            exc.printStackTrace();
         }
-     */   //TODO: NIE MOZESZ UKRYWAC QUOTE_LAY TYLKO PODZIELIC TO NA DWA OSOBNE LAYOUTY EXPANDED I ZWYKLY I WTEDY TEN EXPANDED DAJESZ DO TEGO IF(VISBLITY)
-    }
 
-    @Override
-    public void onClick(View view) {
-        ViewHolder holder = (ViewHolder) view.getTag();
+        holder.setData(q.getTitle(), q.getQuote(), q.getCategory(), q.getPage(), color);
 
-        // Check for an expanded view, collapse if you find one
-        if (expandedPosition >= 0) {
-            int prev = expandedPosition;
-            notifyItemChanged(prev);
-        }
-        // Set the current position to "expanded"
-        expandedPosition = holder.getAdapterPosition();
-        notifyItemChanged(expandedPosition);
-
-        Toast.makeText(context, "Clicked: "+TAG, Toast.LENGTH_SHORT).show();
+        holder.quote_lay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!holder.expanded){
+                    holder.setExpanded();
+                }else{
+                    holder.setCollapsed();
+                }
+            }
+        });
     }
 
     @Override
@@ -82,31 +84,49 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     }
 
 
-
     protected class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView quote_title_txtView, quote_txtView, category_txtView, quote_page_txtView;
+        private TextView quote_title_txtView, quote_txtView_expanded, quote_txtView_collapsed, category_txtView, quote_page_txtView;
         private ImageView category_imgView;
-        private RelativeLayout quote_lay;
+        private RelativeLayout quote_expanded_lay, quote_collapsed_lay, quote_lay;
+        private boolean expanded=false;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             quote_title_txtView = (TextView) itemView.findViewById(R.id.quote_title_txtView);
-            quote_txtView = (TextView) itemView.findViewById(R.id.quote_txtView);
+            quote_txtView_expanded = (TextView) itemView.findViewById(R.id.quote_txtView_expanded);
+            quote_txtView_collapsed = (TextView) itemView.findViewById(R.id.quote_txtView_collapsed);
             category_txtView = (TextView) itemView.findViewById(R.id.category_txtView);
             quote_page_txtView = (TextView) itemView.findViewById(R.id.quote_page_txtView);
             category_imgView = (ImageView) itemView.findViewById(R.id.category_imgView);
+
+            quote_expanded_lay = (RelativeLayout) itemView.findViewById(R.id.quote_expanded_lay);
+            quote_collapsed_lay = (RelativeLayout) itemView.findViewById(R.id.quote_collapsed_lay);
             quote_lay = (RelativeLayout) itemView.findViewById(R.id.quote_lay);
+
+            quote_expanded_lay.setVisibility(View.GONE);
         }
 
         void setData(String title, String quote, String category, int page, int hexdecColor) {
             quote_title_txtView.setText(title);
-            quote_txtView.setText(quote);
+            quote_txtView_expanded.setText(quote);
+            quote_txtView_collapsed.setText(quote);
             category_txtView.setText(category);
             quote_page_txtView.setText("Page: " + page);
             category_imgView.setBackgroundColor(hexdecColor);
 
-            if (page==0) quote_page_txtView.setVisibility(View.INVISIBLE);
+            if (page == 0) quote_page_txtView.setVisibility(View.INVISIBLE); ///TODO:WTF
+        }
 
+        void setExpanded(){
+            quote_collapsed_lay.setVisibility(View.GONE);
+            quote_expanded_lay.setVisibility(View.VISIBLE);
+            expanded=true;
+        }
+
+        void setCollapsed(){
+            quote_expanded_lay.setVisibility(View.GONE);
+            quote_collapsed_lay.setVisibility(View.VISIBLE);
+            expanded=false;
         }
     }
 }

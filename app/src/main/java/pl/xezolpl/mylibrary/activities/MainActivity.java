@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initWidgets();
         createOnClickListeners();
-    }
+    }//ACTUALLY DISABLED
 
     private void createOnClickListeners() {
         open_all_books_btn.setOnClickListener(new View.OnClickListener() {

@@ -5,8 +5,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "quoteCategories")
-public class QuoteCategory {
+public class QuoteCategory implements Serializable {
 
     @PrimaryKey
     @NonNull
@@ -15,12 +17,12 @@ public class QuoteCategory {
 
     @NonNull
     @ColumnInfo(name = "color")
-    private int hexadecimalColor;
+    private int color;
 
 
-    public QuoteCategory(@NonNull String name, @NonNull int hexadecimalColor) {
+    public QuoteCategory(@NonNull String name, @NonNull int color) {
         this.name = name;
-        this.hexadecimalColor = hexadecimalColor;
+        this.color = color;
     }
 
     @NonNull
@@ -30,6 +32,6 @@ public class QuoteCategory {
 
     @NonNull
     public int getColor(){
-        return hexadecimalColor;
+        return color;
     }
 }
