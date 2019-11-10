@@ -44,7 +44,7 @@
                 android:layout_height="32dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:background="#FF0000" />
+                android:background="@drawable/category_trapezoid"/>
 
             <TextView
                 android:id="@+id/category_txtView"

@@ -64,7 +64,7 @@
 
         <Spinner
             android:id="@+id/add_quote_category_spinner"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="match_parent"
             android:layout_weight="0.2" />
 

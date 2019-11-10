@@ -3,7 +3,6 @@ package pl.xezolpl.mylibrary.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -14,11 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.adapters.QuoteCategorySpinnerAdapter;
 import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
@@ -33,7 +32,7 @@ public class AddQuoteActivity extends AppCompatActivity {
     private Quote thisQuote = null;
 
     private QuoteCategoryViewModel categoryViewModel;
-    private ArrayAdapter<String> spinnerAdapter;
+    private QuoteCategorySpinnerAdapter spinnerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,23 +45,16 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         categoryViewModel = ViewModelProviders.of(this).get(QuoteCategoryViewModel.class);
 
-        spinnerAdapter = new ArrayAdapter<>(AddQuoteActivity.this,
-                android.R.layout.simple_spinner_item);
-
         categoryViewModel.getAllCategories().observe(this, new Observer<List<QuoteCategory>>() {
             @Override
             public void onChanged(List<QuoteCategory> quoteCategories) {
-                spinnerAdapter.clear();
-                List<String> categoriesAsStrings = new ArrayList<>();
-                for(int i=0; i<quoteCategories.size(); i++){
-                    categoriesAsStrings.add(quoteCategories.get(i).getName());
-                }
-                spinnerAdapter.addAll(categoriesAsStrings);
+                spinnerAdapter = new QuoteCategorySpinnerAdapter(AddQuoteActivity.this, quoteCategories);
+                category_spinner.setAdapter(spinnerAdapter);
+                category_spinner.setSelection(0);
             }
         });
 
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        category_spinner.setAdapter(spinnerAdapter);
+
     }
 
     private void initWidgets() {
@@ -80,7 +72,7 @@ public class AddQuoteActivity extends AppCompatActivity {
         add_category_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AddQuoteActivity.this, AddCategoryActivity.class);
+                Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
                 startActivityForResult(intent, QuotesTabFragment.ADD_CATEGORY_ACTIVITY_REQUEST_CODE);
             }
         });
@@ -111,7 +103,7 @@ public class AddQuoteActivity extends AppCompatActivity {
         String title = title_EditTxt.getText().toString();
         String quote = quote_EditTxt.getText().toString();
         int page = 0;
-        String category = category_spinner.getSelectedItem().toString();
+        String category = ((QuoteCategory)spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())).getName();
         String id;
 
         if (page_EditTxt.length() > 0) {

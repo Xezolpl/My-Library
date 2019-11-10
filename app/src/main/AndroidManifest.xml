@@ -21,7 +21,7 @@
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
 
         <activity
-            android:name=".activities.AddCategoryActivity"
+            android:name=".activities.AddQuoteCategoryActivity"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
 
         <activity

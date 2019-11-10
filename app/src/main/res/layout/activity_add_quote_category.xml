@@ -26,7 +26,8 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="5dp"
-        android:layout_below="@id/add_category_name_edtTxt"/>
+        android:layout_below="@id/add_category_name_edtTxt"
+        android:background="@drawable/color_dot"/>
     <Button
         android:id="@+id/add_category_color_btn"
         android:layout_width="match_parent"

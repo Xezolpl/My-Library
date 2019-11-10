@@ -1,6 +1,7 @@
 package pl.xezolpl.mylibrary.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,10 +32,19 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     private LayoutInflater inflater;
     private List<Quote> quotes = new ArrayList<>();
     private List<Quote> quotesFull;
+    private List<QuoteCategory> allCategories;
 
     public QuotesRecViewAdapter(Context context) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
+
+        QuoteCategoryViewModel viewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteCategoryViewModel.class);
+        viewModel.getAllCategories().observe((FragmentActivity) context, new Observer<List<QuoteCategory>>() {
+            @Override
+            public void onChanged(List<QuoteCategory> quoteCategories) {
+                allCategories = quoteCategories;
+            }
+        });
     }
 
     public void setQuotes(List<Quote> quotes) {
@@ -53,14 +64,20 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: ");
 
+        QuoteCategory category = null;
         Quote q = quotes.get(position);
-        //TODO: METHOD IN QuoteCategory which takes categoryName and returns QuoteCategory Object
-        QuoteCategoryViewModel viewModel = ViewModelProviders.of((FragmentActivity)context).get(QuoteCategoryViewModel.class);
-        int color=0xFF0000;
-        try{
-            QuoteCategory category = viewModel.getCategoryByName(q.getCategory()).getValue();
+
+        for (int i = 0; i < allCategories.size(); i++) {
+            if (allCategories.get(i).getName().equals(q.getCategory())){
+                category = allCategories.get(i); //TODO TRY TO SIMPLIFY IT AND MAKE IT FASTER!!!!!!!!!!!
+                break;
+            }
+        }
+
+        int color = 0x000000;
+        try {
             color = category.getColor();
-        } catch (NullPointerException exc){
+        } catch (NullPointerException exc) {
             exc.printStackTrace();
         }
 
@@ -69,9 +86,9 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         holder.quote_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!holder.expanded){
+                if (!holder.expanded) {
                     holder.setExpanded();
-                }else{
+                } else {
                     holder.setCollapsed();
                 }
             }
@@ -88,7 +105,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         private TextView quote_title_txtView, quote_txtView_expanded, quote_txtView_collapsed, category_txtView, quote_page_txtView;
         private ImageView category_imgView;
         private RelativeLayout quote_expanded_lay, quote_collapsed_lay, quote_lay;
-        private boolean expanded=false;
+        private boolean expanded = false;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -112,21 +129,24 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             quote_txtView_collapsed.setText(quote);
             category_txtView.setText(category);
             quote_page_txtView.setText("Page: " + page);
-            category_imgView.setBackgroundColor(hexdecColor);
+
+            GradientDrawable drawable = (GradientDrawable) category_imgView.getBackground();
+            drawable.setColor(hexdecColor);
+            //category_imgView.setBackground(drawable);
 
             if (page == 0) quote_page_txtView.setVisibility(View.INVISIBLE); ///TODO:WTF
         }
 
-        void setExpanded(){
+        void setExpanded() {
             quote_collapsed_lay.setVisibility(View.GONE);
             quote_expanded_lay.setVisibility(View.VISIBLE);
-            expanded=true;
+            expanded = true;
         }
 
-        void setCollapsed(){
+        void setCollapsed() {
             quote_expanded_lay.setVisibility(View.GONE);
             quote_collapsed_lay.setVisibility(View.VISIBLE);
-            expanded=false;
+            expanded = false;
         }
     }
 }

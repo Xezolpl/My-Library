@@ -1,6 +1,7 @@
 package pl.xezolpl.mylibrary.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,12 +12,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import petrov.kristiyan.colorpicker.ColorPicker;
-
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 
-public class AddCategoryActivity extends AppCompatActivity {
-	private static final String TAG = "AddCategoryActivity";
+public class AddQuoteCategoryActivity extends AppCompatActivity {
+	private static final String TAG = "AddQuoteCategoryActivity";
 
 	private QuoteCategory thisCategory = null;
 
@@ -25,14 +25,14 @@ public class AddCategoryActivity extends AppCompatActivity {
 	private Button color_btn, ok_btn, cancel_btn;
 
 	private ColorPicker colorPicker;
+	private GradientDrawable drawable;
 
 	private int hexdecColor;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_category);
+		setContentView(R.layout.activity_add_quote_category);
 
 		initWidgets();
 		setFinishOnTouchOutside(false);
@@ -42,8 +42,11 @@ public class AddCategoryActivity extends AppCompatActivity {
 			thisCategory = (QuoteCategory) getIntent().getSerializableExtra("category");
 			loadCategoryData();
 		} else {
-			hexdecColor = 0xF333333;
+			hexdecColor = 0x000000;
 		}
+
+		drawable = (GradientDrawable) selected_color_imgView.getBackground();
+		drawable.setColor(hexdecColor);
 	}
 
 	private void loadCategoryData() {
@@ -66,13 +69,14 @@ public class AddCategoryActivity extends AppCompatActivity {
 		color_btn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				colorPicker = new ColorPicker(AddCategoryActivity.this);
+				colorPicker = new ColorPicker(AddQuoteCategoryActivity.this);
 				final int hexdecColorCopy = hexdecColor;
 
 				colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
 					@Override
 					public void onChooseColor(int position, int color) {
 						hexdecColor = color;
+						drawable.setColor(color);
 					}
 
 					@Override
@@ -91,7 +95,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 					Intent resultIntent = new Intent();
 					resultIntent.putExtra("category", thisCategory);
 					setResult(RESULT_OK, resultIntent);
-					Toast.makeText(AddCategoryActivity.this, "success color", Toast.LENGTH_SHORT).show();
+					Toast.makeText(AddQuoteCategoryActivity.this, "success color", Toast.LENGTH_SHORT).show();
 					finish();
 				}
 			}
@@ -101,7 +105,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 				setResult(RESULT_CANCELED);
-				Toast.makeText(AddCategoryActivity.this,"Cannot add color",Toast.LENGTH_SHORT).show();
+				Toast.makeText(AddQuoteCategoryActivity.this,"Cannot add color",Toast.LENGTH_SHORT).show();
 				finish();
 			}
 		});

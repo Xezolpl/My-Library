@@ -20,7 +20,7 @@ public class Quote implements Serializable {
     @ColumnInfo(name = "title")
     private String title;
 
-    @ColumnInfo(name = "category") //TODO: change to categoryId id with external table in db
+    @ColumnInfo(name = "category")
     private String category;
 
     @ColumnInfo(name = "page")
