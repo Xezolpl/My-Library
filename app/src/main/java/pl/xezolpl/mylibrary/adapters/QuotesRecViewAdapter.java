@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,7 +26,7 @@ import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 
-public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder>/* implements View.OnClickListener*/ {
+public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder> implements Filterable {
     private static final String TAG = "QuotesRecViewAdapter";
     private int expandedPosition = -1;
 
@@ -68,7 +70,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         Quote q = quotes.get(position);
 
         for (int i = 0; i < allCategories.size(); i++) {
-            if (allCategories.get(i).getName().equals(q.getCategory())){
+            if (allCategories.get(i).getName().equals(q.getCategory())) {
                 category = allCategories.get(i); //TODO TRY TO SIMPLIFY IT AND MAKE IT FASTER!!!!!!!!!!!
                 break;
             }
@@ -100,6 +102,40 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         return quotes.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        return quotesFilter;
+    }
+
+    Filter quotesFilter = new Filter() {
+
+        List<Quote> filteredList = new ArrayList<>();
+
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            if (charSequence == null || charSequence.length() == 0) {
+                filteredList.addAll(quotesFull);
+            } else {
+                String filteredPattern = charSequence.toString().toLowerCase().trim();
+                for (Quote q : quotesFull) {
+                    if (q.getTitle().toLowerCase().contains(filteredPattern) ||
+                    q.getQuote().toLowerCase().contains(filteredPattern)) {
+                        filteredList.add(q);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            quotes.clear();
+            quotes.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
         private TextView quote_title_txtView, quote_txtView_expanded, quote_txtView_collapsed, category_txtView, quote_page_txtView;
@@ -149,4 +185,5 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             expanded = false;
         }
     }
+
 }

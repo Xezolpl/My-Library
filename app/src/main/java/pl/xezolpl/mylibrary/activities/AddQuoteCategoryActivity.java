@@ -50,7 +50,6 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 	}
 
 	private void loadCategoryData() {
-		// TODO: Set color_selected color as thisCategory.getColor or make imageView as a dot add_quote_selected_color
 		name_edtTxt.setText(thisCategory.getName());
 		selected_color_imgView.setColorFilter(thisCategory.getColor());
 		colorPicker.setDefaultColorButton(thisCategory.getColor());
@@ -127,6 +126,5 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 		}
 		return true;
 
-		//TODO: CHECK THAT HEXDEC COLOR IS REALLY HEXADECIMAL
 	}
 }

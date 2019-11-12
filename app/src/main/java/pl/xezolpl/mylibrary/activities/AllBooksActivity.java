@@ -114,18 +114,18 @@ public class AllBooksActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_CANCELED) {
-            BookViewModel model = ((BooksListTabFragment) sectionsPagerAdapter.getItem(books_viewPager.getCurrentItem())).getBookViewModel();
+            BookViewModel viewModel = ((BooksListTabFragment) sectionsPagerAdapter.getItem(books_viewPager.getCurrentItem())).getBookViewModel();
             Book book = (Book) data.getSerializableExtra("book");
 
             if (requestCode == BooksListTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-                model.insert(book);
+                viewModel.insert(book);
             } else if (requestCode == BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-                model.update(book);
+                viewModel.update(book);
                 Intent intent = new Intent(AllBooksActivity.this, OpenedBookActivity.class);
                 intent.putExtra("book",book);
                 startActivityForResult(intent, BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
             } else if (requestCode == BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == OpenedBookActivity.RESULT_DELETE) {
-                model.delete(book);
+                viewModel.delete(book);
             }
         }
     }

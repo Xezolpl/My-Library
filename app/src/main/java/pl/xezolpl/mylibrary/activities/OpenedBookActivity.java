@@ -40,7 +40,6 @@ public class OpenedBookActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         thisBook = (Book) intent.getSerializableExtra("book");
-
         initWidgets();
 
         TabFragmentPagerAdapter adapter = new TabFragmentPagerAdapter(getSupportFragmentManager());
@@ -58,8 +57,8 @@ public class OpenedBookActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
-        }
+        setResult(resultCode,data);
+        finish();
     }
 
     private void initWidgets() {
@@ -69,6 +68,8 @@ public class OpenedBookActivity extends AppCompatActivity {
             opened_book_toolbar = (Toolbar) findViewById(R.id.opened_book_toolbar);
             opened_book_toolbar.setTitle(thisBook.getTitle());
             setSupportActionBar(opened_book_toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
     }
 

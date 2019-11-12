@@ -5,8 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,7 +71,7 @@ public class QuotesTabFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tabfragment_quotes,null,false);
+        View view = inflater.inflate(R.layout.tabfragment_quotes, container,false);
 
 
         quotes_recView = (RecyclerView) view.findViewById(R.id.quotes_recView);
@@ -81,6 +86,9 @@ public class QuotesTabFragment extends Fragment {
                 startActivityForResult(intent,ADD_QUOTE_ACTIVITY_REQUEST_CODE);
             }
         });
+
+        setHasOptionsMenu(true);
+
         return view;
     }
 
@@ -97,5 +105,30 @@ public class QuotesTabFragment extends Fragment {
                 quoteViewModel.update(quote);
             }
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
+        inflater.inflate(R.menu.quotes_menu, menu);
+
+        MenuItem categoryItem = menu.findItem(R.id.quotes_category_spinner);
+        Spinner categorySpinner = (Spinner) categoryItem.getActionView();
+        //Todo: add adapter and observer
+
+        MenuItem searchItem = menu.findItem(R.id.quotes_searchView);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                quotesRecViewAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
     }
 }

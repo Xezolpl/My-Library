@@ -7,9 +7,9 @@
     tools:context=".activities.OpenedBookActivity">
 
     <RelativeLayout
+        android:id="@+id/rel_lay_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rel_lay_1"
         android:layout_marginTop="10dp">
 
         <ImageView
@@ -23,100 +23,108 @@
         <RelativeLayout
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_alignLeft="@+id/bookImage"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp">
 
             <TextView
+                android:id="@+id/bookTitle_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/bookTitle_text"
                 android:text="Title placeholder"
                 android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/bookAuthor_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/bookAuthor_text"
                 android:layout_below="@+id/bookTitle_text"
+                android:layout_marginTop="10dp"
                 android:text="Author placeholder"
                 android:textAlignment="center"
                 android:textSize="18sp"
-                android:textStyle="italic"
-                android:layout_marginTop="10dp"/>
+                android:textStyle="italic" />
 
             <TextView
+                android:id="@+id/bookPages_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/bookPages_text"
                 android:layout_below="@+id/bookAuthor_text"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
                 android:text="Pages:"
                 android:textAlignment="center"
                 android:textSize="18sp"
-                android:textStyle="normal"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="5dp"/>
+                android:textStyle="normal" />
         </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rel_lay_2"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginBottom="20dp"
-        android:id="@+id/rel_lay_2"
-        android:layout_below="@+id/rel_lay_1">
+        android:layout_below="@+id/rel_lay_1"
+        android:layout_marginBottom="20dp">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="28dp"
             android:layout_marginTop="10dp">
-            <me.biubiubiu.justifytext.library.JustifyTextView
+
+            <TextView
+                android:id="@+id/bookDescription_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/bookDescription_text"
-                android:text="Lorem ipsum dolor sit amet, consLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae tortor diam. Sed id lorem ut odio vulputate mollis sed sed libero. Morbi in erat ac tellus sagittis facilisis. Nullam non interdum enim, vel ultrices sem. Maecenas laoreet massa et mi dapibus, sed interdum dolor cursus. Curabitur id placerat diam. In bibendum ipsum nec quam eleifend aliquet. Quisque leo felis, tempus eu urna ut, tempor sollicitudin lectus. Fusce in augue leo.Suspendisse imperdiet porta sem a porta. Pellentesque ullamcorper venenatis felis sed ornare. Cras ut orci eu dui accumsan suscipit vel ac purus. Nullam metus augue, condimentum non turpis in, rhoncus suscipit lacus. Duis mauris mi, mollis efficitur purus rutrum, ultricies egestas lorem. Phasellus rutrum ipsum eget mi vehicula aliquet. Vestibulum scelerisque erat sed est feugiat, vitae tempus augue mattis. Integer tempor, ligula vitae commodo aliquam, massa neque iaculis elit, vitae suscipit orci velit at lectus. Vivamus varius volutpat malesuada. Aenean ut iaculis magna, vitae pharetra quam. Sed ligula massa, feugiat ac maximus eget, sagittis et arcu. Sed volutpat consequat augue ut sollicitudin. Donec ac dui nisi. Sed vel lacus ut quam vestibulum malesuada. Proin mollis velit at sollicitudin molestie.ectetur adipiscing elit. Aenean vitae tortor diam. Sed id lorem ut odio vulputate mollis sed sed libero. Morbi in erat ac tellus sagittis facilisis. Nullam non interdum enim, vel ultrices sem. Maecenas laoreet massa et mi dapibus, sed interdum dolor cursus. Curabitur id placerat diam. In bibendum ipsum nec quam eleifend aliquet. Quisque leo felis, tempus eu urna ut, tempor sollicitudin lectus. Fusce in augue leo.Suspendisse imperdiet porta sem a porta. Pellentesque ullamcorper venenatis felis sed ornare. Cras ut orci eu dui accumsan suscipit vel ac purus. Nullam metus augue, condimentum non turpis in, rhoncus suscipit lacus. Duis mauris mi, mollis efficitur purus rutrum, ultricies egestas lorem. Phasellus rutrum ipsum eget mi vehicula aliquet. Vestibulum scelerisque erat sed est feugiat, vitae tempus augue mattis. Integer tempor, ligula vitae commodo aliquam, massa neque iaculis elit, vitae suscipit orci velit at lectus. Vivamus varius volutpat malesuada. Aenean ut iaculis magna, vitae pharetra quam. Sed ligula massa, feugiat ac maximus eget, sagittis et arcu. Sed volutpat consequat augue ut sollicitudin. Donec ac dui nisi. Sed vel lacus ut quam vestibulum malesuada. Proin mollis velit at sollicitudin molestie."
-                android:layout_margin="10dp" />
+                android:layout_margin="10dp"
+                android:justificationMode="inter_word"
+                android:text="Lorem ipsum dolor sit amet, consLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae tortor diam. Sed id lorem ut odio vulputate mollis sed sed libero. Morbi in erat ac tellus sagittis facilisis. Nullam non interdum enim, vel ultrices sem. Maecenas laoreet massa et mi dapibus, sed interdum dolor cursus. Curabitur id placerat diam. In bibendum ipsum nec quam eleifend aliquet. Quisque leo felis, tempus eu urna ut, tempor sollicitudin lectus. Fusce in augue leo.Suspendisse imperdiet porta sem a porta. Pellentesque ullamcorper venenatis felis sed ornare. Cras ut orci eu dui accumsan suscipit vel ac purus. Nullam metus augue, condimentum non turpis in, rhoncus suscipit lacus. Duis mauris mi, mollis efficitur purus rutrum, ultricies egestas lorem. Phasellus rutrum ipsum eget mi vehicula aliquet. Vestibulum scelerisque erat sed est feugiat, vitae tempus augue mattis. Integer tempor, ligula vitae commodo aliquam, massa neque iaculis elit, vitae suscipit orci velit at lectus. Vivamus varius volutpat malesuada. Aenean ut iaculis magna, vitae pharetra quam. Sed ligula massa, feugiat ac maximus eget, sagittis et arcu. Sed volutpat consequat augue ut sollicitudin. Donec ac dui nisi. Sed vel lacus ut quam vestibulum malesuada. Proin mollis velit at sollicitudin molestie.ectetur adipiscing elit. Aenean vitae tortor diam. Sed id lorem ut odio vulputate mollis sed sed libero. Morbi in erat ac tellus sagittis facilisis. Nullam non interdum enim, vel ultrices sem. Maecenas laoreet massa et mi dapibus, sed interdum dolor cursus. Curabitur id placerat diam. In bibendum ipsum nec quam eleifend aliquet. Quisque leo felis, tempus eu urna ut, tempor sollicitudin lectus. Fusce in augue leo.Suspendisse imperdiet porta sem a porta. Pellentesque ullamcorper venenatis felis sed ornare. Cras ut orci eu dui accumsan suscipit vel ac purus. Nullam metus augue, condimentum non turpis in, rhoncus suscipit lacus. Duis mauris mi, mollis efficitur purus rutrum, ultricies egestas lorem. Phasellus rutrum ipsum eget mi vehicula aliquet. Vestibulum scelerisque erat sed est feugiat, vitae tempus augue mattis. Integer tempor, ligula vitae commodo aliquam, massa neque iaculis elit, vitae suscipit orci velit at lectus. Vivamus varius volutpat malesuada. Aenean ut iaculis magna, vitae pharetra quam. Sed ligula massa, feugiat ac maximus eget, sagittis et arcu. Sed volutpat consequat augue ut sollicitudin. Donec ac dui nisi. Sed vel lacus ut quam vestibulum malesuada. Proin mollis velit at sollicitudin molestie." />
         </ScrollView>
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rel_lay_2"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="5dp">
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginVertical="10dp">
+
         <Button
-            android:layout_width="100dp"
-            android:layout_height="60dp"
             android:id="@+id/setToRead_btn"
-            android:text="Want to read"
-            android:textSize="13sp"
-            android:layout_marginLeft="11dp"/>
-        <Button
             android:layout_width="100dp"
             android:layout_height="60dp"
+            android:layout_marginLeft="11dp"
+            android:text="Want to read"
+            android:textSize="13sp" />
+
+        <Button
             android:id="@+id/setCurrReading_btn"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="11dp"
             android:layout_toRightOf="@+id/setToRead_btn"
             android:text="Currently reading"
-            android:textSize="13sp"
-            android:layout_marginLeft="11dp"/>
+            android:textSize="13sp" />
+
         <Button
+            android:id="@+id/setAlreadyRead_btn"
             android:layout_width="100dp"
             android:layout_height="60dp"
-            android:id="@+id/setAlreadyRead_btn"
+            android:layout_marginLeft="11dp"
             android:layout_toRightOf="@+id/setCurrReading_btn"
             android:text="Already read"
-            android:textSize="13sp"
-            android:layout_marginLeft="11dp"/>
+            android:textSize="13sp" />
+
         <Button
+            android:id="@+id/setFavourite_btn"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:id="@+id/setFavourite_btn"
+            android:layout_marginLeft="11dp"
             android:layout_toRightOf="@+id/setAlreadyRead_btn"
-            android:background="@mipmap/favourite_star"
-            android:layout_marginLeft="11dp"/>
+            android:background="@mipmap/favourite_star" />
 
     </RelativeLayout>
 </RelativeLayout>
