@@ -108,11 +108,9 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     }
 
     Filter quotesFilter = new Filter() {
-
-        List<Quote> filteredList = new ArrayList<>();
-
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Quote> filteredList = new ArrayList<>();
             if (charSequence == null || charSequence.length() == 0) {
                 filteredList.addAll(quotesFull);
             } else {

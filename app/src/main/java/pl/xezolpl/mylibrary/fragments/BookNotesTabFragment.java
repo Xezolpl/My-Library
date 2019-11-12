@@ -3,6 +3,8 @@ package pl.xezolpl.mylibrary.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,27 +25,50 @@ public class BookNotesTabFragment extends Fragment {
     private ViewPager book_notes_viewpager;
     private Context context;
     private Book thisBook;
+    private TabFragmentPagerAdapter adapter;
+    private QuotesTabFragment quotesTabFragment;
 
     public BookNotesTabFragment(Book thisBook, Context context) {
         this.thisBook = thisBook;
         this.context = context;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        adapter = new TabFragmentPagerAdapter(getFragmentManager());
+        quotesTabFragment = new QuotesTabFragment(context, thisBook.getId());
+
+        adapter.addFragment(quotesTabFragment, "Quotes");
+
+        setHasOptionsMenu(true);
+        quotesTabFragment.setMenuVisibility(false);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tabfragment_book_notes ,container,false);
+        View view = inflater.inflate(R.layout.tabfragment_book_notes, container, false);
         initWidgets(view);
-        TabFragmentPagerAdapter adapter = new TabFragmentPagerAdapter(getFragmentManager());
-        //TODO: adapter.addFragment(OUR NEW FRAGMENT);
-        adapter.addFragment(new QuotesTabFragment(context,thisBook.getId()),"Quotes");
-        book_notes_viewpager.setAdapter(adapter);
 
+        book_notes_viewpager.setAdapter(adapter);
         book_notes_tablayout.setupWithViewPager(book_notes_viewpager);
+
         return view;
     }
 
-    private void initWidgets(View v){
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        quotesTabFragment.setMenuVisibility(true);
+    }
+
+    @Override
+    public void onDestroyOptionsMenu() {
+        quotesTabFragment.setMenuVisibility(false);
+    }
+
+    private void initWidgets(View v) {
         book_notes_tablayout = (TabLayout) v.findViewById(R.id.book_notes_tablayout);
         book_notes_viewpager = (ViewPager) v.findViewById(R.id.book_notes_viewpager);
     }

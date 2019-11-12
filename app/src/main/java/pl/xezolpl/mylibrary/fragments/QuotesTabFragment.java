@@ -86,8 +86,8 @@ public class QuotesTabFragment extends Fragment {
                 startActivityForResult(intent,ADD_QUOTE_ACTIVITY_REQUEST_CODE);
             }
         });
-
         setHasOptionsMenu(true);
+        setMenuVisibility(false);
 
         return view;
     }
