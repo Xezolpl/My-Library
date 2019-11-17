@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="25dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/chapter_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chapter 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. In feugiat augue pretium eleifend congue."
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:background="@drawable/chapter_item_background"
+        android:textColor="#EAEAEA"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chapter_recView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/chapter_name"
+        android:layout_marginLeft="20dp" />
+
+
+</RelativeLayout>

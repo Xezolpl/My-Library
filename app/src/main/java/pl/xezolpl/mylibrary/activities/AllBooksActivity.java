@@ -126,7 +126,7 @@ public class AllBooksActivity extends AppCompatActivity {
                 startActivityForResult(intent, BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
             } else if (requestCode == BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == OpenedBookActivity.RESULT_DELETE) {
                 viewModel.delete(book);
-            }
+            }//TODO: STATUS CHANGING  DOESN'T WORK, MAKE FLAGS FOR OPEN ACTIVITY AND FOR UPDATE SEPARATELY
         }
     }
 }

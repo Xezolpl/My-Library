@@ -43,18 +43,17 @@ public class AddQuoteActivity extends AppCompatActivity {
         setOnClickListeners();
         setFinishOnTouchOutside(false);
 
-        categoryViewModel = ViewModelProviders.of(this).get(QuoteCategoryViewModel.class);
+        spinnerAdapter = new QuoteCategorySpinnerAdapter(this);
 
+        categoryViewModel = ViewModelProviders.of(this).get(QuoteCategoryViewModel.class);
         categoryViewModel.getAllCategories().observe(this, new Observer<List<QuoteCategory>>() {
             @Override
             public void onChanged(List<QuoteCategory> quoteCategories) {
-                spinnerAdapter = new QuoteCategorySpinnerAdapter(AddQuoteActivity.this, quoteCategories);
+
+                spinnerAdapter.setCategories(quoteCategories);
                 category_spinner.setAdapter(spinnerAdapter);
-                category_spinner.setSelection(0);
             }
         });
-
-
     }
 
     private void initWidgets() {

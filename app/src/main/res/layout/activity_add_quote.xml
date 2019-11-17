@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/add_quote_txtView"
         android:layout_margin="10dp"
-        android:hint="Quote title" />
+        android:hint="Quote title"
+        android:maxLines="1"/>
 
     <EditText
         android:id="@+id/add_quote_quote_EditTxt"
@@ -51,6 +52,7 @@
                 android:id="@+id/add_quote_page_EditTxt"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/add_quote_page_txtView" />
     </RelativeLayout>

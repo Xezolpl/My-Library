@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -22,10 +23,9 @@ public class QuoteCategorySpinnerAdapter extends BaseAdapter {
     private List<QuoteCategory> categories;
     private LayoutInflater inflater;
 
-    public QuoteCategorySpinnerAdapter(Context context, List<QuoteCategory> quoteCategories) {
+    public QuoteCategorySpinnerAdapter(Context context) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-        setCategories(quoteCategories);
     }
 
     public void setCategories(List<QuoteCategory> quoteCategories){
@@ -57,7 +57,7 @@ public class QuoteCategorySpinnerAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         view = inflater.inflate(R.layout.listitem_quote_category_spinner,null,false);
-
+        RelativeLayout categoryLay = (RelativeLayout) view.findViewById(R.id.category_lay) ;
         ImageView imgView = (ImageView) view.findViewById(R.id.spinner_category_imgView);
         TextView txtView = (TextView) view.findViewById(R.id.spinner_category_txtView);
 

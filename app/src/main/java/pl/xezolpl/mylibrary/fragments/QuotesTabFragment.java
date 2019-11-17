@@ -27,8 +27,11 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
+import pl.xezolpl.mylibrary.adapters.QuoteCategorySpinnerAdapter;
 import pl.xezolpl.mylibrary.adapters.QuotesRecViewAdapter;
 import pl.xezolpl.mylibrary.models.Quote;
+import pl.xezolpl.mylibrary.models.QuoteCategory;
+import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesTabFragment extends Fragment {
@@ -46,6 +49,10 @@ public class QuotesTabFragment extends Fragment {
 
     private QuoteViewModel quoteViewModel;
     private QuotesRecViewAdapter quotesRecViewAdapter;
+    private QuoteCategoryViewModel quoteCategoryViewModel;
+    private QuoteCategorySpinnerAdapter spinnerAdapter;
+    private Spinner categorySpinner;
+
 
     public QuotesTabFragment(Context context, String bookId) {
         this.context = context;
@@ -59,11 +66,21 @@ public class QuotesTabFragment extends Fragment {
         quotesRecViewAdapter = new QuotesRecViewAdapter(context);
 
         quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
-
         quoteViewModel.getAllQuotes().observe(this, new Observer<List<Quote>>() {
             @Override
             public void onChanged(List<Quote> quotes) {
                 quotesRecViewAdapter.setQuotes(quotes);
+            }
+        });
+
+
+        spinnerAdapter = new QuoteCategorySpinnerAdapter(context);
+
+        quoteCategoryViewModel = ViewModelProviders.of(this).get(QuoteCategoryViewModel.class);
+        quoteCategoryViewModel.getAllCategories().observe(this, new Observer<List<QuoteCategory>>() {
+            @Override
+            public void onChanged(List<QuoteCategory> quoteCategories) {
+                spinnerAdapter.setCategories(quoteCategories);
             }
         });
     }
@@ -111,10 +128,6 @@ public class QuotesTabFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 
         inflater.inflate(R.menu.quotes_menu, menu);
-
-        MenuItem categoryItem = menu.findItem(R.id.quotes_category_spinner);
-        Spinner categorySpinner = (Spinner) categoryItem.getActionView();
-        //Todo: add adapter and observer
 
         MenuItem searchItem = menu.findItem(R.id.quotes_searchView);
         SearchView searchView = (SearchView) searchItem.getActionView();

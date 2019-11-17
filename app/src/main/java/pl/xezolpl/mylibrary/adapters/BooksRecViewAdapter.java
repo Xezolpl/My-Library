@@ -70,8 +70,6 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
                 ((Activity)context).startActivityForResult(intent, BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
             }
         });
-
-
     }
 
     @Override
@@ -93,7 +91,8 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
             } else {
                 String filteredPattern = charSequence.toString().toLowerCase().trim();
                 for (Book b : booksFull) {
-                    if (b.getTitle().toLowerCase().contains(filteredPattern)) {
+                    if (b.getTitle().toLowerCase().contains(filteredPattern) ||
+                    b.getAuthor().toLowerCase().contains(filteredPattern)) {
                         filteredList.add(b);
                     }
 

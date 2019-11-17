@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="ADD_BOOK_REQUEST_CODE">0</integer>
+    <integer name="EDIT_BOOK_REQUEST_CODE">1</integer>
+    <integer name="OPEN_BOOK_REQUEST_CODE">2</integer>
+    <integer name="ADD_QUOTE_REQUEST_CODE">3</integer>
+    <integer name="EDIT_QUOTE_REQUEST_CODE">4</integer>
+
+
+    <integer name="RESULT_OK">100</integer>
+    <integer name="RESULT_CANCEL">101</integer>
+    <integer name="RESULT_DELETE">102</integer>
+
+</resources>

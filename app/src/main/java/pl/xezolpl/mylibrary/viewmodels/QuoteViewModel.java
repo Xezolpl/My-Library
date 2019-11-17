@@ -32,7 +32,7 @@ public class QuoteViewModel extends AndroidViewModel {
         return quoteDao.getQuote(id);
     }
 
-    public LiveData<List<Quote>> getQuoteByCategory(String id) {
+    public LiveData<List<Quote>> getQuotesByCategory(String id) {
         return quoteDao.getQuoteByCategory(id);
     }
 

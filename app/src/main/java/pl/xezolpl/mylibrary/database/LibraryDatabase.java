@@ -7,18 +7,24 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import pl.xezolpl.mylibrary.daos.BookDao;
+import pl.xezolpl.mylibrary.daos.ChapterDao;
+import pl.xezolpl.mylibrary.daos.NoteDao;
 import pl.xezolpl.mylibrary.daos.QuoteCategoryDao;
 import pl.xezolpl.mylibrary.daos.QuoteDao;
 import pl.xezolpl.mylibrary.models.Book;
+import pl.xezolpl.mylibrary.models.Chapter;
+import pl.xezolpl.mylibrary.models.Note;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 
-@Database(entities = {Book.class, Quote.class, QuoteCategory.class}, version = 1, exportSchema = false)
+@Database(entities = {Book.class, Quote.class, QuoteCategory.class, Chapter.class, Note.class}, version = 1, exportSchema = false)
 public abstract class LibraryDatabase extends RoomDatabase{
 
     public abstract BookDao BookDao();
     public abstract QuoteDao QuoteDao();
     public abstract QuoteCategoryDao QuoteCategoryDao();
+    public abstract ChapterDao chapterDao();
+    public abstract NoteDao noteDao();
 
     private static volatile LibraryDatabase libraryDatabaseInstance;
 

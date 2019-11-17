@@ -117,7 +117,8 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 String filteredPattern = charSequence.toString().toLowerCase().trim();
                 for (Quote q : quotesFull) {
                     if (q.getTitle().toLowerCase().contains(filteredPattern) ||
-                    q.getQuote().toLowerCase().contains(filteredPattern)) {
+                    q.getQuote().toLowerCase().contains(filteredPattern) ||
+                    q.getCategory().toLowerCase().contains(filteredPattern)) {
                         filteredList.add(q);
                     }
                 }
@@ -166,7 +167,6 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
             GradientDrawable drawable = (GradientDrawable) category_imgView.getBackground();
             drawable.setColor(hexdecColor);
-            //category_imgView.setBackground(drawable);
 
             if (page == 0) quote_page_txtView.setVisibility(View.INVISIBLE); ///TODO:WTF
         }
