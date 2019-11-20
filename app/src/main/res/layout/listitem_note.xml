@@ -1,37 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/note_relLay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginTop="3dp">
+    android:layout_marginTop="3dp"
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/lay1"
+        android:id="@+id/noteLay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:background="@drawable/note_item_background">
 
         <ImageView
             android:id="@+id/note_marker_imgView"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="4dp"
-            android:background="@drawable/color_dot"
-            android:layout_centerVertical="true"/>
+            android:background="@drawable/color_dot" />
 
         <TextView
             android:id="@+id/note_text"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_margin="5dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:textSize="16sp"
             android:layout_toRightOf="@+id/note_marker_imgView"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet vel purus nec dictum. Phasellus molestie, urna a pretium blandit, ligula est lacinia nunc, non ultricies magna velit a erat. In lobortis nisl non ligula" />
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet vel purus nec dictum. Phasellus molestie, urna a pretium blandit, ligula est lacinia nunc." />
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/optionsLay"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:padding="5dp"
+        android:background="@drawable/note_item_background">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33">
+            <Button
+                android:id="@+id/addBtn"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:text="ADD"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33">
+            <Button
+                android:id="@+id/editBtn"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:text="EDIT"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33">
+            <Button
+                android:id="@+id/deleteBtn"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:text="DEL"/>
+        </RelativeLayout>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/note_recView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/lay1"
-        android:layout_marginLeft="20dp"/>
+        android:layout_below="@id/noteLay"
+        android:layout_marginLeft="20dp" />
 </RelativeLayout>

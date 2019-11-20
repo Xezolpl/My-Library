@@ -22,18 +22,14 @@ public class Chapter implements Serializable {
     @ColumnInfo(name = "name")
     private String name;
 
-    @ColumnInfo(name = "page")
-    private int page;
-
     @NonNull
     @ColumnInfo(name = "bookId")
     private String bookId;
 
-    public Chapter(@NonNull String id, int number, @NonNull String name, int page, @NonNull String bookId) {
+    public Chapter(@NonNull String id, int number, @NonNull String name, @NonNull String bookId) {
         this.id = id;
         this.number = number;
         this.name = name;
-        this.page = page;
         this.bookId = bookId;
     }
 
@@ -49,10 +45,6 @@ public class Chapter implements Serializable {
     @NonNull
     public String getName() {
         return name;
-    }
-
-    public int getPage() {
-        return page;
     }
 
     @NonNull

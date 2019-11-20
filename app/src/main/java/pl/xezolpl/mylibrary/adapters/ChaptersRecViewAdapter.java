@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -60,13 +63,66 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView chapter_name;
         private RecyclerView chapter_recView;
-       // private NotesRecViewAdapter adapter;
+        private RelativeLayout chapter_relLay;
+
+        private LinearLayout optionsLay;
+        private Button addBtn, editBtn, deleteBtn;
+
+        private NotesRecViewAdapter adapter;
+        private boolean isRecViewVisible = false;
+        private boolean isOptionsLayVisible = false;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            initWidgets();
+            setOnClickListeners();
+
+            chapter_recView.setVisibility(View.GONE);
+            optionsLay.setVisibility(View.GONE);
+        }
+
+        private void setOnClickListeners() {
+
+            chapter_relLay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isRecViewVisible) {
+                        chapter_recView.setVisibility(View.GONE);
+                        isRecViewVisible = false;
+                    } else {
+                        chapter_recView.setVisibility(View.VISIBLE);
+                        isRecViewVisible = true;
+                    }
+                }
+            });
+
+            chapter_relLay.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (isOptionsLayVisible) {
+                        optionsLay.setVisibility(View.GONE);
+                        isOptionsLayVisible = false;
+                    } else {
+                        optionsLay.setVisibility(View.VISIBLE);
+                        isOptionsLayVisible = true;
+                    }
+                    return false;
+                }
+            });
+        }
+
+        private void initWidgets() {
+
             chapter_name = (TextView) itemView.findViewById(R.id.chapter_name);
             chapter_recView = (RecyclerView) itemView.findViewById(R.id.chapter_recView);
+            chapter_relLay = (RelativeLayout) itemView.findViewById(R.id.chapter_relLay);
+
+            optionsLay = (LinearLayout) itemView.findViewById(R.id.optionsLay);
+            addBtn = (Button) itemView.findViewById(R.id.addBtn);
+            editBtn = (Button) itemView.findViewById(R.id.editBtn);
+            deleteBtn = (Button) itemView.findViewById(R.id.deleteBtn);
         }
 
         public void setData(Chapter chapter) {
@@ -77,10 +133,10 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
                 noteModel.getNotesByParent(chapter.getId()).observe((FragmentActivity) context, new Observer<List<Note>>() {
                     @Override
                     public void onChanged(List<Note> notes) {
-                        NotesRecViewAdapter adapter = new NotesRecViewAdapter(context);
+                        adapter = new NotesRecViewAdapter(context);
                         adapter.setNotesList(notes);
                         chapter_recView.setAdapter(adapter);
-                        chapter_recView.setLayoutManager(new GridLayoutManager(context,1));
+                        chapter_recView.setLayoutManager(new GridLayoutManager(context, 1));
                     }
                 });
             } catch (NullPointerException exc) {

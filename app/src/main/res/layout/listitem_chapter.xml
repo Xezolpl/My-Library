@@ -1,28 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chapter_relLay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="25dp"
     android:layout_marginLeft="10dp"
+    android:layout_marginTop="25dp"
     android:layout_marginRight="10dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/chapter_name"
+    <RelativeLayout
+        android:id="@+id/lay2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Chapter 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. In feugiat augue pretium eleifend congue."
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:background="@drawable/chapter_item_background"
-        android:textColor="#EAEAEA"/>
+        android:layout_height="80dp"
+        android:background="@drawable/chapter_item_background">
+
+        <TextView
+            android:id="@+id/chapter_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Chapter 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. In feugiat augue pretium eleifend congue."
+            android:textAlignment="center"
+            android:textColor="#EAEAEA"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/optionsLay"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:padding="5dp"
+        android:background="@drawable/chapter_item_background">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33">
+            <Button
+                android:id="@+id/addBtn"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:text="ADD"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33">
+            <Button
+                android:id="@+id/editBtn"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:text="EDIT"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33">
+            <Button
+                android:id="@+id/deleteBtn"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:text="DEL"/>
+        </RelativeLayout>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chapter_recView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/chapter_name"
+        android:layout_below="@id/lay2"
         android:layout_marginLeft="20dp" />
 
 

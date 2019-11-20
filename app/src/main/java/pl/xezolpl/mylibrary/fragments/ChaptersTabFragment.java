@@ -76,7 +76,6 @@ public class ChaptersTabFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: CREATE NEW CHAPTER DIALOG
             }
         });
 
