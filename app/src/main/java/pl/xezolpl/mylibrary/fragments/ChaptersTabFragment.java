@@ -2,6 +2,7 @@ package pl.xezolpl.mylibrary.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.activities.AddChapterActivity;
 import pl.xezolpl.mylibrary.adapters.ChaptersRecViewAdapter;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
@@ -57,7 +59,6 @@ public class ChaptersTabFragment extends Fragment {
             @Override
             public void onChanged(List<Chapter> chapters) {
                 adapter.setChaptersList(chapters);
-
             }
         });
     }
@@ -76,6 +77,9 @@ public class ChaptersTabFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(context, AddChapterActivity.class);
+                intent.putExtra("bookId",bookId);
+                startActivity(intent);
             }
         });
 
@@ -86,6 +90,5 @@ public class ChaptersTabFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.chapters_menu, menu);
-
     }
 }

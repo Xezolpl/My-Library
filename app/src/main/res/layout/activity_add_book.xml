@@ -3,15 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:layout_height="600dp"
+    android:layout_height="550dp"
     android:layout_centerInParent="true"
     android:excludeFromRecents="true"
     tools:context=".activities.AddBookActivity">
-
-    <ScrollView
-        android:id="@+id/add_book_scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -66,60 +61,11 @@
                 android:hint="Description"
                 android:textAlignment="center" />
 
-            <CheckBox
-                android:id="@+id/add_book_chapters_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/add_book_description"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="8dp"
-                android:text="Fill with chapters"
-                android:textColor="#828282" />
-
-            <RelativeLayout
-                android:id="@+id/add_book_chapters_relLay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/add_book_chapters_checkbox"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:id="@+id/add_book_chapters_txtView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginLeft="8dp"
-                    android:text="Chapters count:" />
-
-                <EditText
-                    android:id="@+id/add_book_chapters_edtTxt"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/add_book_chapters_txtView"
-                    android:layout_marginLeft="8dp" />
-
-                <Button
-                    android:id="@+id/add_book_generate_chapters_btn"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:text="Generate"
-                    android:layout_toRightOf="@id/add_book_chapters_edtTxt"
-                    android:layout_marginLeft="8dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/add_book_chapters_recView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/add_book_chapters_edtTxt"
-                    android:layout_margin="15dp"/>
-            </RelativeLayout>
-
             <LinearLayout
                 android:id="@+id/lin_lay_0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/add_book_chapters_relLay"
+                android:layout_below="@id/add_book_description"
                 android:layout_marginTop="10dp">
 
                 <EditText
@@ -163,5 +109,4 @@
             </LinearLayout>
 
         </RelativeLayout>
-    </ScrollView>
 </RelativeLayout>

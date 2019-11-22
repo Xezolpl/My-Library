@@ -40,8 +40,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<ChaptersNotesViewH
 
     @Override
     public void onBindViewHolder(@NonNull ChaptersNotesViewHolder holder, int position) {
-        Note note = notes.get(position);
-        holder.setData(note.getId(),note.getNote());
+        holder.setData(notes.get(position));
     }
 
     @Override

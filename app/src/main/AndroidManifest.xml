@@ -15,6 +15,12 @@
             android:name=".activities.AddBookActivity"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
         <activity
+            android:name=".activities.AddChapterActivity"
+            android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
+        <activity
+            android:name=".activities.AddNoteActivity"
+            android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
+        <activity
             android:name=".activities.AddQuoteActivity"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
         <activity

@@ -7,12 +7,20 @@
     android:layout_marginTop="25dp"
     android:layout_marginRight="10dp"
     android:orientation="vertical">
-
     <RelativeLayout
         android:id="@+id/lay2"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@drawable/chapter_item_background">
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/marker_imgView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:background="@drawable/color_dot" />
 
         <TextView
             android:id="@+id/textView"
@@ -23,6 +31,7 @@
             android:textAlignment="center"
             android:textColor="#EAEAEA"
             android:textSize="18sp"
+            android:layout_toRightOf="@+id/marker_imgView"
             android:textStyle="bold" />
     </RelativeLayout>
 
