@@ -22,7 +22,9 @@
         android:layout_below="@id/add_quote_txtView"
         android:layout_margin="10dp"
         android:hint="Quote title"
-        android:maxLines="1"/>
+        android:textAlignment="center"
+        android:maxLines="1"
+        android:maxLength="50"/>
 
     <EditText
         android:id="@+id/add_quote_quote_EditTxt"
@@ -30,6 +32,8 @@
         android:layout_height="150dp"
         android:layout_below="@id/add_quote_title_EditTxt"
         android:layout_margin="10dp"
+        android:textAlignment="center"
+        android:maxLength="220"
         android:hint="Quotation text" />
 
     <RelativeLayout
@@ -53,6 +57,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:maxLength="5"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/add_quote_page_txtView" />
     </RelativeLayout>

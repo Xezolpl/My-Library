@@ -14,6 +14,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
         android:hint="Chapter's name"
+        android:maxLength="100"
         android:textAlignment="center" />
 
     <LinearLayout
@@ -30,8 +31,9 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:layout_weight="0.5"
-            android:hint="Number"
+            android:hint="Chapter number:"
             android:lines="1"
+            android:maxLength="5"
             android:textAlignment="center" />
 
     </LinearLayout>

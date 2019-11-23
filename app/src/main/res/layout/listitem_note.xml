@@ -23,11 +23,11 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="5dp"
+            android:layout_margin="8dp"
             android:textSize="16sp"
+            android:maxLength="100"
             android:layout_toRightOf="@+id/marker_imgView"
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet vel purus nec dictum. Phasellus molestie, urna a pretium blandit, ligula est lacinia nunc." />
     </RelativeLayout>

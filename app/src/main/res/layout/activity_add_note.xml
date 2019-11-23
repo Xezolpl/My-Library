@@ -23,6 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/add_note_imgView"
         android:textAlignment="center"
+        android:maxLength="100"
         android:hint="Note"/>
 
     <LinearLayout
