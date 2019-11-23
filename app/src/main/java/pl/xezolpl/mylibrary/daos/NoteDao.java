@@ -23,10 +23,10 @@ public interface NoteDao {
     @Delete
     void delete(Note note);
 
-    @Query("SELECT * FROM notes")
+    @Query("SELECT * FROM notes ORDER BY note")
     LiveData<List<Note>> getAllNotes();
 
-    @Query("SELECT * FROM notes WHERE parentId=:parentId")
+    @Query("SELECT * FROM notes WHERE parentId=:parentId ORDER BY note")
     LiveData<List<Note>> getNotesByParent(String parentId);
 
     @Query("SELECT * FROM notes WHERE id=:id")

@@ -23,10 +23,10 @@ public interface BookDao {
     @Delete
     void delete(Book book);
 
-    @Query("SELECT * FROM books")
+    @Query("SELECT * FROM books ORDER BY title")
     LiveData<List<Book>> getAllBooks();
 
-    @Query("Select * FROM books WHERE status=:status")
+    @Query("Select * FROM books WHERE status=:status ORDER BY title")
     LiveData<List<Book>> getBooksWithStatus(int status);
 
     @Query("SELECT * FROM books WHERE id=:bookId")

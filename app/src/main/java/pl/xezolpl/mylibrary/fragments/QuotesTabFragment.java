@@ -100,6 +100,7 @@ public class QuotesTabFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, AddQuoteActivity.class);
+                intent.putExtra("bookId",bookId);
                 startActivityForResult(intent,ADD_QUOTE_ACTIVITY_REQUEST_CODE);
             }
         });
@@ -114,7 +115,7 @@ public class QuotesTabFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode== Activity.RESULT_OK){
-            Quote quote = (Quote) data.getSerializableExtra("quote");
+            Quote quote = (Quote) data.getSerializableExtra("quote_background");
             if(requestCode==ADD_QUOTE_ACTIVITY_REQUEST_CODE){
                 quoteViewModel.insert(quote);
             }

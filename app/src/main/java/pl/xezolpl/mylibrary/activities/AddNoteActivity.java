@@ -107,7 +107,7 @@ public class AddNoteActivity extends AppCompatActivity {
                     }
                     finish();
                 } else {
-                    Toast.makeText(AddNoteActivity.this, "Note can't be empty!", Toast.LENGTH_SHORT);
+                    Toast.makeText(AddNoteActivity.this, "Note can't be empty!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

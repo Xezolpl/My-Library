@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initWidgets();
         createOnClickListeners();
+
     }//ACTUALLY DISABLED
 
     private void createOnClickListeners() {
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         about_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

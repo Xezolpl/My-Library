@@ -20,12 +20,18 @@ public interface QuoteDao{
     @Delete
     void delete(Quote quote);
 
-    @Query("SELECT * FROM quotes")
+    @Query("SELECT * FROM quotes ORDER BY page")
     LiveData<List<Quote>> getAllQuotes();
 
     @Query("SELECT * FROM quotes WHERE id=:quoteId")
     LiveData<Quote> getQuote(String quoteId);
 
-    @Query("SELECT * FROM quotes WHERE category=:category")
-    LiveData<List<Quote>> getQuoteByCategory(String category);
+    @Query("SELECT * FROM quotes WHERE category=:category ORDER BY page")
+    LiveData<List<Quote>> getQuotesByCategory(String category);
+
+    @Query("SELECT * FROM quotes WHERE bookId=:bookId ORDER BY page")
+    LiveData<List<Quote>> getQuotesByBook(String bookId);
+
+    @Query("SELECT * FROM quotes WHERE chapterId=:chapterId ORDER BY page")
+    LiveData<List<Quote>> getQuotesByChapter(String chapterId);
 }

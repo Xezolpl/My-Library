@@ -27,6 +27,9 @@
             android:name=".activities.AddQuoteCategoryActivity"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
         <activity
+            android:name=".activities.InsertQuoteActivity"
+            android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
+        <activity
             android:name=".activities.OpenedBookActivity"
             android:parentActivityName=".activities.AllBooksActivity" />
         <activity android:name=".activities.AllBooksActivity">

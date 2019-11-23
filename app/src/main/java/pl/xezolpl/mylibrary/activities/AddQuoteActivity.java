@@ -30,6 +30,7 @@ public class AddQuoteActivity extends AppCompatActivity {
     private Button add_category_btn, ok_btn, cancel_btn;
 
     private Quote thisQuote = null;
+    private String bookId;
 
     private QuoteCategoryViewModel categoryViewModel;
     private QuoteCategorySpinnerAdapter spinnerAdapter;
@@ -49,11 +50,16 @@ public class AddQuoteActivity extends AppCompatActivity {
         categoryViewModel.getAllCategories().observe(this, new Observer<List<QuoteCategory>>() {
             @Override
             public void onChanged(List<QuoteCategory> quoteCategories) {
-
                 spinnerAdapter.setCategories(quoteCategories);
                 category_spinner.setAdapter(spinnerAdapter);
             }
         });
+
+        try {
+            bookId = getIntent().getStringExtra("bookId");
+        }catch (Exception exc){
+            exc.printStackTrace();
+        }
     }
 
     private void initWidgets() {
@@ -81,7 +87,7 @@ public class AddQuoteActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (areValidOutputs()) {
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra("quote", thisQuote);
+                    resultIntent.putExtra("quote_background", thisQuote);
                     setResult(RESULT_OK, resultIntent);
                     finish();
                 }
@@ -103,6 +109,8 @@ public class AddQuoteActivity extends AppCompatActivity {
         String quote = quote_EditTxt.getText().toString();
         int page = 0;
         String category = ((QuoteCategory)spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())).getName();
+        //TODO: HARD-CODED "UNCATEGORIZED" QUOTE CATEGORY
+
         String id;
 
         if (page_EditTxt.length() > 0) {
@@ -125,7 +133,7 @@ public class AddQuoteActivity extends AppCompatActivity {
             id = UUID.randomUUID().toString();
         }
 
-        thisQuote = new Quote(id, quote, title, category, page);
+        thisQuote = new Quote(id, quote, title, category, page, bookId);
         return true;
     }
 

@@ -59,6 +59,18 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.33">
             <Button
+                android:id="@+id/insertQuoteBtn"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerInParent="true"
+                android:text="ADD QUOTE"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33">
+            <Button
                 android:id="@+id/editBtn"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
@@ -85,6 +97,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/lay2"
         android:layout_marginLeft="20dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/quotes_recView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recView"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="8dp"/>
 
 
 </RelativeLayout>

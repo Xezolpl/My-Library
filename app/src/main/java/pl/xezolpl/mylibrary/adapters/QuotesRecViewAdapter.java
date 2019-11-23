@@ -1,6 +1,7 @@
 package pl.xezolpl.mylibrary.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -34,6 +36,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     private LayoutInflater inflater;
     private List<Quote> quotes = new ArrayList<>();
     private List<Quote> quotesFull;
+    private List<Quote> chapterQuotes;
     private List<QuoteCategory> allCategories;
 
     public QuotesRecViewAdapter(Context context) {
@@ -52,6 +55,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     public void setQuotes(List<Quote> quotes) {
         this.quotes = quotes;
         quotesFull = new ArrayList<>(this.quotes);
+        chapterQuotes = new ArrayList<>();
         notifyDataSetChanged();
     }
 
@@ -88,14 +92,30 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         holder.quote_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!holder.expanded) {
+                if (!holder.isExpanded) {
                     holder.setExpanded();
                 } else {
                     holder.setCollapsed();
                 }
             }
         });
+
+        holder.quote_lay.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(!holder.isSelected){
+                    chapterQuotes.add(quotes.get(position));
+                    holder.setSelected(true);
+                }else {
+                    chapterQuotes.remove(quotes.get(position));
+                    holder.setSelected(false);
+                }
+                return false;
+            }
+        });
     }
+
+    public List<Quote> getChapterQuotes(){return chapterQuotes;}
 
     @Override
     public int getItemCount() {
@@ -140,7 +160,8 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         private TextView quote_title_txtView, quote_txtView_expanded, quote_txtView_collapsed, category_txtView, quote_page_txtView;
         private ImageView category_imgView;
         private RelativeLayout quote_expanded_lay, quote_collapsed_lay, quote_lay;
-        private boolean expanded = false;
+        private boolean isExpanded = false;
+        private boolean isSelected = false;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -174,13 +195,26 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         void setExpanded() {
             quote_collapsed_lay.setVisibility(View.GONE);
             quote_expanded_lay.setVisibility(View.VISIBLE);
-            expanded = true;
+            isExpanded = true;
         }
 
         void setCollapsed() {
             quote_expanded_lay.setVisibility(View.GONE);
             quote_collapsed_lay.setVisibility(View.VISIBLE);
-            expanded = false;
+            isExpanded = false;
+        }
+
+        void setSelected(boolean b){
+            if(b){
+                Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.selected_quote_background, null);
+                quote_lay.setBackground(drawable);
+                isSelected = true;
+            }else{
+                Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.quote_background, null);
+                quote_lay.setBackground(drawable);
+                isSelected = false;
+            }
+            setExpanded();
         }
     }
 

@@ -22,10 +22,13 @@ import java.util.List;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddChapterActivity;
 import pl.xezolpl.mylibrary.activities.AddNoteActivity;
+import pl.xezolpl.mylibrary.activities.InsertQuoteActivity;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.models.Note;
+import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
+import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
     public static final int FROM_CHAPTER = 1;
@@ -35,12 +38,12 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
     public static final int DELETE_REQUEST = 4;
 
     private TextView textView;
-    private RecyclerView recView;
+    private RecyclerView recView, quotesRecView;
     private ImageView marker_imgView;
     private RelativeLayout wholeRelLay;
 
     private LinearLayout optionsLay;
-    private Button addBtn, editBtn, deleteBtn;
+    private Button addBtn, editBtn, deleteBtn, insertQuoteBtn;
 
     private NotesRecViewAdapter adapter;
     private boolean isRecViewVisible = false;
@@ -50,16 +53,24 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
     private int parent;
     private Chapter parentChapter = null;
     private Note parentNote = null;
+    private QuotesRecViewAdapter quotesAdapter;
 
     public ChaptersNotesViewHolder(@NonNull View itemView, Context context, int parent) {
         super(itemView);
         this.context = context;
+        this.parent = parent;
 
         initWidgets();
         setOnClickListeners();
 
         setRecViewVisible(false);
         setOptionsLayVisible(false);
+
+        if (parent == FROM_CHAPTER) {
+            quotesAdapter = new QuotesRecViewAdapter(context);
+            quotesRecView.setLayoutManager(new GridLayoutManager(context, 1));
+        }
+
     }
 
     private void setOnClickListeners() {
@@ -110,10 +121,10 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
                 Intent intent;
-                if(parent == FROM_CHAPTER){
+                if (parent == FROM_CHAPTER) {
                     intent = new Intent(context, AddChapterActivity.class);
                     intent.putExtra("chapter", parentChapter);
-                }else {
+                } else {
                     intent = new Intent(context, AddNoteActivity.class);
                     intent.putExtra("note", parentNote);
                 }
@@ -125,17 +136,29 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(parent  == FROM_CHAPTER){
-                    ChapterViewModel model = ViewModelProviders.of((FragmentActivity)context).get(ChapterViewModel.class);
+                if (parent == FROM_CHAPTER) {
+                    ChapterViewModel model = ViewModelProviders.of((FragmentActivity) context).get(ChapterViewModel.class);
                     model.delete(parentChapter);
-                }else {
-                    NoteViewModel model  = ViewModelProviders.of((FragmentActivity)context).get(NoteViewModel.class);
+                } else {
+                    NoteViewModel model = ViewModelProviders.of((FragmentActivity) context).get(NoteViewModel.class);
                     model.delete(parentNote);
                     setOptionsLayVisible(false);
                     setRecViewVisible(false);
                 }
             }
         });
+
+        if (parent == FROM_CHAPTER) {
+            insertQuoteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, InsertQuoteActivity.class);
+                    intent.putExtra("chapter", parentChapter);
+                    context.startActivity(intent);
+                    //TODO: DIALOG / VIEW WITH RECVIEW WITH CHECKBOXES OF QUOTES FROM THIS BOOK
+                }
+            });
+        }
     }
 
     private void initWidgets() {
@@ -143,7 +166,12 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         textView = (TextView) itemView.findViewById(R.id.textView);
         recView = (RecyclerView) itemView.findViewById(R.id.recView);
         wholeRelLay = (RelativeLayout) itemView.findViewById(R.id.wholeRelLay);
-        marker_imgView = (ImageView) itemView.findViewById(R.id.marker_imgView);
+        if (parent == FROM_NOTE)
+            marker_imgView = (ImageView) itemView.findViewById(R.id.marker_imgView);
+        else {
+            insertQuoteBtn = (Button) itemView.findViewById(R.id.insertQuoteBtn);
+            quotesRecView = (RecyclerView) itemView.findViewById(R.id.quotes_recView);
+        }
 
         optionsLay = (LinearLayout) itemView.findViewById(R.id.optionsLay);
         addBtn = (Button) itemView.findViewById(R.id.addBtn);
@@ -155,7 +183,6 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
     public void setData(Chapter chapter) {
 
         parentChapter = chapter;
-        parent = FROM_CHAPTER;
         textView.setText(chapter.getName());
         try {
             NoteViewModel noteModel = ViewModelProviders.of((FragmentActivity) context).get(NoteViewModel.class);
@@ -171,12 +198,20 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         } catch (NullPointerException exc) {
             exc.printStackTrace();
         }
+
+        QuoteViewModel quoteViewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteViewModel.class);
+        quoteViewModel.getQuotesByChapter(parentChapter.getId()).observe((FragmentActivity)context, new Observer<List<Quote>>() {
+            @Override
+            public void onChanged(List<Quote> quotes) {
+                quotesAdapter.setQuotes(quotes);
+                quotesRecView.setAdapter(quotesAdapter);
+            }
+        });
     }
 
     public void setData(Note note) {
 
         parentNote = note;
-        parent = FROM_NOTE;
         textView.setText(note.getNote());
         try {
             NoteViewModel noteModel = ViewModelProviders.of((FragmentActivity) context).get(NoteViewModel.class);
@@ -194,23 +229,21 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setOptionsLayVisible(boolean b){
-        if(b){
+    public void setOptionsLayVisible(boolean b) {
+        if (b) {
             optionsLay.setVisibility(View.VISIBLE);
             isOptionsLayVisible = true;
-        }
-        else{
+        } else {
             optionsLay.setVisibility(View.GONE);
             isOptionsLayVisible = false;
         }
     }
 
-    public void setRecViewVisible(boolean b){
-        if(b){
+    public void setRecViewVisible(boolean b) {
+        if (b) {
             recView.setVisibility(View.VISIBLE);
             isRecViewVisible = true;
-        }
-        else{
+        } else {
             recView.setVisibility(View.GONE);
             isRecViewVisible = false;
         }

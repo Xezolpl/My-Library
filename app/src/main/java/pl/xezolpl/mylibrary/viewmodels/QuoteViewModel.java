@@ -33,7 +33,15 @@ public class QuoteViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Quote>> getQuotesByCategory(String id) {
-        return quoteDao.getQuoteByCategory(id);
+        return quoteDao.getQuotesByCategory(id);
+    }
+
+    public LiveData<List<Quote>> getQuotesByBook(String bookId){
+        return quoteDao.getQuotesByBook(bookId);
+    }
+
+    public LiveData<List<Quote>> getQuotesByChapter(String chapterId){
+        return quoteDao.getQuotesByChapter(chapterId);
     }
 
     public void insert(Quote quote) {
