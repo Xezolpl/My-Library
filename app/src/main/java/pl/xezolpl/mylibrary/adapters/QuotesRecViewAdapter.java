@@ -1,12 +1,15 @@
 package pl.xezolpl.mylibrary.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -24,9 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
+import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
+import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder> implements Filterable {
     private static final String TAG = "QuotesRecViewAdapter";
@@ -38,6 +44,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     private List<Quote> quotesFull;
     private List<Quote> chapterQuotes;
     private List<QuoteCategory> allCategories;
+    private boolean inserting = false;
 
     public QuotesRecViewAdapter(Context context) {
         this.context = context;
@@ -50,6 +57,20 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 allCategories = quoteCategories;
             }
         });
+    }
+
+    public QuotesRecViewAdapter(Context context, boolean inserting) {
+        this.context = context;
+        this.inflater = LayoutInflater.from(context);
+
+        QuoteCategoryViewModel viewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteCategoryViewModel.class);
+        viewModel.getAllCategories().observe((FragmentActivity) context, new Observer<List<QuoteCategory>>() {
+            @Override
+            public void onChanged(List<QuoteCategory> quoteCategories) {
+                allCategories = quoteCategories;
+            }
+        });
+        this.inserting = inserting;
     }
 
     public void setQuotes(List<Quote> quotes) {
@@ -71,7 +92,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         Log.d(TAG, "onBindViewHolder: ");
 
         QuoteCategory category = null;
-        Quote q = quotes.get(position);
+        final Quote q = quotes.get(position);
 
         for (int i = 0; i < allCategories.size(); i++) {
             if (allCategories.get(i).getName().equals(q.getCategory())) {
@@ -89,6 +110,25 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
         holder.setData(q.getTitle(), q.getQuote(), q.getCategory(), q.getPage(), color);
 
+        holder.editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, AddQuoteActivity.class);
+                intent.putExtra("quote",q);
+                ((Activity)context).startActivityForResult(intent, QuotesTabFragment.EDIT_QUOTE_ACTIVITY_REQUEST_CODE);
+                notifyDataSetChanged();
+            }
+        });
+
+        holder.delBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                QuoteViewModel quoteViewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteViewModel.class);
+                quoteViewModel.delete(q);
+                notifyDataSetChanged();
+            }
+        });
+
         holder.quote_lay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,22 +140,26 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             }
         });
 
-        holder.quote_lay.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if(!holder.isSelected){
-                    chapterQuotes.add(quotes.get(position));
-                    holder.setSelected(true);
-                }else {
-                    chapterQuotes.remove(quotes.get(position));
-                    holder.setSelected(false);
+        if (inserting) {
+            holder.quote_lay.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (!holder.isSelected) {
+                        chapterQuotes.add(quotes.get(position));
+                        holder.setSelected(true);
+                    } else {
+                        chapterQuotes.remove(quotes.get(position));
+                        holder.setSelected(false);
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
+        }
     }
 
-    public List<Quote> getChapterQuotes(){return chapterQuotes;}
+    public List<Quote> getChapterQuotes() {
+        return chapterQuotes;
+    }
 
     @Override
     public int getItemCount() {
@@ -137,8 +181,8 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 String filteredPattern = charSequence.toString().toLowerCase().trim();
                 for (Quote q : quotesFull) {
                     if (q.getTitle().toLowerCase().contains(filteredPattern) ||
-                    q.getQuote().toLowerCase().contains(filteredPattern) ||
-                    q.getCategory().toLowerCase().contains(filteredPattern)) {
+                            q.getQuote().toLowerCase().contains(filteredPattern) ||
+                            q.getCategory().toLowerCase().contains(filteredPattern)) {
                         filteredList.add(q);
                     }
                 }
@@ -160,6 +204,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         private TextView quote_title_txtView, quote_txtView_expanded, quote_txtView_collapsed, category_txtView, quote_page_txtView;
         private ImageView category_imgView;
         private RelativeLayout quote_expanded_lay, quote_collapsed_lay, quote_lay;
+        private Button editBtn, delBtn;
         private boolean isExpanded = false;
         private boolean isSelected = false;
 
@@ -176,7 +221,11 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             quote_collapsed_lay = (RelativeLayout) itemView.findViewById(R.id.quote_collapsed_lay);
             quote_lay = (RelativeLayout) itemView.findViewById(R.id.quote_lay);
 
+            editBtn = (Button) itemView.findViewById(R.id.editBtn);
+            delBtn = (Button) itemView.findViewById(R.id.delBtn);
+
             quote_expanded_lay.setVisibility(View.GONE);
+
         }
 
         void setData(String title, String quote, String category, int page, int hexdecColor) {
@@ -189,7 +238,8 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             GradientDrawable drawable = (GradientDrawable) category_imgView.getBackground();
             drawable.setColor(hexdecColor);
 
-            if (page == 0) quote_page_txtView.setVisibility(View.INVISIBLE); ///TODO:WTF
+            if (page == 0) quote_page_txtView.setVisibility(View.GONE); ///TODO:WTF
+            else quote_page_txtView.setVisibility(View.VISIBLE);
         }
 
         void setExpanded() {
@@ -204,12 +254,12 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             isExpanded = false;
         }
 
-        void setSelected(boolean b){
-            if(b){
+        void setSelected(boolean b) {
+            if (b) {
                 Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.selected_quote_background, null);
                 quote_lay.setBackground(drawable);
                 isSelected = true;
-            }else{
+            } else {
                 Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.quote_background, null);
                 quote_lay.setBackground(drawable);
                 isSelected = false;

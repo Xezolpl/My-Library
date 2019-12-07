@@ -3,6 +3,8 @@ package pl.xezolpl.mylibrary.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -35,7 +37,6 @@ public class BooksListTabFragment extends Fragment{
     private BookViewModel bookViewModel;
 
     public BooksListTabFragment(int tabBooksStatus, Context context) {
-        super();
         this.tabBooksStatus = tabBooksStatus;
         this.context = context;
     }
@@ -67,6 +68,11 @@ public class BooksListTabFragment extends Fragment{
         booksRecView.setLayoutManager(new GridLayoutManager(context, 2));
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+
     }
 
     public void setFilter(String filter) {

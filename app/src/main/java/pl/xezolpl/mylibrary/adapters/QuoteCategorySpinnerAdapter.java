@@ -38,7 +38,12 @@ public class QuoteCategorySpinnerAdapter extends BaseAdapter {
             colours[i] = categories.get(i).getColor();
         }
     }
-
+    public int getItemPosition(String s){
+        for(int i=0; i<names.length; i++){
+            if(s == names[i]) return i;
+        }
+        return 0;
+    }
     @Override
     public int getCount() {
         return categories.size();

@@ -63,11 +63,13 @@ public class BookNotesTabFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        quotesTabFragment.setMenuVisibility(true);
+        if(book_notes_viewpager.getCurrentItem()==0) quotesTabFragment.setMenuVisibility(false);
+        else quotesTabFragment.setMenuVisibility(true);
     }
 
     @Override
     public void onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu();
         quotesTabFragment.setMenuVisibility(false);
     }
 

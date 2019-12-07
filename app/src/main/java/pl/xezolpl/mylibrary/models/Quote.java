@@ -14,7 +14,7 @@ public class Quote implements Serializable {
     private String id;
 
     @NonNull
-    @ColumnInfo(name = "quote_background")
+    @ColumnInfo(name = "quote")
     private String quote;
 
     @ColumnInfo(name = "title")

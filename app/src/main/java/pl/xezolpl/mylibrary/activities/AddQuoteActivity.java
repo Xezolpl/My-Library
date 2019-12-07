@@ -50,6 +50,9 @@ public class AddQuoteActivity extends AppCompatActivity {
         categoryViewModel.getAllCategories().observe(this, new Observer<List<QuoteCategory>>() {
             @Override
             public void onChanged(List<QuoteCategory> quoteCategories) {
+                if(quoteCategories.size()==0){
+                    categoryViewModel.insert(new QuoteCategory("Uncategorized",0x44BBFF));
+                }
                 spinnerAdapter.setCategories(quoteCategories);
                 category_spinner.setAdapter(spinnerAdapter);
             }
@@ -57,7 +60,14 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         try {
             bookId = getIntent().getStringExtra("bookId");
-        }catch (Exception exc){
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+
+        try {
+            thisQuote = (Quote) getIntent().getSerializableExtra("quote");
+            loadQuoteData(thisQuote);
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
     }
@@ -70,6 +80,13 @@ public class AddQuoteActivity extends AppCompatActivity {
         add_category_btn = (Button) findViewById(R.id.add_quote_add_category_btn);
         ok_btn = (Button) findViewById(R.id.add_quote_ok_btn);
         cancel_btn = (Button) findViewById(R.id.add_quote_cancel_btn);
+    }
+
+    private void loadQuoteData(Quote quote) {
+        title_EditTxt.setText(quote.getTitle());
+        quote_EditTxt.setText(quote.getQuote());
+        page_EditTxt.setText("" + quote.getPage());
+        category_spinner.setSelection(spinnerAdapter.getItemPosition(quote.getCategory()));
     }
 
     private void setOnClickListeners() {
@@ -87,7 +104,7 @@ public class AddQuoteActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (areValidOutputs()) {
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra("quote_background", thisQuote);
+                    resultIntent.putExtra("quote", thisQuote);
                     setResult(RESULT_OK, resultIntent);
                     finish();
                 }
@@ -108,7 +125,7 @@ public class AddQuoteActivity extends AppCompatActivity {
         String title = title_EditTxt.getText().toString();
         String quote = quote_EditTxt.getText().toString();
         int page = 0;
-        String category = ((QuoteCategory)spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())).getName();
+        String category = ((QuoteCategory) spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())).getName();
         //TODO: HARD-CODED "UNCATEGORIZED" QUOTE CATEGORY
 
         String id;
@@ -144,6 +161,8 @@ public class AddQuoteActivity extends AppCompatActivity {
             if (requestCode == QuotesTabFragment.ADD_CATEGORY_ACTIVITY_REQUEST_CODE) {
                 QuoteCategory category = (QuoteCategory) data.getSerializableExtra("category");
                 categoryViewModel.insert(category);
+            } else if (requestCode == QuotesTabFragment.EDIT_CATEGORY_ACTIVITY_REQUEST_CODE) {
+
             }
         }
     }

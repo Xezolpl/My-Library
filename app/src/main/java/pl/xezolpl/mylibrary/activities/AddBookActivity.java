@@ -18,12 +18,11 @@ import com.bumptech.glide.Glide;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.dialogs.SelectCoverDialog;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class AddBookActivity extends AppCompatActivity {
     private static final String TAG = "AddBookActivity";
-
+    private static final String GET_BOOK_GOODREADS_ID_BY_ISBN = "https://www.goodreads.com/book/isbn_to_id";
     private EditText add_book_title, add_book_author, add_book_description, add_book_pages, add_book_chapters_edtTxt;
     private Button select_image_btn;
     private ImageView add_book_image;
@@ -38,7 +37,7 @@ public class AddBookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
-
+        //grapi.INSTANCE.init(this, BuildConfig.goodreadsKey, BuildConfig.goodreadsSecret, BuildConfig.goodreadsCallback)
         initWidgets();
         setUpStatusSpinner();
         setFinishOnTouchOutside(false);
@@ -75,8 +74,8 @@ public class AddBookActivity extends AppCompatActivity {
         select_image_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SelectCoverDialog coverDialog = new SelectCoverDialog();
-                coverDialog.show(getSupportFragmentManager(), "Select book's cover");
+                Intent intent = new Intent(AddBookActivity.this, SelectCoverActivity.class);
+                intent.putExtra("title", thisBook.getTitle());
                 //TODO:SELECT COVER AND SEND IT TO THIS ACTIVITY
             }
         });
@@ -140,6 +139,7 @@ public class AddBookActivity extends AppCompatActivity {
                 add_book_description.length() > 0 &&
                 pages != 0);
     }
+
 /* FIRST FIND API FOR IT!!!
     private void downloadImageFromUri(String address) {
         URL url;

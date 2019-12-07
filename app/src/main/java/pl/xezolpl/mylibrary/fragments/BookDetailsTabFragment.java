@@ -57,7 +57,7 @@ public class BookDetailsTabFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-
+        menu.clear();
         inflater.inflate(R.menu.opened_book_menu, menu);
 
         MenuItem editItem = menu.findItem(R.id.action_edit);

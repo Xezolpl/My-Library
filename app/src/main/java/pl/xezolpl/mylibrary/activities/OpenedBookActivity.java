@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -17,7 +18,10 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.TabFragmentPagerAdapter;
 import pl.xezolpl.mylibrary.fragments.BookDetailsTabFragment;
 import pl.xezolpl.mylibrary.fragments.BookNotesTabFragment;
+import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import pl.xezolpl.mylibrary.models.Book;
+import pl.xezolpl.mylibrary.models.Quote;
+import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class OpenedBookActivity extends AppCompatActivity {
     private static final String TAG = "OpenedBookActivity";
@@ -57,7 +61,24 @@ public class OpenedBookActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        setResult(resultCode,data);
+        if(requestCode == QuotesTabFragment.EDIT_QUOTE_ACTIVITY_REQUEST_CODE){
+            try {
+                Quote quote = (Quote) data.getSerializableExtra("quote");
+                QuoteViewModel quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
+                quoteViewModel.update(quote);
+            }catch (Exception exc){
+                exc.printStackTrace();
+            }
+        }else if(resultCode == QuotesTabFragment.RESULT_DELETE){
+            try {
+                Quote quote = (Quote) data.getSerializableExtra("quote");
+                QuoteViewModel quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
+                quoteViewModel.delete(quote);
+            }catch (Exception exc){
+                exc.printStackTrace();
+            }
+        }
+        else setResult(resultCode,data);
     }
 
     private void initWidgets() {

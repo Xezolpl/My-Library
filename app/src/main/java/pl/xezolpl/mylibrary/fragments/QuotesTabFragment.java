@@ -40,6 +40,7 @@ public class QuotesTabFragment extends Fragment {
     public static final int EDIT_QUOTE_ACTIVITY_REQUEST_CODE=2;
     public static final int ADD_CATEGORY_ACTIVITY_REQUEST_CODE=3;
     public static final int EDIT_CATEGORY_ACTIVITY_REQUEST_CODE=4;
+    public static final int RESULT_DELETE=8;
 
     private Context context;
     private String bookId;
@@ -62,7 +63,6 @@ public class QuotesTabFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         quotesRecViewAdapter = new QuotesRecViewAdapter(context);
 
         quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
@@ -101,7 +101,7 @@ public class QuotesTabFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(context, AddQuoteActivity.class);
                 intent.putExtra("bookId",bookId);
-                startActivityForResult(intent,ADD_QUOTE_ACTIVITY_REQUEST_CODE);
+                ((Activity)context).startActivityForResult(intent,ADD_QUOTE_ACTIVITY_REQUEST_CODE);
             }
         });
         setHasOptionsMenu(true);
@@ -115,7 +115,7 @@ public class QuotesTabFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode== Activity.RESULT_OK){
-            Quote quote = (Quote) data.getSerializableExtra("quote_background");
+            Quote quote = (Quote) data.getSerializableExtra("quote");
             if(requestCode==ADD_QUOTE_ACTIVITY_REQUEST_CODE){
                 quoteViewModel.insert(quote);
             }
@@ -123,12 +123,16 @@ public class QuotesTabFragment extends Fragment {
                 quoteViewModel.update(quote);
             }
         }
+        else if (resultCode==RESULT_DELETE){
+            Quote quote = (Quote) data.getSerializableExtra("quote");
+            quoteViewModel.delete(quote);
+        }
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 
-        inflater.inflate(R.menu.quotes_menu, menu);
+         inflater.inflate(R.menu.quotes_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.quotes_searchView);
         SearchView searchView = (SearchView) searchItem.getActionView();

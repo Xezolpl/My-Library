@@ -43,7 +43,7 @@ public class InsertQuoteActivity extends AppCompatActivity {
             exc.printStackTrace();
         }
 
-        adapter = new QuotesRecViewAdapter(this);
+        adapter = new QuotesRecViewAdapter(this, true);
         recView.setLayoutManager(new GridLayoutManager(this,1));
 
         viewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
