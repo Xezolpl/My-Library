@@ -1,6 +1,7 @@
 package pl.xezolpl.mylibrary.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -51,7 +52,9 @@ public class AddQuoteActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<QuoteCategory> quoteCategories) {
                 if(quoteCategories.size()==0){
-                    categoryViewModel.insert(new QuoteCategory("Uncategorized",0x44BBFF));
+                    QuoteCategory qc = new QuoteCategory("Uncategorized", Color.parseColor("#44BBFF"));
+                    categoryViewModel.insert(qc);
+                    quoteCategories.add(qc);
                 }
                 spinnerAdapter.setCategories(quoteCategories);
                 category_spinner.setAdapter(spinnerAdapter);
@@ -126,8 +129,6 @@ public class AddQuoteActivity extends AppCompatActivity {
         String quote = quote_EditTxt.getText().toString();
         int page = 0;
         String category = ((QuoteCategory) spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())).getName();
-        //TODO: HARD-CODED "UNCATEGORIZED" QUOTE CATEGORY
-
         String id;
 
         if (page_EditTxt.length() > 0) {

@@ -21,8 +21,6 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class AddBookActivity extends AppCompatActivity {
-    private static final String TAG = "AddBookActivity";
-    private static final String GET_BOOK_GOODREADS_ID_BY_ISBN = "https://www.goodreads.com/book/isbn_to_id";
     private EditText add_book_title, add_book_author, add_book_description, add_book_pages, add_book_chapters_edtTxt;
     private Button select_image_btn;
     private ImageView add_book_image;
@@ -37,7 +35,7 @@ public class AddBookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
-        //grapi.INSTANCE.init(this, BuildConfig.goodreadsKey, BuildConfig.goodreadsSecret, BuildConfig.goodreadsCallback)
+
         initWidgets();
         setUpStatusSpinner();
         setFinishOnTouchOutside(false);
