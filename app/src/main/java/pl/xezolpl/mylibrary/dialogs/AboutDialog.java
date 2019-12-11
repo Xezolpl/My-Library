@@ -24,7 +24,6 @@ public class AboutDialog extends AppCompatDialogFragment {
         builder.setView(mView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
             }
         });
         return builder.create();

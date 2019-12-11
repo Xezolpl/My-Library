@@ -1,6 +1,5 @@
 package pl.xezolpl.mylibrary.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,11 +25,8 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
-import pl.xezolpl.mylibrary.adapters.QuoteCategorySpinnerAdapter;
 import pl.xezolpl.mylibrary.adapters.QuotesRecViewAdapter;
 import pl.xezolpl.mylibrary.models.Quote;
-import pl.xezolpl.mylibrary.models.QuoteCategory;
-import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesTabFragment extends Fragment {
@@ -50,9 +45,6 @@ public class QuotesTabFragment extends Fragment {
 
     private QuoteViewModel quoteViewModel;
     private QuotesRecViewAdapter quotesRecViewAdapter;
-    private QuoteCategoryViewModel quoteCategoryViewModel;
-    private QuoteCategorySpinnerAdapter spinnerAdapter;
-    private Spinner categorySpinner;
 
 
     public QuotesTabFragment(Context context, String bookId) {
@@ -63,6 +55,7 @@ public class QuotesTabFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         quotesRecViewAdapter = new QuotesRecViewAdapter(context);
 
         quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
@@ -73,16 +66,6 @@ public class QuotesTabFragment extends Fragment {
             }
         });
 
-
-        spinnerAdapter = new QuoteCategorySpinnerAdapter(context);
-
-        quoteCategoryViewModel = ViewModelProviders.of(this).get(QuoteCategoryViewModel.class);
-        quoteCategoryViewModel.getAllCategories().observe(this, new Observer<List<QuoteCategory>>() {
-            @Override
-            public void onChanged(List<QuoteCategory> quoteCategories) {
-                spinnerAdapter.setCategories(quoteCategories);
-            }
-        });
     }
 
     @Nullable
@@ -101,7 +84,7 @@ public class QuotesTabFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(context, AddQuoteActivity.class);
                 intent.putExtra("bookId",bookId);
-                ((Activity)context).startActivityForResult(intent,ADD_QUOTE_ACTIVITY_REQUEST_CODE);
+                context.startActivity(intent);
             }
         });
         setHasOptionsMenu(true);
@@ -111,28 +94,8 @@ public class QuotesTabFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode== Activity.RESULT_OK){
-            Quote quote = (Quote) data.getSerializableExtra("quote");
-            if(requestCode==ADD_QUOTE_ACTIVITY_REQUEST_CODE){
-                quoteViewModel.insert(quote);
-            }
-            else if (requestCode == EDIT_QUOTE_ACTIVITY_REQUEST_CODE){
-                quoteViewModel.update(quote);
-            }
-        }
-        else if (resultCode==RESULT_DELETE){
-            Quote quote = (Quote) data.getSerializableExtra("quote");
-            quoteViewModel.delete(quote);
-        }
-    }
-
-    @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-
-         inflater.inflate(R.menu.quotes_menu, menu);
+        inflater.inflate(R.menu.quotes_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.quotes_searchView);
         SearchView searchView = (SearchView) searchItem.getActionView();

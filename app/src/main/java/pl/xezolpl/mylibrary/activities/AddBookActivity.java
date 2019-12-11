@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,9 +20,11 @@ import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.models.Book;
+import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 
 public class AddBookActivity extends AppCompatActivity {
-    private EditText add_book_title, add_book_author, add_book_description, add_book_pages, add_book_chapters_edtTxt;
+
+    private EditText add_book_title, add_book_author, add_book_description, add_book_pages;
     private Button select_image_btn;
     private ImageView add_book_image;
     private Spinner status_spinner;
@@ -29,7 +32,7 @@ public class AddBookActivity extends AppCompatActivity {
     private Button add_book_ok_btn, add_book_cancel_btn;
 
     private Book thisBook = null;
-    private int chaptersCount = 0;
+    private boolean inEditing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,13 @@ public class AddBookActivity extends AppCompatActivity {
         setUpStatusSpinner();
         setFinishOnTouchOutside(false);
         setOnClickListeners();
+
+        Intent intent = getIntent();
+        if (intent.hasExtra("book")) {
+            thisBook = (Book) intent.getSerializableExtra("book");
+            inEditing = true;
+            loadBookData(thisBook);
+        }
     }
 
     private void loadBookData(Book thisBook) {
@@ -62,7 +72,6 @@ public class AddBookActivity extends AppCompatActivity {
         status_spinner = (Spinner) findViewById(R.id.status_spinner);
         book_covers_rec_view = (RecyclerView) findViewById(R.id.book_covers_rec_view);
 
-        //result buttons
         add_book_ok_btn = (Button) findViewById(R.id.add_book_ok_btn);
         add_book_cancel_btn = (Button) findViewById(R.id.add_book_cancel_btn);
     }
@@ -73,7 +82,7 @@ public class AddBookActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AddBookActivity.this, SelectCoverActivity.class);
-                intent.putExtra("title", thisBook.getTitle());
+                startActivity(intent);
                 //TODO:SELECT COVER AND SEND IT TO THIS ACTIVITY
             }
         });
@@ -83,27 +92,17 @@ public class AddBookActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (areValidOutputs()) {
 
-                    String title = add_book_title.getText().toString();
-                    String author = add_book_author.getText().toString();
-                    String imageUrl = "https://images-na.ssl-images-amazon.com/images/I/51uLvJlKpNL._SX321_BO1,204,203,200_.jpg";
-                    String description = add_book_description.getText().toString();
-                    int pages = Integer.valueOf(add_book_pages.getText().toString());
-                    int status = status_spinner.getSelectedItemPosition();
-                    String id;
+                    BookViewModel model = ViewModelProviders.of(AddBookActivity.this).get(BookViewModel.class);
+                    if (inEditing) {
+                        model.update(thisBook);
 
-                    if (thisBook == null) {
-                        id = UUID.randomUUID().toString();
-                        thisBook = new Book(title, author, imageUrl, description, pages,
-                                id, status);
+                        Intent intent = new Intent();
+                        intent.putExtra("book", thisBook);
+                        setResult(RESULT_OK, intent);
+
                     } else {
-                        id = thisBook.getId();
-                        thisBook = new Book(title, author, imageUrl, description, pages,
-                                id, status);
+                        model.insert(thisBook);
                     }
-
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("book", thisBook);
-                    setResult(RESULT_OK, resultIntent);
                     finish();
                 }
             }
@@ -126,43 +125,36 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
     private boolean areValidOutputs() {
-        int pages = 0;
+        String title, author, imageUrl, description;
+        int status, pages = 0;
+        String id;
+
         try {
-            pages = Integer.valueOf(add_book_pages.getText().toString());
-        } catch (NumberFormatException exc) {
-            Toast.makeText(this, "Type pages as a number", Toast.LENGTH_SHORT).show();
+            id = thisBook.getId();
+        } catch (NullPointerException e) {
+            id = UUID.randomUUID().toString();
         }
-        return (add_book_title.length() > 0 &&
-                add_book_author.length() > 0 &&
-                add_book_description.length() > 0 &&
-                pages != 0);
+
+        if (add_book_title.getText().length() > 1) {
+            title = add_book_title.getText().toString();
+        } else return false;
+
+        author = add_book_author.getText().toString();
+        imageUrl = "https://images-na.ssl-images-amazon.com/images/I/51uLvJlKpNL._SX321_BO1,204,203,200_.jpg";
+        description = add_book_description.getText().toString();
+        status = status_spinner.getSelectedItemPosition();
+
+
+        if (add_book_pages.getText().length() > 0) {
+            try {
+                pages = Integer.valueOf(add_book_pages.getText().toString());
+            } catch (NumberFormatException exc) {
+                Toast.makeText(this, "Type pages as a number", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+
+        thisBook = new Book(title, author, imageUrl, description, pages, id, status);
+        return true;
     }
-
-/* FIRST FIND API FOR IT!!!
-    private void downloadImageFromUri(String address) {
-        URL url;
-        try {
-            url = new URL(address);
-        } catch (MalformedURLException e1) {
-            url = null;
-        }
-
-        URLConnection conn;
-        InputStream in;
-        Bitmap bitmap;
-        try {
-            conn = url.openConnection();
-            conn.connect();
-            in = conn.getInputStream();
-            bitmap = BitmapFactory.decodeStream(in);
-            in.close();
-        } catch (IOException e) {
-            bitmap = null;
-        }
-
-        if (bitmap != null) {
-            add_book_image.setImageBitmap(bitmap);
-        }
-    }
-*/
 }

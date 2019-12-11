@@ -29,9 +29,12 @@ public class AddNoteActivity extends AppCompatActivity {
     private NoteViewModel viewModel;
 
     private int currentMarkerType = R.drawable.color_dot;
-    private String parentId = "";
-    private int request = 0;
-    private String currentId;
+    private String parentId;
+    private String id;
+
+    private boolean inEdition = false;
+    private Note thisNote;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,38 +46,45 @@ public class AddNoteActivity extends AppCompatActivity {
 
         viewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
 
+        try {
+            loadFromIntent();
+        } catch (NullPointerException exc) {
+            Toast.makeText(this, "Something got wrong. Try again.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    private void loadFromIntent() throws NullPointerException {
         Intent intent = getIntent();
+        int parent = intent.getIntExtra("parent", 0);
 
-        if (intent.hasExtra("request")) {
-            request = (intent.getIntExtra("request", 0));
-        }
-
-        try {
-            Chapter chapter = (Chapter) intent.getSerializableExtra("chapter");
-            currentMarkerType = R.drawable.color_dot;
-            parentId = chapter.getId();
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
-
-        try {
-            Note note = (Note) intent.getSerializableExtra("note");
-
-            if(request == ChaptersNotesViewHolder.EDIT_REQUEST){
-                add_note_name.setText(note.getNote());
-                currentMarkerType  = note.getMarkerType();
-                parentId = note.getParentId();
-                currentId = note.getId();
+        switch (parent) {
+            case ChaptersNotesViewHolder.FROM_CHAPTER: {
+                Chapter chapter = (Chapter) intent.getSerializableExtra("chapter");
+                parentId = chapter.getId();
+                id = UUID.randomUUID().toString();
+                break;
             }
-
-            else {
-                currentMarkerType = note.getMarkerType();// + 1;
+            case ChaptersNotesViewHolder.FROM_NOTE: {
+                Note note = (Note) intent.getSerializableExtra("note");
+                currentMarkerType = note.getMarkerType();//TODO + 1;
                 parentId = note.getId();
+                id = UUID.randomUUID().toString();
+                break;
             }
-        } catch (Exception exc) {
-            exc.printStackTrace();
+            case ChaptersNotesViewHolder.EDITION: {
+                Note note = (Note) intent.getSerializableExtra("note");
+                add_note_name.setText(note.getNote());
+                currentMarkerType = note.getMarkerType();
+                parentId = note.getParentId();
+                id = note.getId();
+                inEdition = true;
+                break;
+            }
+            default: {
+                throw new NullPointerException();
+            }
         }
-
     }
 
     private void initWidgets() {
@@ -89,7 +99,7 @@ public class AddNoteActivity extends AppCompatActivity {
         add_note_imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: CHANGE MARKER TYPE
+                currentMarkerType++;
             }
         });
 
@@ -97,13 +107,10 @@ public class AddNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (areValidOutputs()) {
-                    if(request == ChaptersNotesViewHolder.EDIT_REQUEST){
-                        Note note = new Note(currentId,currentMarkerType,add_note_name.getText().toString(),parentId);
-                        viewModel.update(note);
-                    }
-                    else{
-                        Note note = new Note(UUID.randomUUID().toString(), currentMarkerType, add_note_name.getText().toString(), parentId);
-                        viewModel.insert(note);
+                    if (inEdition) {
+                        viewModel.update(thisNote);
+                    } else {
+                        viewModel.insert(thisNote);
                     }
                     finish();
                 } else {
@@ -121,6 +128,10 @@ public class AddNoteActivity extends AppCompatActivity {
     }
 
     private boolean areValidOutputs() {
-        return (add_note_name.getText().length() > 2);
+        String note = add_note_name.getText().toString();
+        if (note.length() < 2) return false;
+
+        thisNote = new Note(id, currentMarkerType, note, parentId);
+        return true;
     }
 }

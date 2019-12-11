@@ -1,6 +1,5 @@
 package pl.xezolpl.mylibrary.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -23,7 +22,6 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
-import pl.xezolpl.mylibrary.fragments.BooksListTabFragment;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapter.ViewHolder> implements Filterable {
@@ -46,8 +44,6 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
         this.inflater = LayoutInflater.from(context);
     }
 
-
-    //from adapter overrides
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -65,9 +61,8 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, OpenedBookActivity.class);
-                intent.putExtra("book",books.get(position));
-
-                ((Activity)context).startActivityForResult(intent, BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
+                intent.putExtra("book", books.get(position));
+                context.startActivity(intent);
             }
         });
     }
@@ -92,7 +87,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
                 String filteredPattern = charSequence.toString().toLowerCase().trim();
                 for (Book b : booksFull) {
                     if (b.getTitle().toLowerCase().contains(filteredPattern) ||
-                    b.getAuthor().toLowerCase().contains(filteredPattern)) {
+                            b.getAuthor().toLowerCase().contains(filteredPattern)) {
                         filteredList.add(b);
                     }
 
@@ -111,7 +106,6 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
         }
     };
 
-    //inner class
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView bookImage;
         private TextView bookTitle;
@@ -119,11 +113,12 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
 
         ViewHolder(View itemView) {
             super(itemView);
-            bookImage = (ImageView) itemView.findViewById(R.id.bookImage);
-            bookTitle = (TextView) itemView.findViewById(R.id.bookTitle);
-            relLay = (RelativeLayout) itemView.findViewById(R.id.relLay);
+            bookImage = itemView.findViewById(R.id.bookImage);
+            bookTitle = itemView.findViewById(R.id.bookTitle);
+            relLay = itemView.findViewById(R.id.relLay);
         }
-        void setData(String title, String imgUrl){
+
+        void setData(String title, String imgUrl) {
             bookTitle.setText(title);
             Glide.with(context).asBitmap().load(imgUrl).into(bookImage);
         }

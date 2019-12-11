@@ -1,6 +1,5 @@
 package pl.xezolpl.mylibrary.activities;
 
-import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -10,10 +9,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import petrov.kristiyan.colorpicker.ColorPicker;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
+import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 
 public class AddQuoteCategoryActivity extends AppCompatActivity {
 	private static final String TAG = "AddQuoteCategoryActivity";
@@ -28,6 +29,7 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 	private GradientDrawable drawable;
 
 	private int hexdecColor;
+	private boolean inEditing = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 		if (getIntent().hasExtra("category")) {
 			thisCategory = (QuoteCategory) getIntent().getSerializableExtra("category");
 			loadCategoryData();
+			inEditing = true;
 		} else {
 			hexdecColor = 0x000000;
 		}
@@ -91,10 +94,12 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 				if (areValidOutputs()) {
-					Intent resultIntent = new Intent();
-					resultIntent.putExtra("category", thisCategory);
-					setResult(RESULT_OK, resultIntent);
-					Toast.makeText(AddQuoteCategoryActivity.this, "success color", Toast.LENGTH_SHORT).show();
+					QuoteCategoryViewModel model = ViewModelProviders.of(AddQuoteCategoryActivity.this).get(QuoteCategoryViewModel.class);
+					if(inEditing){
+						model.update(thisCategory);
+					} else{
+						model.insert(thisCategory);
+					}
 					finish();
 				}
 			}
@@ -103,27 +108,20 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 		cancel_btn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				setResult(RESULT_CANCELED);
-				Toast.makeText(AddQuoteCategoryActivity.this,"Cannot add color",Toast.LENGTH_SHORT).show();
 				finish();
 			}
 		});
 	}
 
 	private boolean areValidOutputs() {
+
 		String name = name_edtTxt.getText().toString();
 
 		if (name.isEmpty()) {
 			Toast.makeText(this, "Category's name cannot be empty.", Toast.LENGTH_SHORT).show();
 			return false;
 		}
-
-		try {
-			thisCategory = new QuoteCategory(name, hexdecColor);
-		} catch (Exception exc) {
-			exc.printStackTrace();
-			return false;
-		}
+		thisCategory = new QuoteCategory(name,hexdecColor);
 		return true;
 
 	}

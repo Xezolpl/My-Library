@@ -1,11 +1,9 @@
 package pl.xezolpl.mylibrary.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +26,6 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
-import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
@@ -36,14 +33,16 @@ import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder> implements Filterable {
     private static final String TAG = "QuotesRecViewAdapter";
-    private int expandedPosition = -1;
 
     private Context context;
     private LayoutInflater inflater;
+
     private List<Quote> quotes = new ArrayList<>();
     private List<Quote> quotesFull;
     private List<Quote> chapterQuotes;
+
     private List<QuoteCategory> allCategories;
+
     private boolean inserting = false;
 
     public QuotesRecViewAdapter(Context context) {
@@ -59,63 +58,26 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         });
     }
 
-    public QuotesRecViewAdapter(Context context, boolean inserting) {
-        this.context = context;
-        this.inflater = LayoutInflater.from(context);
-
-        QuoteCategoryViewModel viewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteCategoryViewModel.class);
-        viewModel.getAllCategories().observe((FragmentActivity) context, new Observer<List<QuoteCategory>>() {
-            @Override
-            public void onChanged(List<QuoteCategory> quoteCategories) {
-                allCategories = quoteCategories;
-            }
-        });
-        this.inserting = inserting;
+    //SETTERS & GETTERS
+    public void setInserting(boolean b){
+        inserting = b;
     }
 
     public void setQuotes(List<Quote> quotes) {
         this.quotes = quotes;
-        quotesFull = new ArrayList<>(this.quotes);
+        quotesFull = new ArrayList<>(quotes);
         chapterQuotes = new ArrayList<>();
         notifyDataSetChanged();
     }
 
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.listitem_quote, parent, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        Log.d(TAG, "onBindViewHolder: ");
-
-        QuoteCategory category = null;
-        final Quote q = quotes.get(position);
-
-        for (int i = 0; i < allCategories.size(); i++) {
-            if (allCategories.get(i).getName().equals(q.getCategory())) {
-                category = allCategories.get(i); //TODO TRY TO SIMPLIFY IT AND MAKE IT FASTER!!!!!!!!!!!
-                break;
-            }
-        }
-
-        int color = 0x000000;
-        try {
-            color = category.getColor();
-        } catch (NullPointerException exc) {
-            exc.printStackTrace();
-        }
-
-        holder.setData(q.getTitle(), q.getQuote(), q.getCategory(), q.getPage(), color);
+    private void setOnClickListeners(final ViewHolder holder, final Quote q){
 
         holder.editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, AddQuoteActivity.class);
                 intent.putExtra("quote",q);
-                ((Activity)context).startActivityForResult(intent, QuotesTabFragment.EDIT_QUOTE_ACTIVITY_REQUEST_CODE);
+                context.startActivity(intent);
                 notifyDataSetChanged();
             }
         });
@@ -145,10 +107,10 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 @Override
                 public boolean onLongClick(View view) {
                     if (!holder.isSelected) {
-                        chapterQuotes.add(quotes.get(position));
+                        chapterQuotes.add(q);
                         holder.setSelected(true);
                     } else {
-                        chapterQuotes.remove(quotes.get(position));
+                        chapterQuotes.remove(q);
                         holder.setSelected(false);
                     }
                     return false;
@@ -161,17 +123,48 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         return chapterQuotes;
     }
 
+    //OVERRIDES
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.listitem_quote, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+
+        //GET CATEGORY
+        QuoteCategory category = null;
+        final Quote q = quotes.get(position);
+
+        for (int i = 0; i < allCategories.size(); i++) {
+            if (allCategories.get(i).getName().equals(q.getCategory())) {
+                category = allCategories.get(i);
+                break;
+            }
+        }
+
+        //GET COLOR
+        int color = 0x000000;
+        try {
+            color = category.getColor();
+        } catch (NullPointerException exc) {
+            exc.printStackTrace();
+        }
+
+        holder.setData(q.getTitle(), q.getQuote(), q.getCategory(), q.getPage(), color);
+        setOnClickListeners(holder,q);
+
+    }
+
     @Override
     public int getItemCount() {
         return quotes.size();
     }
 
-    @Override
-    public Filter getFilter() {
-        return quotesFilter;
-    }
-
-    Filter quotesFilter = new Filter() {
+    //FILTERING
+    private Filter quotesFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<Quote> filteredList = new ArrayList<>();
@@ -199,6 +192,12 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             notifyDataSetChanged();
         }
     };
+
+    @Override
+    public Filter getFilter() {
+        return quotesFilter;
+    }
+
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
         private TextView quote_title_txtView, quote_txtView_expanded, quote_txtView_collapsed, category_txtView, quote_page_txtView;

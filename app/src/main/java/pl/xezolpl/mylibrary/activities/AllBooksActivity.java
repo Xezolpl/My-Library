@@ -1,6 +1,5 @@
 package pl.xezolpl.mylibrary.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -23,7 +21,6 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.TabFragmentPagerAdapter;
 import pl.xezolpl.mylibrary.fragments.BooksListTabFragment;
 import pl.xezolpl.mylibrary.models.Book;
-import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 
 public class AllBooksActivity extends AppCompatActivity {
     private static final String TAG = "AllBooksActivity";
@@ -88,7 +85,7 @@ public class AllBooksActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AllBooksActivity.this, AddBookActivity.class);
-                startActivityForResult(intent, BooksListTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE);
+                startActivity(intent);
             }
         });
     }
@@ -110,23 +107,4 @@ public class AllBooksActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_CANCELED) {
-            BookViewModel viewModel = ((BooksListTabFragment) sectionsPagerAdapter.getItem(books_viewPager.getCurrentItem())).getBookViewModel();
-            Book book = (Book) data.getSerializableExtra("book");
-
-            if (requestCode == BooksListTabFragment.NEW_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-                viewModel.insert(book);
-            } else if (requestCode == BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-                viewModel.update(book);
-                Intent intent = new Intent(AllBooksActivity.this, OpenedBookActivity.class);
-                intent.putExtra("book",book);
-                startActivityForResult(intent, BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
-            } else if (requestCode == BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE && resultCode == OpenedBookActivity.RESULT_DELETE) {
-                viewModel.delete(book);
-            }//TODO: STATUS CHANGING  DOESN'T WORK, MAKE FLAGS FOR OPEN ACTIVITY AND FOR UPDATE SEPARATELY
-        }
-    }
 }

@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.adapters.ChaptersNotesViewHolder;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 
@@ -24,9 +23,10 @@ public class AddChapterActivity extends AppCompatActivity {
     private Button ok_btn, cancel_btn;
 
     private ChapterViewModel viewModel;
-    private Chapter chapter;
-    private int request = 0;
+
     private String bookId;
+    private boolean inEdition = false;
+    private Chapter thisChapter = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,26 +39,16 @@ public class AddChapterActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this).get(ChapterViewModel.class);
         Intent intent = getIntent();
 
-        if (intent.hasExtra("request")) {
-            request = intent.getIntExtra("request", 0);
+        if(intent.hasExtra("chapter")){
+            thisChapter = (Chapter) intent.getSerializableExtra("chapter");
+            inEdition = true;
+
+            add_chapter_name.setText(thisChapter.getName());
+            add_chapter_number.setText(String.valueOf(thisChapter.getNumber()));
         }
 
-        try {
-            chapter = (Chapter) intent.getSerializableExtra("chapter");
-            if(request == ChaptersNotesViewHolder.EDIT_REQUEST){
-                add_chapter_name.setText(chapter.getName());
-                add_chapter_number.setText(String.valueOf(chapter.getNumber()));
-            }
-        } catch (Exception exc) {
-            exc.printStackTrace();
-            Toast.makeText(this, "Something got wrong, try again.", Toast.LENGTH_SHORT).show();
-        }
+        bookId = intent.getStringExtra("bookId");
 
-        try {
-           bookId = intent.getStringExtra("bookId");
-        }catch (Exception exc){
-            exc.printStackTrace();
-        }
     }
 
     private void initWidgets() {
@@ -74,16 +64,10 @@ public class AddChapterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (areValidOutputs()) {
-                    if(request==ChaptersNotesViewHolder.EDIT_REQUEST){
-                        viewModel.update(new Chapter(chapter.getId(),
-                                Integer.valueOf(add_chapter_number.getText().toString()),
-                                add_chapter_name.getText().toString(),
-                                chapter.getBookId()));
-                    }
-                    else {
-                        viewModel.insert(new Chapter(UUID.randomUUID().toString(),
-                                Integer.valueOf(add_chapter_number.getText().toString()),
-                                add_chapter_name.getText().toString(), bookId));
+                    if (inEdition) {
+                        viewModel.update(thisChapter);
+                    } else {
+                        viewModel.insert(thisChapter);
                     }
                     finish();
                 }
@@ -99,25 +83,26 @@ public class AddChapterActivity extends AppCompatActivity {
     }
 
     private boolean areValidOutputs() {
-        int number = 0;
         String name = add_chapter_name.getText().toString();
+        String id;
+        int number;
+
+        if (inEdition) id = thisChapter.getId();
+        else id = UUID.randomUUID().toString();
+
 
         try {
             number = Integer.valueOf(add_chapter_number.getText().toString());
         } catch (NumberFormatException exc) {
-            Toast.makeText(this, "Write it as natural number. (Bigger than 0).", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Write it as natural number.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (number < 0) {
-            Toast.makeText(this, "Chapter's number can not be minus!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (name.length() < 3) {
+        if (name.length() < 1) {
             Toast.makeText(this, "Chapter's name can not be empty!", Toast.LENGTH_SHORT).show();
             return false;
         }
+        thisChapter = new Chapter(id,number,name,bookId);
         return true;
     }
 }

@@ -3,7 +3,7 @@
     package="pl.xezolpl.mylibrary">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -31,16 +31,20 @@
         <activity
             android:name=".activities.InsertQuoteActivity"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
+
+
         <activity
             android:name=".activities.OpenedBookActivity"
             android:parentActivityName=".activities.AllBooksActivity" />
+
+
         <activity android:name=".activities.AllBooksActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

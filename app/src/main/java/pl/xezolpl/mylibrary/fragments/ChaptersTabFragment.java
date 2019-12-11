@@ -34,18 +34,15 @@ public class ChaptersTabFragment extends Fragment {
     private FloatingActionButton fab;
 
     private ChapterViewModel chapterViewModel;
-    private NoteViewModel noteViewModel;
 
     private String bookId;
     private Context context;
-    private Activity activity;
 
     private ChaptersRecViewAdapter adapter;
 
     public ChaptersTabFragment(Context context, String bookId) {
         this.bookId = bookId;
         this.context = context;
-        this.activity = (Activity) context;
     }
 
     @Override

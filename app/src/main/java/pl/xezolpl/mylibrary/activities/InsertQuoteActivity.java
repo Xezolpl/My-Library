@@ -37,13 +37,12 @@ public class InsertQuoteActivity extends AppCompatActivity {
         initWidgets();
         setOnClickListeners();
 
-        try {
-            chapter = (Chapter) getIntent().getSerializableExtra("chapter");
-        }catch (Exception exc){
-            exc.printStackTrace();
-        }
+        chapter = (Chapter) getIntent().getSerializableExtra("chapter");
 
-        adapter = new QuotesRecViewAdapter(this, true);
+
+        adapter = new QuotesRecViewAdapter(this);
+        adapter.setInserting(true);
+
         recView.setLayoutManager(new GridLayoutManager(this,1));
 
         viewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
@@ -68,7 +67,7 @@ public class InsertQuoteActivity extends AppCompatActivity {
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateQuotesChapter(adapter.getChapterQuotes());
+                updateChapterQuotes(adapter.getChapterQuotes());
                 finish();
             }
         });
@@ -80,7 +79,7 @@ public class InsertQuoteActivity extends AppCompatActivity {
         });
     }
 
-    private boolean updateQuotesChapter(List<Quote> quotes){
+    private boolean updateChapterQuotes(List<Quote> quotes){
         for (Quote quote : quotes){
             quote.setChapterId(chapter.getId());
             viewModel.update(quote);

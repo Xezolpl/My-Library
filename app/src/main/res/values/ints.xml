@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="ADD_BOOK_REQUEST">11</integer>
-    <integer name="EDIT_BOOK_REQUEST">12</integer>
-    <integer name="DELETE_BOOK_REQUEST">13</integer>
-
-</resources>

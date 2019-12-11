@@ -20,38 +20,51 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddBookActivity;
 import pl.xezolpl.mylibrary.models.Book;
+import pl.xezolpl.mylibrary.utilities.Requests;
+import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
+
+import static android.app.Activity.RESULT_OK;
 
 public class BookDetailsTabFragment extends Fragment {
 
-    public static final int RESULT_DELETE = 2;
     private TextView bookTitle_text, bookDescription_text, bookPages_text, bookAuthor_text;
     private ImageView book_image;
     private Button setToRead_btn, setCurrReading_btn, setAlreadyRead_btn, setFavourite_btn;
+
     private Book thisBook;
+    private BookViewModel bookViewModel;
 
     private Context context;
-    private Activity activity;
 
     public BookDetailsTabFragment(Book thisBook, Context context) {
         this.context = context;
-        activity = (Activity)context;
         this.thisBook = thisBook;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tabfragment_book_details, container, false);
+
         initWidgets(view);
         loadBookData();
         createOnClickListeners();
+
         setHasOptionsMenu(true);
+
         return view;
     }
 
@@ -64,9 +77,9 @@ public class BookDetailsTabFragment extends Fragment {
         editItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(activity, AddBookActivity.class);
+                Intent intent = new Intent(context, AddBookActivity.class);
                 intent.putExtra("book", thisBook);
-                startActivityForResult(intent, BooksListTabFragment.UPDATE_BOOK_ACTIVITY_REQUEST_CODE);
+                startActivityForResult(intent, Requests.EDIT_REQUEST);
                 return false;
             }
         });
@@ -75,10 +88,8 @@ public class BookDetailsTabFragment extends Fragment {
         delItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent();
-                intent.putExtra("book", thisBook);
-                activity.setResult(RESULT_DELETE, intent);
-                activity.finish();
+                bookViewModel.delete(thisBook);
+                ((Activity)context).finish();
                 return false;
             }
         });
@@ -86,8 +97,10 @@ public class BookDetailsTabFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        activity.setResult(resultCode,data);
+        if (requestCode == Requests.EDIT_REQUEST && resultCode == RESULT_OK) {
+            thisBook = (Book) data.getSerializableExtra("book");
+            loadBookData();
+        }
     }
 
     private void initWidgets(View v) {
@@ -131,15 +144,13 @@ public class BookDetailsTabFragment extends Fragment {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            thisBook.setStatus(Book.STATUS_NEUTRAL);
+                            updateBook(Book.STATUS_NEUTRAL);
                         }
                     });
                     builder.create().show();
                 } else {
-                    thisBook.setStatus(Book.STATUS_WANT_TO_READ);
+                    updateBook(Book.STATUS_WANT_TO_READ);
                 }
-                Toast.makeText(getContext(), "Successfully changed the book status.", Toast.LENGTH_SHORT).show();
-                updateBook();
 
             }
         });
@@ -154,15 +165,14 @@ public class BookDetailsTabFragment extends Fragment {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            thisBook.setStatus(Book.STATUS_NEUTRAL);
+                            updateBook(Book.STATUS_NEUTRAL);
                         }
                     });
                     builder.create().show();
                 } else {
                     thisBook.setStatus(Book.STATUS_CURRENTLY_READING);
                 }
-                Toast.makeText(getContext(), "Successfully changed the book status.", Toast.LENGTH_SHORT).show();
-                updateBook();
+                updateBook(Book.STATUS_CURRENTLY_READING);
             }
         });
 
@@ -176,15 +186,13 @@ public class BookDetailsTabFragment extends Fragment {
                     builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            thisBook.setStatus(Book.STATUS_NEUTRAL);
+                            updateBook(Book.STATUS_NEUTRAL);
                         }
                     });
                     builder.create().show();
                 } else {
-                    thisBook.setStatus(Book.STATUS_ALREADY_READ);
+                    updateBook(Book.STATUS_ALREADY_READ);
                 }
-                Toast.makeText(getContext(), "Successfully changed the book status.", Toast.LENGTH_SHORT).show();
-                updateBook();
             }
         });
 
@@ -194,14 +202,14 @@ public class BookDetailsTabFragment extends Fragment {
             public void onClick(View view) {
                 if (thisBook.isFavourite()) thisBook.setFavourite(false);
                 else thisBook.setFavourite(true);
-                updateBook();
+                bookViewModel.update(thisBook);
             }
         });
     }
 
-    private void updateBook() {
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("book", thisBook);
-        activity.setResult(activity.RESULT_OK, resultIntent);
+    private void updateBook(int status) {
+        thisBook.setStatus(status);
+        bookViewModel.update(thisBook);
+        Toast.makeText(getContext(), "Successfully changed the book status.", Toast.LENGTH_SHORT).show();
     }
 }

@@ -3,8 +3,6 @@ package pl.xezolpl.mylibrary.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,14 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import pl.xezolpl.mylibrary.adapters.BooksRecViewAdapter;
 import pl.xezolpl.mylibrary.models.Book;
+import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 
-public class BooksListTabFragment extends Fragment{
-
-    public static final int NEW_BOOK_ACTIVITY_REQUEST_CODE = 0;
-    public static final int UPDATE_BOOK_ACTIVITY_REQUEST_CODE = 1;
+public class BooksListTabFragment extends Fragment {
 
     private Context context;
     private int tabBooksStatus;
@@ -50,12 +45,25 @@ public class BooksListTabFragment extends Fragment{
 
         bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
 
-        bookViewModel.getBookWithStatus(tabBooksStatus).observe(this, new Observer<List<Book>>() {
-            @Override
-            public void onChanged(List<Book> books) {
-                booksRecViewAdapter.setBooks(books);
-            }
-        });
+        /*ALL BOOKS*/
+        if (tabBooksStatus == Book.STATUS_NEUTRAL) {
+            bookViewModel.getAllBooks().observe(this, new Observer<List<Book>>() {
+                @Override
+                public void onChanged(List<Book> books) {
+                    booksRecViewAdapter.setBooks(books);
+                }
+            });
+        }
+        /*OTHER STATUS*/
+        else {
+            bookViewModel.getBookWithStatus(tabBooksStatus).observe(this, new Observer<List<Book>>() {
+                @Override
+                public void onChanged(List<Book> books) {
+                    booksRecViewAdapter.setBooks(books);
+                }
+            });
+        }
+
     }
 
     @Nullable
@@ -70,15 +78,7 @@ public class BooksListTabFragment extends Fragment{
         return view;
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-
-    }
-
     public void setFilter(String filter) {
         booksRecViewAdapter.getFilter().filter(filter);
     }
-
-
-    public BookViewModel getBookViewModel(){return bookViewModel;}
 }
