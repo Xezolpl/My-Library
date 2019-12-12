@@ -7,12 +7,10 @@
 
     <ImageView
         android:id="@+id/add_note_imgView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:padding="10dp"
-        android:src="@drawable/color_dot"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:layout_centerHorizontal="true"
-        android:layout_margin="8dp"/>
+        android:layout_margin="15dp"/>
 
 
     <EditText

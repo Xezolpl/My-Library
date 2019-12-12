@@ -2,6 +2,8 @@ package pl.xezolpl.mylibrary.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
@@ -26,6 +29,8 @@ import pl.xezolpl.mylibrary.activities.InsertQuoteActivity;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.models.Note;
 import pl.xezolpl.mylibrary.models.Quote;
+import pl.xezolpl.mylibrary.utilities.Markers;
+import pl.xezolpl.mylibrary.utilities.TextDrawable;
 import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
@@ -161,14 +166,6 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
                 }
             });
         }
-        else{
-            marker_imgView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //TODO: CHANGE MARKER TYPE
-                }
-            });
-        }
     }
 
     private void initWidgets() {
@@ -216,20 +213,35 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         );
     }
 
-    public void setData(Note note) {
+    public void setData(Note note, int position) {
 
         parentNote = note;
         textView.setText(note.getNote());
-            NoteViewModel noteModel = ViewModelProviders.of((FragmentActivity) context).get(NoteViewModel.class);
-            noteModel.getNotesByParent(note.getId()).observe((FragmentActivity) context, new Observer<List<Note>>() {
-                @Override
-                public void onChanged(List<Note> notes) {
-                    adapter = new NotesRecViewAdapter(context);
-                    adapter.setNotesList(notes);
-                    recView.setAdapter(adapter);
-                    recView.setLayoutManager(new GridLayoutManager(context, 1));
-                }
-            });
+        try {
+            Drawable drawable;
+            int markerType = note.getMarkerType();
+
+            if (markerType == Markers.NUMBER_MARKER || markerType == Markers.LETTER_MARKER){
+                drawable = Markers.getLetterMarker(markerType, position, Color.RED, TextDrawable.MEDIUM_TEXT_SIZE);
+            }else{
+                drawable = Markers.getSimpleMarker(context, note.getMarkerType(),/*note.getColor()*/Color.RED);
+            }
+
+                marker_imgView.setImageDrawable(drawable);
+            //TODO: GET UPPER  NOTE'S markerPosition and set it +1 to it as letter/number
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        NoteViewModel noteModel = ViewModelProviders.of((FragmentActivity) context).get(NoteViewModel.class);
+        noteModel.getNotesByParent(note.getId()).observe((FragmentActivity) context, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(List<Note> notes) {
+                adapter = new NotesRecViewAdapter(context);
+                adapter.setNotesList(notes);
+                recView.setAdapter(adapter);
+                recView.setLayoutManager(new GridLayoutManager(context, 1));
+            }
+        });
     }
 
     public void setOptionsLayVisible(boolean b) {

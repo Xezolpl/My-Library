@@ -17,8 +17,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="4dp"
-            android:background="@drawable/color_dot" />
+            android:layout_marginLeft="4dp" />
 
         <TextView
             android:id="@+id/textView"

@@ -1,6 +1,7 @@
 package pl.xezolpl.mylibrary.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +13,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.ChaptersNotesViewHolder;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.models.Note;
+import pl.xezolpl.mylibrary.utilities.Markers;
+import pl.xezolpl.mylibrary.utilities.TextDrawable;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 
 public class AddNoteActivity extends AppCompatActivity {
@@ -28,7 +32,8 @@ public class AddNoteActivity extends AppCompatActivity {
 
     private NoteViewModel viewModel;
 
-    private int currentMarkerType = R.drawable.color_dot;
+    private int currentMarkerType = Markers.DOT_MARKER;
+
     private String parentId;
     private String id;
 
@@ -43,18 +48,17 @@ public class AddNoteActivity extends AppCompatActivity {
 
         initWidgets();
         setOnClickListeners();
-
         viewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
 
         try {
             loadFromIntent();
-        } catch (NullPointerException exc) {
+        } catch (Exception exc) {
             Toast.makeText(this, "Something got wrong. Try again.", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
-    private void loadFromIntent() throws NullPointerException {
+    private void loadFromIntent() throws NullPointerException, IOException {
         Intent intent = getIntent();
         int parent = intent.getIntExtra("parent", 0);
 
@@ -67,7 +71,7 @@ public class AddNoteActivity extends AppCompatActivity {
             }
             case ChaptersNotesViewHolder.FROM_NOTE: {
                 Note note = (Note) intent.getSerializableExtra("note");
-                currentMarkerType = note.getMarkerType();//TODO + 1;
+                currentMarkerType = Markers.incrementMarker(note.getMarkerType());
                 parentId = note.getId();
                 id = UUID.randomUUID().toString();
                 break;
@@ -85,11 +89,18 @@ public class AddNoteActivity extends AppCompatActivity {
                 throw new NullPointerException();
             }
         }
+        if(currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER){
+            add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType,0,Color.GREEN, TextDrawable.LARGE_TEXT_SIZE));
+        }else {
+            add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this,currentMarkerType, Color.GREEN));
+
+        }
     }
 
     private void initWidgets() {
         add_note_name = (EditText) findViewById(R.id.add_note_name);
         add_note_imgView = (ImageView) findViewById(R.id.add_note_imgView);
+        add_note_imgView.setImageResource(R.drawable.color_dot);
         ok_btn = (Button) findViewById(R.id.ok_btn);
         cancel_btn = (Button) findViewById(R.id.cancel_btn);
     }
@@ -99,7 +110,18 @@ public class AddNoteActivity extends AppCompatActivity {
         add_note_imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentMarkerType++;
+                currentMarkerType = Markers.incrementMarker(currentMarkerType);
+                try {
+                    if(currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER){
+                        add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType,0,
+                                Color.RED, TextDrawable.LARGE_TEXT_SIZE));
+                    }
+                    else{
+                        add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this,currentMarkerType, Color.RED));
+                    }
+                }catch (IOException exc){
+                    exc.printStackTrace();
+                }
             }
         });
 

@@ -27,6 +27,7 @@ public class Note implements Serializable {
     @ColumnInfo(name = "parentId")
     private String parentId;
 
+
     public Note(@NonNull String id, int markerType, @NonNull String note, @NonNull String parentId) {
         this.id = id;
         this.markerType = markerType;
