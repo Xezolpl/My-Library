@@ -117,7 +117,7 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
                     context.startActivity(intent);
                 } catch (Exception exc) {
                     exc.printStackTrace();
-                    Toast.makeText(context, "Something went wrong! Try again or restart application.", Toast.LENGTH_SHORT);
+                    Toast.makeText(context, "Something went wrong! Try again or restart application.", Toast.LENGTH_SHORT).show();
                 }
 
                 setOptionsLayVisible(false);

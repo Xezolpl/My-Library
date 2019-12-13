@@ -11,9 +11,11 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
@@ -38,6 +40,8 @@ public class AddNoteActivity extends AppCompatActivity {
     private String id;
 
     private boolean inEdition = false;
+    private boolean markerTypeLocked = false;
+
     private Note thisNote;
 
 
@@ -56,6 +60,7 @@ public class AddNoteActivity extends AppCompatActivity {
             Toast.makeText(this, "Something got wrong. Try again.", Toast.LENGTH_SHORT).show();
             finish();
         }
+
     }
 
     private void loadFromIntent() throws NullPointerException, IOException {
@@ -74,6 +79,17 @@ public class AddNoteActivity extends AppCompatActivity {
                 currentMarkerType = Markers.incrementMarker(note.getMarkerType());
                 parentId = note.getId();
                 id = UUID.randomUUID().toString();
+
+                viewModel.getNotesByParent(note.getId()).observe(this, new Observer<List<Note>>() {
+                    @Override
+                    public void onChanged(List<Note> notes) {
+                        if (notes.size() > 0) {
+                            currentMarkerType = notes.get(0).getMarkerType();
+                            markerTypeLocked = true;
+                            setImageView();
+                        }
+                    }
+                });
                 break;
             }
             case ChaptersNotesViewHolder.EDITION: {
@@ -83,18 +99,24 @@ public class AddNoteActivity extends AppCompatActivity {
                 parentId = note.getParentId();
                 id = note.getId();
                 inEdition = true;
+
+                viewModel.getNotesByParent(note.getParentId()).observe(this, new Observer<List<Note>>() {
+                    @Override
+                    public void onChanged(List<Note> notes) {
+                        if (notes.size() > 0) {
+                            currentMarkerType = notes.get(0).getMarkerType();
+                            markerTypeLocked = true;
+                            setImageView();
+                        }
+                    }
+                });
                 break;
             }
             default: {
                 throw new NullPointerException();
             }
         }
-        if(currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER){
-            add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType,0,Color.GREEN, TextDrawable.LARGE_TEXT_SIZE));
-        }else {
-            add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this,currentMarkerType, Color.GREEN));
-
-        }
+        setImageView();
     }
 
     private void initWidgets() {
@@ -110,17 +132,18 @@ public class AddNoteActivity extends AppCompatActivity {
         add_note_imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentMarkerType = Markers.incrementMarker(currentMarkerType);
-                try {
-                    if(currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER){
-                        add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType,0,
-                                Color.RED, TextDrawable.LARGE_TEXT_SIZE));
+                if (!markerTypeLocked) {
+                    currentMarkerType = Markers.incrementMarker(currentMarkerType);
+                    try {
+                        if (currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER) {
+                            add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType, 0,
+                                    Color.RED, TextDrawable.LARGE_TEXT_SIZE));
+                        } else {
+                            add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this, currentMarkerType, Color.RED));
+                        }
+                    } catch (IOException exc) {
+                        exc.printStackTrace();
                     }
-                    else{
-                        add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this,currentMarkerType, Color.RED));
-                    }
-                }catch (IOException exc){
-                    exc.printStackTrace();
                 }
             }
         });
@@ -155,5 +178,17 @@ public class AddNoteActivity extends AppCompatActivity {
 
         thisNote = new Note(id, currentMarkerType, note, parentId);
         return true;
+    }
+
+    private void setImageView() {
+        try {
+            if (currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER) {
+                add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType, 0, Color.GREEN, TextDrawable.LARGE_TEXT_SIZE));
+            } else {
+                add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this, currentMarkerType, Color.GREEN));
+            }
+        } catch (IOException exc){
+            exc.printStackTrace();
+        }
     }
 }
