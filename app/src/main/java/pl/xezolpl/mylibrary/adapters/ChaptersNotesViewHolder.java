@@ -2,7 +2,6 @@ package pl.xezolpl.mylibrary.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Button;
@@ -222,9 +221,9 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
             int markerType = note.getMarkerType();
 
             if (markerType == Markers.NUMBER_MARKER || markerType == Markers.LETTER_MARKER){
-                drawable = Markers.getLetterMarker(markerType, position, Color.RED, TextDrawable.MEDIUM_TEXT_SIZE);
+                drawable = Markers.getLetterMarker(markerType, position, note.getColor(), TextDrawable.MEDIUM_TEXT_SIZE);
             }else{
-                drawable = Markers.getSimpleMarker(context, note.getMarkerType(),/*note.getColor()*/Color.RED);
+                drawable = Markers.getSimpleMarker(context, note.getMarkerType(),note.getColor());
             }
 
                 marker_imgView.setImageDrawable(drawable);

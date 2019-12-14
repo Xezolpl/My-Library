@@ -27,12 +27,17 @@ public class Note implements Serializable {
     @ColumnInfo(name = "parentId")
     private String parentId;
 
+    @NonNull
+    @ColumnInfo(name = "color")
+    private int color;
 
-    public Note(@NonNull String id, int markerType, @NonNull String note, @NonNull String parentId) {
+
+    public Note(@NonNull String id, int markerType, @NonNull String note, @NonNull String parentId, @NonNull int color) {
         this.id = id;
         this.markerType = markerType;
         this.note = note;
         this.parentId = parentId;
+        this.color = color;
     }
 
     @NonNull
@@ -52,5 +57,10 @@ public class Note implements Serializable {
     @NonNull
     public String getParentId() {
         return parentId;
+    }
+
+    @NonNull
+    public int getColor() {
+        return color;
     }
 }

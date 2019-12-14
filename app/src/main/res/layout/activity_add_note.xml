@@ -12,6 +12,13 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="15dp"/>
 
+    <Button
+        android:id="@+id/add_note_color_btn"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/ic_color_lens_black_32dp"
+        android:layout_toRightOf="@id/add_note_imgView"
+        android:layout_marginTop="36.5dp"/>
 
     <EditText
         android:id="@+id/add_note_name"
