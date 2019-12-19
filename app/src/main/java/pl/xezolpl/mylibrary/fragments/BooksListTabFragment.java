@@ -31,6 +31,11 @@ public class BooksListTabFragment extends Fragment {
 
     private BookViewModel bookViewModel;
 
+    public BooksListTabFragment(){
+        context = getContext();
+        tabBooksStatus = Book.STATUS_NEUTRAL;
+    }
+
     public BooksListTabFragment(int tabBooksStatus, Context context) {
         this.tabBooksStatus = tabBooksStatus;
         this.context = context;
@@ -63,7 +68,6 @@ public class BooksListTabFragment extends Fragment {
                 }
             });
         }
-
     }
 
     @Nullable

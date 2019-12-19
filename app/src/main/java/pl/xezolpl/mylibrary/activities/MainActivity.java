@@ -1,48 +1,78 @@
 package pl.xezolpl.mylibrary.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.google.android.material.navigation.NavigationView;
 
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.dialogs.AboutDialog;
+import pl.xezolpl.mylibrary.fragments.ContactFragment;
+import pl.xezolpl.mylibrary.fragments.AllBooksFragment;
+import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 
-public class MainActivity extends AppCompatActivity {
-
-    private Button open_all_books_btn, about_btn;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private DrawerLayout drawer;
+    private AllBooksFragment allBooksFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initWidgets();
-        createOnClickListeners();
 
-    }//ACTUALLY DISABLED
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-    private void createOnClickListeners() {
-        open_all_books_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AllBooksActivity.class);
-                startActivity(intent);
-            }
-        });
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView nav_view = findViewById(R.id.nav_view);
+        nav_view.setNavigationItemSelectedListener(this);
 
-        about_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AboutDialog aboutDialog = new AboutDialog();
-                aboutDialog.show(getSupportFragmentManager(), "About application");
-            }
-        });
-    }
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-        private void initWidgets () {
-            open_all_books_btn = (Button) findViewById(R.id.open_all_books_btn);
-            about_btn = (Button) findViewById(R.id.about_btn);
+        if (savedInstanceState == null) {
+            allBooksFragment = new AllBooksFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    allBooksFragment).commit();
+            nav_view.setCheckedItem(R.id.nav_books);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_books: {
+                allBooksFragment.setUpViewPager();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, allBooksFragment).commit();
+                break;
+            }
+            case R.id.nav_quotes: {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new QuotesTabFragment(MainActivity.this,"")).commit();
+                break;
+            }
+            case R.id.nav_contact: {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ContactFragment()).commit();
+                break;
+            }
+        }
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+}

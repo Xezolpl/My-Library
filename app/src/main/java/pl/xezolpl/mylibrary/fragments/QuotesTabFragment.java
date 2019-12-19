@@ -59,12 +59,21 @@ public class QuotesTabFragment extends Fragment {
         quotesRecViewAdapter = new QuotesRecViewAdapter(context);
 
         quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
-        quoteViewModel.getAllQuotes().observe(this, new Observer<List<Quote>>() {
-            @Override
-            public void onChanged(List<Quote> quotes) {
-                quotesRecViewAdapter.setQuotes(quotes);
-            }
-        });
+        if(bookId.isEmpty()){
+            quoteViewModel.getAllQuotes().observe(this, new Observer<List<Quote>>() {
+                @Override
+                public void onChanged(List<Quote> quotes) {
+                    quotesRecViewAdapter.setQuotes(quotes);
+                }
+            });
+        }else {
+            quoteViewModel.getQuotesByBook(bookId).observe(this, new Observer<List<Quote>>() {
+                @Override
+                public void onChanged(List<Quote> quotes) {
+                    quotesRecViewAdapter.setQuotes(quotes);
+                }
+            });
+        }
 
     }
 
