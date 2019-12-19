@@ -42,7 +42,6 @@ public class AllBooksFragment extends Fragment {
         initWidgets(view);
         setOnClickListeners();
 
-
         setUpViewPager();
         books_tabLayout.setupWithViewPager(books_viewPager);
 
