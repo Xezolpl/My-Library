@@ -7,39 +7,33 @@
         <item
             android:id="@+id/nav_books"
             android:icon="@drawable/ic_book_black_24dp"
-            android:onClick="onNavigationItemSelected"
-            android:title="Books"/>
+            android:title="All books" />
+        <item
+            android:id="@+id/nav_categories"
+            android:icon="@drawable/ic_apps_black_24dp"
+            android:title="Categories" />
+        <item
+            android:id="@+id/nav_authors"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Authors" />
         <item
             android:id="@+id/nav_quotes"
             android:icon="@drawable/ic_format_quote_black_24dp"
-            android:onClick="onNavigationItemSelected"
-
             android:title="Quotes" />
-        <item
-            android:id="@+id/nav_shelves"
-            android:icon="@drawable/ic_dehaze_black_24dp"
-            android:title="Shelves" />
-        <item
-            android:id="@+id/nav_mind_maps"
-            android:icon="@drawable/ic_map_black_24dp"
-            android:title="Mind maps" />
+
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="Settings" />
-    </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_contact"
-                android:icon="@drawable/ic_contact_mail_black_24dp"
-                android:title="Contact and about" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_send_black_24dp"
-                android:title="Send your opinion" />
-        </menu>
-    </item>
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_contact_mail_black_24dp"
+            android:title="Contact and about" />
+        <item
+            android:id="@+id/nav_send"
+            android:icon="@drawable/ic_send_black_24dp"
+            android:title="Send your opinion" />
+    </group>
 
 </menu>

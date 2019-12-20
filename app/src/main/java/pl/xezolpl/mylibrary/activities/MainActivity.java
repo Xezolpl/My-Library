@@ -20,7 +20,8 @@ import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private AllBooksFragment allBooksFragment;
-
+    private NavigationView nav_view;
+    private int checkedItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView nav_view = findViewById(R.id.nav_view);
+         nav_view = findViewById(R.id.nav_view);
         nav_view.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     allBooksFragment).commit();
             nav_view.setCheckedItem(R.id.nav_books);
+            checkedItem=0;
         }
     }
 
@@ -61,15 +63,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_books: {
                 allBooksFragment.setUpViewPager();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, allBooksFragment).commit();
+                checkedItem=0;
                 break;
             }
             case R.id.nav_quotes: {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new QuotesTabFragment(MainActivity.this,"")).commit();
+                checkedItem=3;
                 break;
             }
             case R.id.nav_contact: {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ContactFragment()).commit();
+                checkedItem=5;
                 break;
+            }
+            default:{
+                return false;
             }
         }
         drawer.closeDrawer(GravityCompat.START);
