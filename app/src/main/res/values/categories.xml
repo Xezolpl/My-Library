@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="actionAndAdventure" translatable="true">Action and Adventure</string>
+    <string name="art" translatable="true">Art</string>
+    <string name="biography" translatable="true">Biography</string>
+    <string name="business" translatable="true">Business</string>
+    <string name="comic_book" translatable="true">Comic Book</string>
+    <string name="comedy" translatable="true">Comedy</string>
+    <string name="cooking" translatable="true">Cooking</string>
+    <string name="crime" translatable="true">Crime</string>
+    <string name="dictionary" translatable="true">Dictionary</string>
+    <string name="drama" translatable="true">Drama</string>
+    <string name="fantasy" translatable="true">Fantasy</string>
+    <string name="guide" translatable="true">Guide</string>
+    <string name="health" translatable="true">Health</string>
+    <string name="history" translatable="true">History</string>
+    <string name="horror" translatable="true">Horror</string>
+    <string name="journal" translatable="true">Journal</string>
+    <string name="mystery" translatable="true">Mystery</string>
+    <string name="mythology" translatable="true">Mythology</string>
+    <string name="poetry" translatable="true">Poetry</string>
+    <string name="politic" translatable="true">Political</string>
+    <string name="psychology" translatable="true">Psychology</string>
+    <string name="religion" translatable="true">Religion</string>
+    <string name="self_improvement" translatable="true">Self Improvement</string>
+    <string name="science" translatable="true">Science</string>
+    <string name="science_fiction" translatable="true">Science Fiction</string>
+    <string name="textbook" translatable="true">Textbook</string>
+    <string name="thriller" translatable="true">Thriller</string>
+    <string name="travel" translatable="true">Travel</string>
+    <string name="war" translatable="true">War</string>
+</resources>

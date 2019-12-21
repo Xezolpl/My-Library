@@ -21,7 +21,7 @@ public class ChapterViewModel extends AndroidViewModel {
     public ChapterViewModel(@NonNull Application application) {
         super(application);
         database = LibraryDatabase.getDatabase(application);
-        chapterDao = database.chapterDao();
+        chapterDao = database.ChapterDao();
     }
 
     public void insert(Chapter chapter){

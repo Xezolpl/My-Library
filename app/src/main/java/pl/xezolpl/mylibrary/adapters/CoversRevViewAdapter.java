@@ -29,7 +29,7 @@ public class CoversRevViewAdapter extends RecyclerView.Adapter<CoversRevViewAdap
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.listitem_cover_rec_view,parent,false);
+                .inflate(R.layout.listitem_cover,parent,false);
         return new ViewHolder(view);
     }
 

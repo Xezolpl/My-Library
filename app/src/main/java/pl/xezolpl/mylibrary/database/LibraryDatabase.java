@@ -23,8 +23,8 @@ public abstract class LibraryDatabase extends RoomDatabase{
     public abstract BookDao BookDao();
     public abstract QuoteDao QuoteDao();
     public abstract QuoteCategoryDao QuoteCategoryDao();
-    public abstract ChapterDao chapterDao();
-    public abstract NoteDao noteDao();
+    public abstract ChapterDao ChapterDao();
+    public abstract NoteDao NoteDao();
 
     private static volatile LibraryDatabase libraryDatabaseInstance;
 

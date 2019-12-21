@@ -21,7 +21,7 @@ public class NoteViewModel extends AndroidViewModel {
     public NoteViewModel(@NonNull Application application) {
         super(application);
         database = LibraryDatabase.getDatabase(application);
-        noteDao = database.noteDao();
+        noteDao = database.NoteDao();
     }
 
     public void insert(Note note){
