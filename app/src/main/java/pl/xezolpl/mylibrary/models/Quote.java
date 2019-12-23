@@ -20,6 +20,9 @@ public class Quote implements Serializable {
     @ColumnInfo(name = "title")
     private String title;
 
+    @ColumnInfo(name = "author")
+    private String author;
+
     @ColumnInfo(name = "category")
     private String category;
 
@@ -32,10 +35,11 @@ public class Quote implements Serializable {
     @ColumnInfo(name = "chapterId")
     private String chapterId;
 
-    public Quote(@NonNull String id, @NonNull String quote, String title, String category, int page, String bookId){
+    public Quote(@NonNull String id, @NonNull String quote, String title, String author, String category, int page, String bookId) {
         this.id = id;
         this.quote = quote;
         this.title = title;
+        this.author = author;
         this.category = category;
         this.page = page;
         this.bookId = bookId;
@@ -54,6 +58,10 @@ public class Quote implements Serializable {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getAuthor() {
+        return author;
     }
 
     public String getCategory() {

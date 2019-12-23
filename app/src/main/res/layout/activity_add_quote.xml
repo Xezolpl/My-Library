@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
-    android:layout_height="520dp"
+    android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:orientation="vertical">
 
@@ -21,7 +21,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/add_quote_txtView"
         android:layout_margin="10dp"
-        android:hint="Quote title"
+        android:hint="Quote title (optional)"
+        android:textAlignment="center"
+        android:maxLines="1"
+        android:maxLength="50"/>
+
+    <EditText
+        android:id="@+id/add_quote_author_EditTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_quote_title_EditTxt"
+        android:layout_margin="10dp"
+        android:hint="Author (optional)"
         android:textAlignment="center"
         android:maxLines="1"
         android:maxLength="50"/>
@@ -29,8 +40,8 @@
     <EditText
         android:id="@+id/add_quote_quote_EditTxt"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_below="@id/add_quote_title_EditTxt"
+        android:layout_height="100dp"
+        android:layout_below="@id/add_quote_author_EditTxt"
         android:layout_margin="10dp"
         android:textAlignment="center"
         android:maxLength="220"

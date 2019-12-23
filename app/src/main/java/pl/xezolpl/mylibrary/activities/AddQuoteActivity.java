@@ -27,7 +27,7 @@ import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class AddQuoteActivity extends AppCompatActivity {
 
-    private EditText title_EditTxt, quote_EditTxt, page_EditTxt;
+    private EditText title_EditTxt, quote_EditTxt, page_EditTxt, author_EditTxt;
     private Spinner category_spinner;
     private Button add_category_btn, ok_btn, cancel_btn;
 
@@ -81,6 +81,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     private void initWidgets() {
         title_EditTxt = (EditText) findViewById(R.id.add_quote_title_EditTxt);
+        author_EditTxt = (EditText) findViewById(R.id.add_quote_author_EditTxt);
         quote_EditTxt = (EditText) findViewById(R.id.add_quote_quote_EditTxt);
         page_EditTxt = (EditText) findViewById(R.id.add_quote_page_EditTxt);
         category_spinner = (Spinner) findViewById(R.id.add_quote_category_spinner);
@@ -92,6 +93,7 @@ public class AddQuoteActivity extends AppCompatActivity {
     private void loadQuoteData(Quote quote) {
         title_EditTxt.setText(quote.getTitle());
         quote_EditTxt.setText(quote.getQuote());
+        author_EditTxt.setText(quote.getAuthor());
         page_EditTxt.setText("" + quote.getPage());
         category_spinner.setSelection(spinnerAdapter.getItemPosition(quote.getCategory()));
     }
@@ -133,7 +135,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     private boolean areValidOutputs() {
 
-        String title, quote, id, category;
+        String title, quote, id, category, author;
         int page = 0;
 
         //isQuoteShorterThan3
@@ -152,6 +154,7 @@ public class AddQuoteActivity extends AppCompatActivity {
         //getting other strings
         try {
             title = title_EditTxt.getText().toString();
+            author = author_EditTxt.getText().toString();
             quote = quote_EditTxt.getText().toString();
             category = ((QuoteCategory) spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())).getName();
         }catch (Exception exc){
@@ -169,7 +172,7 @@ public class AddQuoteActivity extends AppCompatActivity {
             }
         }
 
-        thisQuote = new Quote(id, quote, title, category, page, bookId);
+        thisQuote = new Quote(id, quote, title, author, category, page, bookId);
         return true;
     }
 }

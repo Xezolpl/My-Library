@@ -153,7 +153,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             exc.printStackTrace();
         }
 
-        holder.setData(q.getTitle(), q.getQuote(), q.getCategory(), q.getPage(), color);
+        holder.setData(q.getTitle(), q.getQuote(), q.getAuthor(),q.getCategory(), q.getPage(), color);
         setOnClickListeners(holder,q);
 
     }
@@ -200,7 +200,8 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView quote_title_txtView, quote_txtView_expanded, quote_txtView_collapsed, category_txtView, quote_page_txtView;
+        private TextView quote_title_txtView, quote_txtView_expanded, quote_txtView_collapsed,
+                category_txtView, quote_page_txtView, quote_author_txtView;
         private ImageView category_imgView;
         private RelativeLayout quote_expanded_lay, quote_collapsed_lay, quote_lay;
         private Button editBtn, delBtn;
@@ -210,6 +211,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             quote_title_txtView = (TextView) itemView.findViewById(R.id.quote_title_txtView);
+            quote_author_txtView = (TextView) itemView.findViewById(R.id.quote_author_txtView);
             quote_txtView_expanded = (TextView) itemView.findViewById(R.id.quote_txtView_expanded);
             quote_txtView_collapsed = (TextView) itemView.findViewById(R.id.quote_txtView_collapsed);
             category_txtView = (TextView) itemView.findViewById(R.id.category_txtView);
@@ -227,9 +229,11 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
         }
 
-        void setData(String title, String quote, String category, int page, int hexdecColor) {
+        void setData(String title, String quote, String author, String category, int page, int hexdecColor) {
             quote_title_txtView.setText(title);
+            quote_author_txtView.setText(author);
             quote_txtView_expanded.setText(quote);
+            quote_txtView_collapsed.setText(quote);
             quote_txtView_collapsed.setText(quote);
             category_txtView.setText(category);
             quote_page_txtView.setText("Page: " + page);
