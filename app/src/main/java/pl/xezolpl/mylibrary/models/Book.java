@@ -32,15 +32,16 @@ public class Book implements Serializable {
     private int pages;
 
     @ColumnInfo(name = "favourite")
-    private boolean favourite = false;
+    private boolean favourite;
 
     @ColumnInfo(name = "status")
     private int status;
 
-    public static final int STATUS_NEUTRAL=0;
-    public static final int STATUS_WANT_TO_READ=1;
-    public static final int STATUS_CURRENTLY_READING=2;
-    public static final int STATUS_ALREADY_READ=3;
+
+    public static final int STATUS_NEUTRAL = 0;
+    public static final int STATUS_WANT_TO_READ = 1;
+    public static final int STATUS_CURRENTLY_READING = 2;
+    public static final int STATUS_ALREADY_READ = 3;
 
 
     public Book(String title, String author, String imageUrl, String description, int pages, String id, int status) {
@@ -50,9 +51,8 @@ public class Book implements Serializable {
         this.description = description;
         this.pages = pages;
         this.id = id;
-
         this.status = status;
-        favourite=false;
+        favourite = false;
     }
 
     public String getTitle() {
@@ -94,6 +94,7 @@ public class Book implements Serializable {
     public void setStatus(int status) {
         this.status = status;
     }
+
 
     @Override
     public String toString() {

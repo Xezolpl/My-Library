@@ -29,7 +29,7 @@ public class BookViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Book>> getBookWithStatus(int status) {
-        return bookDao.getBooksWithStatus(status);
+        return bookDao.getBooksByStatus(status);
     }
 
     public void insert(Book book) {

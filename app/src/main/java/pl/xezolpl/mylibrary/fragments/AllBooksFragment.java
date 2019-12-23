@@ -94,10 +94,11 @@ public class AllBooksFragment extends Fragment {
     public void setUpViewPager() {
         sectionsPagerAdapter = new TabFragmentPagerAdapter(getFragmentManager());
 
-        Fragment allBooksFragment = new BooksListTabFragment(Book.STATUS_NEUTRAL, context);
-        Fragment wantBooksFragment = new BooksListTabFragment(Book.STATUS_WANT_TO_READ, context);
-        Fragment currBooksFragment = new BooksListTabFragment(Book.STATUS_CURRENTLY_READING, context);
-        Fragment alrBooksFragment = new BooksListTabFragment(Book.STATUS_ALREADY_READ, context);
+
+        Fragment allBooksFragment = new BooksListTabFragment(Book.STATUS_NEUTRAL);
+        Fragment wantBooksFragment = new BooksListTabFragment(Book.STATUS_WANT_TO_READ);
+        Fragment currBooksFragment = new BooksListTabFragment(Book.STATUS_CURRENTLY_READING);
+        Fragment alrBooksFragment = new BooksListTabFragment(Book.STATUS_ALREADY_READ);
 
         sectionsPagerAdapter.addFragment(allBooksFragment, "All books");
         sectionsPagerAdapter.addFragment(wantBooksFragment, "Want to read books");

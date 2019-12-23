@@ -1,5 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,19 +22,19 @@ import com.bumptech.glide.Glide;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.adapters.CategoryRecViewAdapter;
 import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 
 public class AddBookActivity extends AppCompatActivity {
 
     private EditText add_book_title, add_book_author, add_book_description, add_book_pages;
-    private Button select_image_btn;
     private ImageView add_book_image;
     private Spinner status_spinner;
-    private RecyclerView book_covers_rec_view;
-    private Button add_book_ok_btn, add_book_cancel_btn;
+    private Button add_book_ok_btn, add_book_cancel_btn, select_category_btn, select_image_btn;
 
     private Book thisBook = null;
+    private String bookId;
     private boolean inEditing = false;
 
     @Override
@@ -49,6 +52,10 @@ public class AddBookActivity extends AppCompatActivity {
             thisBook = (Book) intent.getSerializableExtra("book");
             inEditing = true;
             loadBookData(thisBook);
+            bookId = thisBook.getId();
+        }
+        else{
+            bookId = UUID.randomUUID().toString();
         }
     }
 
@@ -68,12 +75,11 @@ public class AddBookActivity extends AppCompatActivity {
         add_book_pages = (EditText) findViewById(R.id.add_book_pages);
 
         add_book_image = (ImageView) findViewById(R.id.add_book_image);
-        select_image_btn = (Button) findViewById(R.id.select_image_btn);
         status_spinner = (Spinner) findViewById(R.id.status_spinner);
-        book_covers_rec_view = (RecyclerView) findViewById(R.id.book_covers_rec_view);
 
         add_book_ok_btn = (Button) findViewById(R.id.add_book_ok_btn);
         add_book_cancel_btn = (Button) findViewById(R.id.add_book_cancel_btn);
+        select_image_btn = (Button) findViewById(R.id.select_image_btn);
     }
 
     private void setOnClickListeners() {
@@ -81,9 +87,30 @@ public class AddBookActivity extends AppCompatActivity {
         select_image_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AddBookActivity.this, SelectCoverActivity.class);
-                startActivity(intent);
+                // Intent intent = new Intent(AddBookActivity.this, SelectCoverActivity.class);
+                // startActivity(intent);
                 //TODO:SELECT COVER AND SEND IT TO THIS ACTIVITY
+
+                AlertDialog dialog = new AlertDialog.Builder(AddBookActivity.this)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .setView(R.layout.fragment_categories)
+                        .create();
+                dialog.show();
+                RecyclerView recView = dialog.findViewById(R.id.recView);
+                recView.setAdapter(new CategoryRecViewAdapter(AddBookActivity.this,
+                        CategoryRecViewAdapter.SELECTING_CATEGORIES_MODE, getSupportFragmentManager(), bookId));
+                recView.setLayoutManager(new GridLayoutManager(AddBookActivity.this, 2));
             }
         });
 
@@ -127,13 +154,6 @@ public class AddBookActivity extends AppCompatActivity {
     private boolean areValidOutputs() {
         String title, author, imageUrl, description;
         int status, pages = 0;
-        String id;
-
-        try {
-            id = thisBook.getId();
-        } catch (NullPointerException e) {
-            id = UUID.randomUUID().toString();
-        }
 
         if (add_book_title.getText().length() > 1) {
             title = add_book_title.getText().toString();
@@ -154,7 +174,7 @@ public class AddBookActivity extends AppCompatActivity {
             }
         }
 
-        thisBook = new Book(title, author, imageUrl, description, pages, id, status);
+        thisBook = new Book(title, author, imageUrl, description, pages, bookId, status);
         return true;
     }
 }

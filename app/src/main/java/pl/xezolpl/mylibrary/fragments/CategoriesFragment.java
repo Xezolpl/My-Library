@@ -15,13 +15,14 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.CategoryRecViewAdapter;
 
 public class CategoriesFragment extends Fragment {
+
     private CategoryRecViewAdapter adapter;
     private RecyclerView recView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new CategoryRecViewAdapter(getContext());
+        adapter = new CategoryRecViewAdapter(getContext(), CategoryRecViewAdapter.NORMAL_MODE, getFragmentManager(), null);
     }
 
     @Nullable

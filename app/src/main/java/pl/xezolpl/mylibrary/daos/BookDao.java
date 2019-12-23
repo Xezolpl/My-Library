@@ -27,10 +27,7 @@ public interface BookDao {
     LiveData<List<Book>> getAllBooks();
 
     @Query("Select * FROM books WHERE status=:status ORDER BY title")
-    LiveData<List<Book>> getBooksWithStatus(int status);
-
-    @Query("SELECT * FROM books WHERE id=:bookId")
-    LiveData<Book> getBook(String bookId);
+    LiveData<List<Book>> getBooksByStatus(int status);
 
 
 }

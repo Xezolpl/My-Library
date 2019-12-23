@@ -32,7 +32,7 @@
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
         <activity
             android:name=".activities.OpenedBookActivity"
-            android:parentActivityName=".fragments.AllBooksFragment" />
+            android:parentActivityName=".activities.MainActivity" />
 
         <activity android:name=".activities.MainActivity">
             <intent-filter>
@@ -41,6 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
