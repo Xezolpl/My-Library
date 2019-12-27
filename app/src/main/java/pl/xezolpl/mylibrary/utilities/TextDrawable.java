@@ -9,9 +9,12 @@ import android.graphics.drawable.Drawable;
 
 public class TextDrawable extends Drawable {
 
-    public static final float SMALL_TEXT_SIZE = 24f;
-    public static final float MEDIUM_TEXT_SIZE = 48f;
+    public static final float MINI_TEXT_SIZE = 24f;
+    public static final float SMALL_TEXT_SIZE = 48f;
+    public static final float MEDIUM_TEXT_SIZE = 72f;
+    public static final float BIG_TEXT_SIZE = 96f;
     public static final float LARGE_TEXT_SIZE = 120f;
+    public static final float HUGE_TEXT_SIZE = 144f;
 
     private final String text;
     private final Paint paint;
@@ -29,13 +32,13 @@ public class TextDrawable extends Drawable {
         paint.setTextAlign(Paint.Align.CENTER);
     }
 
-    public void setTextSize(float textSize){
+    public void setTextSize(float textSize) {
         paint.setTextSize(textSize);
     }
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawText(text, canvas.getWidth()/2, canvas.getHeight()-10, paint);
+        canvas.drawText(text, canvas.getWidth() / 2, canvas.getHeight() - 10, paint);
     }
 
     @Override

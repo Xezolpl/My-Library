@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 @Entity(tableName = "books")
@@ -44,7 +46,9 @@ public class Book implements Serializable {
     public static final int STATUS_ALREADY_READ = 3;
 
 
-    public Book(String title, String author, String imageUrl, String description, int pages, String id, int status) {
+    public Book(@NotNull String title, @NotNull String author, String imageUrl, String description,
+                int pages, @NotNull String id, int status) {
+
         this.title = title;
         this.author = author;
         this.imageUrl = imageUrl;
@@ -55,10 +59,12 @@ public class Book implements Serializable {
         favourite = false;
     }
 
+    @NotNull
     public String getTitle() {
         return title;
     }
 
+    @NotNull
     public String getAuthor() {
         return author;
     }
@@ -75,6 +81,7 @@ public class Book implements Serializable {
         return pages;
     }
 
+    @NotNull
     public String getId() {
         return id;
     }
@@ -96,6 +103,7 @@ public class Book implements Serializable {
     }
 
 
+    @NotNull
     @Override
     public String toString() {
         return "Book{" +

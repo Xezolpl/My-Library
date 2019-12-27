@@ -39,7 +39,7 @@ public class AddChapterActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this).get(ChapterViewModel.class);
         Intent intent = getIntent();
 
-        if(intent.hasExtra("chapter")){
+        if (intent.hasExtra("chapter")) {
             thisChapter = (Chapter) intent.getSerializableExtra("chapter");
             inEdition = true;
 
@@ -52,10 +52,10 @@ public class AddChapterActivity extends AppCompatActivity {
     }
 
     private void initWidgets() {
-        add_chapter_name = (EditText) findViewById(R.id.add_chapter_name);
-        add_chapter_number = (EditText) findViewById(R.id.add_chapter_number);
-        ok_btn = (Button) findViewById(R.id.ok_btn);
-        cancel_btn = (Button) findViewById(R.id.cancel_btn);
+        add_chapter_name = findViewById(R.id.add_chapter_name);
+        add_chapter_number = findViewById(R.id.add_chapter_number);
+        ok_btn = findViewById(R.id.ok_btn);
+        cancel_btn = findViewById(R.id.cancel_btn);
     }
 
     private void setOnClickListeners() {
@@ -102,7 +102,7 @@ public class AddChapterActivity extends AppCompatActivity {
             Toast.makeText(this, "Chapter's name can not be empty!", Toast.LENGTH_SHORT).show();
             return false;
         }
-        thisChapter = new Chapter(id,number,name,bookId);
+        thisChapter = new Chapter(id, number, name, bookId);
         return true;
     }
 }

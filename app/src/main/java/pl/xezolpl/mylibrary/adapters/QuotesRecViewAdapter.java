@@ -28,12 +28,11 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
+import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder> implements Filterable {
-    private static final String TAG = "QuotesRecViewAdapter";
-
     private Context context;
     private LayoutInflater inflater;
 
@@ -59,7 +58,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     }
 
     //SETTERS & GETTERS
-    public void setInserting(boolean b){
+    public void setInserting(boolean b) {
         inserting = b;
     }
 
@@ -70,13 +69,13 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         notifyDataSetChanged();
     }
 
-    private void setOnClickListeners(final ViewHolder holder, final Quote q){
+    private void setOnClickListeners(final ViewHolder holder, final Quote q) {
 
         holder.editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, AddQuoteActivity.class);
-                intent.putExtra("quote",q);
+                intent.putExtra("quote", q);
                 context.startActivity(intent);
                 notifyDataSetChanged();
             }
@@ -95,9 +94,9 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             @Override
             public void onClick(View view) {
                 if (!holder.isExpanded) {
-                    holder.setExpanded();
+                    holder.setExpanded(true);
                 } else {
-                    holder.setCollapsed();
+                    holder.setExpanded(false);
                 }
             }
         });
@@ -146,15 +145,16 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         }
 
         //GET COLOR
-        int color = 0x000000;
-        try {
+        int color;
+        if (category != null) {
             color = category.getColor();
-        } catch (NullPointerException exc) {
-            exc.printStackTrace();
+        }else {
+            color = Markers.BLUE_START_COLOR;
         }
 
-        holder.setData(q.getTitle(), q.getQuote(), q.getAuthor(),q.getCategory(), q.getPage(), color);
-        setOnClickListeners(holder,q);
+
+        holder.setData(q.getTitle(), q.getQuote(), q.getAuthor(), q.getCategory(), q.getPage(), color);
+        setOnClickListeners(holder, q);
 
     }
 
@@ -199,7 +199,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     }
 
 
-    protected class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView quote_title_txtView, quote_txtView_expanded, quote_txtView_collapsed,
                 category_txtView, quote_page_txtView, quote_author_txtView;
         private ImageView category_imgView;
@@ -208,22 +208,22 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         private boolean isExpanded = false;
         private boolean isSelected = false;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
-            quote_title_txtView = (TextView) itemView.findViewById(R.id.quote_title_txtView);
-            quote_author_txtView = (TextView) itemView.findViewById(R.id.quote_author_txtView);
-            quote_txtView_expanded = (TextView) itemView.findViewById(R.id.quote_txtView_expanded);
-            quote_txtView_collapsed = (TextView) itemView.findViewById(R.id.quote_txtView_collapsed);
-            category_txtView = (TextView) itemView.findViewById(R.id.category_txtView);
-            quote_page_txtView = (TextView) itemView.findViewById(R.id.quote_page_txtView);
-            category_imgView = (ImageView) itemView.findViewById(R.id.category_imgView);
+            quote_title_txtView = itemView.findViewById(R.id.quote_title_txtView);
+            quote_author_txtView = itemView.findViewById(R.id.quote_author_txtView);
+            quote_txtView_expanded = itemView.findViewById(R.id.quote_txtView_expanded);
+            quote_txtView_collapsed = itemView.findViewById(R.id.quote_txtView_collapsed);
+            category_txtView = itemView.findViewById(R.id.category_txtView);
+            quote_page_txtView = itemView.findViewById(R.id.quote_page_txtView);
+            category_imgView = itemView.findViewById(R.id.category_imgView);
 
-            quote_expanded_lay = (RelativeLayout) itemView.findViewById(R.id.quote_expanded_lay);
-            quote_collapsed_lay = (RelativeLayout) itemView.findViewById(R.id.quote_collapsed_lay);
-            quote_lay = (RelativeLayout) itemView.findViewById(R.id.quote_lay);
+            quote_expanded_lay = itemView.findViewById(R.id.quote_expanded_lay);
+            quote_collapsed_lay = itemView.findViewById(R.id.quote_collapsed_lay);
+            quote_lay = itemView.findViewById(R.id.quote_lay);
 
-            editBtn = (Button) itemView.findViewById(R.id.editBtn);
-            delBtn = (Button) itemView.findViewById(R.id.delBtn);
+            editBtn = itemView.findViewById(R.id.editBtn);
+            delBtn = itemView.findViewById(R.id.delBtn);
 
             quote_expanded_lay.setVisibility(View.GONE);
 
@@ -236,7 +236,8 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             quote_txtView_collapsed.setText(quote);
             quote_txtView_collapsed.setText(quote);
             category_txtView.setText(category);
-            quote_page_txtView.setText("Page: " + page);
+            String pageString = "Page: " + page;
+            quote_page_txtView.setText(pageString);
 
             GradientDrawable drawable = (GradientDrawable) category_imgView.getBackground();
             drawable.setColor(hexdecColor);
@@ -245,16 +246,16 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             else quote_page_txtView.setVisibility(View.VISIBLE);
         }
 
-        void setExpanded() {
-            quote_collapsed_lay.setVisibility(View.GONE);
-            quote_expanded_lay.setVisibility(View.VISIBLE);
-            isExpanded = true;
-        }
-
-        void setCollapsed() {
-            quote_expanded_lay.setVisibility(View.GONE);
-            quote_collapsed_lay.setVisibility(View.VISIBLE);
-            isExpanded = false;
+        void setExpanded(boolean b){
+            if(b){
+                quote_collapsed_lay.setVisibility(View.GONE);
+                quote_expanded_lay.setVisibility(View.VISIBLE);
+                isExpanded = true;
+            }else{
+                quote_expanded_lay.setVisibility(View.GONE);
+                quote_collapsed_lay.setVisibility(View.VISIBLE);
+                isExpanded = false;
+            }
         }
 
         void setSelected(boolean b) {
@@ -267,7 +268,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 quote_lay.setBackground(drawable);
                 isSelected = false;
             }
-            setExpanded();
+            setExpanded(true);
         }
     }
 

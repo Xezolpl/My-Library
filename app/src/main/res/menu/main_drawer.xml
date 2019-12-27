@@ -13,10 +13,6 @@
             android:icon="@drawable/ic_apps_black_24dp"
             android:title="Categories" />
         <item
-            android:id="@+id/nav_authors"
-            android:icon="@drawable/ic_person_black_24dp"
-            android:title="Authors" />
-        <item
             android:id="@+id/nav_quotes"
             android:icon="@drawable/ic_format_quote_black_24dp"
             android:title="Quotes" />
@@ -30,10 +26,6 @@
             android:id="@+id/nav_contact"
             android:icon="@drawable/ic_contact_mail_black_24dp"
             android:title="Contact and about" />
-        <item
-            android:id="@+id/nav_send"
-            android:icon="@drawable/ic_send_black_24dp"
-            android:title="Send your opinion" />
     </group>
 
 </menu>

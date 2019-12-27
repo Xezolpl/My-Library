@@ -7,10 +7,4 @@
         app:actionViewClass="android.widget.SearchView"
         android:icon="@drawable/ic_search_black_24dp"
         app:showAsAction="always"/>
-    <item
-        android:id="@+id/more_btn"
-        android:title=""
-        android:icon="@drawable/ic_more_vert_black_24dp"
-        app:showAsAction="always"
-        />
 </menu>

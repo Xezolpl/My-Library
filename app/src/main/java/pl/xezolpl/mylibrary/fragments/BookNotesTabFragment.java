@@ -15,6 +15,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.Objects;
+
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.TabFragmentPagerAdapter;
 import pl.xezolpl.mylibrary.models.Book;
@@ -27,7 +29,6 @@ public class BookNotesTabFragment extends Fragment {
     private Book thisBook;
     private TabFragmentPagerAdapter adapter;
     private QuotesTabFragment quotesTabFragment;
-    private ChaptersTabFragment chaptersTabFragment;
 
     public BookNotesTabFragment(Book thisBook, Context context) {
         this.thisBook = thisBook;
@@ -38,9 +39,10 @@ public class BookNotesTabFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new TabFragmentPagerAdapter(getFragmentManager());
+        adapter = new TabFragmentPagerAdapter(Objects.requireNonNull(getFragmentManager(), "Requires non null FragmentPager!"));
+
         quotesTabFragment = new QuotesTabFragment(context, thisBook.getId());
-        chaptersTabFragment = new ChaptersTabFragment(context, thisBook.getId());
+        ChaptersTabFragment chaptersTabFragment = new ChaptersTabFragment(context, thisBook.getId());
 
         adapter.addFragment(chaptersTabFragment, "Chapters & Notes");
         adapter.addFragment(quotesTabFragment, "Quotes");
@@ -63,7 +65,7 @@ public class BookNotesTabFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        if(book_notes_viewpager.getCurrentItem()==0) quotesTabFragment.setMenuVisibility(false);
+        if (book_notes_viewpager.getCurrentItem() == 0) quotesTabFragment.setMenuVisibility(false);
         else quotesTabFragment.setMenuVisibility(true);
     }
 
@@ -74,7 +76,7 @@ public class BookNotesTabFragment extends Fragment {
     }
 
     private void initWidgets(View v) {
-        book_notes_tablayout = (TabLayout) v.findViewById(R.id.book_notes_tablayout);
-        book_notes_viewpager = (ViewPager) v.findViewById(R.id.book_notes_viewpager);
+        book_notes_tablayout = v.findViewById(R.id.book_notes_tablayout);
+        book_notes_viewpager = v.findViewById(R.id.book_notes_viewpager);
     }
 }

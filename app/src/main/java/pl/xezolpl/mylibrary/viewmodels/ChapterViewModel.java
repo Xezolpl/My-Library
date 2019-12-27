@@ -16,23 +16,22 @@ import pl.xezolpl.mylibrary.models.Chapter;
 public class ChapterViewModel extends AndroidViewModel {
 
     private ChapterDao chapterDao;
-    private LibraryDatabase database;
 
     public ChapterViewModel(@NonNull Application application) {
         super(application);
-        database = LibraryDatabase.getDatabase(application);
+        LibraryDatabase database = LibraryDatabase.getDatabase(application);
         chapterDao = database.ChapterDao();
     }
 
-    public void insert(Chapter chapter){
+    public void insert(Chapter chapter) {
         new InsertAsyncTask(chapterDao).execute(chapter);
     }
 
-    public void update(Chapter chapter){
+    public void update(Chapter chapter) {
         new UpdateAsyncTask(chapterDao).execute(chapter);
     }
 
-    public void delete(Chapter chapter){
+    public void delete(Chapter chapter) {
         new DeleteAsyncTask(chapterDao).execute(chapter);
     }
 
@@ -48,10 +47,10 @@ public class ChapterViewModel extends AndroidViewModel {
         return chapterDao.getChapter(id);
     }
 
-    private class OperationsAsyncTask extends AsyncTask<Chapter, Void, Void> {
-        protected ChapterDao operationDao;
+    private static class OperationsAsyncTask extends AsyncTask<Chapter, Void, Void> {
+        ChapterDao operationDao;
 
-        public OperationsAsyncTask(ChapterDao operationDao) {
+        OperationsAsyncTask(ChapterDao operationDao) {
             this.operationDao = operationDao;
         }
 
@@ -61,9 +60,9 @@ public class ChapterViewModel extends AndroidViewModel {
         }
     }
 
-    private class InsertAsyncTask extends OperationsAsyncTask {
+    private static class InsertAsyncTask extends OperationsAsyncTask {
 
-        public InsertAsyncTask(ChapterDao operationDao) {
+        InsertAsyncTask(ChapterDao operationDao) {
             super(operationDao);
         }
 
@@ -74,9 +73,9 @@ public class ChapterViewModel extends AndroidViewModel {
         }
     }
 
-    private class UpdateAsyncTask extends OperationsAsyncTask {
+    private static class UpdateAsyncTask extends OperationsAsyncTask {
 
-        public UpdateAsyncTask(ChapterDao operationDao) {
+        UpdateAsyncTask(ChapterDao operationDao) {
             super(operationDao);
         }
 
@@ -87,9 +86,9 @@ public class ChapterViewModel extends AndroidViewModel {
         }
     }
 
-    private class DeleteAsyncTask extends OperationsAsyncTask {
+    private static class DeleteAsyncTask extends OperationsAsyncTask {
 
-        public DeleteAsyncTask(ChapterDao operationDao) {
+        DeleteAsyncTask(ChapterDao operationDao) {
             super(operationDao);
         }
 

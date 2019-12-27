@@ -1,15 +1,18 @@
 package pl.xezolpl.mylibrary.daos;
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
 import java.util.List;
+
 import pl.xezolpl.mylibrary.models.Quote;
 
 @Dao
-public interface QuoteDao{
+public interface QuoteDao {
 
     @Insert
     void insert(Quote quote);

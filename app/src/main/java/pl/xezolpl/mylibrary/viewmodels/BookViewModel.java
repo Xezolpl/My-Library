@@ -16,11 +16,10 @@ import pl.xezolpl.mylibrary.models.Book;
 public class BookViewModel extends AndroidViewModel {
 
     private BookDao bookDao;
-    private LibraryDatabase database;
 
     public BookViewModel(@NonNull Application application) {
         super(application);
-        database = LibraryDatabase.getDatabase(application);
+        LibraryDatabase database = LibraryDatabase.getDatabase(application);
         bookDao = database.BookDao();
     }
 
@@ -30,6 +29,10 @@ public class BookViewModel extends AndroidViewModel {
 
     public LiveData<List<Book>> getBookWithStatus(int status) {
         return bookDao.getBooksByStatus(status);
+    }
+
+    public LiveData<Book> getBook(String id) {
+        return bookDao.getBook(id);
     }
 
     public void insert(Book book) {
@@ -45,11 +48,11 @@ public class BookViewModel extends AndroidViewModel {
     }
 
 
-    private class OperationsAsyncTask extends AsyncTask<Book, Void, Void> {
+    private static class OperationsAsyncTask extends AsyncTask<Book, Void, Void> {
 
-        protected BookDao asyncTaskDao;
+        BookDao asyncTaskDao;
 
-        public OperationsAsyncTask(BookDao asyncTaskDao) {
+        OperationsAsyncTask(BookDao asyncTaskDao) {
             this.asyncTaskDao = asyncTaskDao;
         }
 
@@ -59,8 +62,8 @@ public class BookViewModel extends AndroidViewModel {
         }
     }
 
-    private class InsertAsyncTask extends OperationsAsyncTask {
-        public InsertAsyncTask(BookDao asyncTaskDao) {
+    private static class InsertAsyncTask extends OperationsAsyncTask {
+        InsertAsyncTask(BookDao asyncTaskDao) {
             super(asyncTaskDao);
         }
 
@@ -71,8 +74,8 @@ public class BookViewModel extends AndroidViewModel {
         }
     }
 
-    private class UpdateAsyncTask extends OperationsAsyncTask {
-        public UpdateAsyncTask(BookDao asyncTaskDao) {
+    private static class UpdateAsyncTask extends OperationsAsyncTask {
+        UpdateAsyncTask(BookDao asyncTaskDao) {
             super(asyncTaskDao);
         }
 
@@ -83,8 +86,8 @@ public class BookViewModel extends AndroidViewModel {
         }
     }
 
-    private class DeleteAsyncTask extends OperationsAsyncTask {
-        public DeleteAsyncTask(BookDao asyncTaskDao) {
+    private static class DeleteAsyncTask extends OperationsAsyncTask {
+        DeleteAsyncTask(BookDao asyncTaskDao) {
             super(asyncTaskDao);
         }
 

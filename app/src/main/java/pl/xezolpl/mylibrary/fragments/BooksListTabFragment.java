@@ -21,7 +21,7 @@ import java.util.List;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.BooksRecViewAdapter;
 import pl.xezolpl.mylibrary.models.Book;
-import pl.xezolpl.mylibrary.models.Categories;
+import pl.xezolpl.mylibrary.models.CategoryWithBook;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import pl.xezolpl.mylibrary.viewmodels.CategoriesViewModel;
 
@@ -30,17 +30,15 @@ public class BooksListTabFragment extends Fragment {
     private Context context;
     private int tabBooksStatus;
 
-    private RecyclerView booksRecView;
     private BooksRecViewAdapter booksRecViewAdapter;
 
-    private BookViewModel bookViewModel;
     private String categoryName = null;
 
     public BooksListTabFragment() {
         tabBooksStatus = Book.STATUS_NEUTRAL;
     }
 
-    public BooksListTabFragment(int tabBooksStatus) {
+    BooksListTabFragment(int tabBooksStatus) {
         this.tabBooksStatus = tabBooksStatus;
     }
 
@@ -56,7 +54,7 @@ public class BooksListTabFragment extends Fragment {
 
         booksRecViewAdapter = new BooksRecViewAdapter(context);
 
-        bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
+        BookViewModel bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
 
         /*ALL BOOKS*/
         if (tabBooksStatus == Book.STATUS_NEUTRAL) {
@@ -65,25 +63,30 @@ public class BooksListTabFragment extends Fragment {
                 public void onChanged(final List<Book> books) {
                     if (categoryName == null) {
                         booksRecViewAdapter.setBooks(books);
-                    }else{
+                    } else {
                         final List<Book> booksWithCategory = new ArrayList<>();
 
-                        CategoriesViewModel categoriesViewModel = ViewModelProviders.of((FragmentActivity)context)
+                        CategoriesViewModel categoriesViewModel = ViewModelProviders.of((FragmentActivity) context)
                                 .get(CategoriesViewModel.class);
 
                         categoriesViewModel.getBooksByCategory(categoryName)
-                                .observe((FragmentActivity) context, new Observer<List<Categories>>() {
+                                .observe((FragmentActivity) context, new Observer<List<CategoryWithBook>>() {
                                     @Override
-                                    public void onChanged(List<Categories> categories) {
-                                        for (int i=0; i<categories.size(); i++){
-                                            if(categories.contains(new Categories(books.get(i).getId()
-                                                    ,categoryName))){
-                                                booksWithCategory.add(books.get(i));
+                                    public void onChanged(List<CategoryWithBook> categories) {
+                                        for (int i = 0; i < categories.size(); i++) {
+                                            for (int j = 0; j < books.size(); j++) {
+                                                CategoryWithBook cat1 = categories.get(i);
+                                                Book book1 = books.get(j);
+                                                if (cat1.getBookId().equals(book1.getId())) {
+                                                    booksWithCategory.add(book1);
+                                                    break;
+                                                }
                                             }
+
                                         }
+                                        booksRecViewAdapter.setBooks(booksWithCategory);
                                     }
                                 });
-                        booksRecViewAdapter.setBooks(booksWithCategory);
                     }
                 }
             });
@@ -104,14 +107,14 @@ public class BooksListTabFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tabfragment_books_list, container, false);
 
-        booksRecView = (RecyclerView) view.findViewById(R.id.booksRecView);
+        RecyclerView booksRecView = view.findViewById(R.id.booksRecView);
         booksRecView.setAdapter(booksRecViewAdapter);
         booksRecView.setLayoutManager(new GridLayoutManager(context, 2));
 
         return view;
     }
 
-    public void setFilter(String filter) {
+     void setFilter(String filter) {
         booksRecViewAdapter.getFilter().filter(filter);
     }
 }

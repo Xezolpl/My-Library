@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.models.Cover;
@@ -19,7 +20,7 @@ import pl.xezolpl.mylibrary.models.Cover;
 public class CoversRevViewAdapter extends RecyclerView.Adapter<CoversRevViewAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<Cover> bookCovers = new ArrayList<>();
+    private List<Cover> bookCovers = new ArrayList<>();
 
     public CoversRevViewAdapter(Context context) {
         this.context = context;
@@ -29,25 +30,26 @@ public class CoversRevViewAdapter extends RecyclerView.Adapter<CoversRevViewAdap
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.listitem_cover,parent,false);
+                .inflate(R.layout.listitem_cover, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Glide.with(context).asBitmap().load(bookCovers.get(position).getUrl()).into(holder.bookCover);
+        Glide.with(context).asBitmap().load(bookCovers.get(position)).into(holder.bookCover);
     }
 
     @Override
     public int getItemCount() {
-       return bookCovers.size();
+        return bookCovers.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView bookCover;
+
         ViewHolder(View itemView) {
             super(itemView);
-            bookCover= (ImageView) itemView.findViewById(R.id.bookCover);
+            bookCover = itemView.findViewById(R.id.bookCover);
 
         }
     }

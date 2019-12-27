@@ -1,8 +1,8 @@
 package pl.xezolpl.mylibrary.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,25 +25,24 @@ import pl.xezolpl.mylibrary.adapters.TabFragmentPagerAdapter;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class AllBooksFragment extends Fragment {
-
+    private static final String TAG = "AllBooksFragment";
     private FloatingActionButton fab;
     private ViewPager books_viewPager;
     private TabLayout books_tabLayout;
 
-    private Context context;
     private TabFragmentPagerAdapter sectionsPagerAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_all_books, container, false);
-        context = getContext();
 
         initWidgets(view);
         setOnClickListeners();
-
         setUpViewPager();
+
         books_tabLayout.setupWithViewPager(books_viewPager);
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -74,9 +73,9 @@ public class AllBooksFragment extends Fragment {
 
 
     private void initWidgets(View v) {
-        books_viewPager = (ViewPager) v.findViewById(R.id.books_viewPager);
-        books_tabLayout = (TabLayout) v.findViewById(R.id.books_tabLayout);
-        fab = (FloatingActionButton) v.findViewById(R.id.add_book_fab);
+        books_viewPager = v.findViewById(R.id.books_viewPager);
+        books_tabLayout = v.findViewById(R.id.books_tabLayout);
+        fab = v.findViewById(R.id.add_book_fab);
 
     }
 
@@ -84,7 +83,7 @@ public class AllBooksFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, AddBookActivity.class);
+                Intent intent = new Intent(getContext(), AddBookActivity.class);
                 startActivity(intent);
             }
         });
@@ -92,20 +91,26 @@ public class AllBooksFragment extends Fragment {
 
 
     public void setUpViewPager() {
-        sectionsPagerAdapter = new TabFragmentPagerAdapter(getFragmentManager());
+        if (getFragmentManager() != null) {
+            sectionsPagerAdapter = new TabFragmentPagerAdapter(getFragmentManager());
+
+            Fragment allBooksFragment = new BooksListTabFragment(Book.STATUS_NEUTRAL);
+            Fragment wantBooksFragment = new BooksListTabFragment(Book.STATUS_WANT_TO_READ);
+            Fragment currBooksFragment = new BooksListTabFragment(Book.STATUS_CURRENTLY_READING);
+            Fragment alrBooksFragment = new BooksListTabFragment(Book.STATUS_ALREADY_READ);
+
+            sectionsPagerAdapter.addFragment(allBooksFragment, "All books");
+            sectionsPagerAdapter.addFragment(wantBooksFragment, "Want to read books");
+            sectionsPagerAdapter.addFragment(currBooksFragment, "Currently reading books");
+            sectionsPagerAdapter.addFragment(alrBooksFragment, "Already read books");
+
+            books_viewPager.setAdapter(sectionsPagerAdapter);
+        }else {
+            Log.e(TAG, "setUpViewPager: ", new NullPointerException("getFragmentManager == null"));
+        }
 
 
-        Fragment allBooksFragment = new BooksListTabFragment(Book.STATUS_NEUTRAL);
-        Fragment wantBooksFragment = new BooksListTabFragment(Book.STATUS_WANT_TO_READ);
-        Fragment currBooksFragment = new BooksListTabFragment(Book.STATUS_CURRENTLY_READING);
-        Fragment alrBooksFragment = new BooksListTabFragment(Book.STATUS_ALREADY_READ);
 
-        sectionsPagerAdapter.addFragment(allBooksFragment, "All books");
-        sectionsPagerAdapter.addFragment(wantBooksFragment, "Want to read books");
-        sectionsPagerAdapter.addFragment(currBooksFragment, "Currently reading books");
-        sectionsPagerAdapter.addFragment(alrBooksFragment, "Already read books");
-
-        books_viewPager.setAdapter(sectionsPagerAdapter);
     }
 
 }

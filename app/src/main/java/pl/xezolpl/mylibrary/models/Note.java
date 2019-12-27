@@ -15,7 +15,6 @@ public class Note implements Serializable {
     @ColumnInfo(name = "id")
     private String id;
 
-    @NonNull
     @ColumnInfo(name = "markerType")
     private int markerType;
 
@@ -27,12 +26,11 @@ public class Note implements Serializable {
     @ColumnInfo(name = "parentId")
     private String parentId;
 
-    @NonNull
     @ColumnInfo(name = "color")
     private int color;
 
 
-    public Note(@NonNull String id, int markerType, @NonNull String note, @NonNull String parentId, @NonNull int color) {
+    public Note(@NonNull String id, int markerType, @NonNull String note, @NonNull String parentId, int color) {
         this.id = id;
         this.markerType = markerType;
         this.note = note;
@@ -59,7 +57,6 @@ public class Note implements Serializable {
         return parentId;
     }
 
-    @NonNull
     public int getColor() {
         return color;
     }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,8 +22,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.activities.MainActivity;
 import pl.xezolpl.mylibrary.fragments.BooksListTabFragment;
-import pl.xezolpl.mylibrary.models.Categories;
+import pl.xezolpl.mylibrary.models.CategoryWithBook;
 import pl.xezolpl.mylibrary.models.Category;
 import pl.xezolpl.mylibrary.viewmodels.CategoriesViewModel;
 
@@ -101,6 +103,18 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         final Category category = categories.get(position);
 
         holder.setData(category.getNameR(), category.getImgR());
+        final String categoryName = context.getString(category.getNameR());
+        categoriesViewModel.getCategoriesByBook(bookId).observe((FragmentActivity) context, new Observer<List<CategoryWithBook>>() {
+            @Override
+            public void onChanged(List<CategoryWithBook> categories) {
+                for (int i = 0; i < categories.size(); i++) {
+                    if (categories.get(i).getCategory().equals(categoryName)) {
+                        holder.checked = true;
+                    }
+                }
+            }
+        });
+
 
         holder.relLay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,13 +122,16 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
                 if (mode == NORMAL_MODE) {
                     fm.beginTransaction().replace(R.id.fragment_container,
                             new BooksListTabFragment(context.getString(category.getNameR()))).commit();
+                    ((MainActivity)context).setNavViewItem(0);
+
                 } else if (mode == SELECTING_CATEGORIES_MODE) {
+                    String categoryName = context.getString(category.getNameR());
                     if (holder.checked) {
-                        categoriesViewModel.delete(new Categories(bookId, context.getString(category.getNameR())));
+                        categoriesViewModel.delete(new CategoryWithBook(bookId + categoryName, bookId, categoryName));
                         Toast.makeText(context, "Category deleted", Toast.LENGTH_SHORT).show();
                         holder.checked = false;
                     } else {
-                        categoriesViewModel.insert(new Categories(bookId, context.getString(category.getNameR())));
+                        categoriesViewModel.insert(new CategoryWithBook(bookId + categoryName, bookId, categoryName));
                         Toast.makeText(context, "Category inserted", Toast.LENGTH_SHORT).show();
                         holder.checked = true;
                     }
@@ -128,13 +145,13 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         return categories.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView txtView;
         private ImageView imgView;
         private RelativeLayout relLay;
         private boolean checked = false;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             txtView = itemView.findViewById(R.id.txtView);
@@ -142,7 +159,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
             relLay = itemView.findViewById(R.id.relLay);
         }
 
-        public void setData(int nameR, int imgR) {
+        void setData(int nameR, int imgR) {
             txtView.setText(context.getResources().getString(nameR));
             imgView.setBackground(context.getResources().getDrawable(imgR));
         }

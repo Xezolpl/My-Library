@@ -43,7 +43,7 @@ public class InsertQuoteActivity extends AppCompatActivity {
         adapter = new QuotesRecViewAdapter(this);
         adapter.setInserting(true);
 
-        recView.setLayoutManager(new GridLayoutManager(this,1));
+        recView.setLayoutManager(new GridLayoutManager(this, 1));
 
         viewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
         viewModel.getQuotesByBook(chapter.getBookId()).observe(this, new Observer<List<Quote>>() {
@@ -56,11 +56,10 @@ public class InsertQuoteActivity extends AppCompatActivity {
     }
 
 
-
     private void initWidgets() {
-        recView = (RecyclerView) findViewById(R.id.recView);
-        okBtn = (Button) findViewById(R.id.ok_btn);
-        cancelBtn = (Button) findViewById(R.id.cancel_btn);
+        recView = findViewById(R.id.recView);
+        okBtn = findViewById(R.id.ok_btn);
+        cancelBtn = findViewById(R.id.cancel_btn);
     }
 
     private void setOnClickListeners() {
@@ -79,11 +78,10 @@ public class InsertQuoteActivity extends AppCompatActivity {
         });
     }
 
-    private boolean updateChapterQuotes(List<Quote> quotes){
-        for (Quote quote : quotes){
+    private void updateChapterQuotes(List<Quote> quotes) {
+        for (Quote quote : quotes) {
             quote.setChapterId(chapter.getId());
             viewModel.update(quote);
         }
-        return true;
     }
 }

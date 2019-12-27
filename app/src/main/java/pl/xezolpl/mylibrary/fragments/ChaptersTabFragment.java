@@ -1,6 +1,5 @@
 package pl.xezolpl.mylibrary.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,20 +26,15 @@ import pl.xezolpl.mylibrary.activities.AddChapterActivity;
 import pl.xezolpl.mylibrary.adapters.ChaptersRecViewAdapter;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
-import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 
 public class ChaptersTabFragment extends Fragment {
-    private RecyclerView recView;
-    private FloatingActionButton fab;
-
-    private ChapterViewModel chapterViewModel;
 
     private String bookId;
     private Context context;
 
     private ChaptersRecViewAdapter adapter;
 
-    public ChaptersTabFragment(Context context, String bookId) {
+    ChaptersTabFragment(Context context, String bookId) {
         this.bookId = bookId;
         this.context = context;
     }
@@ -51,7 +45,7 @@ public class ChaptersTabFragment extends Fragment {
 
         adapter = new ChaptersRecViewAdapter(context);
 
-        chapterViewModel = ViewModelProviders.of(this).get(ChapterViewModel.class);
+        ChapterViewModel chapterViewModel = ViewModelProviders.of(this).get(ChapterViewModel.class);
         chapterViewModel.getChaptersByBook(bookId).observe(this, new Observer<List<Chapter>>() {
             @Override
             public void onChanged(List<Chapter> chapters) {
@@ -65,17 +59,17 @@ public class ChaptersTabFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tabfragment_chapters, container, false);
 
-        recView = (RecyclerView) view.findViewById(R.id.chapters_recView);
+        RecyclerView recView = view.findViewById(R.id.chapters_recView);
         recView.setAdapter(adapter);
-        recView.setLayoutManager(new GridLayoutManager(context,1));
+        recView.setLayoutManager(new GridLayoutManager(context, 1));
 
 
-        fab = (FloatingActionButton) view.findViewById(R.id.chapters_fab);
+        FloatingActionButton fab = view.findViewById(R.id.chapters_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, AddChapterActivity.class);
-                intent.putExtra("bookId",bookId);
+                intent.putExtra("bookId", bookId);
                 startActivity(intent);
             }
         });

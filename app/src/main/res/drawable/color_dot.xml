@@ -3,7 +3,7 @@
     android:id="@+id/color_dot"
     android:layout_weight="0.9"
     android:shape="oval">
-    <solid android:color="#44BBFF" />
+    <solid android:color="#51C1ED" />
     <size
         android:width="32dp"
         android:height="32dp" />

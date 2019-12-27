@@ -34,9 +34,8 @@ public class AddNoteActivity extends AppCompatActivity {
     private ImageView add_note_imgView;
     private Button ok_btn, cancel_btn, add_note_color_btn;
 
-    private NoteViewModel viewModel;
-
-    private int currentMarkerType = Markers.DOT_MARKER;
+    private int currentMarkerType = Markers.NUMBER_MARKER;
+    private int color = Color.BLUE;
 
     private String parentId;
     private String id;
@@ -45,8 +44,7 @@ public class AddNoteActivity extends AppCompatActivity {
     private boolean markerTypeLocked = false;
 
     private Note thisNote;
-    private int color = Color.BLUE;
-
+    private NoteViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,15 +64,29 @@ public class AddNoteActivity extends AppCompatActivity {
 
     }
 
-    private void loadFromIntent() throws NullPointerException, IOException {
+    private void loadFromIntent() throws NullPointerException {
         Intent intent = getIntent();
         int parent = intent.getIntExtra("parent", 0);
 
         switch (parent) {
             case ChaptersNotesViewHolder.FROM_CHAPTER: {
-                Chapter chapter = (Chapter) intent.getSerializableExtra("chapter");
+                final Chapter chapter = (Chapter) intent.getSerializableExtra("chapter");
                 parentId = chapter.getId();
                 id = UUID.randomUUID().toString();
+
+                viewModel.getNotesByParent(chapter.getId()).observe(this, new Observer<List<Note>>() {
+                    @Override
+                    public void onChanged(List<Note> notes) {
+                        if (notes.size() > 0) {
+                            currentMarkerType = notes.get(0).getMarkerType();
+                            markerTypeLocked = true;
+                            color = notes.get(0).getColor();
+                        } else {
+                            color = Markers.BLUE_START_COLOR;
+                        }
+                        setImageView(color);
+                    }
+                });
                 break;
             }
             case ChaptersNotesViewHolder.FROM_NOTE: {
@@ -90,7 +102,7 @@ public class AddNoteActivity extends AppCompatActivity {
                             currentMarkerType = notes.get(0).getMarkerType();
                             markerTypeLocked = true;
                             color = notes.get(0).getColor();
-                        }else {
+                        } else {
                             color = note.getColor();
                         }
                         setImageView(color);
@@ -110,7 +122,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 viewModel.getNotesByParent(note.getParentId()).observe(this, new Observer<List<Note>>() {
                     @Override
                     public void onChanged(List<Note> notes) {
-                        if (notes.size() > 0) {
+                        if (notes.size() > 1) {
                             currentMarkerType = notes.get(0).getMarkerType();
                             markerTypeLocked = true;
                             setImageView(color);
@@ -127,12 +139,17 @@ public class AddNoteActivity extends AppCompatActivity {
     }
 
     private void initWidgets() {
-        add_note_name = (EditText) findViewById(R.id.add_note_name);
-        add_note_imgView = (ImageView) findViewById(R.id.add_note_imgView);
-        add_note_imgView.setImageResource(R.drawable.color_dot);
-        ok_btn = (Button) findViewById(R.id.ok_btn);
-        cancel_btn = (Button) findViewById(R.id.cancel_btn);
-        add_note_color_btn = (Button) findViewById(R.id.add_note_color_btn);
+        add_note_name = findViewById(R.id.add_note_name);
+        add_note_imgView = findViewById(R.id.add_note_imgView);
+        try {
+            add_note_imgView.setImageDrawable(Markers.getLetterMarker(Markers.NUMBER_MARKER,
+                    0, Color.BLUE, TextDrawable.LARGE_TEXT_SIZE));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ok_btn = findViewById(R.id.ok_btn);
+        cancel_btn = findViewById(R.id.cancel_btn);
+        add_note_color_btn = findViewById(R.id.add_note_color_btn);
     }
 
     private void setOnClickListeners() {
@@ -184,16 +201,16 @@ public class AddNoteActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ColorPicker picker = new ColorPicker(AddNoteActivity.this);
                 picker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
-                            @Override
-                            public void onChooseColor(int position, int color) {
-                                add_note_imgView.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-                                AddNoteActivity.this.color = color;
-                            }
+                    @Override
+                    public void onChooseColor(int position, int color) {
+                        add_note_imgView.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+                        AddNoteActivity.this.color = color;
+                    }
 
-                            @Override
-                            public void onCancel() {
-                            }
-                        }).show();
+                    @Override
+                    public void onCancel() {
+                    }
+                }).show();
             }
         });
     }
@@ -213,7 +230,7 @@ public class AddNoteActivity extends AppCompatActivity {
             } else {
                 add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this, currentMarkerType, markerColor));
             }
-        } catch (IOException exc){
+        } catch (IOException exc) {
             exc.printStackTrace();
         }
     }

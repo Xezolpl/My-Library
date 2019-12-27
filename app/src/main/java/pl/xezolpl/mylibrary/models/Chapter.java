@@ -48,7 +48,7 @@ public class Chapter implements Serializable {
     }
 
     @NonNull
-    public String getBookId(){
+    public String getBookId() {
         return bookId;
     }
 }

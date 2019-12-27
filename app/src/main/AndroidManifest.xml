@@ -14,30 +14,39 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.AddBookActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
         <activity
             android:name=".activities.AddChapterActivity"
+            android:parentActivityName=".activities.OpenedBookActivity"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
         <activity
             android:name=".activities.AddNoteActivity"
+            android:parentActivityName=".activities.OpenedBookActivity"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
         <activity
             android:name=".activities.AddQuoteActivity"
+            android:parentActivityName=".activities.OpenedBookActivity"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
         <activity
             android:name=".activities.AddQuoteCategoryActivity"
+            android:parentActivityName=".activities.AddQuoteActivity"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
         <activity
             android:name=".activities.InsertQuoteActivity"
+            android:parentActivityName=".activities.OpenedBookActivity"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
         <activity
             android:name=".activities.OpenedBookActivity"
             android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".activities.SelectCoverActivity"
+            android:parentActivityName=".activities.AddBookActivity"
+            android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
 
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

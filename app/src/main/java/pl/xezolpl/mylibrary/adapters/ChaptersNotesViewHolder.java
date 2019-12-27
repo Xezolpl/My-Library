@@ -3,15 +3,17 @@ package pl.xezolpl.mylibrary.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -43,35 +45,48 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
     private RecyclerView recView, quotesRecView;
     private ImageView marker_imgView;
     private RelativeLayout wholeRelLay;
-
-    private LinearLayout optionsLay;
-    private Button addBtn, editBtn, deleteBtn, insertQuoteBtn;
+    private Button moreBtn;
 
     private NotesRecViewAdapter adapter;
-    private boolean isRecViewVisible = false;
-    private boolean isOptionsLayVisible = false;
-    private Context context;
-
-    private int parent;
-    private Chapter parentChapter = null;
-    private Note parentNote = null;
     private QuotesRecViewAdapter quotesAdapter;
 
-    public ChaptersNotesViewHolder(@NonNull View itemView, Context context, int parent) {
+    private boolean isRecViewVisible = true;
+    private int parent;
+
+    private Context context;
+    private FragmentActivity activity;
+
+    private Chapter parentChapter = null;
+    private Note parentNote = null;
+
+    ChaptersNotesViewHolder(@NonNull View itemView, Context context, int parent) {
         super(itemView);
         this.context = context;
         this.parent = parent;
+        activity = (FragmentActivity) context;
 
         initWidgets();
         setOnClickListeners();
-
-        setRecViewVisible(false);
-        setOptionsLayVisible(false);
 
         if (parent == FROM_CHAPTER) {
             quotesAdapter = new QuotesRecViewAdapter(context);
             quotesRecView.setLayoutManager(new GridLayoutManager(context, 1));
         }
+
+    }
+
+    private void initWidgets() {
+
+        textView = itemView.findViewById(R.id.textView);
+        recView = itemView.findViewById(R.id.recView);
+        wholeRelLay = itemView.findViewById(R.id.wholeRelLay);
+        if (parent == FROM_NOTE)
+            marker_imgView = itemView.findViewById(R.id.marker_imgView);
+        else {
+            quotesRecView = itemView.findViewById(R.id.quotes_recView);
+            setRecViewVisible(false);
+        }
+        moreBtn = itemView.findViewById(R.id.moreBtn);
 
     }
 
@@ -91,107 +106,94 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         wholeRelLay.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if (isOptionsLayVisible) {
-                    setOptionsLayVisible(false);
-                } else {
-                    setOptionsLayVisible(true);
-                }
+                //TODO:EXPAND EVERY CHILD
                 return false;
             }
         });
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
+        moreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                try {
-                    Intent intent = new Intent(context, AddNoteActivity.class);
-                    if (parent == FROM_CHAPTER) {
-                        intent.putExtra("chapter", parentChapter);
-                        intent.putExtra("parent", FROM_CHAPTER);
-                    } else {
-                        intent.putExtra("note", parentNote);
-                        intent.putExtra("parent", FROM_NOTE);
+                PopupMenu popupMenu = new PopupMenu(context, view);
+                popupMenu.inflate(R.menu.chapter_note_popup_menu);
+                if (parent == FROM_NOTE) {
+                    popupMenu.getMenu().getItem(2).setVisible(false);
+                }
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case R.id.addMenuBtn: {
+
+                                Intent intent = new Intent(context, AddNoteActivity.class);
+                                if (parent == FROM_CHAPTER) {
+                                    intent.putExtra("chapter", parentChapter);
+                                    intent.putExtra("parent", FROM_CHAPTER);
+                                } else {
+                                    intent.putExtra("note", parentNote);
+                                    intent.putExtra("parent", FROM_NOTE);
+                                }
+                                setRecViewVisible(true);
+                                context.startActivity(intent);
+                                break;
+                            }
+                            case R.id.editMenuBtn: {
+
+                                Intent intent;
+                                if (parent == FROM_CHAPTER) {
+                                    intent = new Intent(context, AddChapterActivity.class);
+                                    intent.putExtra("chapter", parentChapter);
+                                } else {
+                                    intent = new Intent(context, AddNoteActivity.class);
+                                    intent.putExtra("note", parentNote);
+                                    intent.putExtra("parent", EDITION);
+                                }
+
+                                context.startActivity(intent);
+                                break;
+                            }
+                            case R.id.insertQuoteMenuBtn: {
+
+                                Intent intent = new Intent(context, InsertQuoteActivity.class);
+                                intent.putExtra("chapter", parentChapter);
+
+                                context.startActivity(intent);
+                                break;
+                            }
+                            case R.id.deleteMenuBtn: {
+
+                                if (parent == FROM_CHAPTER) {
+                                    ChapterViewModel model = ViewModelProviders.of(activity).get(ChapterViewModel.class);
+                                    model.delete(parentChapter);
+                                } else {
+                                    NoteViewModel model = ViewModelProviders.of(activity).get(NoteViewModel.class);
+                                    model.delete(parentNote);
+                                    setRecViewVisible(false);
+                                }
+                                break;
+                            }
+                            default:
+                                return false;
+                        }
+                        return true;
                     }
-                    context.startActivity(intent);
-                } catch (Exception exc) {
-                    exc.printStackTrace();
-                    Toast.makeText(context, "Something went wrong! Try again or restart application.", Toast.LENGTH_SHORT).show();
-                }
+                });
 
-                setOptionsLayVisible(false);
-                setRecViewVisible(true);
+                MenuPopupHelper menuHelper = new MenuPopupHelper(context, (MenuBuilder) popupMenu.getMenu(), view);
+                menuHelper.setForceShowIcon(true);
+                menuHelper.show();
             }
         });
-
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent;
-                if (parent == FROM_CHAPTER) {
-                    intent = new Intent(context, AddChapterActivity.class);
-                    intent.putExtra("chapter", parentChapter);
-                } else {
-                    intent = new Intent(context, AddNoteActivity.class);
-                    intent.putExtra("note", parentNote);
-                    intent.putExtra("parent", EDITION);
-                }
-                context.startActivity(intent);
-            }
-        });
-
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (parent == FROM_CHAPTER) {
-                    ChapterViewModel model = ViewModelProviders.of((FragmentActivity) context).get(ChapterViewModel.class);
-                    model.delete(parentChapter);
-                } else {
-                    NoteViewModel model = ViewModelProviders.of((FragmentActivity) context).get(NoteViewModel.class);
-                    model.delete(parentNote);
-                    setOptionsLayVisible(false);
-                    setRecViewVisible(false);
-                }
-            }
-        });
-
-        if (parent == FROM_CHAPTER) {
-            insertQuoteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, InsertQuoteActivity.class);
-                    intent.putExtra("chapter", parentChapter);
-                    context.startActivity(intent);
-                }
-            });
-        }
-    }
-
-    private void initWidgets() {
-
-        textView = itemView.findViewById(R.id.textView);
-        recView = itemView.findViewById(R.id.recView);
-        wholeRelLay = itemView.findViewById(R.id.wholeRelLay);
-        if (parent == FROM_NOTE)
-            marker_imgView = itemView.findViewById(R.id.marker_imgView);
-        else {
-            insertQuoteBtn = itemView.findViewById(R.id.insertQuoteBtn);
-            quotesRecView = itemView.findViewById(R.id.quotes_recView);
-        }
-
-        optionsLay = itemView.findViewById(R.id.optionsLay);
-        addBtn = itemView.findViewById(R.id.addBtn);
-        editBtn = itemView.findViewById(R.id.editBtn);
-        deleteBtn = itemView.findViewById(R.id.deleteBtn);
 
     }
 
-    public void setData(Chapter chapter) {
+    void setData(Chapter chapter) {
 
         parentChapter = chapter;
         textView.setText(chapter.getName());
-        NoteViewModel noteModel = ViewModelProviders.of((FragmentActivity) context).get(NoteViewModel.class);
-        noteModel.getNotesByParent(chapter.getId()).observe((FragmentActivity) context, new Observer<List<Note>>() {
+        NoteViewModel noteModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
+        noteModel.getNotesByParent(chapter.getId()).observe(activity, new Observer<List<Note>>() {
                     @Override
                     public void onChanged(List<Note> notes) {
                         adapter = new NotesRecViewAdapter(context);
@@ -199,8 +201,8 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
                         recView.setAdapter(adapter);
                         recView.setLayoutManager(new GridLayoutManager(context, 1));
 
-                        QuoteViewModel quoteViewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteViewModel.class);
-                        quoteViewModel.getQuotesByChapter(parentChapter.getId()).observe((FragmentActivity) context, new Observer<List<Quote>>() {
+                        QuoteViewModel quoteViewModel = ViewModelProviders.of(activity).get(QuoteViewModel.class);
+                        quoteViewModel.getQuotesByChapter(parentChapter.getId()).observe(activity, new Observer<List<Quote>>() {
                             @Override
                             public void onChanged(List<Quote> quotes) {
                                 quotesAdapter.setQuotes(quotes);
@@ -212,7 +214,7 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         );
     }
 
-    public void setData(Note note, int position) {
+    void setData(Note note, int position) {
 
         parentNote = note;
         textView.setText(note.getNote());
@@ -220,19 +222,18 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
             Drawable drawable;
             int markerType = note.getMarkerType();
 
-            if (markerType == Markers.NUMBER_MARKER || markerType == Markers.LETTER_MARKER){
+            if (markerType == Markers.NUMBER_MARKER || markerType == Markers.LETTER_MARKER) {
                 drawable = Markers.getLetterMarker(markerType, position, note.getColor(), TextDrawable.MEDIUM_TEXT_SIZE);
-            }else{
-                drawable = Markers.getSimpleMarker(context, note.getMarkerType(),note.getColor());
+            } else {
+                drawable = Markers.getSimpleMarker(context, note.getMarkerType(), note.getColor());
             }
 
-                marker_imgView.setImageDrawable(drawable);
-            //TODO: GET UPPER  NOTE'S markerPosition and set it +1 to it as letter/number
+            marker_imgView.setImageDrawable(drawable);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        NoteViewModel noteModel = ViewModelProviders.of((FragmentActivity) context).get(NoteViewModel.class);
-        noteModel.getNotesByParent(note.getId()).observe((FragmentActivity) context, new Observer<List<Note>>() {
+        NoteViewModel noteModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
+        noteModel.getNotesByParent(note.getId()).observe(activity, new Observer<List<Note>>() {
             @Override
             public void onChanged(List<Note> notes) {
                 adapter = new NotesRecViewAdapter(context);
@@ -243,17 +244,7 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void setOptionsLayVisible(boolean b) {
-        if (b) {
-            optionsLay.setVisibility(View.VISIBLE);
-            isOptionsLayVisible = true;
-        } else {
-            optionsLay.setVisibility(View.GONE);
-            isOptionsLayVisible = false;
-        }
-    }
-
-    public void setRecViewVisible(boolean b) {
+    private void setRecViewVisible(boolean b) {
         if (b) {
             recView.setVisibility(View.VISIBLE);
             isRecViewVisible = true;

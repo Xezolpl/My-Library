@@ -2,6 +2,7 @@ package pl.xezolpl.mylibrary.utilities;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -10,10 +11,13 @@ import android.graphics.drawable.GradientDrawable;
 import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import pl.xezolpl.mylibrary.R;
 
 public abstract class Markers {
+
+    public static final int BLUE_START_COLOR = Color.parseColor("#51C1ED");
 
     //SIMPLE MARKERS
     public static final int DOT_MARKER = R.drawable.color_dot;
@@ -23,7 +27,7 @@ public abstract class Markers {
     public static Drawable getSimpleMarker(Context context, int marker, int color) throws IOException {
         if (marker == DOT_MARKER || marker == DASH_MARKER || marker == STAR_MARKER) {
             GradientDrawable drawable = (GradientDrawable) ContextCompat.getDrawable(context, marker);
-            drawable.setColor(color);
+            Objects.requireNonNull(drawable, "Drawable was null inside markers").setColor(color);
             return drawable;
         } else throw new IOException();
     }
@@ -33,17 +37,15 @@ public abstract class Markers {
     public static final int LETTER_MARKER = 10;
     public static final int NUMBER_MARKER = 11;
 
-    public static final String[] alphabet = new String[]{"a)", "b)","c)","d)","e)","f)","g)","h)","i)"
-            ,"j)","k)","l)","m)","n)","o)","p)","q)","r)","s)","t)","u)","v)","w)","x)","y)","z)"};
-
-
+    private static final String[] alphabet = new String[]{"a)", "b)", "c)", "d)", "e)", "f)", "g)", "h)", "i)"
+            , "j)", "k)", "l)", "m)", "n)", "o)", "p)", "q)", "r)", "s)", "t)", "u)", "v)", "w)", "x)", "y)", "z)"};
 
 
     public static Drawable getLetterMarker(int markerType, int markerPosition, int color, float textSize) throws IOException {
         String text;
 
         if (markerType == LETTER_MARKER) {
-            text = String.valueOf(alphabet[markerPosition]);
+            text = alphabet[markerPosition];
         } else if (markerType == NUMBER_MARKER) {
             text = String.valueOf(markerPosition + 1);
             text += '.';

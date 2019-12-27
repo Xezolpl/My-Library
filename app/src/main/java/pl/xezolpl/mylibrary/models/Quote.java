@@ -9,7 +9,9 @@ import java.io.Serializable;
 
 @Entity(tableName = "quotes")
 public class Quote implements Serializable {
+
     @NonNull
+    @ColumnInfo(name = "id")
     @PrimaryKey
     private String id;
 

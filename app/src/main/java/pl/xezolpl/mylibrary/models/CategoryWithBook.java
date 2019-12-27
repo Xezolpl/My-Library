@@ -5,10 +5,13 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NotNull;
+
 @Entity(tableName = "categories")
-public class Categories {
+public class CategoryWithBook {
 
     @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "id")
     private String id;
 
@@ -20,12 +23,13 @@ public class Categories {
     @ColumnInfo(name = "category")
     private String category;
 
-    public Categories(String id, @NonNull String bookId, @NonNull String category) {
+    public CategoryWithBook(@NotNull String id, @NonNull String bookId, @NonNull String category) {
         this.id = id;
         this.bookId = bookId;
         this.category = category;
     }
 
+    @NotNull
     public String getId() {
         return id;
     }

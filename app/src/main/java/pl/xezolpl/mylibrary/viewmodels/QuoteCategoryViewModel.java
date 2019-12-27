@@ -14,12 +14,11 @@ import pl.xezolpl.mylibrary.database.LibraryDatabase;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 
 public class QuoteCategoryViewModel extends AndroidViewModel {
-    QuoteCategoryDao categoryDao;
-    LibraryDatabase database;
+    private QuoteCategoryDao categoryDao;
 
     public QuoteCategoryViewModel(@NonNull Application application) {
         super(application);
-        database = LibraryDatabase.getDatabase(application);
+        LibraryDatabase database = LibraryDatabase.getDatabase(application);
         categoryDao = database.QuoteCategoryDao();
     }
 
@@ -45,10 +44,10 @@ public class QuoteCategoryViewModel extends AndroidViewModel {
 
 
     //inner classes
-    private class OperationAsyncTask extends AsyncTask<QuoteCategory, Void, Void> {
-        protected QuoteCategoryDao asyncTaskDao;
+    private static class OperationAsyncTask extends AsyncTask<QuoteCategory, Void, Void> {
+        QuoteCategoryDao asyncTaskDao;
 
-        public OperationAsyncTask(QuoteCategoryDao dao) {
+        OperationAsyncTask(QuoteCategoryDao dao) {
             asyncTaskDao = dao;
         }
 
@@ -58,9 +57,8 @@ public class QuoteCategoryViewModel extends AndroidViewModel {
         }
     }
 
-    private class InsertAsyncTask extends OperationAsyncTask {
-
-        public InsertAsyncTask(QuoteCategoryDao dao) {
+    private static class InsertAsyncTask extends OperationAsyncTask {
+        InsertAsyncTask(QuoteCategoryDao dao) {
             super(dao);
         }
 
@@ -71,8 +69,8 @@ public class QuoteCategoryViewModel extends AndroidViewModel {
         }
     }
 
-    private class UpdateAsyncTask extends OperationAsyncTask {
-        public UpdateAsyncTask(QuoteCategoryDao dao) {
+    private static class UpdateAsyncTask extends OperationAsyncTask {
+        UpdateAsyncTask(QuoteCategoryDao dao) {
             super(dao);
         }
 
@@ -83,8 +81,8 @@ public class QuoteCategoryViewModel extends AndroidViewModel {
         }
     }
 
-    private class DeleteAsyncTask extends OperationAsyncTask {
-        public DeleteAsyncTask(QuoteCategoryDao dao) {
+    private static class DeleteAsyncTask extends OperationAsyncTask {
+        DeleteAsyncTask(QuoteCategoryDao dao) {
             super(dao);
         }
 

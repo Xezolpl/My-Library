@@ -18,15 +18,15 @@ public class SelectCoverActivity extends AppCompatActivity {
         setOnClickListeners();
     }
 
-    private void initWidgets(){
+    private void initWidgets() {
 
     }
 
-    private void setOnClickListeners(){
+    private void setOnClickListeners() {
 
     }
 
     private boolean isCoverSelected() {
-        return true; //TODO:validate that user pressed selected a cover
+        return true;
     }
 }

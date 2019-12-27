@@ -11,82 +11,85 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.daos.CategoriesDao;
 import pl.xezolpl.mylibrary.database.LibraryDatabase;
-import pl.xezolpl.mylibrary.models.Categories;
+import pl.xezolpl.mylibrary.models.CategoryWithBook;
 
 public class CategoriesViewModel extends AndroidViewModel {
 
     private CategoriesDao categoriesDao;
-    private LibraryDatabase database;
 
     public CategoriesViewModel(@NonNull Application application) {
         super(application);
-        database = LibraryDatabase.getDatabase(application);
+        LibraryDatabase database = LibraryDatabase.getDatabase(application);
         categoriesDao = database.CategoriesDao();
     }
 
-    public void insert(Categories categories){
-        new InsertAsyncTask(categoriesDao).execute(categories);
+    public void insert(CategoryWithBook categoryWithBook) {
+        new InsertAsyncTask(categoriesDao).execute(categoryWithBook);
     }
 
-    public void update(Categories categories){
-        new UpdateAsyncTask(categoriesDao).execute(categories);
+    public void update(CategoryWithBook categoryWithBook) {
+        new UpdateAsyncTask(categoriesDao).execute(categoryWithBook);
     }
 
-    public void delete(Categories categories){
-        new DeleteAsyncTask(categoriesDao).execute(categories);
+    public void delete(CategoryWithBook categoryWithBook) {
+        new DeleteAsyncTask(categoriesDao).execute(categoryWithBook);
     }
 
-    public LiveData<List<Categories>> getBooksByCategory(String category){
+    public LiveData<List<CategoryWithBook>> getBooksByCategory(String category) {
         return categoriesDao.getBooksByCategory(category);
     }
 
-    private class OperationsAsyncTask extends AsyncTask<Categories, Void, Void> {
-        protected CategoriesDao operationDao;
+    public LiveData<List<CategoryWithBook>> getCategoriesByBook(String bookId) {
+        return categoriesDao.getCategoriesByBook(bookId);
+    }
 
-        public OperationsAsyncTask(CategoriesDao operationDao) {
+    private static class OperationsAsyncTask extends AsyncTask<CategoryWithBook, Void, Void> {
+        CategoriesDao operationDao;
+
+        OperationsAsyncTask(CategoriesDao operationDao) {
             this.operationDao = operationDao;
         }
 
         @Override
-        protected Void doInBackground(Categories... categories) {
+        protected Void doInBackground(CategoryWithBook... categories) {
             return null;
         }
     }
 
-    private class InsertAsyncTask extends OperationsAsyncTask {
+    private static class InsertAsyncTask extends OperationsAsyncTask {
 
-        public InsertAsyncTask(CategoriesDao operationDao) {
+        InsertAsyncTask(CategoriesDao operationDao) {
             super(operationDao);
         }
 
         @Override
-        protected Void doInBackground(Categories... categories) {
+        protected Void doInBackground(CategoryWithBook... categories) {
             operationDao.insert(categories[0]);
             return null;
         }
     }
 
-    private class UpdateAsyncTask extends OperationsAsyncTask {
+    private static class UpdateAsyncTask extends OperationsAsyncTask {
 
-        public UpdateAsyncTask(CategoriesDao operationDao) {
+        UpdateAsyncTask(CategoriesDao operationDao) {
             super(operationDao);
         }
 
         @Override
-        protected Void doInBackground(Categories... categories) {
+        protected Void doInBackground(CategoryWithBook... categories) {
             operationDao.update(categories[0]);
             return null;
         }
     }
 
-    private class DeleteAsyncTask extends OperationsAsyncTask {
+    private static class DeleteAsyncTask extends OperationsAsyncTask {
 
-        public DeleteAsyncTask(CategoriesDao operationDao) {
+        DeleteAsyncTask(CategoriesDao operationDao) {
             super(operationDao);
         }
 
         @Override
-        protected Void doInBackground(Categories... categories) {
+        protected Void doInBackground(CategoryWithBook... categories) {
             operationDao.delete(categories[0]);
             return null;
         }

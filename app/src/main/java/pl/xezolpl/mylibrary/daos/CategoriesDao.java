@@ -9,20 +9,23 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import pl.xezolpl.mylibrary.models.Categories;
+import pl.xezolpl.mylibrary.models.CategoryWithBook;
 
 @Dao
 public interface CategoriesDao {
 
     @Insert
-    void insert(Categories categories);
+    void insert(CategoryWithBook categoryWithBook);
 
     @Update
-    void update(Categories categories);
+    void update(CategoryWithBook categoryWithBook);
 
     @Delete
-    void delete(Categories categories);
+    void delete(CategoryWithBook categoryWithBook);
 
     @Query("SELECT * FROM categories WHERE category=:category")
-    LiveData<List<Categories>> getBooksByCategory(String category);
- }
+    LiveData<List<CategoryWithBook>> getBooksByCategory(String category);
+
+    @Query("SELECT * FROM categories WHERE bookId=:bookId")
+    LiveData<List<CategoryWithBook>> getCategoriesByBook(String bookId);
+}

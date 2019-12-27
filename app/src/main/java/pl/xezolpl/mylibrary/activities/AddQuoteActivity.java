@@ -1,7 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,14 +13,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.QuoteCategorySpinnerAdapter;
-import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
+import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
+import pl.xezolpl.mylibrary.utilities.Markers;
+import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
@@ -29,7 +32,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     private EditText title_EditTxt, quote_EditTxt, page_EditTxt, author_EditTxt;
     private Spinner category_spinner;
-    private Button add_category_btn, ok_btn, cancel_btn;
+    private Button add_category_btn, ok_btn, cancel_btn, quote_author_btn;
 
     private Quote thisQuote = null;
     private boolean inEdition = false;
@@ -56,23 +59,23 @@ public class AddQuoteActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<QuoteCategory> quoteCategories) {
                 if (quoteCategories.size() == 0) {
-                    QuoteCategory qc = new QuoteCategory("Uncategorized", Color.parseColor("#44BBFF"));
+                    QuoteCategory qc = new QuoteCategory("Uncategorized", Markers.BLUE_START_COLOR);
                     categoryViewModel.insert(qc);
                     quoteCategories.add(qc);
                 }
                 spinnerAdapter.setCategories(quoteCategories);
                 category_spinner.setAdapter(spinnerAdapter);
 
-                if(inEdition) loadQuoteData(thisQuote);
+                if (inEdition) loadQuoteData(thisQuote);
             }
         });
     }
 
-    private void loadFromIntent(){
+    private void loadFromIntent() {
         Intent intent = getIntent();
         bookId = intent.getStringExtra("bookId");
 
-       if(intent.hasExtra("quote")){
+        if (intent.hasExtra("quote")) {
             thisQuote = (Quote) getIntent().getSerializableExtra("quote");
             bookId = thisQuote.getBookId();
             inEdition = true;
@@ -80,21 +83,22 @@ public class AddQuoteActivity extends AppCompatActivity {
     }
 
     private void initWidgets() {
-        title_EditTxt = (EditText) findViewById(R.id.add_quote_title_EditTxt);
-        author_EditTxt = (EditText) findViewById(R.id.add_quote_author_EditTxt);
-        quote_EditTxt = (EditText) findViewById(R.id.add_quote_quote_EditTxt);
-        page_EditTxt = (EditText) findViewById(R.id.add_quote_page_EditTxt);
-        category_spinner = (Spinner) findViewById(R.id.add_quote_category_spinner);
-        add_category_btn = (Button) findViewById(R.id.add_quote_add_category_btn);
-        ok_btn = (Button) findViewById(R.id.add_quote_ok_btn);
-        cancel_btn = (Button) findViewById(R.id.add_quote_cancel_btn);
+        title_EditTxt = findViewById(R.id.add_quote_title_EditTxt);
+        author_EditTxt = findViewById(R.id.add_quote_author_EditTxt);
+        quote_EditTxt = findViewById(R.id.add_quote_quote_EditTxt);
+        page_EditTxt = findViewById(R.id.add_quote_page_EditTxt);
+        category_spinner = findViewById(R.id.add_quote_category_spinner);
+        add_category_btn = findViewById(R.id.add_quote_add_category_btn);
+        ok_btn = findViewById(R.id.add_quote_ok_btn);
+        cancel_btn = findViewById(R.id.add_quote_cancel_btn);
+        quote_author_btn = findViewById(R.id.quote_author_btn);
     }
 
-    private void loadQuoteData(Quote quote) {
+    private void loadQuoteData(@NotNull Quote quote) {
         title_EditTxt.setText(quote.getTitle());
         quote_EditTxt.setText(quote.getQuote());
         author_EditTxt.setText(quote.getAuthor());
-        page_EditTxt.setText("" + quote.getPage());
+        page_EditTxt.setText(String.valueOf(quote.getPage()));
         category_spinner.setSelection(spinnerAdapter.getItemPosition(quote.getCategory()));
     }
 
@@ -104,7 +108,7 @@ public class AddQuoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
-                startActivityForResult(intent, QuotesTabFragment.ADD_CATEGORY_ACTIVITY_REQUEST_CODE);//todo here
+                startActivityForResult(intent,0);
             }
         });
 
@@ -112,7 +116,6 @@ public class AddQuoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (areValidOutputs()) {
-
                     QuoteViewModel viewModel = ViewModelProviders.of(AddQuoteActivity.this).get(QuoteViewModel.class);
                     if (inEdition) {
                         viewModel.update(thisQuote);
@@ -128,6 +131,19 @@ public class AddQuoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        quote_author_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BookViewModel bookViewModel = ViewModelProviders.of(AddQuoteActivity.this).get(BookViewModel.class);
+                bookViewModel.getBook(bookId).observe(AddQuoteActivity.this, new Observer<Book>() {
+                    @Override
+                    public void onChanged(Book book) {
+                        author_EditTxt.setText(book.getAuthor());
+                    }
+                });
             }
         });
 
@@ -157,7 +173,7 @@ public class AddQuoteActivity extends AppCompatActivity {
             author = author_EditTxt.getText().toString();
             quote = quote_EditTxt.getText().toString();
             category = ((QuoteCategory) spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())).getName();
-        }catch (Exception exc){
+        } catch (Exception exc) {
             exc.printStackTrace();
             return false;
         }

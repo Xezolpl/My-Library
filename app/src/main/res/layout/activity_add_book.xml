@@ -1,116 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:layout_height="560dp"
+    android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:excludeFromRecents="true"
     tools:context=".activities.AddBookActivity">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/add_book_image"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="25dp"
-                android:src="@mipmap/ic_launcher" />
+        <ImageView
+            android:id="@+id/add_book_image"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="25dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <LinearLayout
+            android:id="@+id/linlay1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:layout_below="@+id/add_book_image">
 
             <Button
                 android:id="@+id/select_image_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/add_book_image"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:text="Select image" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:text="Select image"
+                android:layout_marginRight="5dp"/>
+
+            <Button
+                android:id="@+id/select_category_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:text="Select Categories"
+                android:layout_marginLeft="5dp"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/add_book_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linlay1"
+            android:layout_margin="5dp"
+            android:hint="Title"
+            android:maxLength="100"
+            android:maxLines="1"
+            android:textAlignment="center" />
+
+        <EditText
+            android:id="@+id/add_book_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/add_book_title"
+            android:layout_margin="5dp"
+            android:hint="Author"
+            android:maxLength="100"
+            android:maxLines="1"
+            android:textAlignment="center" />
+
+
+        <EditText
+            android:id="@+id/add_book_description"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@id/add_book_author"
+            android:layout_margin="5dp"
+            android:hint="Description"
+            android:maxLength="500"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:id="@+id/lin_lay_0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/add_book_description"
+            android:layout_marginTop="10dp">
 
             <EditText
-                android:id="@+id/add_book_title"
+                android:id="@+id/add_book_pages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/select_image_btn"
                 android:layout_margin="5dp"
-                android:hint="Title"
+                android:layout_weight=".7"
+                android:hint="Pages"
+                android:maxLength="5"
                 android:maxLines="1"
-                android:maxLength="100"
                 android:textAlignment="center" />
 
-            <EditText
-                android:id="@+id/add_book_author"
+            <Spinner
+                android:id="@+id/status_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/add_book_title"
+                android:layout_height="45dp"
                 android:layout_margin="5dp"
-                android:hint="Author"
-                android:maxLines="1"
-                android:maxLength="100"
-                android:textAlignment="center" />
+                android:layout_weight=".3" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lin_lay_0">
 
-            <EditText
-                android:id="@+id/add_book_description"
+            <Button
+                android:id="@+id/add_book_ok_btn"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_below="@id/add_book_author"
+                android:layout_height="50dp"
                 android:layout_margin="5dp"
-                android:hint="Description"
-                android:maxLength="500"
-                android:textAlignment="center" />
+                android:layout_weight=".5"
+                android:text="OK" />
 
-            <LinearLayout
-                android:id="@+id/lin_lay_0"
+            <Button
+                android:id="@+id/add_book_cancel_btn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/add_book_description"
-                android:layout_marginTop="10dp">
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_weight=".5"
+                android:text="Cancel" />
+        </LinearLayout>
 
-                <EditText
-                    android:id="@+id/add_book_pages"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".7"
-                    android:hint="Pages"
-                    android:maxLines="1"
-                    android:maxLength="5"
-                    android:textAlignment="center" />
-
-                <Spinner
-                    android:id="@+id/status_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".3" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lin_lay_0">
-
-                <Button
-                    android:id="@+id/add_book_ok_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".5"
-                    android:text="OK" />
-
-                <Button
-                    android:id="@+id/add_book_cancel_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".5"
-                    android:text="Cancel" />
-            </LinearLayout>
-
-        </RelativeLayout>
+    </RelativeLayout>
 </RelativeLayout>

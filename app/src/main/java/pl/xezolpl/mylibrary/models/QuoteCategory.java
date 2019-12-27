@@ -15,12 +15,11 @@ public class QuoteCategory implements Serializable {
     @ColumnInfo(name = "name")
     private String name;
 
-    @NonNull
     @ColumnInfo(name = "color")
     private int color;
 
 
-    public QuoteCategory(@NonNull String name, @NonNull int color) {
+    public QuoteCategory(@NonNull String name, int color) {
         this.name = name;
         this.color = color;
     }
@@ -30,8 +29,7 @@ public class QuoteCategory implements Serializable {
         return name;
     }
 
-    @NonNull
-    public int getColor(){
+    public int getColor() {
         return color;
     }
 }

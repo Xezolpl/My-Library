@@ -2,7 +2,6 @@ package pl.xezolpl.mylibrary.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,17 +24,14 @@ import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapter.ViewHolder> implements Filterable {
-    //variables
-    private static final String TAG = "BooksRecViewAdapter";
     private Context context;
     private List<Book> books = new ArrayList<>();
     private List<Book> booksFull;
     private LayoutInflater inflater;
 
-    //methods
     public void setBooks(List<Book> books) {
         this.books = books;
-        booksFull = new ArrayList<>(this.books);//copy of the list
+        booksFull = new ArrayList<>(this.books);
         notifyDataSetChanged();
     }
 
@@ -53,8 +49,6 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        Log.d(TAG, "onBindViewHolder: called");
-
         holder.setData(books.get(position).getTitle(), books.get(position).getImageUrl());
 
         holder.relLay.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +71,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
         return booksFilter;
     }
 
-    Filter booksFilter = new Filter() {
+    private final Filter booksFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<Book> filteredList = new ArrayList<>();
@@ -106,7 +100,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
         }
     };
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView bookImage;
         private TextView bookTitle;
         private RelativeLayout relLay;

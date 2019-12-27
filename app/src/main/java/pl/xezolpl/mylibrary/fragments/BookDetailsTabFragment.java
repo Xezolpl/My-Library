@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +27,7 @@ import com.bumptech.glide.Glide;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddBookActivity;
+import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
 import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.utilities.Requests;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
@@ -33,6 +35,7 @@ import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import static android.app.Activity.RESULT_OK;
 
 public class BookDetailsTabFragment extends Fragment {
+    private static final String TAG = "BookDetailsTabFragment";
 
     private TextView bookTitle_text, bookDescription_text, bookPages_text, bookAuthor_text;
     private ImageView book_image;
@@ -89,7 +92,7 @@ public class BookDetailsTabFragment extends Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 bookViewModel.delete(thisBook);
-                ((Activity)context).finish();
+                ((Activity) context).finish();
                 return false;
             }
         });
@@ -98,29 +101,39 @@ public class BookDetailsTabFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == Requests.EDIT_REQUEST && resultCode == RESULT_OK) {
-            thisBook = (Book) data.getSerializableExtra("book");
-            loadBookData();
+            if (data != null) {
+                thisBook = (Book) data.getSerializableExtra("book");
+
+                OpenedBookActivity activity = (OpenedBookActivity) getActivity();
+                if (activity != null) {
+                    activity.setToolbarTitle(thisBook.getTitle());
+                }
+                loadBookData();
+            } else {
+                Log.w(TAG, "onActivityResult: ", new NullPointerException("Null result book"));
+            }
         }
     }
 
     private void initWidgets(View v) {
-        bookTitle_text = (TextView) v.findViewById(R.id.bookTitle_text);
-        bookAuthor_text = (TextView) v.findViewById(R.id.bookAuthor_text);
-        bookPages_text = (TextView) v.findViewById(R.id.bookPages_text);
-        bookDescription_text = (TextView) v.findViewById(R.id.bookDescription_text);
+        bookTitle_text = v.findViewById(R.id.bookTitle_text);
+        bookAuthor_text = v.findViewById(R.id.bookAuthor_text);
+        bookPages_text = v.findViewById(R.id.bookPages_text);
+        bookDescription_text = v.findViewById(R.id.bookDescription_text);
 
-        book_image = (ImageView) v.findViewById(R.id.book_image);
+        book_image = v.findViewById(R.id.book_image);
 
-        setToRead_btn = (Button) v.findViewById(R.id.setToRead_btn);
-        setCurrReading_btn = (Button) v.findViewById(R.id.setCurrReading_btn);
-        setAlreadyRead_btn = (Button) v.findViewById(R.id.setAlreadyRead_btn);
-        setFavourite_btn = (Button) v.findViewById(R.id.setFavourite_btn);
+        setToRead_btn = v.findViewById(R.id.setToRead_btn);
+        setCurrReading_btn = v.findViewById(R.id.setCurrReading_btn);
+        setAlreadyRead_btn = v.findViewById(R.id.setAlreadyRead_btn);
+        setFavourite_btn = v.findViewById(R.id.setFavourite_btn);
     }
 
     private void loadBookData() {
         bookTitle_text.setText(thisBook.getTitle());
         bookAuthor_text.setText(thisBook.getAuthor());
-        bookPages_text.setText("Pages: " + thisBook.getPages());
+        String pages = "Pages: " + thisBook.getPages();
+        bookPages_text.setText(pages);
         bookDescription_text.setText(thisBook.getDescription());
         Glide.with(this).asBitmap().load(thisBook.getImageUrl()).into(book_image);
     }

@@ -13,6 +13,13 @@
         android:layout_height="80dp"
         android:background="@drawable/chapter_item_background">
 
+        <Button
+            android:id="@+id/moreBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/ic_more_vert_black_24dp"/>
+
         <ImageView
             android:visibility="gone"
             android:id="@+id/marker_imgView"
@@ -35,62 +42,6 @@
             android:layout_toRightOf="@+id/marker_imgView"
             android:textStyle="bold" />
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/optionsLay"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:padding="5dp"
-        android:background="@drawable/chapter_item_background">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33">
-            <Button
-                android:id="@+id/addBtn"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                android:text="ADD"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33">
-            <Button
-                android:id="@+id/insertQuoteBtn"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                android:text="ADD QUOTE"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33">
-            <Button
-                android:id="@+id/editBtn"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                android:text="EDIT"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.33">
-            <Button
-                android:id="@+id/deleteBtn"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerInParent="true"
-                android:text="DEL"/>
-        </RelativeLayout>
-    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recView"

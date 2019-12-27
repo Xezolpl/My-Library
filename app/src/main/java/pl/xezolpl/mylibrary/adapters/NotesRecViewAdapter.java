@@ -21,12 +21,12 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<ChaptersNotesViewH
     private Context context;
     private LayoutInflater inflater;
 
-    public NotesRecViewAdapter(Context context) {
+    NotesRecViewAdapter(Context context) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
     }
 
-    public void setNotesList(List<Note> notes) {
+    void setNotesList(List<Note> notes) {
         this.notes = notes;
         notifyDataSetChanged();
     }
@@ -40,11 +40,12 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<ChaptersNotesViewH
 
     @Override
     public void onBindViewHolder(@NonNull ChaptersNotesViewHolder holder, int position) {
-        holder.setData(notes.get(position),position);
+        holder.setData(notes.get(position), position);
     }
 
     @Override
     public int getItemCount() {
         return notes.size();
     }
+
 }

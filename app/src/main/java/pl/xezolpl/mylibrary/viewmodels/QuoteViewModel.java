@@ -16,11 +16,10 @@ import pl.xezolpl.mylibrary.models.Quote;
 public class QuoteViewModel extends AndroidViewModel {
 
     private QuoteDao quoteDao;
-    private LibraryDatabase database;
 
     public QuoteViewModel(@NonNull Application application) {
         super(application);
-        database = LibraryDatabase.getDatabase(application);
+        LibraryDatabase database = LibraryDatabase.getDatabase(application);
         quoteDao = database.QuoteDao();
     }
 
@@ -36,11 +35,11 @@ public class QuoteViewModel extends AndroidViewModel {
         return quoteDao.getQuotesByCategory(id);
     }
 
-    public LiveData<List<Quote>> getQuotesByBook(String bookId){
+    public LiveData<List<Quote>> getQuotesByBook(String bookId) {
         return quoteDao.getQuotesByBook(bookId);
     }
 
-    public LiveData<List<Quote>> getQuotesByChapter(String chapterId){
+    public LiveData<List<Quote>> getQuotesByChapter(String chapterId) {
         return quoteDao.getQuotesByChapter(chapterId);
     }
 
@@ -58,10 +57,10 @@ public class QuoteViewModel extends AndroidViewModel {
 
 
     //inner classes
-    private class OperationAsyncTask extends AsyncTask<Quote, Void, Void> {
-        protected QuoteDao asyncTaskDao;
+    private static class OperationAsyncTask extends AsyncTask<Quote, Void, Void> {
+        QuoteDao asyncTaskDao;
 
-        public OperationAsyncTask(QuoteDao quoteDao) {
+        OperationAsyncTask(QuoteDao quoteDao) {
             asyncTaskDao = quoteDao;
         }
 
@@ -71,9 +70,9 @@ public class QuoteViewModel extends AndroidViewModel {
         }
     }
 
-    private class InsertAsyncTask extends OperationAsyncTask {
+    private static class InsertAsyncTask extends OperationAsyncTask {
 
-        public InsertAsyncTask(QuoteDao quoteDao) {
+        InsertAsyncTask(QuoteDao quoteDao) {
             super(quoteDao);
         }
 
@@ -84,8 +83,8 @@ public class QuoteViewModel extends AndroidViewModel {
         }
     }
 
-    private class UpdateAsyncTask extends OperationAsyncTask {
-        public UpdateAsyncTask(QuoteDao quoteDao) {
+    private static class UpdateAsyncTask extends OperationAsyncTask {
+        UpdateAsyncTask(QuoteDao quoteDao) {
             super(quoteDao);
         }
 
@@ -96,8 +95,8 @@ public class QuoteViewModel extends AndroidViewModel {
         }
     }
 
-    private class DeleteAsyncTask extends OperationAsyncTask {
-        public DeleteAsyncTask(QuoteDao quoteDao) {
+    private static class DeleteAsyncTask extends OperationAsyncTask {
+        DeleteAsyncTask(QuoteDao quoteDao) {
             super(quoteDao);
         }
 

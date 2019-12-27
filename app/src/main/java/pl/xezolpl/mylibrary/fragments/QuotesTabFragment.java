@@ -30,20 +30,10 @@ import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesTabFragment extends Fragment {
-    private static final String TAG = "QuotesTabFragment";
-    public static final int ADD_QUOTE_ACTIVITY_REQUEST_CODE=1;
-    public static final int EDIT_QUOTE_ACTIVITY_REQUEST_CODE=2;
-    public static final int ADD_CATEGORY_ACTIVITY_REQUEST_CODE=3;
-    public static final int EDIT_CATEGORY_ACTIVITY_REQUEST_CODE=4;
-    public static final int RESULT_DELETE=8;
 
     private Context context;
     private String bookId;
 
-    private FloatingActionButton quotes_fab;
-    private RecyclerView quotes_recView;
-
-    private QuoteViewModel quoteViewModel;
     private QuotesRecViewAdapter quotesRecViewAdapter;
 
 
@@ -58,15 +48,15 @@ public class QuotesTabFragment extends Fragment {
 
         quotesRecViewAdapter = new QuotesRecViewAdapter(context);
 
-        quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
-        if(bookId.isEmpty()){
+        QuoteViewModel quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
+        if (bookId.isEmpty()) {
             quoteViewModel.getAllQuotes().observe(this, new Observer<List<Quote>>() {
                 @Override
                 public void onChanged(List<Quote> quotes) {
                     quotesRecViewAdapter.setQuotes(quotes);
                 }
             });
-        }else {
+        } else {
             quoteViewModel.getQuotesByBook(bookId).observe(this, new Observer<List<Quote>>() {
                 @Override
                 public void onChanged(List<Quote> quotes) {
@@ -80,19 +70,19 @@ public class QuotesTabFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tabfragment_quotes, container,false);
+        View view = inflater.inflate(R.layout.tabfragment_quotes, container, false);
 
 
-        quotes_recView = (RecyclerView) view.findViewById(R.id.quotes_recView);
+        RecyclerView quotes_recView = view.findViewById(R.id.quotes_recView);
         quotes_recView.setAdapter(quotesRecViewAdapter);
-        quotes_recView.setLayoutManager(new GridLayoutManager(context,1));
+        quotes_recView.setLayoutManager(new GridLayoutManager(context, 1));
 
-        quotes_fab = (FloatingActionButton) view.findViewById(R.id.quotes_fab);
+        FloatingActionButton quotes_fab = view.findViewById(R.id.quotes_fab);
         quotes_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, AddQuoteActivity.class);
-                intent.putExtra("bookId",bookId);
+                intent.putExtra("bookId", bookId);
                 context.startActivity(intent);
             }
         });

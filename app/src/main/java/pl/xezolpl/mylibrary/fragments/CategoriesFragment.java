@@ -17,7 +17,6 @@ import pl.xezolpl.mylibrary.adapters.CategoryRecViewAdapter;
 public class CategoriesFragment extends Fragment {
 
     private CategoryRecViewAdapter adapter;
-    private RecyclerView recView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,8 +29,8 @@ public class CategoriesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
-        recView = view.findViewById(R.id.recView);
-        recView.setLayoutManager(new GridLayoutManager(getContext(),3));
+        RecyclerView recView = view.findViewById(R.id.recView);
+        recView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recView.setAdapter(adapter);
 
         return view;
