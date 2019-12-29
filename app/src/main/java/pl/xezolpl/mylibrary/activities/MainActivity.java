@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,8 +62,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_books: {
-                allBooksFragment.setUpViewPager();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, allBooksFragment).commit();
+                allBooksFragment.setUpViewPager();
+                //yup setUpViewPager has to be invoked after the transaction because transaction creates the view
                 break;
             }
             case R.id.nav_categories: {
