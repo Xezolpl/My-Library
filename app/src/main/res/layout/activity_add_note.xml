@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
+    android:layout_width="280dp"
     android:layout_height="400dp"
     android:layout_centerInParent="true"
     android:excludeFromRecents="true">
@@ -10,15 +10,16 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_centerHorizontal="true"
-        android:layout_margin="15dp"/>
+        android:layout_margin="15dp"
+        android:contentDescription="@string/marker_type"/>
 
     <Button
         android:id="@+id/add_note_color_btn"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:background="@drawable/ic_color_lens_black_32dp"
-        android:layout_toRightOf="@id/add_note_imgView"
-        android:layout_marginTop="36.5dp"/>
+        android:layout_toEndOf="@id/add_note_imgView"
+        android:layout_marginTop="36.5dp" />
 
     <EditText
         android:id="@+id/add_note_name"
@@ -29,7 +30,9 @@
         android:layout_below="@id/add_note_imgView"
         android:textAlignment="center"
         android:maxLength="100"
-        android:hint="Note"/>
+        android:hint="@string/note"
+        android:imeOptions="actionDone"
+        android:inputType="text" />
 
     <LinearLayout
         android:id="@+id/lay2"
@@ -43,15 +46,16 @@
             android:id="@+id/ok_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="OK"
-            android:layout_marginRight="5dp"
-            android:layout_weight="0.5"/>
+            android:text="@string/ok_btn"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.5" />
+
         <Button
             android:id="@+id/cancel_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="0.5"/>
+            android:text="@string/cancel_btn"
+            android:layout_marginStart="5dp"
+            android:layout_weight="0.5" />
     </LinearLayout>
 </RelativeLayout>

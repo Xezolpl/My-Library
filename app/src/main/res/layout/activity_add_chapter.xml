@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
+    android:layout_width="280dp"
     android:layout_height="300dp"
     android:layout_centerInParent="true"
     android:excludeFromRecents="true">
@@ -13,8 +13,9 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
-        android:hint="Chapter's name"
+        android:hint="@string/chapters_name"
         android:maxLength="100"
+        android:inputType="text"
         android:textAlignment="center" />
 
     <LinearLayout
@@ -27,13 +28,14 @@
 
         <EditText
             android:id="@+id/add_chapter_number"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="0.5"
-            android:hint="Chapter number:"
+            android:hint="@string/chapter_number"
             android:lines="1"
             android:maxLength="5"
+            android:inputType="number"
             android:textAlignment="center" />
 
     </LinearLayout>
@@ -50,18 +52,16 @@
             android:id="@+id/ok_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="0.5"
-            android:text="OK" />
+            android:text="@string/ok_btn" />
 
         <Button
             android:id="@+id/cancel_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="0.5"
-            android:text="Cancel" />
+            android:text="@string/cancel_btn" />
     </LinearLayout>
-
-
 </RelativeLayout>

@@ -11,11 +11,46 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="book_cover">Book\'s Cover</string>
+    <string name="select_image">Select image</string>
+    <string name="select_categories">Select Categories</string>
+    <string name="title">Title</string>
+    <string name="author">Author</string>
+    <string name="description_optional">Description (optional)</string>
+    <string name="pages">Pages</string>
+    <string name="ok_btn">OK</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="chapters_name">Chapter\'s name</string>
+    <string name="chapter_number">Chapter number:</string>
+    <string name="marker_type">Marker Type</string>
+    <string name="note">Note</string>
+    <string name="add_quote">Add Quote</string>
+    <string name="quote_title_optional">Quote title (optional)</string>
+    <string name="author_optional">Author (optional)</string>
+    <string name="quotation_text">Quotation text</string>
+    <string name="page">Page:</string>
+    <string name="category_name">Category\'s name</string>
+    <string name="select_color">Select color</string>
+    <string name="select_book_cover">Select book\'s cover</string>
+    <string name="mateusz_pietras_xezolpl">Mateusz Pietras \'XezolPL\'</string>
+    <string name="app_description">Simple library application first made as a project for java learning, but then i figured out that it also can help other people in making simple notes in read by them books.</string>
+    <string name="category_image">Category image</string>
+    <string name="placeholder_quote_title">Very long title placeholder</string>
+    <string name="placeholder_quote_author">An author and the second one</string>
+    <string name="placeholder_page">Page: 1234</string>
+    <string name="placeholder_quote_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed bibendum et sapien id facilisis. Duis mattis ornare dictum. Duis pulvinar condimentum rutrum. . Duis mattis ornare dictum. Duis pulvinar condimentum rutrum.</string>
+    <string name="category_name_background">Category name background</string>
+    <string name="placeholder_category_name">category place</string>
+    <string name="placeholder_book_title">Funny book</string>
+    <string name="placeholder_category">Category</string>
+    <string name="placeholder_chapter">Chapter I: The beginning</string>
+    <string name="placeholder_book_author">An author of book</string>
+    <string name="very_long_lorem_ipsum">Lorem ipsum dolor sit amet, consLorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vitae tortor diam. Sed id lorem ut odio vulputate mollis sed sed libero. Morbi in erat ac tellus sagittis facilisis. Nullam non interdum enim, vel ultrices sem. Maecenas laoreet massa et mi dapibus, sed interdum dolor cursus. Curabitur id placerat diam. In bibendum ipsum nec quam eleifend aliquet. Quisque leo felis, tempus eu urna ut, tempor sollicitudin lectus. Fusce in augue leo.Suspendisse imperdiet porta sem a porta. Pellentesque ullamcorper venenatis felis sed ornare. Cras ut orci eu dui accumsan suscipit vel ac purus. Nullam metus augue, condimentum non turpis in, rhoncus suscipit lacus. Duis mauris mi, mollis efficitur purus rutrum, ultricies egestas lorem. Phasellus rutrum ipsum eget mi vehicula aliquet. Vestibulum scelerisque erat sed est feugiat, vitae tempus augue mattis. Integer tempor, ligula vitae commodo aliquam, massa neque iaculis elit, vitae suscipit orci velit at lectus. Vivamus varius volutpat malesuada. Aenean ut iaculis magna, vitae pharetra quam. Sed ligula massa, feugiat ac maximus eget, sagittis et arcu. Sed volutpat consequat augue ut sollicitudin. Donec ac dui nisi. Sed vel lacus ut quam vestibulum malesuada. Proin mollis velit at sollicitudin molestie.ectetur adipiscing elit. Aenean vitae tortor diam. Sed id lorem ut odio vulputate mollis sed sed libero. Morbi in erat ac tellus sagittis facilisis. Nullam non interdum enim, vel ultrices sem. Maecenas laoreet massa et mi dapibus, sed interdum dolor cursus. Curabitur id placerat diam. In bibendum ipsum nec quam eleifend aliquet. Quisque leo felis, tempus eu urna ut, tempor sollicitudin lectus. Fusce in augue leo.Suspendisse imperdiet porta sem a porta. Pellentesque ullamcorper venenatis felis sed ornare. Cras ut orci eu dui accumsan suscipit vel ac purus. Nullam metus augue, condimentum non turpis in, rhoncus suscipit lacus. Duis mauris mi, mollis efficitur purus rutrum, ultricies egestas lorem. Phasellus rutrum ipsum eget mi vehicula aliquet. Vestibulum scelerisque erat sed est feugiat, vitae tempus augue mattis. Integer tempor, ligula vitae commodo aliquam, massa neque iaculis elit, vitae suscipit orci velit at lectus. Vivamus varius volutpat malesuada. Aenean ut iaculis magna, vitae pharetra quam. Sed ligula massa, feugiat ac maximus eget, sagittis et arcu. Sed volutpat consequat augue ut sollicitudin. Donec ac dui nisi. Sed vel lacus ut quam vestibulum malesuada. Proin mollis velit at sollicitudin molestie.</string>
+    <string name="want_to_read">Want to read</string>
+    <string name="currently_reading">Currently reading</string>
+    <string name="already_read">Already read</string>
+
+    <!-- Layout strings -->
+
     
 </resources>

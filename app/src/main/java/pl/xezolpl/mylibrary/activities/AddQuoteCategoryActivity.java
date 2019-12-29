@@ -1,5 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -34,6 +35,7 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_quote_category);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         initWidgets();
         setFinishOnTouchOutside(false);

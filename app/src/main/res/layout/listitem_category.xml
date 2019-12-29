@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_weight="0.5"
     android:orientation="vertical"
@@ -13,7 +13,8 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="5dp"
+        android:contentDescription="@string/category_image" />
 
     <TextView
         android:id="@+id/txtView"
@@ -25,6 +26,7 @@
         android:layout_centerHorizontal="true"
         android:fontFamily="sans-serif-condensed-medium"
         android:textStyle="bold"
-        android:layout_below="@id/imgView"/>
+        android:text="@string/placeholder_category"
+        android:layout_below="@id/imgView" />
 
 </RelativeLayout>

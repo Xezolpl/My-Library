@@ -1,134 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/add_quote_txtView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:fontFamily="sans-serif-condensed-medium"
-        android:text="Add Quote"
-        android:textAlignment="center"
-        android:textSize="40sp" />
-
-    <EditText
-        android:id="@+id/add_quote_title_EditTxt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/add_quote_txtView"
-        android:layout_margin="10dp"
-        android:hint="Quote title (optional)"
-        android:maxLength="50"
-        android:maxLines="1"
-        android:textAlignment="center" />
-
     <RelativeLayout
-        android:id="@+id/rellay4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/add_quote_title_EditTxt"
-        android:layout_margin="10dp">
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/add_quote_txtView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:text="@string/add_quote"
+            android:textAlignment="center"
+            android:textSize="40sp" />
 
         <EditText
-            android:id="@+id/add_quote_author_EditTxt"
-            android:layout_width="248dp"
+            android:id="@+id/add_quote_title_EditTxt"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Author (optional)"
+            android:layout_below="@id/add_quote_txtView"
+            android:layout_margin="10dp"
+            android:hint="@string/quote_title_optional"
+            android:inputType="text"
             android:maxLength="50"
             android:maxLines="1"
             android:textAlignment="center" />
 
-        <Button
-            android:id="@+id/quote_author_btn"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="@drawable/ic_person_black_24dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+        <RelativeLayout
+            android:id="@+id/rellay4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/add_quote_title_EditTxt"
+            android:layout_margin="10dp">
 
-    </RelativeLayout>
+            <EditText
+                android:id="@+id/add_quote_author_EditTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/quote_author_btn"
+                android:hint="@string/author_optional"
+                android:inputType="text"
+                android:maxLength="50"
+                android:maxLines="1"
+                android:textAlignment="center" />
 
-    <EditText
-        android:id="@+id/add_quote_quote_EditTxt"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@id/rellay4"
-        android:layout_margin="10dp"
-        android:hint="Quotation text"
-        android:maxLength="220"
-        android:textAlignment="center" />
+            <Button
+                android:id="@+id/quote_author_btn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ic_person_black_24dp" />
 
-    <RelativeLayout
-        android:id="@+id/rel_lay1"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_below="@id/add_quote_quote_EditTxt"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp">
-
-        <TextView
-            android:id="@+id/add_quote_page_txtView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="3dp"
-            android:text="Page:"
-            android:textSize="22sp" />
+        </RelativeLayout>
 
         <EditText
-            android:id="@+id/add_quote_page_EditTxt"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/add_quote_page_txtView"
-            android:maxLength="5"
-            android:maxLines="1" />
-    </RelativeLayout>
+            android:id="@+id/add_quote_quote_EditTxt"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_below="@id/rellay4"
+            android:layout_margin="10dp"
+            android:hint="@string/quotation_text"
+            android:inputType="text"
+            android:maxLength="220"
+            android:textAlignment="center" />
 
-    <LinearLayout
-        android:id="@+id/rel_lay2"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_below="@id/rel_lay1"
-        android:layout_margin="10dp">
+        <RelativeLayout
+            android:id="@+id/rel_lay1"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/add_quote_quote_EditTxt"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp">
 
-        <Spinner
-            android:id="@+id/add_quote_category_spinner"
-            android:layout_width="150dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.2" />
+            <TextView
+                android:id="@+id/add_quote_page_txtView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="3dp"
+                android:text="@string/page"
+                android:textSize="22sp" />
 
-        <Button
-            android:id="@+id/add_quote_add_category_btn"
-            android:layout_width="60dp"
+            <EditText
+                android:id="@+id/add_quote_page_EditTxt"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/add_quote_page_txtView"
+                android:inputType="number"
+                android:maxLength="5"
+                android:maxLines="1" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/rel_lay2"
+            android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="+" />
-    </LinearLayout>
+            android:layout_below="@id/rel_lay1"
+            android:layout_margin="10dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rel_lay2">
+            <Spinner
+                android:id="@+id/add_quote_category_spinner"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2" />
 
-        <Button
-            android:id="@+id/add_quote_ok_btn"
+            <Button
+                android:id="@+id/add_quote_add_category_btn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/ic_add_circle_outline_black_24dp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_weight="0.5"
-            android:text="OK" />
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rel_lay2">
 
-        <Button
-            android:id="@+id/add_quote_cancel_btn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_weight="0.5"
-            android:text="Cancel" />
+            <Button
+                android:id="@+id/add_quote_ok_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:text="@string/ok_btn" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/add_quote_cancel_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:text="@string/cancel_btn" />
 
-</RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

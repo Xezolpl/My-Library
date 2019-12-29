@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="200dp"
-    android:layout_height="300dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_centerInParent="true"
     android:padding="10dp">
+
     <TextView
         android:id="@+id/add_category_txtView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:textSize="28sp"
         android:text="Add category"
         android:textAlignment="center"
-        android:textStyle="bold"/>
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:textStyle="bold" />
+
     <EditText
         android:id="@+id/add_category_name_edtTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Category's name"
+        android:hint="@string/category_name"
         android:maxLines="1"
         android:maxLength="15"
         android:layout_margin="5dp"
-        android:layout_below="@id/add_category_txtView"/>
+        android:layout_below="@id/add_category_txtView" />
+
     <ImageView
         android:id="@+id/add_category_selected_color_imgView"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_margin="5dp"
         android:layout_below="@id/add_category_name_edtTxt"
-        android:background="@drawable/color_dot"/>
+        android:background="@drawable/color_dot" />
+
     <Button
         android:id="@+id/add_category_color_btn"
         android:layout_width="match_parent"
@@ -37,28 +43,30 @@
         android:layout_toRightOf="@id/add_category_selected_color_imgView"
         android:layout_below="@id/add_category_name_edtTxt"
         android:layout_margin="5dp"
-        android:text="Select color"/>
+        android:text="@string/select_color" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_below="@id/add_category_selected_color_imgView"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp">
 
         <Button
             android:id="@+id/add_category_ok_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="OK"
-            android:layout_weight="0.5"/>
+            android:text="@string/ok_btn"
+            android:layout_weight="0.5" />
+
         <Button
             android:id="@+id/add_category_cancel_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Cancel"/>
+            android:text="@string/cancel_btn" />
     </LinearLayout>
-
-
 
 
 </RelativeLayout>

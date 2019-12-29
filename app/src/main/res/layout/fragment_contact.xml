@@ -4,15 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true">
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="60sp"
-        android:text="My library"
+        android:text="@string/app_name"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:layout_margin="35dp"/>
+        android:layout_margin="35dp" />
 
     <TextView
         android:id="@+id/textView2"
@@ -22,14 +23,14 @@
         android:text="@string/app_version"
         android:layout_below="@id/textView1"
         android:textAlignment="center"
-        android:layout_marginTop="25dp"/>
+        android:layout_marginTop="25dp" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:text="Mateusz Pietras 'XezolPL'"
+        android:text="@string/mateusz_pietras_xezolpl"
         android:layout_below="@id/textView2"
         android:textAlignment="center"
         android:layout_marginTop="25dp" />
@@ -39,10 +40,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textSize="20sp"
-        android:text="Simple library application first made as a project for java learning, but then i figured out that it also can help other people in making simple notes in read by them books."
+        android:text="@string/app_description"
         android:layout_below="@id/textView3"
         android:layout_margin="35dp"
-        android:textAlignment="center"/>
+        android:textAlignment="center" />
 
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -28,6 +29,7 @@ public class OpenedBookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opened_book);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         thisBook = (Book) getIntent().getSerializableExtra("book");
 

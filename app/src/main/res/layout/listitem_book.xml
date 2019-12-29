@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dp"
     android:layout_marginTop="25dp"
     android:layout_marginRight="10dp"
     android:id="@+id/relLay"
     android:layout_centerHorizontal="true">
+
     <ImageView
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:id="@+id/bookImage"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@mipmap/ic_launcher"
+        android:contentDescription="@string/book_cover"/>
+
     <TextView
         android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:id="@+id/bookTitle"
-        android:text="Very very long title with special effects"
         android:layout_below="@id/bookImage"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
         android:layout_marginTop="10dp"
         android:textSize="16sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:text="@string/placeholder_book_title"/>
 
 </RelativeLayout>

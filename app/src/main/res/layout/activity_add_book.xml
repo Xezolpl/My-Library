@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
+    android:layout_width="280dp"
     android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
+    android:layout_centerHorizontal="true"
     android:excludeFromRecents="true"
     tools:context=".activities.AddBookActivity">
 
@@ -13,37 +13,40 @@
 
         <ImageView
             android:id="@+id/add_book_image"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
+            android:layout_width="140dp"
+            android:layout_height="192.5dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="25dp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_margin="5dp"
+            android:background="@drawable/ic_book_black_24dp"
+            android:contentDescription="@string/book_cover"/>
 
         <LinearLayout
             android:id="@+id/linlay1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/add_book_image"
             android:layout_centerHorizontal="true"
-            android:layout_margin="10dp"
-            android:layout_below="@+id/add_book_image">
+            android:layout_margin="10dp">
 
             <Button
                 android:id="@+id/select_image_btn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="0.5"
-                android:text="Select image"
-                android:layout_marginRight="5dp"/>
+                android:text="@string/select_image"
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/select_category_btn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
                 android:layout_weight="0.5"
-                android:text="Select Categories"
-                android:layout_marginLeft="5dp"/>
+                android:text="@string/select_categories"
+                android:textSize="13sp" />
+
         </LinearLayout>
 
         <EditText
@@ -52,9 +55,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/linlay1"
             android:layout_margin="5dp"
-            android:hint="Title"
+            android:hint="@string/title"
             android:maxLength="100"
             android:maxLines="1"
+            android:inputType="text"
             android:textAlignment="center" />
 
         <EditText
@@ -63,20 +67,22 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/add_book_title"
             android:layout_margin="5dp"
-            android:hint="Author"
+            android:hint="@string/author_optional"
             android:maxLength="100"
             android:maxLines="1"
+            android:inputType="text"
             android:textAlignment="center" />
 
 
         <EditText
             android:id="@+id/add_book_description"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="140dp"
             android:layout_below="@id/add_book_author"
             android:layout_margin="5dp"
-            android:hint="Description"
+            android:hint="@string/description_optional"
             android:maxLength="500"
+            android:inputType="text"
             android:textAlignment="center" />
 
         <LinearLayout
@@ -92,9 +98,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight=".7"
-                android:hint="Pages"
+                android:hint="@string/pages"
                 android:maxLength="5"
                 android:maxLines="1"
+                android:inputType="number"
                 android:textAlignment="center" />
 
             <Spinner
@@ -113,19 +120,18 @@
             <Button
                 android:id="@+id/add_book_ok_btn"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight=".5"
-                android:text="OK" />
+                android:text="@string/ok_btn" />
 
             <Button
                 android:id="@+id/add_book_cancel_btn"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:layout_weight=".5"
-                android:text="Cancel" />
+                android:text="@string/cancel_btn" />
         </LinearLayout>
-
     </RelativeLayout>
-</RelativeLayout>
+</ScrollView>
