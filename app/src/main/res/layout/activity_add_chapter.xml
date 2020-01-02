@@ -15,7 +15,8 @@
         android:layout_marginRight="15dp"
         android:hint="@string/chapters_name"
         android:maxLength="100"
-        android:inputType="text"
+        android:inputType="textMultiLine"
+        android:imeOptions="actionNext"
         android:textAlignment="center" />
 
     <LinearLayout

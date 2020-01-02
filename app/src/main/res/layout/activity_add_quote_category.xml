@@ -24,7 +24,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/category_name"
         android:maxLines="1"
-        android:maxLength="15"
+        android:maxLength="25"
+        android:imeOptions="actionDone"
         android:layout_margin="5dp"
         android:layout_below="@id/add_category_txtView" />
 

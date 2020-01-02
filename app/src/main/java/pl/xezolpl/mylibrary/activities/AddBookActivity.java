@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -19,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.github.nikartm.button.FitButton;
 
 import java.util.UUID;
 
@@ -33,7 +33,7 @@ public class AddBookActivity extends AppCompatActivity {
     private EditText add_book_title, add_book_author, add_book_description, add_book_pages;
     private ImageView add_book_image;
     private Spinner status_spinner;
-    private Button add_book_ok_btn, add_book_cancel_btn, select_category_btn, select_image_btn;
+    private FitButton add_book_ok_btn, add_book_cancel_btn, select_category_btn, select_image_btn;
 
     private Book thisBook = null;
     private String bookId;
@@ -66,6 +66,7 @@ public class AddBookActivity extends AppCompatActivity {
         add_book_author.setText(thisBook.getAuthor());
         add_book_description.setText(thisBook.getDescription());
         add_book_pages.setText(String.valueOf(thisBook.getPages()));
+        status_spinner.setSelection(thisBook.getStatus());
         Glide.with(this).asBitmap().load(thisBook.getImageUrl()).into(add_book_image);
     }
 
@@ -83,10 +84,11 @@ public class AddBookActivity extends AppCompatActivity {
         add_book_cancel_btn = findViewById(R.id.add_book_cancel_btn);
         select_image_btn = findViewById(R.id.select_image_btn);
         select_category_btn = findViewById(R.id.select_category_btn);
+
+
     }
 
     private void setOnClickListeners() {
-
         select_image_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +96,6 @@ public class AddBookActivity extends AppCompatActivity {
                  startActivity(intent);
             }
         });
-
         select_category_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,6 +144,7 @@ public class AddBookActivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
     private void setUpStatusSpinner() {

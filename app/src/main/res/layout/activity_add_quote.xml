@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    android:id="@+id/add_quote_scrollview"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
@@ -26,8 +28,9 @@
             android:layout_below="@id/add_quote_txtView"
             android:layout_margin="10dp"
             android:hint="@string/quote_title_optional"
-            android:inputType="text"
-            android:maxLength="50"
+            android:inputType="textMultiLine"
+            android:imeOptions="actionNext"
+            android:maxLength="80"
             android:maxLines="1"
             android:textAlignment="center" />
 
@@ -62,11 +65,13 @@
         <EditText
             android:id="@+id/add_quote_quote_EditTxt"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="wrap_content"
+            android:minHeight="140dp"
             android:layout_below="@id/rellay4"
             android:layout_margin="10dp"
             android:hint="@string/quotation_text"
-            android:inputType="text"
+            android:inputType="textMultiLine"
+            android:imeOptions="actionNext"
             android:maxLength="220"
             android:textAlignment="center" />
 

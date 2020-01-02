@@ -223,7 +223,7 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
             int markerType = note.getMarkerType();
 
             if (markerType == Markers.NUMBER_MARKER || markerType == Markers.LETTER_MARKER) {
-                drawable = Markers.getLetterMarker(markerType, position, note.getColor(), TextDrawable.MEDIUM_TEXT_SIZE);
+                drawable = Markers.getLetterMarker(markerType, position, note.getColor(), TextDrawable.BIG_TEXT_SIZE);
             } else {
                 drawable = Markers.getSimpleMarker(context, note.getMarkerType(), note.getColor());
             }

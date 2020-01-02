@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_centerHorizontal="true"
     android:excludeFromRecents="true"
-    tools:context=".activities.AddBookActivity">
+    tools:context=".activities.AddBookActivity"
+    android:id="@+id/add_book_scroll_view">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,68 +25,111 @@
             android:contentDescription="@string/book_cover"/>
 
         <LinearLayout
-            android:id="@+id/linlay1"
+            android:id="@+id/lay5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/add_book_image"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="10dp">
+            android:orientation="horizontal"
+            android:layout_below="@id/add_book_image">
 
-            <Button
+            <com.github.nikartm.button.FitButton
                 android:id="@+id/select_image_btn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="0.5"
-                android:text="@string/select_image"
-                android:textSize="13sp" />
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_weight="5"
+                android:gravity="center_vertical"
 
-            <Button
+                app:fb_backgroundColor="#ed0909"
+                app:fb_cornerRadius="15dp"
+                app:fb_divColor="#fff"
+                app:fb_divHeight="40dp"
+                app:fb_divWidth="1dp"
+                app:fb_icon="@drawable/ic_image_black_24dp"
+                app:fb_iconColor="#FFF"
+                app:fb_iconHeight="32dp"
+                app:fb_iconMarginEnd="5dp"
+                app:fb_iconMarginStart="5dp"
+                app:fb_iconPosition="left"
+                app:fb_iconWidth="32dp"
+                app:fb_text="@string/select_image"
+                app:fb_textColor="#FFF"
+                app:fb_textPaddingStart="8dp" />
+
+            <com.github.nikartm.button.FitButton
                 android:id="@+id/select_category_btn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_weight="0.5"
-                android:text="@string/select_categories"
-                android:textSize="13sp" />
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_weight="5"
+                android:gravity="center_vertical"
 
+                app:fb_backgroundColor="#ed0909"
+                app:fb_cornerRadius="15dp"
+                app:fb_divColor="#fff"
+                app:fb_divHeight="40dp"
+                app:fb_divWidth="1dp"
+                app:fb_icon="@drawable/ic_apps_black_24dp"
+                app:fb_iconColor="#FFF"
+                app:fb_iconHeight="32dp"
+                app:fb_iconMarginEnd="5dp"
+                app:fb_iconMarginStart="5dp"
+                app:fb_iconPosition="left"
+                app:fb_iconWidth="32dp"
+                app:fb_text="@string/select_categories"
+                app:fb_textColor="#FFF"
+                app:fb_textPaddingStart="5dp"/>
         </LinearLayout>
 
-        <EditText
+
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/add_book_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/linlay1"
-            android:layout_margin="5dp"
+            android:layout_below="@id/lay5"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
             android:hint="@string/title"
             android:maxLength="100"
-            android:maxLines="1"
-            android:inputType="text"
-            android:textAlignment="center" />
+            android:inputType="textMultiLine"
+            android:imeOptions="actionNext"
+            android:textAlignment="center"
+            app:met_underlineColor="#EF5350"
+            app:met_textColor="#666666"
+            app:met_textColorHint="#EF5350" />
 
-        <EditText
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/add_book_author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/add_book_title"
             android:layout_margin="5dp"
             android:hint="@string/author_optional"
-            android:maxLength="100"
-            android:maxLines="1"
-            android:inputType="text"
-            android:textAlignment="center" />
+            android:maxLength="50"
+            android:inputType="textMultiLine"
+            android:imeOptions="actionNext"
+            android:textAlignment="center"
+            app:met_underlineColor="#EF5350"
+            app:met_textColor="#666666"
+            app:met_textColorHint="#EF5350"  />
 
 
-        <EditText
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/add_book_description"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="wrap_content"
+            android:minHeight="140dp"
             android:layout_below="@id/add_book_author"
             android:layout_margin="5dp"
             android:hint="@string/description_optional"
-            android:maxLength="500"
-            android:inputType="text"
-            android:textAlignment="center" />
+            android:maxLength="1000"
+            android:inputType="textMultiLine"
+            android:imeOptions="actionNext"
+            android:textAlignment="center"
+            app:met_underlineColor="#EF5350"
+            app:met_textColor="#666666"
+            app:met_textColorHint="#EF5350"/>
 
         <LinearLayout
             android:id="@+id/lin_lay_0"
@@ -92,7 +138,7 @@
             android:layout_below="@id/add_book_description"
             android:layout_marginTop="10dp">
 
-            <EditText
+            <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/add_book_pages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -102,7 +148,10 @@
                 android:maxLength="5"
                 android:maxLines="1"
                 android:inputType="number"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                app:met_underlineColor="#EF5350"
+                app:met_textColor="#666666"
+                app:met_textColorHint="#EF5350" />
 
             <Spinner
                 android:id="@+id/status_spinner"
@@ -115,23 +164,55 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lin_lay_0">
+            android:orientation="horizontal"
+            android:layout_below="@id/lin_lay_0"
+            android:layout_marginTop="10dp">
 
-            <Button
+            <com.github.nikartm.button.FitButton
                 android:id="@+id/add_book_ok_btn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="130dp"
+                android:layout_height="40dp"
                 android:layout_margin="5dp"
-                android:layout_weight=".5"
-                android:text="@string/ok_btn" />
+                android:gravity="center_vertical"
 
-            <Button
+                app:fb_backgroundColor="#ed0909"
+                app:fb_cornerRadius="15dp"
+                app:fb_divColor="#fff"
+                app:fb_divHeight="25dp"
+                app:fb_divWidth="1dp"
+                app:fb_icon="@drawable/ic_check_black_24dp"
+                app:fb_iconColor="#FFF"
+                app:fb_iconHeight="20dp"
+                app:fb_iconMarginEnd="10dp"
+                app:fb_iconMarginStart="10dp"
+                app:fb_iconPosition="left"
+                app:fb_iconWidth="32dp"
+                app:fb_text="@string/ok_btn"
+                app:fb_textColor="#FFF"
+                app:fb_textPaddingStart="20dp" />
+
+            <com.github.nikartm.button.FitButton
                 android:id="@+id/add_book_cancel_btn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="130dp"
+                android:layout_height="40dp"
                 android:layout_margin="5dp"
-                android:layout_weight=".5"
-                android:text="@string/cancel_btn" />
+                android:gravity="center_vertical"
+
+                app:fb_backgroundColor="#ed0909"
+                app:fb_cornerRadius="15dp"
+                app:fb_divColor="#fff"
+                app:fb_divHeight="25dp"
+                app:fb_divWidth="1dp"
+                app:fb_icon="@drawable/ic_close_black_24dp"
+                app:fb_iconColor="#FFF"
+                app:fb_iconHeight="20dp"
+                app:fb_iconMarginEnd="10dp"
+                app:fb_iconMarginStart="10dp"
+                app:fb_iconPosition="left"
+                app:fb_iconWidth="32dp"
+                app:fb_text="@string/cancel_btn"
+                app:fb_textColor="#FFF"
+                app:fb_textPaddingStart="15dp" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

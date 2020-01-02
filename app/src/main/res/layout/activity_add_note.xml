@@ -32,7 +32,7 @@
         android:maxLength="100"
         android:hint="@string/note"
         android:imeOptions="actionDone"
-        android:inputType="text" />
+        android:inputType="textMultiLine" />
 
     <LinearLayout
         android:id="@+id/lay2"
