@@ -72,7 +72,7 @@
             android:hint="@string/quotation_text"
             android:inputType="textMultiLine"
             android:imeOptions="actionNext"
-            android:maxLength="220"
+            android:maxLength="300"
             android:textAlignment="center" />
 
         <RelativeLayout

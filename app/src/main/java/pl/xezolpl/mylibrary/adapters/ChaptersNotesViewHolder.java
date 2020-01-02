@@ -84,9 +84,11 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
             marker_imgView = itemView.findViewById(R.id.marker_imgView);
         else {
             quotesRecView = itemView.findViewById(R.id.quotes_recView);
-            setRecViewVisible(false);
+            quotesRecView.setVisibility(View.GONE);
         }
         moreBtn = itemView.findViewById(R.id.moreBtn);
+
+        setRecViewVisible(false);
 
     }
 
@@ -97,8 +99,10 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 if (isRecViewVisible) {
                     setRecViewVisible(false);
+                    if (parent==FROM_CHAPTER) setQuotesViewVisible(false);
                 } else {
                     setRecViewVisible(true);
+                    if (parent==FROM_CHAPTER) setQuotesViewVisible(true);
                 }
             }
         });
@@ -251,6 +255,13 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         } else {
             recView.setVisibility(View.GONE);
             isRecViewVisible = false;
+        }
+    }
+    private void setQuotesViewVisible(boolean b){
+        if(b){
+            quotesRecView.setVisibility(View.VISIBLE);
+        }else {
+            quotesRecView.setVisibility(View.INVISIBLE);
         }
     }
 }

@@ -3,9 +3,8 @@
     android:id="@+id/quote_lay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="25dp"
-    android:layout_marginBottom="25dp"
-    android:animateLayoutChanges="true"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="15dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -17,9 +16,9 @@
             android:id="@+id/quote_title_lay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
             android:layout_marginTop="4.5dp"
-            android:layout_toStartOf="@id/category_relLay">
+            android:layout_toStartOf="@id/category_relLay"
+            android:layout_marginStart="10dp">
 
             <TextView
                 android:id="@+id/quote_title_txtView"
@@ -56,8 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/quote_title_lay"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_margin="10dp"
             android:text="@string/placeholder_quote_description"
             android:textStyle="italic" />
 
@@ -117,14 +115,15 @@
     <RelativeLayout
         android:id="@+id/quote_collapsed_lay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
 
         <TextView
+            android:layout_marginStart="8dp"
             android:id="@+id/quote_txtView_collapsed"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="50dp"
+            android:layout_centerHorizontal="true"
             android:text="@string/placeholder_quote_description"
             android:textStyle="italic" />
     </RelativeLayout>
