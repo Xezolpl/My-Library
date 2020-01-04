@@ -29,6 +29,7 @@ public class InsertQuoteActivity extends AppCompatActivity {
     private QuotesRecViewAdapter adapter;
 
     private Chapter chapter;
+    private List<Quote> quotes;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class InsertQuoteActivity extends AppCompatActivity {
 
         adapter = new QuotesRecViewAdapter(this);
         adapter.setInserting(true);
+        adapter.setChapterId(chapter.getId());
 
         recView.setLayoutManager(new GridLayoutManager(this, 1));
 
@@ -81,7 +83,6 @@ public class InsertQuoteActivity extends AppCompatActivity {
 
     private void updateChapterQuotes(List<Quote> quotes) {
         for (Quote quote : quotes) {
-            quote.setChapterId(chapter.getId());
             viewModel.update(quote);
         }
     }

@@ -43,6 +43,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     private List<QuoteCategory> allCategories;
 
     private boolean inserting = false;
+    private String chapterId = "";
 
     public QuotesRecViewAdapter(Context context) {
         this.context = context;
@@ -61,6 +62,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     public void setInserting(boolean b) {
         inserting = b;
     }
+    public void setChapterId(String chapterId){this.chapterId = chapterId;}
 
     public void setQuotes(List<Quote> quotes) {
         this.quotes = quotes;
@@ -106,13 +108,14 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 @Override
                 public boolean onLongClick(View view) {
                     if (!holder.isSelected) {
+                        chapterQuotes.remove(q);
+                        q.setChapterId(chapterId);
                         chapterQuotes.add(q);
                         holder.setSelected(true);
                     } else {
-                        chapterQuotes.remove(q);
+                        chapterQuotes.get(chapterQuotes.indexOf(q)).setChapterId("");
                         holder.setSelected(false);
                     }
-                    notifyDataSetChanged();
                     return false;
                 }
             });
@@ -153,6 +156,10 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             color = Markers.BLUE_START_COLOR;
         }
 
+        if(chapterId.equals(q.getChapterId())){
+            holder.setSelected(true);
+            chapterQuotes.add(q);
+        }
 
         holder.setData(q.getTitle(), q.getQuote(), q.getAuthor(), q.getCategory(), q.getPage(), color);
         setOnClickListeners(holder, q);
