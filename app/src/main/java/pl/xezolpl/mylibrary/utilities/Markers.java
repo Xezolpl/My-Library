@@ -41,7 +41,7 @@ public abstract class Markers {
             , "j)", "k)", "l)", "m)", "n)", "o)", "p)", "q)", "r)", "s)", "t)", "u)", "v)", "w)", "x)", "y)", "z)"};
 
 
-    public static Drawable getLetterMarker(int markerType, int markerPosition, int color, float textSize) throws IOException {
+    public static Drawable getLetterMarker(int markerType, int markerPosition, int color) throws IOException {
         String text;
 
         if (markerType == LETTER_MARKER) {
@@ -53,7 +53,6 @@ public abstract class Markers {
 
 
         TextDrawable drawable = new TextDrawable(text);
-        drawable.setTextSize(textSize);
         drawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP));
         drawable.draw(new Canvas());
         return drawable;

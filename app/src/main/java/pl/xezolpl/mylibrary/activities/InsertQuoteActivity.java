@@ -41,7 +41,6 @@ public class InsertQuoteActivity extends AppCompatActivity {
 
         chapter = (Chapter) getIntent().getSerializableExtra("chapter");
 
-
         adapter = new QuotesRecViewAdapter(this);
         adapter.setInserting(true);
 

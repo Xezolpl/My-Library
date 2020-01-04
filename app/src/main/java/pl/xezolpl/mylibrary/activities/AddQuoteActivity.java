@@ -38,6 +38,7 @@ public class AddQuoteActivity extends AppCompatActivity {
     private Quote thisQuote = null;
     private boolean inEdition = false;
     private String bookId;
+    private String chapterId = "";
 
     private QuoteCategoryViewModel categoryViewModel;
     private QuoteCategorySpinnerAdapter spinnerAdapter;
@@ -102,6 +103,8 @@ public class AddQuoteActivity extends AppCompatActivity {
         author_EditTxt.setText(quote.getAuthor());
         page_EditTxt.setText(String.valueOf(quote.getPage()));
         category_spinner.setSelection(spinnerAdapter.getItemPosition(quote.getCategory()));
+        chapterId = quote.getChapterId();
+
     }
 
     private void setOnClickListeners() {
@@ -191,6 +194,7 @@ public class AddQuoteActivity extends AppCompatActivity {
         }
 
         thisQuote = new Quote(id, quote, title, author, category, page, bookId);
+        thisQuote.setChapterId(chapterId);
         return true;
     }
 }

@@ -26,7 +26,6 @@ import pl.xezolpl.mylibrary.adapters.ChaptersNotesViewHolder;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.models.Note;
 import pl.xezolpl.mylibrary.utilities.Markers;
-import pl.xezolpl.mylibrary.utilities.TextDrawable;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 
 public class AddNoteActivity extends AppCompatActivity {
@@ -145,7 +144,7 @@ public class AddNoteActivity extends AppCompatActivity {
         add_note_imgView = findViewById(R.id.add_note_imgView);
         try {
             add_note_imgView.setImageDrawable(Markers.getLetterMarker(Markers.NUMBER_MARKER,
-                    0, Color.BLUE, TextDrawable.LARGE_TEXT_SIZE));
+                    0, Color.BLUE));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -164,7 +163,7 @@ public class AddNoteActivity extends AppCompatActivity {
                     try {
                         if (currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER) {
                             add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType, 0,
-                                    color, TextDrawable.LARGE_TEXT_SIZE));
+                                    color));
                         } else {
                             add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this, currentMarkerType, color));
                         }
@@ -228,7 +227,7 @@ public class AddNoteActivity extends AppCompatActivity {
     private void setImageView(int markerColor) {
         try {
             if (currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER) {
-                add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType, 0, markerColor, TextDrawable.LARGE_TEXT_SIZE));
+                add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType, 0, markerColor));
             } else {
                 add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this, currentMarkerType, markerColor));
             }

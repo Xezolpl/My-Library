@@ -31,7 +31,6 @@ import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.models.Note;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.utilities.Markers;
-import pl.xezolpl.mylibrary.utilities.TextDrawable;
 import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
@@ -134,12 +133,13 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
                                 if (parent == FROM_CHAPTER) {
                                     intent.putExtra("chapter", parentChapter);
                                     intent.putExtra("parent", FROM_CHAPTER);
+                                    setQuotesViewVisible(true);
                                 } else {
                                     intent.putExtra("note", parentNote);
                                     intent.putExtra("parent", FROM_NOTE);
                                 }
-                                setRecViewVisible(true);
                                 context.startActivity(intent);
+                                setRecViewVisible(true);
                                 break;
                             }
                             case R.id.editMenuBtn: {
@@ -161,7 +161,8 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
 
                                 Intent intent = new Intent(context, InsertQuoteActivity.class);
                                 intent.putExtra("chapter", parentChapter);
-
+                                setRecViewVisible(true);
+                                setQuotesViewVisible(true);
                                 context.startActivity(intent);
                                 break;
                             }
@@ -173,7 +174,6 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
                                 } else {
                                     NoteViewModel model = ViewModelProviders.of(activity).get(NoteViewModel.class);
                                     model.delete(parentNote);
-                                    setRecViewVisible(false);
                                 }
                                 break;
                             }
@@ -227,11 +227,10 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
             int markerType = note.getMarkerType();
 
             if (markerType == Markers.NUMBER_MARKER || markerType == Markers.LETTER_MARKER) {
-                drawable = Markers.getLetterMarker(markerType, position, note.getColor(), TextDrawable.BIG_TEXT_SIZE);
+                drawable = Markers.getLetterMarker(markerType, position, note.getColor());
             } else {
                 drawable = Markers.getSimpleMarker(context, note.getMarkerType(), note.getColor());
             }
-
             marker_imgView.setImageDrawable(drawable);
         } catch (IOException e) {
             e.printStackTrace();
@@ -261,7 +260,7 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         if(b){
             quotesRecView.setVisibility(View.VISIBLE);
         }else {
-            quotesRecView.setVisibility(View.INVISIBLE);
+            quotesRecView.setVisibility(View.GONE);
         }
     }
 }

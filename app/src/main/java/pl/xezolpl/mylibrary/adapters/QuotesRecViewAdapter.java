@@ -112,6 +112,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                         chapterQuotes.remove(q);
                         holder.setSelected(false);
                     }
+                    notifyDataSetChanged();
                     return false;
                 }
             });
@@ -155,7 +156,6 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
         holder.setData(q.getTitle(), q.getQuote(), q.getAuthor(), q.getCategory(), q.getPage(), color);
         setOnClickListeners(holder, q);
-
     }
 
     @Override

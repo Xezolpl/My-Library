@@ -17,7 +17,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginStart="4dp" />
+            android:layout_marginStart="4dp"
+            android:contentDescription="@string/marker_type" />
 
         <Button
             android:id="@+id/moreBtn"
@@ -36,13 +37,22 @@
             android:maxLength="100"
             android:layout_toEndOf="@+id/marker_imgView"
             android:layout_toStartOf="@id/moreBtn"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum imperdiet vel purus nec dictum. Phasellus molestie, urna a pretium blandit, ligula est lacinia nunc." />
+            android:text="@string/very_long_lorem_ipsum"/>
     </RelativeLayout>
+
+    <ImageView
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/noteLay"
+        android:layout_alignBottom="@id/recView"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/gray_line" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/noteLay"
-        android:layout_marginLeft="20dp" />
+        android:layout_marginStart="20dp"/>
 </RelativeLayout>
