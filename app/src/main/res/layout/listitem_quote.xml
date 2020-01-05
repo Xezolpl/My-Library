@@ -123,7 +123,6 @@
             android:id="@+id/quote_txtView_collapsed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:text="@string/placeholder_quote_description"
             android:textStyle="italic" />
     </RelativeLayout>

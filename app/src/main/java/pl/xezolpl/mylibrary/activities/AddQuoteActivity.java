@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.github.nikartm.button.FitButton;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -33,8 +35,8 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     private EditText title_EditTxt, quote_EditTxt, page_EditTxt, author_EditTxt;
     private Spinner category_spinner;
-    private Button add_category_btn, ok_btn, cancel_btn, quote_author_btn;
-
+    private Button add_category_btn, quote_author_btn, edit_category_btn, delete_category_btn;
+    private FitButton ok_btn, cancel_btn;
     private Quote thisQuote = null;
     private boolean inEdition = false;
     private String bookId;
@@ -62,7 +64,9 @@ public class AddQuoteActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<QuoteCategory> quoteCategories) {
                 if (quoteCategories.size() == 0) {
-                    QuoteCategory qc = new QuoteCategory("Uncategorized", Markers.BLUE_START_COLOR);
+                    String uncategorized = getString(R.string.uncategorized);
+
+                    QuoteCategory qc = new QuoteCategory(uncategorized, uncategorized, Markers.BLUE_START_COLOR);
                     categoryViewModel.insert(qc);
                     quoteCategories.add(qc);
                 }
@@ -92,6 +96,8 @@ public class AddQuoteActivity extends AppCompatActivity {
         page_EditTxt = findViewById(R.id.add_quote_page_EditTxt);
         category_spinner = findViewById(R.id.add_quote_category_spinner);
         add_category_btn = findViewById(R.id.add_quote_add_category_btn);
+        edit_category_btn = findViewById(R.id.add_quote_edit_category_btn);
+        delete_category_btn = findViewById(R.id.add_quote_delete_category_btn);
         ok_btn = findViewById(R.id.add_quote_ok_btn);
         cancel_btn = findViewById(R.id.add_quote_cancel_btn);
         quote_author_btn = findViewById(R.id.quote_author_btn);
@@ -102,7 +108,7 @@ public class AddQuoteActivity extends AppCompatActivity {
         quote_EditTxt.setText(quote.getQuote());
         author_EditTxt.setText(quote.getAuthor());
         page_EditTxt.setText(String.valueOf(quote.getPage()));
-        category_spinner.setSelection(spinnerAdapter.getItemPosition(quote.getCategory()));
+        category_spinner.setSelection(spinnerAdapter.getItemPosition(quote.getCategoryId()));
         chapterId = quote.getChapterId();
 
     }
@@ -113,7 +119,24 @@ public class AddQuoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
-                startActivityForResult(intent,0);
+                startActivityForResult(intent, 0);
+            }
+        });
+        edit_category_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
+                QuoteCategory qc = ((QuoteCategory)(spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
+                intent.putExtra("category", qc);
+                startActivity(intent);
+            }
+        });
+
+        delete_category_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                QuoteCategory qc = ((QuoteCategory)(spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
+                categoryViewModel.delete(qc);
             }
         });
 
@@ -151,12 +174,11 @@ public class AddQuoteActivity extends AppCompatActivity {
                 });
             }
         });
-
     }
 
     private boolean areValidOutputs() {
 
-        String title, quote, id, category, author;
+        String title, quote, id, categoryId, author;
         int page = 0;
 
         //isQuoteShorterThan3
@@ -177,7 +199,7 @@ public class AddQuoteActivity extends AppCompatActivity {
             title = title_EditTxt.getText().toString();
             author = author_EditTxt.getText().toString();
             quote = quote_EditTxt.getText().toString();
-            category = ((QuoteCategory) spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())).getName();
+            categoryId = ((QuoteCategory) spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())).getId();
         } catch (Exception exc) {
             exc.printStackTrace();
             return false;
@@ -193,7 +215,7 @@ public class AddQuoteActivity extends AppCompatActivity {
             }
         }
 
-        thisQuote = new Quote(id, quote, title, author, category, page, bookId);
+        thisQuote = new Quote(id, quote, title, author, categoryId, page, bookId);
         thisQuote.setChapterId(chapterId);
         return true;
     }

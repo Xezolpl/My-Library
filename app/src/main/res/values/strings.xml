@@ -40,7 +40,7 @@
     <string name="placeholder_page">Page: 1234</string>
     <string name="placeholder_quote_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed bibendum et sapien id facilisis. Duis mattis ornare dictum. Duis pulvinar condimentum rutrum. . Duis mattis ornare dictum. Duis pulvinar condimentum rutrum.</string>
     <string name="category_name_background">Category name background</string>
-    <string name="placeholder_category_name">category place</string>
+    <string name="placeholder_category_name">categoryId place</string>
     <string name="placeholder_book_title">Funny book</string>
     <string name="placeholder_category">Category</string>
     <string name="placeholder_chapter">Chapter I: The beginning</string>
@@ -49,6 +49,12 @@
     <string name="want_to_read">Want to read</string>
     <string name="currently_reading">Currently reading</string>
     <string name="already_read">Already read</string>
+    <string name="add_category">Add categoryId</string>
+
+    <string name="uncategorized">Uncategorized</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="without_quotes">Without quotes</string>
 
     <!-- Layout strings -->
 

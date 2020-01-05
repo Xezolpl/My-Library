@@ -62,7 +62,10 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     public void setInserting(boolean b) {
         inserting = b;
     }
-    public void setChapterId(String chapterId){this.chapterId = chapterId;}
+
+    public void setChapterId(String chapterId) {
+        this.chapterId = chapterId;
+    }
 
     public void setQuotes(List<Quote> quotes) {
         this.quotes = quotes;
@@ -142,7 +145,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         final Quote q = quotes.get(position);
 
         for (int i = 0; i < allCategories.size(); i++) {
-            if (allCategories.get(i).getName().equals(q.getCategory())) {
+            if (allCategories.get(i).getId().equals(q.getCategoryId())) {
                 category = allCategories.get(i);
                 break;
             }
@@ -152,16 +155,17 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         int color;
         if (category != null) {
             color = category.getColor();
-        }else {
+        } else {
             color = Markers.BLUE_START_COLOR;
         }
 
-        if(chapterId.equals(q.getChapterId())){
+        if (chapterId.equals(q.getChapterId()) && inserting) {
             holder.setSelected(true);
             chapterQuotes.add(q);
         }
 
-        holder.setData(q.getTitle(), q.getQuote(), q.getAuthor(), q.getCategory(), q.getPage(), color);
+
+        holder.setData(q.getTitle(), q.getQuote(), q.getAuthor(), q.getCategoryId(), q.getPage(), color);
         setOnClickListeners(holder, q);
     }
 
@@ -182,7 +186,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 for (Quote q : quotesFull) {
                     if (q.getTitle().toLowerCase().contains(filteredPattern) ||
                             q.getQuote().toLowerCase().contains(filteredPattern) ||
-                            q.getCategory().toLowerCase().contains(filteredPattern)) {
+                            q.getCategoryId().toLowerCase().contains(filteredPattern)) {
                         filteredList.add(q);
                     }
                 }
@@ -236,13 +240,12 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
         }
 
-        void setData(String title, String quote, String author, String category, int page, int hexdecColor) {
+        void setData(String title, String quote, String author, String categoryid, int page, int hexdecColor) {
             quote_title_txtView.setText(title);
             quote_author_txtView.setText(author);
             quote_txtView_expanded.setText(quote);
             quote_txtView_collapsed.setText(quote);
             quote_txtView_collapsed.setText(quote);
-            category_txtView.setText(category);
             String pageString = "Page: " + page;
             quote_page_txtView.setText(pageString);
 
@@ -251,14 +254,20 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
             if (page == 0) quote_page_txtView.setVisibility(View.GONE); ///TODO:WTF
             else quote_page_txtView.setVisibility(View.VISIBLE);
+
+            for (int i=0; i<allCategories.size(); i++){
+                if(allCategories.get(i).getId().equals(categoryid)){
+                    category_txtView.setText(allCategories.get(i).getName());
+                }
+            }
         }
 
-        void setExpanded(boolean b){
-            if(b){
+        void setExpanded(boolean b) {
+            if (b) {
                 quote_collapsed_lay.setVisibility(View.GONE);
                 quote_expanded_lay.setVisibility(View.VISIBLE);
                 isExpanded = true;
-            }else{
+            } else {
                 quote_expanded_lay.setVisibility(View.GONE);
                 quote_collapsed_lay.setVisibility(View.VISIBLE);
                 isExpanded = false;

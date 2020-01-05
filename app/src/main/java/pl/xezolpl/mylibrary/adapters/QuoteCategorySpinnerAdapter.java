@@ -62,7 +62,8 @@ public class QuoteCategorySpinnerAdapter extends BaseAdapter {
     @SuppressLint("ViewHolder")
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        view = inflater.inflate(R.layout.listitem_quote_category_spinner, viewGroup, false);
+        view = inflater.inflate(R.layout.spinneritem_quote_category, viewGroup, false);
+
         ImageView imgView = view.findViewById(R.id.spinner_category_imgView);
         TextView txtView = view.findViewById(R.id.spinner_category_txtView);
 

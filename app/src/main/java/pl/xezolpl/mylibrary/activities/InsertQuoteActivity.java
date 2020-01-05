@@ -3,7 +3,6 @@ package pl.xezolpl.mylibrary.activities;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +10,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.github.nikartm.button.FitButton;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 public class InsertQuoteActivity extends AppCompatActivity {
 
     private RecyclerView recView;
-    private Button okBtn, cancelBtn;
+    private FitButton okBtn, cancelBtn;
 
     private QuoteViewModel viewModel;
     private QuotesRecViewAdapter adapter;

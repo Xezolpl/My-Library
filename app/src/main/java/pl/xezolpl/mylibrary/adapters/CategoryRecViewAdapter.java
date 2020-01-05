@@ -24,8 +24,8 @@ import java.util.List;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.MainActivity;
 import pl.xezolpl.mylibrary.fragments.BooksListTabFragment;
-import pl.xezolpl.mylibrary.models.CategoryWithBook;
 import pl.xezolpl.mylibrary.models.Category;
+import pl.xezolpl.mylibrary.models.CategoryWithBook;
 import pl.xezolpl.mylibrary.viewmodels.CategoriesViewModel;
 
 public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecViewAdapter.ViewHolder> {
@@ -122,7 +122,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
                 if (mode == NORMAL_MODE) {
                     fm.beginTransaction().replace(R.id.fragment_container,
                             new BooksListTabFragment(context.getString(category.getNameR()))).commit();
-                    ((MainActivity)context).setNavViewItem(0);
+                    ((MainActivity) context).setNavViewItem(0);
 
                 } else if (mode == SELECTING_CATEGORIES_MODE) {
                     String categoryName = context.getString(category.getNameR());

@@ -29,7 +29,7 @@ public interface QuoteDao {
     @Query("SELECT * FROM quotes WHERE id=:quoteId")
     LiveData<Quote> getQuote(String quoteId);
 
-    @Query("SELECT * FROM quotes WHERE category=:category ORDER BY page")
+    @Query("SELECT * FROM quotes WHERE categoryId=:category ORDER BY page")
     LiveData<List<Quote>> getQuotesByCategory(String category);
 
     @Query("SELECT * FROM quotes WHERE bookId=:bookId ORDER BY page")

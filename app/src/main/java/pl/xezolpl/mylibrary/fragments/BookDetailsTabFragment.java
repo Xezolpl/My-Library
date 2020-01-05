@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -29,6 +30,7 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddBookActivity;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
 import pl.xezolpl.mylibrary.models.Book;
+import pl.xezolpl.mylibrary.utilities.DeletingHelper;
 import pl.xezolpl.mylibrary.utilities.Requests;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 
@@ -39,7 +41,7 @@ public class BookDetailsTabFragment extends Fragment {
 
     private TextView bookTitle_text, bookDescription_text, bookPages_text, bookAuthor_text;
     private ImageView book_image;
-    private Button setToRead_btn, setCurrReading_btn, setAlreadyRead_btn, setFavourite_btn;
+    private Button setToRead_btn, setCurrReading_btn, setAlreadyRead_btn;
 
     private Book thisBook;
     private BookViewModel bookViewModel;
@@ -91,11 +93,53 @@ public class BookDetailsTabFragment extends Fragment {
         delItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                bookViewModel.delete(thisBook);
-                ((Activity) context).finish();
+                final DeletingHelper deletingHelper = new DeletingHelper(BookDetailsTabFragment.this);
+                new AlertDialog.Builder(context)
+                        .setTitle("Confirm deleting")
+                        .setMessage("Are you sure you want delete this book? " +
+                                "Delete with quotes?")
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                deletingHelper.deleteBook(thisBook,true);
+                                ((Activity) context).finish();
+                            }
+                        })
+                        .setNeutralButton(getString(R.string.without_quotes), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                deletingHelper.deleteBook(thisBook,false);
+                                ((Activity) context).finish();
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.no), null)
+                        .create()
+                        .show();
                 return false;
             }
         });
+
+        final MenuItem favouriteItem = menu.findItem(R.id.action_favourite);
+
+        if (!thisBook.isFavourite()){
+            favouriteItem.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
+        }
+
+        favouriteItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if(thisBook.isFavourite()){
+                    favouriteItem.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
+                    thisBook.setFavourite(false);
+                }else{
+                    thisBook.setFavourite(true);
+                    favouriteItem.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star));
+                }
+                bookViewModel.update(thisBook);
+                return false;
+            }
+        });
+
     }
 
     @Override
@@ -126,7 +170,6 @@ public class BookDetailsTabFragment extends Fragment {
         setToRead_btn = v.findViewById(R.id.setToRead_btn);
         setCurrReading_btn = v.findViewById(R.id.setCurrReading_btn);
         setAlreadyRead_btn = v.findViewById(R.id.setAlreadyRead_btn);
-        setFavourite_btn = v.findViewById(R.id.setFavourite_btn);
     }
 
     private void loadBookData() {
@@ -206,16 +249,6 @@ public class BookDetailsTabFragment extends Fragment {
                 } else {
                     updateBook(Book.STATUS_ALREADY_READ);
                 }
-            }
-        });
-
-
-        setFavourite_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (thisBook.isFavourite()) thisBook.setFavourite(false);
-                else thisBook.setFavourite(true);
-                bookViewModel.update(thisBook);
             }
         });
     }

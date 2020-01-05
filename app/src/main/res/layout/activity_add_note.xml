@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
     android:layout_height="400dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_centerInParent="true"
     android:excludeFromRecents="true">
 
@@ -10,7 +11,7 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_centerHorizontal="true"
-        android:layout_margin="15dp"
+        android:layout_margin="20dp"
         android:contentDescription="@string/marker_type"/>
 
     <Button
@@ -24,8 +25,8 @@
     <EditText
         android:id="@+id/add_note_name"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_margin="15dp"
+        android:layout_height="200dp"
+        android:layout_margin="5dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/add_note_imgView"
         android:textAlignment="center"
@@ -39,23 +40,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="15dp"
         android:layout_alignParentBottom="true">
 
-        <Button
+        <com.github.nikartm.button.FitButton
             android:id="@+id/ok_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ok_btn"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="0.5" />
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:gravity="center_vertical"
 
-        <Button
+            app:fb_backgroundColor="#ed0909"
+            app:fb_cornerRadius="15dp"
+            app:fb_divColor="#fff"
+            app:fb_divHeight="25dp"
+            app:fb_divWidth="1dp"
+            app:fb_icon="@drawable/ic_check_black_24dp"
+            app:fb_iconColor="#FFF"
+            app:fb_iconHeight="20dp"
+            app:fb_iconMarginEnd="10dp"
+            app:fb_iconMarginStart="10dp"
+            app:fb_iconPosition="left"
+            app:fb_iconWidth="32dp"
+            app:fb_text="@string/ok_btn"
+            app:fb_textColor="#FFF"
+            app:fb_textPaddingStart="20dp" />
+
+        <com.github.nikartm.button.FitButton
             android:id="@+id/cancel_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel_btn"
-            android:layout_marginStart="5dp"
-            android:layout_weight="0.5" />
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:gravity="center_vertical"
+
+            app:fb_backgroundColor="#ed0909"
+            app:fb_cornerRadius="15dp"
+            app:fb_divColor="#fff"
+            app:fb_divHeight="25dp"
+            app:fb_divWidth="1dp"
+            app:fb_icon="@drawable/ic_close_black_24dp"
+            app:fb_iconColor="#FFF"
+            app:fb_iconHeight="20dp"
+            app:fb_iconMarginEnd="10dp"
+            app:fb_iconMarginStart="10dp"
+            app:fb_iconPosition="left"
+            app:fb_iconWidth="32dp"
+            app:fb_text="@string/cancel_btn"
+            app:fb_textColor="#FFF"
+            app:fb_textPaddingStart="15dp" />
     </LinearLayout>
 </RelativeLayout>

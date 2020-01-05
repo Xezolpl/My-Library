@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.github.nikartm.button.FitButton;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +34,8 @@ public class AddNoteActivity extends AppCompatActivity {
 
     private EditText add_note_name;
     private ImageView add_note_imgView;
-    private Button ok_btn, cancel_btn, add_note_color_btn;
+    private FitButton ok_btn, cancel_btn;
+    private Button add_note_color_btn;
 
     private int currentMarkerType = Markers.NUMBER_MARKER;
     private int color = Color.BLUE;

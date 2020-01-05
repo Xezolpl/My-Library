@@ -35,5 +35,4 @@ public class CategoriesFragment extends Fragment {
 
         return view;
     }
-
 }

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
     android:layout_height="400dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ScrollView
@@ -21,20 +22,50 @@
         android:layout_below="@id/scrollView"
         android:layout_marginTop="5dp">
 
-        <Button
+        <com.github.nikartm.button.FitButton
             android:id="@+id/ok_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:layout_marginRight="10dp"
-            android:text="OK" />
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:gravity="center_vertical"
 
-        <Button
+            app:fb_backgroundColor="#ed0909"
+            app:fb_cornerRadius="15dp"
+            app:fb_divColor="#fff"
+            app:fb_divHeight="25dp"
+            app:fb_divWidth="1dp"
+            app:fb_icon="@drawable/ic_check_black_24dp"
+            app:fb_iconColor="#FFF"
+            app:fb_iconHeight="20dp"
+            app:fb_iconMarginEnd="10dp"
+            app:fb_iconMarginStart="10dp"
+            app:fb_iconPosition="left"
+            app:fb_iconWidth="32dp"
+            app:fb_text="@string/ok_btn"
+            app:fb_textColor="#FFF"
+            app:fb_textPaddingStart="20dp" />
+
+        <com.github.nikartm.button.FitButton
             android:id="@+id/cancel_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:layout_marginLeft="10dp"
-            android:text="Cancel" />
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:gravity="center_vertical"
+
+            app:fb_backgroundColor="#ed0909"
+            app:fb_cornerRadius="15dp"
+            app:fb_divColor="#fff"
+            app:fb_divHeight="25dp"
+            app:fb_divWidth="1dp"
+            app:fb_icon="@drawable/ic_close_black_24dp"
+            app:fb_iconColor="#FFF"
+            app:fb_iconHeight="20dp"
+            app:fb_iconMarginEnd="10dp"
+            app:fb_iconMarginStart="10dp"
+            app:fb_iconPosition="left"
+            app:fb_iconWidth="32dp"
+            app:fb_text="@string/cancel_btn"
+            app:fb_textColor="#FFF"
+            app:fb_textPaddingStart="15dp" />
     </LinearLayout>
 </RelativeLayout>

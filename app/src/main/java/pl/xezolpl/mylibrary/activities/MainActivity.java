@@ -1,11 +1,14 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -21,8 +24,12 @@ import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private AllBooksFragment allBooksFragment;
     private NavigationView nav_view;
+
+    private AllBooksFragment allBooksFragment;
+    private CategoriesFragment categoriesFragment;
+    private QuotesTabFragment quotesFragment;
+    private ContactFragment contactFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (savedInstanceState == null) {
             allBooksFragment = new AllBooksFragment();
+            categoriesFragment = new CategoriesFragment();
+            quotesFragment = new QuotesTabFragment(this, "");
+            contactFragment = new ContactFragment();
+
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     allBooksFragment).commit();
             nav_view.setCheckedItem(R.id.nav_books);
@@ -68,15 +79,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
             case R.id.nav_categories: {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CategoriesFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  categoriesFragment).commit();
                 break;
             }
             case R.id.nav_quotes: {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new QuotesTabFragment(MainActivity.this, "")).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, quotesFragment).commit();
                 break;
             }
             case R.id.nav_contact: {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ContactFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, contactFragment).commit();
                 break;
             }
             default: {
@@ -88,6 +99,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     public void setNavViewItem(int position){
         nav_view.setCheckedItem(position);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            new AlertDialog.Builder(this)
+                    .setTitle("Exit application")
+                    .setMessage("Are you sure you want exit the application?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .create()
+                    .show();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }
