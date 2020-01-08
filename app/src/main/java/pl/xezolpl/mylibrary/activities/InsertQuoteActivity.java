@@ -2,11 +2,9 @@ package pl.xezolpl.mylibrary.activities;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,9 +27,6 @@ public class InsertQuoteActivity extends AppCompatActivity {
     private QuoteViewModel viewModel;
     private QuotesRecViewAdapter adapter;
 
-    private Chapter chapter;
-    private List<Quote> quotes;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +36,7 @@ public class InsertQuoteActivity extends AppCompatActivity {
         initWidgets();
         setOnClickListeners();
 
-        chapter = (Chapter) getIntent().getSerializableExtra("chapter");
+        Chapter chapter = (Chapter) getIntent().getSerializableExtra("chapter");
 
         adapter = new QuotesRecViewAdapter(this);
         adapter.setInserting(true);
@@ -50,12 +45,9 @@ public class InsertQuoteActivity extends AppCompatActivity {
         recView.setLayoutManager(new GridLayoutManager(this, 1));
 
         viewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
-        viewModel.getQuotesByBook(chapter.getBookId()).observe(this, new Observer<List<Quote>>() {
-            @Override
-            public void onChanged(List<Quote> quotes) {
-                adapter.setQuotes(quotes);
-                recView.setAdapter(adapter);
-            }
+        viewModel.getQuotesByBook(chapter.getBookId()).observe(this, quotes -> {
+            adapter.setQuotes(quotes);
+            recView.setAdapter(adapter);
         });
     }
 
@@ -67,19 +59,11 @@ public class InsertQuoteActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        okBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateChapterQuotes(adapter.getChapterQuotes());
-                finish();
-            }
+        okBtn.setOnClickListener(view -> {
+            updateChapterQuotes(adapter.getChapterQuotes());
+            finish();
         });
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        cancelBtn.setOnClickListener(view -> finish());
     }
 
     private void updateChapterQuotes(List<Quote> quotes) {

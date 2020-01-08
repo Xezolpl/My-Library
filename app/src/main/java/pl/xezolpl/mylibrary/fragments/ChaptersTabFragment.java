@@ -12,19 +12,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddChapterActivity;
 import pl.xezolpl.mylibrary.adapters.ChaptersRecViewAdapter;
-import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 
 public class ChaptersTabFragment extends Fragment {
@@ -46,12 +42,7 @@ public class ChaptersTabFragment extends Fragment {
         adapter = new ChaptersRecViewAdapter(context);
 
         ChapterViewModel chapterViewModel = ViewModelProviders.of(this).get(ChapterViewModel.class);
-        chapterViewModel.getChaptersByBook(bookId).observe(this, new Observer<List<Chapter>>() {
-            @Override
-            public void onChanged(List<Chapter> chapters) {
-                adapter.setChaptersList(chapters);
-            }
-        });
+        chapterViewModel.getChaptersByBook(bookId).observe(this, chapters -> adapter.setChaptersList(chapters));
     }
 
     @Nullable
@@ -65,13 +56,10 @@ public class ChaptersTabFragment extends Fragment {
 
 
         FloatingActionButton fab = view.findViewById(R.id.chapters_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, AddChapterActivity.class);
-                intent.putExtra("bookId", bookId);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(view1 -> {
+            Intent intent = new Intent(context, AddChapterActivity.class);
+            intent.putExtra("bookId", bookId);
+            startActivity(intent);
         });
 
         setHasOptionsMenu(true);

@@ -3,7 +3,6 @@ package pl.xezolpl.mylibrary.activities;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -63,26 +62,18 @@ public class AddChapterActivity extends AppCompatActivity {
 
     private void setOnClickListeners() {
 
-        ok_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (areValidOutputs()) {
-                    if (inEdition) {
-                        viewModel.update(thisChapter);
-                    } else {
-                        viewModel.insert(thisChapter);
-                    }
-                    finish();
+        ok_btn.setOnClickListener(view -> {
+            if (areValidOutputs()) {
+                if (inEdition) {
+                    viewModel.update(thisChapter);
+                } else {
+                    viewModel.insert(thisChapter);
                 }
-            }
-        });
-
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 finish();
             }
         });
+
+        cancel_btn.setOnClickListener(view -> finish());
     }
 
     private boolean areValidOutputs() {

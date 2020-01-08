@@ -3,7 +3,6 @@ package pl.xezolpl.mylibrary.activities;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -76,48 +75,37 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 
     private void setOnClickListeners() {
 
-        color_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final int hexdecColorCopy = hexdecColor;
-                colorPicker.setDefaultColorButton(Markers.BLUE_START_COLOR);
-                colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
-                    @Override
-                    public void onChooseColor(int position, int color) {
-                        hexdecColor = color;
-                        drawable.setColor(color);
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        hexdecColor = hexdecColorCopy;
-                        colorPicker.dismissDialog();
-                    }
-                }).show();
-            }
-        });
-
-        ok_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (areValidOutputs()) {
-                    QuoteCategoryViewModel model = ViewModelProviders.of(AddQuoteCategoryActivity.this).get(QuoteCategoryViewModel.class);
-                    if (inEditing) {
-                        model.update(thisCategory);
-                    } else {
-                        model.insert(thisCategory);
-                    }
-                    finish();
+        color_btn.setOnClickListener(view -> {
+            final int hexdecColorCopy = hexdecColor;
+            colorPicker.setDefaultColorButton(Markers.BLUE_START_COLOR);
+            colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+                @Override
+                public void onChooseColor(int position, int color) {
+                    hexdecColor = color;
+                    drawable.setColor(color);
                 }
-            }
+
+                @Override
+                public void onCancel() {
+                    hexdecColor = hexdecColorCopy;
+                    colorPicker.dismissDialog();
+                }
+            }).show();
         });
 
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        ok_btn.setOnClickListener(view -> {
+            if (areValidOutputs()) {
+                QuoteCategoryViewModel model = ViewModelProviders.of(AddQuoteCategoryActivity.this).get(QuoteCategoryViewModel.class);
+                if (inEditing) {
+                    model.update(thisCategory);
+                } else {
+                    model.insert(thisCategory);
+                }
                 finish();
             }
         });
+
+        cancel_btn.setOnClickListener(view -> finish());
     }
 
     private boolean areValidOutputs() {

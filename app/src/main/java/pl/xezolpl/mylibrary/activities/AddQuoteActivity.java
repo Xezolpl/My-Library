@@ -3,7 +3,6 @@ package pl.xezolpl.mylibrary.activities;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -11,19 +10,16 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.github.nikartm.button.FitButton;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.QuoteCategorySpinnerAdapter;
-import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 import pl.xezolpl.mylibrary.utilities.Markers;
@@ -60,21 +56,18 @@ public class AddQuoteActivity extends AppCompatActivity {
         spinnerAdapter = new QuoteCategorySpinnerAdapter(this);
         categoryViewModel = ViewModelProviders.of(this).get(QuoteCategoryViewModel.class);
 
-        categoryViewModel.getAllCategories().observe(this, new Observer<List<QuoteCategory>>() {
-            @Override
-            public void onChanged(List<QuoteCategory> quoteCategories) {
-                if (quoteCategories.size() == 0) {
-                    String uncategorized = getString(R.string.uncategorized);
+        categoryViewModel.getAllCategories().observe(this, quoteCategories -> {
+            if (quoteCategories.size() == 0) {
+                String uncategorized = getString(R.string.uncategorized);
 
-                    QuoteCategory qc = new QuoteCategory(uncategorized, uncategorized, Markers.BLUE_START_COLOR);
-                    categoryViewModel.insert(qc);
-                    quoteCategories.add(qc);
-                }
-                spinnerAdapter.setCategories(quoteCategories);
-                category_spinner.setAdapter(spinnerAdapter);
-
-                if (inEdition) loadQuoteData(thisQuote);
+                QuoteCategory qc = new QuoteCategory(uncategorized, uncategorized, Markers.BLUE_START_COLOR);
+                categoryViewModel.insert(qc);
+                quoteCategories.add(qc);
             }
+            spinnerAdapter.setCategories(quoteCategories);
+            category_spinner.setAdapter(spinnerAdapter);
+
+            if (inEdition) loadQuoteData(thisQuote);
         });
     }
 
@@ -115,64 +108,39 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     private void setOnClickListeners() {
 
-        add_category_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
-                startActivityForResult(intent, 0);
-            }
+        add_category_btn.setOnClickListener(view -> {
+            Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
+            startActivityForResult(intent, 0);
         });
-        edit_category_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
-                QuoteCategory qc = ((QuoteCategory)(spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
-                intent.putExtra("category", qc);
-                startActivity(intent);
-            }
+        edit_category_btn.setOnClickListener(view -> {
+            Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
+            QuoteCategory qc = ((QuoteCategory)(spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
+            intent.putExtra("category", qc);
+            startActivity(intent);
         });
 
-        delete_category_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                QuoteCategory qc = ((QuoteCategory)(spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
-                categoryViewModel.delete(qc);
-            }
+        delete_category_btn.setOnClickListener(view -> {
+            QuoteCategory qc = ((QuoteCategory)(spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
+            categoryViewModel.delete(qc);
         });
 
-        ok_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (areValidOutputs()) {
-                    QuoteViewModel viewModel = ViewModelProviders.of(AddQuoteActivity.this).get(QuoteViewModel.class);
-                    if (inEdition) {
-                        viewModel.update(thisQuote);
-                    } else {
-                        viewModel.insert(thisQuote);
-                    }
-                    finish();
+        ok_btn.setOnClickListener(view -> {
+            if (areValidOutputs()) {
+                QuoteViewModel viewModel = ViewModelProviders.of(AddQuoteActivity.this).get(QuoteViewModel.class);
+                if (inEdition) {
+                    viewModel.update(thisQuote);
+                } else {
+                    viewModel.insert(thisQuote);
                 }
-            }
-        });
-
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 finish();
             }
         });
 
-        quote_author_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BookViewModel bookViewModel = ViewModelProviders.of(AddQuoteActivity.this).get(BookViewModel.class);
-                bookViewModel.getBook(bookId).observe(AddQuoteActivity.this, new Observer<Book>() {
-                    @Override
-                    public void onChanged(Book book) {
-                        author_EditTxt.setText(book.getAuthor());
-                    }
-                });
-            }
+        cancel_btn.setOnClickListener(view -> finish());
+
+        quote_author_btn.setOnClickListener(view -> {
+            BookViewModel bookViewModel = ViewModelProviders.of(AddQuoteActivity.this).get(BookViewModel.class);
+            bookViewModel.getBook(bookId).observe(AddQuoteActivity.this, book -> author_EditTxt.setText(book.getAuthor()));
         });
     }
 

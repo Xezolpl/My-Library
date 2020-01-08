@@ -14,19 +14,15 @@ import android.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
 import pl.xezolpl.mylibrary.adapters.QuotesRecViewAdapter;
-import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesTabFragment extends Fragment {
@@ -50,19 +46,9 @@ public class QuotesTabFragment extends Fragment {
 
         QuoteViewModel quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
         if (bookId.isEmpty()) {
-            quoteViewModel.getAllQuotes().observe(this, new Observer<List<Quote>>() {
-                @Override
-                public void onChanged(List<Quote> quotes) {
-                    quotesRecViewAdapter.setQuotes(quotes);
-                }
-            });
+            quoteViewModel.getAllQuotes().observe(this, quotes -> quotesRecViewAdapter.setQuotes(quotes));
         } else {
-            quoteViewModel.getQuotesByBook(bookId).observe(this, new Observer<List<Quote>>() {
-                @Override
-                public void onChanged(List<Quote> quotes) {
-                    quotesRecViewAdapter.setQuotes(quotes);
-                }
-            });
+            quoteViewModel.getQuotesByBook(bookId).observe(this, quotes -> quotesRecViewAdapter.setQuotes(quotes));
         }
 
     }
@@ -78,13 +64,10 @@ public class QuotesTabFragment extends Fragment {
         quotes_recView.setLayoutManager(new GridLayoutManager(context, 1));
 
         FloatingActionButton quotes_fab = view.findViewById(R.id.quotes_fab);
-        quotes_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, AddQuoteActivity.class);
-                intent.putExtra("bookId", bookId);
-                context.startActivity(intent);
-            }
+        quotes_fab.setOnClickListener(view1 -> {
+            Intent intent = new Intent(context, AddQuoteActivity.class);
+            intent.putExtra("bookId", bookId);
+            context.startActivity(intent);
         });
         setHasOptionsMenu(true);
         setMenuVisibility(false);

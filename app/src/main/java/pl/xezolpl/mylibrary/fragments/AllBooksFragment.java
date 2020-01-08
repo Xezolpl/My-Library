@@ -80,12 +80,9 @@ public class AllBooksFragment extends Fragment {
     }
 
     private void setOnClickListeners() {
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AddBookActivity.class);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(getContext(), AddBookActivity.class);
+            startActivity(intent);
         });
     }
 

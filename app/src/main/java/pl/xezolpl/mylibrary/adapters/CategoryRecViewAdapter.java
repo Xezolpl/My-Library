@@ -12,13 +12,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
@@ -83,12 +81,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         categories.add(new Category(R.string.travel, R.drawable.travel));
         categories.add(new Category(R.string.war, R.drawable.war));
 
-        Collections.sort(categories, new Comparator<Category>() {
-            @Override
-            public int compare(Category category, Category t1) {
-                return context.getString(category.getNameR()).compareTo(context.getString(t1.getNameR()));
-            }
-        });
+        Collections.sort(categories, (category, t1) -> context.getString(category.getNameR()).compareTo(context.getString(t1.getNameR())));
     }
 
     @NonNull
@@ -104,37 +97,31 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
 
         holder.setData(category.getNameR(), category.getImgR());
         final String categoryName = context.getString(category.getNameR());
-        categoriesViewModel.getCategoriesByBook(bookId).observe((FragmentActivity) context, new Observer<List<CategoryWithBook>>() {
-            @Override
-            public void onChanged(List<CategoryWithBook> categories) {
-                for (int i = 0; i < categories.size(); i++) {
-                    if (categories.get(i).getCategory().equals(categoryName)) {
-                        holder.checked = true;
-                    }
+        categoriesViewModel.getCategoriesByBook(bookId).observe((FragmentActivity) context, categories -> {
+            for (int i = 0; i < categories.size(); i++) {
+                if (categories.get(i).getCategory().equals(categoryName)) {
+                    holder.checked = true;
                 }
             }
         });
 
 
-        holder.relLay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mode == NORMAL_MODE) {
-                    fm.beginTransaction().replace(R.id.fragment_container,
-                            new BooksListTabFragment(context.getString(category.getNameR()))).commit();
-                    ((MainActivity) context).setNavViewItem(0);
+        holder.relLay.setOnClickListener(view -> {
+            if (mode == NORMAL_MODE) {
+                fm.beginTransaction().replace(R.id.fragment_container,
+                        new BooksListTabFragment(context.getString(category.getNameR()))).commit();
+                ((MainActivity) context).setNavViewItem(0);
 
-                } else if (mode == SELECTING_CATEGORIES_MODE) {
-                    String categoryName = context.getString(category.getNameR());
-                    if (holder.checked) {
-                        categoriesViewModel.delete(new CategoryWithBook(bookId + categoryName, bookId, categoryName));
-                        Toast.makeText(context, "Category deleted", Toast.LENGTH_SHORT).show();
-                        holder.checked = false;
-                    } else {
-                        categoriesViewModel.insert(new CategoryWithBook(bookId + categoryName, bookId, categoryName));
-                        Toast.makeText(context, "Category inserted", Toast.LENGTH_SHORT).show();
-                        holder.checked = true;
-                    }
+            } else if (mode == SELECTING_CATEGORIES_MODE) {
+                String categoryName1 = context.getString(category.getNameR());
+                if (holder.checked) {
+                    categoriesViewModel.delete(new CategoryWithBook(bookId + categoryName1, bookId, categoryName1));
+                    Toast.makeText(context, "Category deleted", Toast.LENGTH_SHORT).show();
+                    holder.checked = false;
+                } else {
+                    categoriesViewModel.insert(new CategoryWithBook(bookId + categoryName1, bookId, categoryName1));
+                    Toast.makeText(context, "Category inserted", Toast.LENGTH_SHORT).show();
+                    holder.checked = true;
                 }
             }
         });

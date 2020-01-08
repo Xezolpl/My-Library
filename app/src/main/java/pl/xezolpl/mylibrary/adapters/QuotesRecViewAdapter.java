@@ -17,7 +17,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,12 +49,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         this.inflater = LayoutInflater.from(context);
 
         QuoteCategoryViewModel viewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteCategoryViewModel.class);
-        viewModel.getAllCategories().observe((FragmentActivity) context, new Observer<List<QuoteCategory>>() {
-            @Override
-            public void onChanged(List<QuoteCategory> quoteCategories) {
-                allCategories = quoteCategories;
-            }
-        });
+        viewModel.getAllCategories().observe((FragmentActivity) context, quoteCategories -> allCategories = quoteCategories);
     }
 
     //SETTERS & GETTERS
@@ -76,51 +70,39 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
     private void setOnClickListeners(final ViewHolder holder, final Quote q) {
 
-        holder.editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, AddQuoteActivity.class);
-                intent.putExtra("quote", q);
-                context.startActivity(intent);
-                notifyDataSetChanged();
-            }
+        holder.editBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(context, AddQuoteActivity.class);
+            intent.putExtra("quote", q);
+            context.startActivity(intent);
+            notifyDataSetChanged();
         });
 
-        holder.delBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                QuoteViewModel quoteViewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteViewModel.class);
-                quoteViewModel.delete(q);
-                notifyDataSetChanged();
-            }
+        holder.delBtn.setOnClickListener(view -> {
+            QuoteViewModel quoteViewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteViewModel.class);
+            quoteViewModel.delete(q);
+            notifyDataSetChanged();
         });
 
-        holder.quote_lay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!holder.isExpanded) {
-                    holder.setExpanded(true);
-                } else {
-                    holder.setExpanded(false);
-                }
+        holder.quote_lay.setOnClickListener(view -> {
+            if (!holder.isExpanded) {
+                holder.setExpanded(true);
+            } else {
+                holder.setExpanded(false);
             }
         });
 
         if (inserting) {
-            holder.quote_lay.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    if (!holder.isSelected) {
-                        chapterQuotes.remove(q);
-                        q.setChapterId(chapterId);
-                        chapterQuotes.add(q);
-                        holder.setSelected(true);
-                    } else {
-                        chapterQuotes.get(chapterQuotes.indexOf(q)).setChapterId("");
-                        holder.setSelected(false);
-                    }
-                    return false;
+            holder.quote_lay.setOnLongClickListener(view -> {
+                if (!holder.isSelected) {
+                    chapterQuotes.remove(q);
+                    q.setChapterId(chapterId);
+                    chapterQuotes.add(q);
+                    holder.setSelected(true);
+                } else {
+                    chapterQuotes.get(chapterQuotes.indexOf(q)).setChapterId("");
+                    holder.setSelected(false);
                 }
+                return false;
             });
         }
     }

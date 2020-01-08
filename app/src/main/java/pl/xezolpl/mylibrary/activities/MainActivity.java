@@ -1,6 +1,5 @@
 package pl.xezolpl.mylibrary.activities;
 
-import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -107,12 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             new AlertDialog.Builder(this)
                     .setTitle("Exit application")
                     .setMessage("Are you sure you want exit the application?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            finish();
-                        }
-                    })
+                    .setPositiveButton("Yes", (dialogInterface, i) -> finish())
                     .setNegativeButton("No", null)
                     .create()
                     .show();

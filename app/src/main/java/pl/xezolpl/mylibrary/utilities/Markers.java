@@ -20,9 +20,9 @@ public abstract class Markers {
     public static final int BLUE_START_COLOR = Color.parseColor("#51C1ED");
 
     //SIMPLE MARKERS
-    public static final int DOT_MARKER = R.drawable.color_dot;
-    public static final int DASH_MARKER = R.drawable.color_dash;
-    public static final int STAR_MARKER = R.drawable.color_star;
+    private static final int DOT_MARKER = R.drawable.color_dot;
+    private static final int DASH_MARKER = R.drawable.color_dash;
+    private static final int STAR_MARKER = R.drawable.color_star;
 
     public static Drawable getSimpleMarker(Context context, int marker, int color) throws IOException {
         if (marker == DOT_MARKER || marker == DASH_MARKER || marker == STAR_MARKER) {

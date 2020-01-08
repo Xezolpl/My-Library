@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -89,60 +88,48 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        select_image_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                 Intent intent = new Intent(AddBookActivity.this, SelectCoverActivity.class);
-                 startActivity(intent);
+        select_image_btn.setOnClickListener(view -> {
+             Intent intent = new Intent(AddBookActivity.this, SelectCoverActivity.class);
+             startActivity(intent);
+        });
+        select_category_btn.setOnClickListener(view -> {
+            AlertDialog dialog = new AlertDialog.Builder(AddBookActivity.this)
+                    .setPositiveButton("OK", null)
+                    .setView(R.layout.fragment_categories)
+                    .create();
+            dialog.show();
+
+            RecyclerView recView = dialog.findViewById(R.id.recView);
+            if (recView != null) {
+                recView.setAdapter(new CategoryRecViewAdapter(AddBookActivity.this,
+                        CategoryRecViewAdapter.SELECTING_CATEGORIES_MODE, getSupportFragmentManager(), bookId));
+                recView.setLayoutManager(new GridLayoutManager(AddBookActivity.this, 2));
+            }else{
+                Log.w(TAG, "select_category_btn -> onClick: ", new  NullPointerException());
             }
         });
-        select_category_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog dialog = new AlertDialog.Builder(AddBookActivity.this)
-                        .setPositiveButton("OK", null)
-                        .setView(R.layout.fragment_categories)
-                        .create();
-                dialog.show();
 
-                RecyclerView recView = dialog.findViewById(R.id.recView);
-                if (recView != null) {
-                    recView.setAdapter(new CategoryRecViewAdapter(AddBookActivity.this,
-                            CategoryRecViewAdapter.SELECTING_CATEGORIES_MODE, getSupportFragmentManager(), bookId));
-                    recView.setLayoutManager(new GridLayoutManager(AddBookActivity.this, 2));
-                }else{
-                    Log.w(TAG, "select_category_btn -> onClick: ", new  NullPointerException());
+
+        add_book_ok_btn.setOnClickListener(view -> {
+            if (areValidOutputs()) {
+                BookViewModel model = ViewModelProviders.of(AddBookActivity.this).get(BookViewModel.class);
+                if (inEditing) {
+                    model.update(thisBook);
+
+                    Intent intent = new Intent();
+                    intent.putExtra("book", thisBook);
+                    setResult(RESULT_OK, intent);
+
+                } else {
+                    model.insert(thisBook);
                 }
-            }
-        });
-
-
-        add_book_ok_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (areValidOutputs()) {
-                    BookViewModel model = ViewModelProviders.of(AddBookActivity.this).get(BookViewModel.class);
-                    if (inEditing) {
-                        model.update(thisBook);
-
-                        Intent intent = new Intent();
-                        intent.putExtra("book", thisBook);
-                        setResult(RESULT_OK, intent);
-
-                    } else {
-                        model.insert(thisBook);
-                    }
-                    finish();
-                }
-            }
-        });
-
-        add_book_cancel_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setResult(RESULT_CANCELED);
                 finish();
             }
+        });
+
+        add_book_cancel_btn.setOnClickListener(view -> {
+            setResult(RESULT_CANCELED);
+            finish();
         });
 
     }

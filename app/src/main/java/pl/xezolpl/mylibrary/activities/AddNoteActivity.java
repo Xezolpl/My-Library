@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -13,13 +12,11 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.github.nikartm.button.FitButton;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 import petrov.kristiyan.colorpicker.ColorPicker;
@@ -78,18 +75,15 @@ public class AddNoteActivity extends AppCompatActivity {
                 parentId = chapter.getId();
                 id = UUID.randomUUID().toString();
 
-                viewModel.getNotesByParent(chapter.getId()).observe(this, new Observer<List<Note>>() {
-                    @Override
-                    public void onChanged(List<Note> notes) {
-                        if (notes.size() > 0) {
-                            currentMarkerType = notes.get(0).getMarkerType();
-                            markerTypeLocked = true;
-                            color = notes.get(0).getColor();
-                        } else {
-                            color = Markers.BLUE_START_COLOR;
-                        }
-                        setImageView(color);
+                viewModel.getNotesByParent(chapter.getId()).observe(this, notes -> {
+                    if (notes.size() > 0) {
+                        currentMarkerType = notes.get(0).getMarkerType();
+                        markerTypeLocked = true;
+                        color = notes.get(0).getColor();
+                    } else {
+                        color = Markers.BLUE_START_COLOR;
                     }
+                    setImageView(color);
                 });
                 break;
             }
@@ -99,18 +93,15 @@ public class AddNoteActivity extends AppCompatActivity {
                 parentId = note.getId();
                 id = UUID.randomUUID().toString();
 
-                viewModel.getNotesByParent(note.getId()).observe(this, new Observer<List<Note>>() {
-                    @Override
-                    public void onChanged(List<Note> notes) {
-                        if (notes.size() > 0) {
-                            currentMarkerType = notes.get(0).getMarkerType();
-                            markerTypeLocked = true;
-                            color = notes.get(0).getColor();
-                        } else {
-                            color = note.getColor();
-                        }
-                        setImageView(color);
+                viewModel.getNotesByParent(note.getId()).observe(this, notes -> {
+                    if (notes.size() > 0) {
+                        currentMarkerType = notes.get(0).getMarkerType();
+                        markerTypeLocked = true;
+                        color = notes.get(0).getColor();
+                    } else {
+                        color = note.getColor();
                     }
+                    setImageView(color);
                 });
                 break;
             }
@@ -123,14 +114,11 @@ public class AddNoteActivity extends AppCompatActivity {
                 color = note.getColor();
                 inEdition = true;
 
-                viewModel.getNotesByParent(note.getParentId()).observe(this, new Observer<List<Note>>() {
-                    @Override
-                    public void onChanged(List<Note> notes) {
-                        if (notes.size() > 1) {
-                            currentMarkerType = notes.get(0).getMarkerType();
-                            markerTypeLocked = true;
-                            setImageView(color);
-                        }
+                viewModel.getNotesByParent(note.getParentId()).observe(this, notes -> {
+                    if (notes.size() > 1) {
+                        currentMarkerType = notes.get(0).getMarkerType();
+                        markerTypeLocked = true;
+                        setImageView(color);
                     }
                 });
                 break;
@@ -158,64 +146,50 @@ public class AddNoteActivity extends AppCompatActivity {
 
     private void setOnClickListeners() {
 
-        add_note_imgView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!markerTypeLocked) {
-                    currentMarkerType = Markers.incrementMarker(currentMarkerType);
-                    try {
-                        if (currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER) {
-                            add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType, 0,
-                                    color));
-                        } else {
-                            add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this, currentMarkerType, color));
-                        }
-                    } catch (IOException exc) {
-                        exc.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        ok_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (areValidOutputs()) {
-                    if (inEdition) {
-                        viewModel.update(thisNote);
+        add_note_imgView.setOnClickListener(view -> {
+            if (!markerTypeLocked) {
+                currentMarkerType = Markers.incrementMarker(currentMarkerType);
+                try {
+                    if (currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER) {
+                        add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType, 0,
+                                color));
                     } else {
-                        viewModel.insert(thisNote);
+                        add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this, currentMarkerType, color));
                     }
-                    finish();
-                } else {
-                    Toast.makeText(AddNoteActivity.this, "Note can't be empty!", Toast.LENGTH_SHORT).show();
+                } catch (IOException exc) {
+                    exc.printStackTrace();
                 }
             }
         });
 
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        ok_btn.setOnClickListener(view -> {
+            if (areValidOutputs()) {
+                if (inEdition) {
+                    viewModel.update(thisNote);
+                } else {
+                    viewModel.insert(thisNote);
+                }
                 finish();
+            } else {
+                Toast.makeText(AddNoteActivity.this, "Note can't be empty!", Toast.LENGTH_SHORT).show();
             }
         });
 
-        add_note_color_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ColorPicker picker = new ColorPicker(AddNoteActivity.this);
-                picker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
-                    @Override
-                    public void onChooseColor(int position, int color) {
-                        add_note_imgView.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-                        AddNoteActivity.this.color = color;
-                    }
+        cancel_btn.setOnClickListener(view -> finish());
 
-                    @Override
-                    public void onCancel() {
-                    }
-                }).show();
-            }
+        add_note_color_btn.setOnClickListener(view -> {
+            ColorPicker picker = new ColorPicker(AddNoteActivity.this);
+            picker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+                @Override
+                public void onChooseColor(int position, int color) {
+                    add_note_imgView.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+                    AddNoteActivity.this.color = color;
+                }
+
+                @Override
+                public void onCancel() {
+                }
+            }).show();
         });
     }
 

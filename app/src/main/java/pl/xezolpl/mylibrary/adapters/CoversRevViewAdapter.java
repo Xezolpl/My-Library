@@ -26,6 +26,10 @@ public class CoversRevViewAdapter extends RecyclerView.Adapter<CoversRevViewAdap
         this.context = context;
     }
 
+    public void setBookCovers(List<Cover> bookCovers){
+        this.bookCovers = bookCovers;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

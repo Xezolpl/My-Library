@@ -51,13 +51,10 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.setData(books.get(position).getTitle(), books.get(position).getImageUrl());
 
-        holder.relLay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, OpenedBookActivity.class);
-                intent.putExtra("book", books.get(position));
-                context.startActivity(intent);
-            }
+        holder.relLay.setOnClickListener(view -> {
+            Intent intent = new Intent(context, OpenedBookActivity.class);
+            intent.putExtra("book", books.get(position));
+            context.startActivity(intent);
         });
     }
 

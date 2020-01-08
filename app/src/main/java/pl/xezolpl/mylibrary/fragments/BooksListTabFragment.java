@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,47 +57,36 @@ public class BooksListTabFragment extends Fragment {
 
         /*ALL BOOKS*/
         if (tabBooksStatus == Book.STATUS_NEUTRAL) {
-            bookViewModel.getAllBooks().observe(this, new Observer<List<Book>>() {
-                @Override
-                public void onChanged(final List<Book> books) {
-                    if (categoryName == null) {
-                        booksRecViewAdapter.setBooks(books);
-                    } else {
-                        final List<Book> booksWithCategory = new ArrayList<>();
+            bookViewModel.getAllBooks().observe(this, books -> {
+                if (categoryName == null) {
+                    booksRecViewAdapter.setBooks(books);
+                } else {
+                    final List<Book> booksWithCategory = new ArrayList<>();
 
-                        CategoriesViewModel categoriesViewModel = ViewModelProviders.of((FragmentActivity) context)
-                                .get(CategoriesViewModel.class);
+                    CategoriesViewModel categoriesViewModel = ViewModelProviders.of((FragmentActivity) context)
+                            .get(CategoriesViewModel.class);
 
-                        categoriesViewModel.getBooksByCategory(categoryName)
-                                .observe((FragmentActivity) context, new Observer<List<CategoryWithBook>>() {
-                                    @Override
-                                    public void onChanged(List<CategoryWithBook> categories) {
-                                        for (int i = 0; i < categories.size(); i++) {
-                                            for (int j = 0; j < books.size(); j++) {
-                                                CategoryWithBook cat1 = categories.get(i);
-                                                Book book1 = books.get(j);
-                                                if (cat1.getBookId().equals(book1.getId())) {
-                                                    booksWithCategory.add(book1);
-                                                    break;
-                                                }
-                                            }
-
+                    categoriesViewModel.getBooksByCategory(categoryName)
+                            .observe((FragmentActivity) context, categories -> {
+                                for (int i = 0; i < categories.size(); i++) {
+                                    for (int j = 0; j < books.size(); j++) {
+                                        CategoryWithBook cat1 = categories.get(i);
+                                        Book book1 = books.get(j);
+                                        if (cat1.getBookId().equals(book1.getId())) {
+                                            booksWithCategory.add(book1);
+                                            break;
                                         }
-                                        booksRecViewAdapter.setBooks(booksWithCategory);
                                     }
-                                });
-                    }
+
+                                }
+                                booksRecViewAdapter.setBooks(booksWithCategory);
+                            });
                 }
             });
         }
         /*OTHER STATUS*/
         else {
-            bookViewModel.getBookWithStatus(tabBooksStatus).observe(this, new Observer<List<Book>>() {
-                @Override
-                public void onChanged(List<Book> books) {
-                    booksRecViewAdapter.setBooks(books);
-                }
-            });
+            bookViewModel.getBookWithStatus(tabBooksStatus).observe(this, books -> booksRecViewAdapter.setBooks(books));
         }
     }
 
