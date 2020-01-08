@@ -19,7 +19,7 @@
     <string name="description_optional">Description (optional)</string>
     <string name="pages">Pages</string>
     <string name="ok_btn">OK</string>
-    <string name="cancel_btn">Cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="chapters_name">Chapter\'s name</string>
     <string name="chapter_number">Chapter number:</string>
     <string name="marker_type">Marker Type</string>
@@ -54,7 +54,15 @@
     <string name="uncategorized">Uncategorized</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="delete">Delete</string>
     <string name="without_quotes">Without quotes</string>
+    <string name="deleting1">Delete book:</string>
+    <string name="deleting2">from your library? It will remove also all notes. Delete with quotes?</string>
+    <string name="onAlreadyRead">You have already read this book. Do you want to remove it from the already read list?</string>
+    <string name="onCurrReading">Your are currently reading this book. Do you want to remove it from the currently reading list?</string>
+    <string name="onWantToRead">This book is currently in to read list. Do you want to remove it from the list?</string>
+    <string name="status_change">Status change</string>
+    <string name="successfully_changed_status">Successfully changed the book status.</string>
 
     <!-- Layout strings -->
 
