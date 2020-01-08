@@ -8,16 +8,14 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
+import org.jetbrains.annotations.NotNull;
+
 public class TextDrawable extends Drawable {
 
     private final String text;
     private final Paint paint;
 
-    private int width;
-    private int height;
-    private float textSize;
-
-    public TextDrawable(String text) {
+    TextDrawable(String text) {
 
         this.text = text;
         paint = new Paint();
@@ -31,19 +29,19 @@ public class TextDrawable extends Drawable {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NotNull Canvas canvas) {
         Rect r = getBounds();
-        width = r.width();
-        height = r.height();
+        int width = r.width();
+        int height = r.height();
 
-        textSize = Math.min(width, height) * 1.15f;
+        float textSize = Math.min(width, height) * 1.15f;
         if (text.charAt(1) == ')') {
             if (textSize > 50) {
-                textSize -= 15;
+                textSize -= 25;
             } else if (textSize > 100) {
-                textSize -= 30;
+                textSize -= 50;
             } else if (textSize > 200) {
-                textSize -= 65;
+                textSize -= 100;
             }
         }
         paint.setTextSize(textSize);

@@ -79,15 +79,17 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         textView = itemView.findViewById(R.id.textView);
         recView = itemView.findViewById(R.id.recView);
         wholeRelLay = itemView.findViewById(R.id.wholeRelLay);
-        if (parent == FROM_NOTE)
+        if (parent == FROM_NOTE) {
             marker_imgView = itemView.findViewById(R.id.marker_imgView);
+            setRecViewVisible(true);
+        }
         else {
             quotesRecView = itemView.findViewById(R.id.quotes_recView);
             quotesRecView.setVisibility(View.GONE);
+            setRecViewVisible(false);
         }
         moreBtn = itemView.findViewById(R.id.moreBtn);
 
-        setRecViewVisible(false);
 
     }
 

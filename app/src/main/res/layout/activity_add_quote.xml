@@ -188,7 +188,7 @@
                 app:fb_iconMarginStart="10dp"
                 app:fb_iconPosition="left"
                 app:fb_iconWidth="32dp"
-                app:fb_text="@string/cancel_btn"
+                app:fb_text="@string/cancel"
                 app:fb_textColor="#FFF"
                 app:fb_textPaddingStart="15dp" />
 

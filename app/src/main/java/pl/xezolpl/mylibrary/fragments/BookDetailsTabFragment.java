@@ -1,9 +1,8 @@
 package pl.xezolpl.mylibrary.fragments;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -33,6 +31,8 @@ import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.utilities.DeletingHelper;
 import pl.xezolpl.mylibrary.utilities.Requests;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
+import spencerstudios.com.ezdialoglib.EZDialog;
+import spencerstudios.com.ezdialoglib.Font;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -79,65 +79,40 @@ public class BookDetailsTabFragment extends Fragment {
         inflater.inflate(R.menu.opened_book_menu, menu);
 
         MenuItem editItem = menu.findItem(R.id.action_edit);
-        editItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent intent = new Intent(context, AddBookActivity.class);
-                intent.putExtra("book", thisBook);
-                startActivityForResult(intent, Requests.EDIT_REQUEST);
-                return false;
-            }
+        editItem.setOnMenuItemClickListener(menuItem -> {
+            Intent intent = new Intent(context, AddBookActivity.class);
+            intent.putExtra("book", thisBook);
+            startActivityForResult(intent, Requests.EDIT_REQUEST);
+            return false;
         });
 
         MenuItem delItem = menu.findItem(R.id.action_delete);
-        delItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                final DeletingHelper deletingHelper = new DeletingHelper(BookDetailsTabFragment.this);
-                new AlertDialog.Builder(context)
-                        .setTitle("Confirm deleting")
-                        .setMessage("Are you sure you want delete this book? " +
-                                "Delete with quotes?")
-                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                deletingHelper.deleteBook(thisBook,true);
-                                ((Activity) context).finish();
-                            }
-                        })
-                        .setNeutralButton(getString(R.string.without_quotes), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                deletingHelper.deleteBook(thisBook,false);
-                                ((Activity) context).finish();
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.no), null)
-                        .create()
-                        .show();
-                return false;
-            }
+        delItem.setOnMenuItemClickListener(menuItem -> {
+            DeletingHelper deletingHelper = new DeletingHelper(BookDetailsTabFragment.this);
+            deletingHelper.showDeletingDialog("Delete book",
+                    getString(R.string.deleting1) +
+                            " \"" + thisBook.getTitle() + "\" " +
+                            getString(R.string.deleting2),
+                    DeletingHelper.BOOK, thisBook);
+            return false;
         });
 
         final MenuItem favouriteItem = menu.findItem(R.id.action_favourite);
 
-        if (!thisBook.isFavourite()){
+        if (!thisBook.isFavourite()) {
             favouriteItem.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
         }
 
-        favouriteItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                if(thisBook.isFavourite()){
-                    favouriteItem.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
-                    thisBook.setFavourite(false);
-                }else{
-                    thisBook.setFavourite(true);
-                    favouriteItem.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star));
-                }
-                bookViewModel.update(thisBook);
-                return false;
+        favouriteItem.setOnMenuItemClickListener(menuItem -> {
+            if (thisBook.isFavourite()) {
+                favouriteItem.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
+                thisBook.setFavourite(false);
+            } else {
+                thisBook.setFavourite(true);
+                favouriteItem.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star));
             }
+            bookViewModel.update(thisBook);
+            return false;
         });
 
     }
@@ -182,73 +157,59 @@ public class BookDetailsTabFragment extends Fragment {
     }
 
     private void createOnClickListeners() {
+        final EZDialog.Builder builder = new EZDialog.Builder(context);
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Status change");
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        //stylization
+        builder.setTitleDividerLineColor(Color.parseColor("#ed0909"))
+                .setTitleTextColor(Color.parseColor("#EE311B"))
+                .setButtonTextColor(Color.parseColor("#ed0909"))
+                .setMessageTextColor(Color.parseColor("#333333"))
+                .setFont(Font.COMFORTAA)
+
+                .setTitle(getString(R.string.status_change))
+                .setNegativeBtnText(getString(R.string.no))
+                .OnNegativeClicked(()->{})
+
+                .setCancelableOnTouchOutside(true);
+
+        //listeners
+        setToRead_btn.setOnClickListener(view -> {
+            if (thisBook.getStatus() == Book.STATUS_WANT_TO_READ) {
+                builder.setMessage(getString(R.string.onWantToRead))
+                        .setPositiveBtnText(getString(R.string.yes))
+
+                        .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
+                        .build();
+            } else {
+                updateBook(Book.STATUS_WANT_TO_READ);
             }
-        });
 
-        setToRead_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (thisBook.getStatus() == Book.STATUS_WANT_TO_READ) {
-                    builder.setMessage("This book is currently in to read list. Do you want to " +
-                            "remove it from the list?");
-                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            updateBook(Book.STATUS_NEUTRAL);
-                        }
-                    });
-                    builder.create().show();
-                } else {
-                    updateBook(Book.STATUS_WANT_TO_READ);
-                }
-
-            }
-        });
-
-
-        setCurrReading_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (thisBook.getStatus() == Book.STATUS_CURRENTLY_READING) {
-                    builder.setMessage("Your are currently reading this book. Do you want to " +
-                            "remove it from the currently reading list?");
-                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            updateBook(Book.STATUS_NEUTRAL);
-                        }
-                    });
-                    builder.create().show();
-                } else {
-                    thisBook.setStatus(Book.STATUS_CURRENTLY_READING);
-                }
-                updateBook(Book.STATUS_CURRENTLY_READING);
-            }
         });
 
 
-        setAlreadyRead_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (thisBook.getStatus() == Book.STATUS_ALREADY_READ) {
-                    builder.setMessage("You have already read this book. Do you want to " +
-                            "remove it from the already read list?");
-                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            updateBook(Book.STATUS_NEUTRAL);
-                        }
-                    });
-                    builder.create().show();
-                } else {
-                    updateBook(Book.STATUS_ALREADY_READ);
-                }
+        setCurrReading_btn.setOnClickListener(view -> {
+            if (thisBook.getStatus() == Book.STATUS_CURRENTLY_READING) {
+                builder.setMessage(getString(R.string.onCurrReading))
+                        .setPositiveBtnText(getString(R.string.yes))
+
+                        .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
+                        .build();
+            } else {
+                thisBook.setStatus(Book.STATUS_CURRENTLY_READING);
+            }
+            updateBook(Book.STATUS_CURRENTLY_READING);
+        });
+
+
+        setAlreadyRead_btn.setOnClickListener(view -> {
+            if (thisBook.getStatus() == Book.STATUS_ALREADY_READ) {
+                builder.setMessage(getString(R.string.onAlreadyRead))
+                        .setPositiveBtnText(getString(R.string.yes))
+
+                        .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
+                        .build();
+            } else {
+                updateBook(Book.STATUS_ALREADY_READ);
             }
         });
     }
@@ -256,6 +217,6 @@ public class BookDetailsTabFragment extends Fragment {
     private void updateBook(int status) {
         thisBook.setStatus(status);
         bookViewModel.update(thisBook);
-        Toast.makeText(getContext(), "Successfully changed the book status.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.successfully_changed_status), Toast.LENGTH_SHORT).show();
     }
 }

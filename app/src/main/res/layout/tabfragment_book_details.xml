@@ -94,7 +94,9 @@
             android:layout_weight="0.5"
             android:text="@string/want_to_read"
             android:lines="2"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
 
         <Button
             android:id="@+id/setCurrReading_btn"
@@ -103,7 +105,9 @@
             android:layout_weight="0.5"
             android:text="@string/currently_reading"
             android:lines="2"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
 
         <Button
             android:id="@+id/setAlreadyRead_btn"
@@ -112,7 +116,9 @@
             android:layout_weight="0.5"
             android:text="@string/already_read"
             android:lines="2"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
 
     </LinearLayout>
 </RelativeLayout>
