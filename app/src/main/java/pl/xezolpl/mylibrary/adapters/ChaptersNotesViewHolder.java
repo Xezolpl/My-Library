@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
@@ -26,8 +27,8 @@ import pl.xezolpl.mylibrary.activities.AddNoteActivity;
 import pl.xezolpl.mylibrary.activities.InsertQuoteActivity;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.models.Note;
+import pl.xezolpl.mylibrary.utilities.DeletingHelper;
 import pl.xezolpl.mylibrary.utilities.Markers;
-import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
@@ -155,13 +156,18 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
                         break;
                     }
                     case R.id.deleteMenuBtn: {
+                        DeletingHelper deletingHelper = new DeletingHelper((AppCompatActivity)context);
 
                         if (parent == FROM_CHAPTER) {
-                            ChapterViewModel model = ViewModelProviders.of(activity).get(ChapterViewModel.class);
-                            model.delete(parentChapter);
+                            deletingHelper.showDeletingDialog(context.getString(R.string.del_chapter),
+                                    context.getString(R.string.delete_chapter),
+                                    DeletingHelper.CHAPTER,
+                                    parentChapter);
                         } else {
-                            NoteViewModel model = ViewModelProviders.of(activity).get(NoteViewModel.class);
-                            model.delete(parentNote);
+                            deletingHelper.showDeletingDialog(context.getString(R.string.del_note),
+                                    context.getString(R.string.delete_note),
+                                    DeletingHelper.NOTE,
+                                    parentNote);
                         }
                         break;
                     }

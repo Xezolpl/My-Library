@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -27,9 +28,9 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
+import pl.xezolpl.mylibrary.utilities.DeletingHelper;
 import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
-import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder> implements Filterable {
     private Context context;
@@ -68,18 +69,21 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         notifyDataSetChanged();
     }
 
-    private void setOnClickListeners(final ViewHolder holder, final Quote q) {
+    private void setOnClickListeners(final ViewHolder holder, final Quote quote) {
 
         holder.editBtn.setOnClickListener(view -> {
             Intent intent = new Intent(context, AddQuoteActivity.class);
-            intent.putExtra("quote", q);
+            intent.putExtra("quote", quote);
             context.startActivity(intent);
             notifyDataSetChanged();
         });
 
         holder.delBtn.setOnClickListener(view -> {
-            QuoteViewModel quoteViewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteViewModel.class);
-            quoteViewModel.delete(q);
+            DeletingHelper deletingHelper = new DeletingHelper((AppCompatActivity) context);
+            deletingHelper.showDeletingDialog(context.getString(R.string.del_quote),
+                    context.getString(R.string.delete_quote),
+                    DeletingHelper.QUOTE,
+                    quote);
             notifyDataSetChanged();
         });
 
@@ -94,12 +98,12 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         if (inserting) {
             holder.quote_lay.setOnLongClickListener(view -> {
                 if (!holder.isSelected) {
-                    chapterQuotes.remove(q);
-                    q.setChapterId(chapterId);
-                    chapterQuotes.add(q);
+                    chapterQuotes.remove(quote);
+                    quote.setChapterId(chapterId);
+                    chapterQuotes.add(quote);
                     holder.setSelected(true);
                 } else {
-                    chapterQuotes.get(chapterQuotes.indexOf(q)).setChapterId("");
+                    chapterQuotes.get(chapterQuotes.indexOf(quote)).setChapterId("");
                     holder.setSelected(false);
                 }
                 return false;
@@ -237,8 +241,8 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             if (page == 0) quote_page_txtView.setVisibility(View.GONE); ///TODO:WTF
             else quote_page_txtView.setVisibility(View.VISIBLE);
 
-            for (int i=0; i<allCategories.size(); i++){
-                if(allCategories.get(i).getId().equals(categoryid)){
+            for (int i = 0; i < allCategories.size(); i++) {
+                if (allCategories.get(i).getId().equals(categoryid)) {
                     category_txtView.setText(allCategories.get(i).getName());
                 }
             }

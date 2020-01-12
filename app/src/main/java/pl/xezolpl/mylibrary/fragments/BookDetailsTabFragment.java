@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -88,11 +89,11 @@ public class BookDetailsTabFragment extends Fragment {
 
         MenuItem delItem = menu.findItem(R.id.action_delete);
         delItem.setOnMenuItemClickListener(menuItem -> {
-            DeletingHelper deletingHelper = new DeletingHelper(BookDetailsTabFragment.this);
-            deletingHelper.showDeletingDialog("Delete book",
-                    getString(R.string.deleting1) +
+            DeletingHelper deletingHelper = new DeletingHelper((AppCompatActivity)context);
+            deletingHelper.showDeletingDialog(getString(R.string.del_book),
+                    getString(R.string.delete_book_1) +
                             " \"" + thisBook.getTitle() + "\" " +
-                            getString(R.string.deleting2),
+                            getString(R.string.delete_book_2),
                     DeletingHelper.BOOK, thisBook);
             return false;
         });

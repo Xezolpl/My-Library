@@ -102,6 +102,15 @@
                 android:maxLines="1" />
         </RelativeLayout>
 
+            <Button
+                android:id="@+id/camera_btn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/ic_camera_alt_black_24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/add_quote_quote_EditTxt"
+                android:layout_marginEnd="10dp"/>
+
         <LinearLayout
             android:id="@+id/rel_lay2"
             android:layout_width="match_parent"
@@ -165,7 +174,7 @@
                 app:fb_iconMarginStart="10dp"
                 app:fb_iconPosition="left"
                 app:fb_iconWidth="32dp"
-                app:fb_text="@string/ok_btn"
+                app:fb_text="@string/ok"
                 app:fb_textColor="#FFF"
                 app:fb_textPaddingStart="20dp" />
 

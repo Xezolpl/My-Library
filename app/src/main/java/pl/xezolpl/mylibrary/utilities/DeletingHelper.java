@@ -3,7 +3,6 @@ package pl.xezolpl.mylibrary.utilities;
 import android.graphics.Color;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import java.io.Serializable;
@@ -36,31 +35,13 @@ public class DeletingHelper {
     private QuoteCategoryViewModel quoteCategoryViewModel;
     private QuoteViewModel quoteViewModel;
 
-    private AppCompatActivity activity = null;
-    private Fragment fragment = null;
+    private AppCompatActivity activity;
 
     public static final int BOOK = 1;
     public static final int CHAPTER = 2;
     public static final int NOTE = 3;
     public static final int QUOTECATEGORY = 4;
     public static final int QUOTE = 5;
-
-
-    /**
-     * Setting up view models.
-     *
-     * @param fragment for classes that inherit from Fragment.
-     */
-    public DeletingHelper(Fragment fragment) {
-        this.fragment = fragment;
-
-        bookViewModel = ViewModelProviders.of(fragment).get(BookViewModel.class);
-        categoriesViewModel = ViewModelProviders.of(fragment).get(CategoriesViewModel.class);
-        chapterViewModel = ViewModelProviders.of(fragment).get(ChapterViewModel.class);
-        noteViewModel = ViewModelProviders.of(fragment).get(NoteViewModel.class);
-        quoteCategoryViewModel = ViewModelProviders.of(fragment).get(QuoteCategoryViewModel.class);
-        quoteViewModel = ViewModelProviders.of(fragment).get(QuoteViewModel.class);
-    }
 
     /**
      * Setting up view models.
@@ -88,7 +69,7 @@ public class DeletingHelper {
         String bookId = book.getId();
 
         if (withQuotes) {
-            quoteViewModel.getQuotesByBook(bookId).observe(fragment == null ? activity : fragment, quotes -> {
+            quoteViewModel.getQuotesByBook(bookId).observe(activity, quotes -> {
                 for (Quote quote : quotes) {
                     //deletes every quote
                     quoteViewModel.delete(quote);
@@ -97,7 +78,7 @@ public class DeletingHelper {
         }
 
 
-        categoriesViewModel.getCategoriesByBook(bookId).observe(fragment == null ? activity : fragment, categoryWithBooks -> {
+        categoriesViewModel.getCategoriesByBook(bookId).observe(activity, categoryWithBooks -> {
             for (CategoryWithBook category : categoryWithBooks) {
                 //deletes book's categories
                 categoriesViewModel.delete(category);
@@ -105,7 +86,7 @@ public class DeletingHelper {
         });
 
 
-        chapterViewModel.getChaptersByBook(bookId).observe(fragment == null ? activity : fragment, chapters -> {
+        chapterViewModel.getChaptersByBook(bookId).observe(activity, chapters -> {
             for (Chapter chapter : chapters) {
                 //deletes every chapter and its notes
                 deleteChapter(chapter);
@@ -124,7 +105,7 @@ public class DeletingHelper {
     private void deleteChapter(Chapter chapter) {
         String chapterId = chapter.getId();
 
-        noteViewModel.getNotesByParent(chapterId).observe(fragment == null ? activity : fragment, notes -> {
+        noteViewModel.getNotesByParent(chapterId).observe(activity, notes -> {
             for (Note note : notes) {
                 deleteNote(note);
             }
@@ -141,7 +122,7 @@ public class DeletingHelper {
     private void deleteNote(Note note) {
         String noteId = note.getId();
 
-        noteViewModel.getNotesByParent(noteId).observe(fragment == null ? activity : fragment, notes -> {
+        noteViewModel.getNotesByParent(noteId).observe(activity, notes -> {
             for (Note note1 : notes) {
                 deleteNote(note1);
             }
@@ -158,9 +139,9 @@ public class DeletingHelper {
      */
     private void deleteQuoteCategory(QuoteCategory quoteCategory) {
         String quoteCategoryId = quoteCategory.getId();
-        final String uncategorized = fragment == null ? activity.getString(R.string.uncategorized) : fragment.getString(R.string.uncategorized);
+        final String uncategorized = activity.getString(R.string.uncategorized);
 
-        quoteViewModel.getQuotesByCategory(quoteCategoryId).observe(fragment == null ? activity : fragment, quotes -> {
+        quoteViewModel.getQuotesByCategory(quoteCategoryId).observe(activity, quotes -> {
             for (Quote quote : quotes) {
                 //sets category to uncategorized in every quote where this category was used
                 quote.setCategoryId(uncategorized);
@@ -172,22 +153,27 @@ public class DeletingHelper {
         }
     }
 
+    /**
+     * Showing new dialog, with buttons to get user's answer, to delete or not the book.
+     *
+     * @param title        dialog's title
+     * @param message      dialog's message
+     * @param type         type of deleting item (Book/Chapter/Note/QuoteCategory/Quote)
+     * @param itemToDelete item to delete
+     */
     public void showDeletingDialog(String title, String message, int type, Serializable itemToDelete) {
-
-         new EZDialog.Builder(fragment == null ? activity : fragment.getContext())
+        new EZDialog.Builder(activity)
                 .setTitle(title)
                 .setMessage(message)
 
-                .setPositiveBtnText(fragment == null ? activity.getString(R.string.delete) : fragment.getString(R.string.delete))
-                .setNeutralBtnText(type == BOOK ? (fragment == null ?
-                        activity.getString(R.string.without_quotes) :
-                        fragment.getString(R.string.without_quotes)) : null)
-                .setNegativeBtnText(fragment == null ? activity.getString(R.string.cancel) : fragment.getString(R.string.cancel))
-
+                .setPositiveBtnText(activity.getString(R.string.delete))
+                .setNeutralBtnText(type == BOOK ? activity.getString(R.string.without_quotes) : null)
+                .setNegativeBtnText(activity.getString(R.string.cancel))
                 .OnPositiveClicked(() -> {
                     switch (type) {
                         case BOOK: {
                             deleteBook((Book) itemToDelete, true);
+                            activity.finish();
                             break;
                         }
                         case CHAPTER: {
@@ -211,9 +197,10 @@ public class DeletingHelper {
 
                     }
                 })
-                .OnNeutralClicked(() ->
-                        deleteBook((Book) itemToDelete, false)
-                )
+                .OnNeutralClicked(() -> {
+                    deleteBook((Book) itemToDelete, false);
+                    activity.finish();
+                })
                 .OnNegativeClicked(() -> {
                 })
 
@@ -225,6 +212,5 @@ public class DeletingHelper {
 
                 .setCancelableOnTouchOutside(true)
                 .build();
-
     }
 }

@@ -18,8 +18,6 @@
     <string name="author">Author</string>
     <string name="description_optional">Description (optional)</string>
     <string name="pages">Pages</string>
-    <string name="ok_btn">OK</string>
-    <string name="cancel">Cancel</string>
     <string name="chapters_name">Chapter\'s name</string>
     <string name="chapter_number">Chapter number:</string>
     <string name="marker_type">Marker Type</string>
@@ -50,19 +48,38 @@
     <string name="currently_reading">Currently reading</string>
     <string name="already_read">Already read</string>
     <string name="add_category">Add categoryId</string>
-
     <string name="uncategorized">Uncategorized</string>
+
+    <!--Buttons -->
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
     <string name="delete">Delete</string>
     <string name="without_quotes">Without quotes</string>
-    <string name="deleting1">Delete book:</string>
-    <string name="deleting2">from your library? It will remove also all notes. Delete with quotes?</string>
+
+    <!--Changing status of book -->
     <string name="onAlreadyRead">You have already read this book. Do you want to remove it from the already read list?</string>
     <string name="onCurrReading">Your are currently reading this book. Do you want to remove it from the currently reading list?</string>
     <string name="onWantToRead">This book is currently in to read list. Do you want to remove it from the list?</string>
     <string name="status_change">Status change</string>
     <string name="successfully_changed_status">Successfully changed the book status.</string>
+
+    <!--Deleting dialogs messages & titles -->
+    <string name="del_book">Delete book</string>
+    <string name="delete_book_1">Delete book:</string>
+    <string name="delete_book_2">from your library? It will remove also all notes. Delete with quotes?</string>
+    <string name="del_quote_category">Delete quote category</string>
+    <string name="delete_quote_category">Delete quote category? Everywhere that category was used, quote category will be changed on \"uncategorized\".</string>
+    <string name="del_quote">Delete quote</string>
+    <string name="delete_quote">Delete this quote? It will not delete its category.</string>
+    <string name="del_chapter">Delete chapter</string>
+    <string name="delete_chapter">Delete this chapter? It will delete all its notes?</string>
+    <string name="del_note">Delete note</string>
+    <string name="delete_note">Delete this note? It will delete all its notes?</string>
+    <string name="exit_app">Exit application</string>
+    <string name="exit_app_msg">Are you sure you want exit the application?</string>
 
     <!-- Layout strings -->
 

@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 
 public class AddNoteActivity extends AppCompatActivity {
+    private static final String TAG = "AddNoteActivity";
 
     private EditText add_note_name;
     private ImageView add_note_imgView;
@@ -46,6 +48,8 @@ public class AddNoteActivity extends AppCompatActivity {
     private Note thisNote;
     private NoteViewModel viewModel;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +58,13 @@ public class AddNoteActivity extends AppCompatActivity {
 
         initWidgets();
         setOnClickListeners();
+
         viewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
 
         try {
             loadFromIntent();
         } catch (Exception exc) {
-            Toast.makeText(this, "Something got wrong. Try again.", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "onCreate: cannot read from intent!", exc);
             finish();
         }
 
@@ -191,6 +196,8 @@ public class AddNoteActivity extends AppCompatActivity {
                 }
             }).show();
         });
+
+
     }
 
     private boolean areValidOutputs() {
@@ -212,4 +219,7 @@ public class AddNoteActivity extends AppCompatActivity {
             exc.printStackTrace();
         }
     }
+
+
+
 }

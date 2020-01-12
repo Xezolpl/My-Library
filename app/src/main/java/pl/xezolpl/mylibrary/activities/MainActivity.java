@@ -7,7 +7,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -20,6 +19,7 @@ import pl.xezolpl.mylibrary.fragments.AllBooksFragment;
 import pl.xezolpl.mylibrary.fragments.CategoriesFragment;
 import pl.xezolpl.mylibrary.fragments.ContactFragment;
 import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
+import spencerstudios.com.ezdialoglib.EZDialog;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -103,13 +103,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            new AlertDialog.Builder(this)
-                    .setTitle("Exit application")
-                    .setMessage("Are you sure you want exit the application?")
-                    .setPositiveButton("Yes", (dialogInterface, i) -> finish())
-                    .setNegativeButton("No", null)
-                    .create()
-                    .show();
+            new EZDialog.Builder(this)
+                    .setTitle(getString(R.string.exit_app))
+                    .setMessage(getString(R.string.exit_app_msg))
+                    .setPositiveBtnText(getString(R.string.yes))
+                    .setNegativeBtnText(getString(R.string.no))
+                    .OnPositiveClicked(() -> finish())
+                    .OnNegativeClicked(()->{});
         }
         return super.onKeyDown(keyCode, event);
     }
