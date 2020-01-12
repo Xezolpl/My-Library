@@ -3,7 +3,6 @@ package pl.xezolpl.mylibrary.activities;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -11,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.github.nikartm.button.FitButton;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.UUID;
 
@@ -20,7 +20,7 @@ import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 
 public class AddChapterActivity extends AppCompatActivity {
 
-    private EditText add_chapter_name, add_chapter_number;
+    private MaterialEditText add_chapter_name, add_chapter_number;
     private FitButton ok_btn, cancel_btn;
 
     private ChapterViewModel viewModel;

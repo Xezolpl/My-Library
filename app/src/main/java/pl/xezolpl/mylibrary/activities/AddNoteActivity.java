@@ -6,8 +6,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -16,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.github.nikartm.button.FitButton;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -31,10 +30,9 @@ import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 public class AddNoteActivity extends AppCompatActivity {
     private static final String TAG = "AddNoteActivity";
 
-    private EditText add_note_name;
+    private MaterialEditText add_note_name;
     private ImageView add_note_imgView;
-    private FitButton ok_btn, cancel_btn;
-    private Button add_note_color_btn;
+    private FitButton ok_btn, cancel_btn, add_note_color_btn;
 
     private int currentMarkerType = Markers.NUMBER_MARKER;
     private int color = Color.BLUE;

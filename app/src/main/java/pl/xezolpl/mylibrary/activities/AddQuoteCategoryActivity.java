@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.github.nikartm.button.FitButton;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.UUID;
 
@@ -24,10 +25,9 @@ import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 public class AddQuoteCategoryActivity extends AppCompatActivity {
     private QuoteCategory thisCategory = null;
 
-    private EditText name_edtTxt;
+    private MaterialEditText name_edtTxt;
     private ImageView selected_color_imgView;
-    private Button color_btn;
-    private FitButton ok_btn, cancel_btn;
+    private FitButton ok_btn, cancel_btn, color_btn;
 
     private ColorPicker colorPicker;
     private GradientDrawable drawable;

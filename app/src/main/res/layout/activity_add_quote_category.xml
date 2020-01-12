@@ -6,19 +6,7 @@
     android:orientation="vertical"
     android:layout_centerInParent="true">
 
-    <TextView
-        android:id="@+id/add_category_txtView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:textSize="28sp"
-        android:text="@string/add_category"
-        android:textAlignment="center"
-        android:textStyle="bold" />
-
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/add_category_name_edtTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +16,9 @@
         android:inputType="text"
         android:imeOptions="actionDone"
         android:layout_margin="15dp"
-        android:layout_below="@id/add_category_txtView" />
+        app:met_underlineColor="#EF5350"
+        app:met_textColor="#666666"
+        app:met_textColorHint="#EF5350"/>
 
     <ImageView
         android:id="@+id/add_category_selected_color_imgView"
@@ -38,14 +28,38 @@
         android:layout_below="@id/add_category_name_edtTxt"
         android:background="@drawable/color_dot" />
 
-    <Button
+    <com.github.nikartm.button.FitButton
         android:id="@+id/add_category_color_btn"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_toRightOf="@id/add_category_selected_color_imgView"
+        android:layout_toEndOf="@id/add_category_selected_color_imgView"
         android:layout_below="@id/add_category_name_edtTxt"
         android:layout_margin="10dp"
-        android:text="@string/select_color" />
+        android:gravity="center_vertical"
+
+        app:fb_text="@string/select_color"
+        app:fb_textColor="#fff"
+        app:fb_textStyle="bold"
+        app:fb_textSize="18sp"
+        app:fb_textPaddingStart="15dp"
+
+        app:fb_backgroundColor="#ed0909"
+        app:fb_cornerRadius="15dp"
+
+        app:fb_divColor="#fff"
+        app:fb_divHeight="40dp"
+        app:fb_divWidth="1.5dp"
+
+        app:fb_icon="@drawable/ic_color_lens_black_32dp"
+        app:fb_iconColor="#FFF"
+        app:fb_iconMarginEnd="10dp"
+        app:fb_iconMarginStart="10dp"
+        app:fb_iconPosition="left"
+        app:fb_iconWidth="32dp"
+        app:fb_iconHeight="32dp"
+
+
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

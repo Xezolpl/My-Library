@@ -11,28 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/add_quote_txtView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:text="@string/add_quote"
-            android:textAlignment="center"
-            android:textSize="40sp" />
-
-        <EditText
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/add_quote_title_EditTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/add_quote_txtView"
             android:layout_margin="10dp"
             android:hint="@string/quote_title_optional"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLength="80"
             android:maxLines="1"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            app:met_underlineColor="#EF5350"
+            app:met_textColor="#666666"
+            app:met_textColorHint="#EF5350"/>
 
         <RelativeLayout
             android:id="@+id/rellay4"
@@ -41,7 +33,7 @@
             android:layout_below="@id/add_quote_title_EditTxt"
             android:layout_margin="10dp">
 
-            <EditText
+            <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/add_quote_author_EditTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,30 +42,43 @@
                 android:inputType="text"
                 android:maxLength="50"
                 android:maxLines="1"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                app:met_underlineColor="#EF5350"
+                app:met_textColor="#666666"
+                app:met_textColorHint="#EF5350"/>
 
-            <Button
+            <com.github.nikartm.button.FitButton
                 android:id="@+id/quote_author_btn"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/ic_person_black_24dp" />
+                app:fb_icon="@drawable/ic_person_black_24dp"
+                app:fb_iconHeight="40dp"
+                app:fb_iconWidth="40dp"
+                app:fb_shadow="0dp"/>
 
         </RelativeLayout>
 
-        <EditText
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/add_quote_quote_EditTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/rellay4"
-            android:layout_margin="10dp"
+
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+
             android:hint="@string/quotation_text"
             android:imeOptions="actionNext"
             android:inputType="textMultiLine"
             android:maxLength="300"
             android:minHeight="140dp"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            app:met_underlineColor="#EF5350"
+            app:met_textColor="#666666"
+            app:met_textColorHint="#EF5350"/>
 
         <RelativeLayout
             android:id="@+id/rel_lay1"
@@ -89,9 +94,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="3dp"
                 android:text="@string/page"
-                android:textSize="22sp" />
+                android:textSize="22sp"
+                android:textColor="#ed0909"/>
 
-            <EditText
+            <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/add_quote_page_EditTxt"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -99,17 +105,24 @@
                 android:layout_toEndOf="@id/add_quote_page_txtView"
                 android:inputType="number"
                 android:maxLength="5"
-                android:maxLines="1" />
+                android:maxLines="1"
+                app:met_underlineColor="#EF5350"
+                app:met_textColor="#666666"
+                app:met_textColorHint="#EF5350"/>
         </RelativeLayout>
 
-            <Button
+            <com.github.nikartm.button.FitButton
                 android:id="@+id/camera_btn"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/ic_camera_alt_black_24dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@id/add_quote_quote_EditTxt"
-                android:layout_marginEnd="10dp"/>
+                android:layout_marginEnd="10dp"
+
+                app:fb_icon="@drawable/ic_camera_alt_black_24dp"
+                app:fb_iconWidth="40dp"
+                app:fb_iconHeight="40dp"
+                />
 
         <LinearLayout
             android:id="@+id/rel_lay2"
@@ -117,6 +130,15 @@
             android:layout_height="60dp"
             android:layout_below="@id/rel_lay1"
             android:layout_margin="10dp">
+
+            <com.github.nikartm.button.FitButton
+                android:id="@+id/add_quote_add_category_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                app:fb_icon="@drawable/ic_add_circle_black_24dp"
+                app:fb_iconWidth="30dp"
+                app:fb_iconHeight="30dp"/>
 
             <Spinner
                 android:id="@+id/add_quote_category_spinner"
@@ -129,23 +151,25 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/add_quote_add_category_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/ic_add_circle_outline_black_24dp" />
 
-                <Button
+
+                <com.github.nikartm.button.FitButton
                     android:id="@+id/add_quote_edit_category_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/ic_edit_black_24dp" />
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:fb_icon="@drawable/ic_edit_black_24dp"
+                    app:fb_iconWidth="30dp"
+                    app:fb_iconHeight="30dp"/>
 
-                <Button
+
+                <com.github.nikartm.button.FitButton
                     android:id="@+id/add_quote_delete_category_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@drawable/ic_delete_black_24dp" />
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:fb_icon="@drawable/ic_delete_black_24dp"
+                    app:fb_iconWidth="30dp"
+                    app:fb_iconHeight="30dp"/>
+
             </LinearLayout>
         </LinearLayout>
 

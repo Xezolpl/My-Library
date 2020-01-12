@@ -8,8 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,6 +20,7 @@ import com.github.nikartm.button.FitButton;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
+import com.rengwuxian.materialedittext.MaterialEditText;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -43,10 +42,9 @@ import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class AddQuoteActivity extends AppCompatActivity {
 
-    private EditText title_EditTxt, quote_EditTxt, page_EditTxt, author_EditTxt;
+    private MaterialEditText title_EditTxt, quote_EditTxt, page_EditTxt, author_EditTxt;
     private Spinner category_spinner;
-    private Button add_category_btn, quote_author_btn, edit_category_btn, delete_category_btn, camera_btn;
-    private FitButton ok_btn, cancel_btn;
+    private FitButton ok_btn, cancel_btn,add_category_btn, quote_author_btn, edit_category_btn, delete_category_btn, camera_btn;
     private Quote thisQuote = null;
     private boolean inEdition = false;
     private String bookId;

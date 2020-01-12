@@ -14,15 +14,17 @@
         android:layout_margin="20dp"
         android:contentDescription="@string/marker_type"/>
 
-    <Button
+    <com.github.nikartm.button.FitButton
         android:id="@+id/add_note_color_btn"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:background="@drawable/ic_color_lens_black_32dp"
         android:layout_toEndOf="@id/add_note_imgView"
-        android:layout_marginTop="36.5dp" />
+        android:layout_marginTop="41.5dp"
 
-    <EditText
+        app:fb_icon="@drawable/ic_color_lens_black_32dp"
+        app:fb_iconColor="#ed0909"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/add_note_name"
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -33,7 +35,10 @@
         android:maxLength="100"
         android:hint="@string/note"
         android:imeOptions="actionDone"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        app:met_underlineColor="#EF5350"
+        app:met_textColor="#666666"
+        app:met_textColorHint="#EF5350"/>
 
     <LinearLayout
         android:id="@+id/lay2"
