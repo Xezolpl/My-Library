@@ -111,6 +111,9 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
 
         void setData(String title, String imgUrl) {
             bookTitle.setText(title);
+            if (imgUrl == null) {
+                imgUrl = "https://i.pinimg.com/236x/90/49/e5/9049e5a4e33d49807bbbccf25339d266--old-books-vintage-books.jpg";
+            }
             Glide.with(context).asBitmap().load(imgUrl).into(bookImage);
         }
     }

@@ -83,7 +83,7 @@
         <RelativeLayout
             android:id="@+id/rel_lay1"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/add_quote_quote_EditTxt"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp">
@@ -95,7 +95,8 @@
                 android:layout_marginTop="3dp"
                 android:text="@string/page"
                 android:textSize="22sp"
-                android:textColor="#ed0909"/>
+                android:textColor="#ed0909"
+                android:layout_centerVertical="true"/>
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/add_quote_page_EditTxt"
@@ -105,7 +106,6 @@
                 android:layout_toEndOf="@id/add_quote_page_txtView"
                 android:inputType="number"
                 android:maxLength="5"
-                android:maxLines="1"
                 app:met_underlineColor="#EF5350"
                 app:met_textColor="#666666"
                 app:met_textColorHint="#EF5350"/>

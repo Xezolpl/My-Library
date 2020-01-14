@@ -22,4 +22,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="ToolbarWhiteItems" parent="AppTheme">
+        <item name="android:textColorSecondary">#fff</item>
+        <item name="android:textColorPrimary">#fff</item>
+        <item name="android:background">#ed0909</item>
+        <item name="android:actionBarTabTextStyle">@color/white</item>
+    </style>
+
 </resources>

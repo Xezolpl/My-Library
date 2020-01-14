@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/relLay"
-    android:layout_width="160dp"
-    android:layout_height="160dp"
-    android:layout_margin="10dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:layout_centerHorizontal="true">
 
     <ImageView
         android:id="@+id/bookCover"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:layout_centerInParent="true"
-        android:background="@mipmap/ic_launcher"
-        android:contentDescription="@string/book_cover" />
+        android:contentDescription="@string/book_cover"
+        android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>

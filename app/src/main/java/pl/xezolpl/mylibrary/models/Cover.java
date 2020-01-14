@@ -1,19 +1,17 @@
 package pl.xezolpl.mylibrary.models;
 
-import java.net.URL;
-
 public class Cover {
-    private URL url;
+    private String url;
 
-    public Cover(URL url) {
+    public Cover(String url) {
         this.url = url;
     }
 
-    public URL getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl(URL url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 }

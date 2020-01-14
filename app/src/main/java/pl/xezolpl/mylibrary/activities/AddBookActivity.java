@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -33,10 +34,11 @@ public class AddBookActivity extends AppCompatActivity {
     private ImageView add_book_image;
     private Spinner status_spinner;
     private FitButton add_book_ok_btn, add_book_cancel_btn, select_category_btn, select_image_btn;
-
     private Book thisBook = null;
-    private String bookId;
+    private String bookId, imageUrl = null;
     private boolean inEditing = false;
+
+    public static final int SELECT_COVER_REQ_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,14 +85,13 @@ public class AddBookActivity extends AppCompatActivity {
         add_book_cancel_btn = findViewById(R.id.add_book_cancel_btn);
         select_image_btn = findViewById(R.id.select_image_btn);
         select_category_btn = findViewById(R.id.select_category_btn);
-
-
     }
 
     private void setOnClickListeners() {
         select_image_btn.setOnClickListener(view -> {
-             Intent intent = new Intent(AddBookActivity.this, SelectCoverActivity.class);
-             startActivity(intent);
+            //todo: does user  entered the isbn?
+            Intent intent = new Intent(AddBookActivity.this, SelectCoverActivity.class);
+            startActivityForResult(intent, SELECT_COVER_REQ_CODE);
         });
         select_category_btn.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(AddBookActivity.this)
@@ -104,8 +105,8 @@ public class AddBookActivity extends AppCompatActivity {
                 recView.setAdapter(new CategoryRecViewAdapter(AddBookActivity.this,
                         CategoryRecViewAdapter.SELECTING_CATEGORIES_MODE, getSupportFragmentManager(), bookId));
                 recView.setLayoutManager(new GridLayoutManager(AddBookActivity.this, 2));
-            }else{
-                Log.w(TAG, "select_category_btn -> onClick: ", new  NullPointerException());
+            } else {
+                Log.w(TAG, "select_category_btn -> onClick: ", new NullPointerException());
             }
         });
 
@@ -142,7 +143,7 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
     private boolean areValidOutputs() {
-        String title, author, imageUrl, description;
+        String title, author, description;
         int status, pages = 0;
 
         if (add_book_title.getText().length() > 1) {
@@ -150,7 +151,6 @@ public class AddBookActivity extends AppCompatActivity {
         } else return false;
 
         author = add_book_author.getText().toString();
-        imageUrl = "https://images-na.ssl-images-amazon.com/images/I/51uLvJlKpNL._SX321_BO1,204,203,200_.jpg";
         description = add_book_description.getText().toString();
         status = status_spinner.getSelectedItemPosition();
 
@@ -166,5 +166,16 @@ public class AddBookActivity extends AppCompatActivity {
 
         thisBook = new Book(title, author, imageUrl, description, pages, bookId, status);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECT_COVER_REQ_CODE) {
+            if (resultCode == RESULT_OK && data != null) {
+                imageUrl = data.getStringExtra("url");
+                Glide.with(this).asBitmap().load(imageUrl).into(add_book_image);
+            }
+        }
     }
 }

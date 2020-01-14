@@ -10,10 +10,9 @@
 
     <ImageView
         android:layout_width="140dp"
-        android:layout_height="140dp"
+        android:layout_height="192.5dp"
         android:id="@+id/bookImage"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/ic_launcher"
         android:contentDescription="@string/book_cover"/>
 
     <TextView

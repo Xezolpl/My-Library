@@ -17,6 +17,7 @@ public class TextRecognitionHelper {
     public static final int CAMERA_REQUEST = 100;
 
     public static final int PICK_CAMERA_CODE = 300;
+    public static final int PICK_GALLERY_CODE = 301;
 
     private String[] cameraPermission;
 

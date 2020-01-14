@@ -60,8 +60,7 @@
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.SelectCoverActivity"
-            android:parentActivityName=".activities.AddBookActivity"
-            android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
+            android:parentActivityName=".activities.AddBookActivity"/>
 
         <activity android:name=".activities.MainActivity">
             <intent-filter>

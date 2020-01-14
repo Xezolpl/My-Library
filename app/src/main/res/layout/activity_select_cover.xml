@@ -1,21 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/txtView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/comfortaa"
+        android:padding="25dp"
         android:text="@string/select_book_cover"
         android:textAlignment="center"
+        android:textColor="#ed0909"
         android:textSize="32sp"
-        android:textColor="#000000"
-        android:padding="25dp"
-        android:fontFamily="sans-serif-medium" />
+        android:textStyle="bold" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/book_covers_rec_view"
+    <RelativeLayout
+        android:id="@+id/rellay1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtView"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="15dp">
+
+        <com.github.nikartm.button.FitButton
+            android:id="@+id/galleryBtn"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:gravity="center"
+            android:layout_marginEnd="30dp"
+
+            app:fb_icon="@drawable/ic_image_black_24dp"
+            app:fb_iconColor="@color/white"
+            app:fb_iconWidth="40dp"
+            app:fb_iconHeight="40dp"
+
+            app:fb_backgroundColor="#ed0909"
+            app:fb_cornerRadius="15dp"/>
+
+        <com.github.nikartm.button.FitButton
+            android:id="@+id/cameraBtn"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:gravity="center"
+            android:layout_toEndOf="@id/galleryBtn"
+            android:layout_marginStart="30dp"
+
+
+            app:fb_icon="@drawable/ic_camera_alt_black_24dp"
+            app:fb_iconColor="@color/white"
+            app:fb_iconWidth="40dp"
+            app:fb_iconHeight="40dp"
+
+            app:fb_backgroundColor="#ed0909"
+            app:fb_cornerRadius="15dp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linlay1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rellay1"
+        android:gravity="center_horizontal|center_vertical">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/bookInput"
+            android:layout_width="236dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:hint="@string/book_title_author"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLength="100"
+            app:met_textColor="#666666"
+            app:met_textColorHint="#EF5350"
+            app:met_underlineColor="#EF5350" />
+
+        <com.github.nikartm.button.FitButton
+            android:id="@+id/refreshBtn"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            app:fb_backgroundColor="#ed0909"
+            app:fb_cornerRadius="15dp"
+
+            app:fb_icon="@drawable/ic_refresh_black_24dp"
+            app:fb_iconColor="#FFF"
+            app:fb_iconHeight="34dp"
+            app:fb_iconPosition="center"
+            app:fb_iconWidth="34dp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/linlay1">
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp"
+            android:layout_marginTop="10dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/book_covers_rec_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+
+        <com.github.nikartm.button.FitButton
+            android:id="@+id/moreCoversBtn"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+
+            app:fb_backgroundColor="#ed0909"
+            app:fb_cornerRadius="15dp"
+
+            app:fb_icon="@drawable/ic_keyboard_arrow_down_black_24dp"
+            app:fb_iconColor="#FFF"
+            app:fb_iconHeight="40dp"
+            app:fb_iconWidth="40dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

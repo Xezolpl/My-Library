@@ -25,6 +25,7 @@
             android:id="@+id/moreBtn"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_margin="3dp"
             android:layout_alignParentEnd="true"
             android:background="@drawable/ic_more_vert_black_24dp" />
 
