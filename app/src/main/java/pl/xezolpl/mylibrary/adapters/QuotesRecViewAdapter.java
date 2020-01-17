@@ -106,7 +106,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                     chapterQuotes.get(chapterQuotes.indexOf(quote)).setChapterId("");
                     holder.setSelected(false);
                 }
-                return false;
+                return true;
             });
         }
     }
@@ -270,7 +270,6 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 quote_lay.setBackground(drawable);
                 isSelected = false;
             }
-            setExpanded(true);
         }
     }
 
