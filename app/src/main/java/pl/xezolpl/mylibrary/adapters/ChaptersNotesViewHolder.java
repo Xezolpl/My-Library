@@ -46,7 +46,7 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
     private NotesRecViewAdapter adapter;
     private QuotesRecViewAdapter quotesAdapter;
 
-    private boolean isRecViewVisible = true;
+    private boolean isRecViewVisible = false;
     private boolean isRecViewVisibleWithChildren = false;
     private int parent;
 
@@ -79,15 +79,12 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         wholeRelLay = itemView.findViewById(R.id.wholeRelLay);
         if (parent == FROM_NOTE) {
             marker_imgView = itemView.findViewById(R.id.marker_imgView);
-            setRecViewVisible(true);
-        }
-        else {
+        } else {
             quotesRecView = itemView.findViewById(R.id.quotes_recView);
             quotesRecView.setVisibility(View.GONE);
-            setRecViewVisible(false);
         }
         moreBtn = itemView.findViewById(R.id.moreBtn);
-
+        setRecViewVisible(false);
 
     }
 
@@ -96,10 +93,10 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         wholeRelLay.setOnClickListener(view -> {
             if (isRecViewVisible) {
                 setRecViewVisible(false);
-                if (parent==FROM_CHAPTER) setQuotesViewVisible(false);
+                if (parent == FROM_CHAPTER) setQuotesViewVisible(false);
             } else {
                 setRecViewVisible(true);
-                if (parent==FROM_CHAPTER) setQuotesViewVisible(true);
+                if (parent == FROM_CHAPTER) setQuotesViewVisible(true);
             }
         });
 
@@ -157,7 +154,7 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
                         break;
                     }
                     case R.id.deleteMenuBtn: {
-                        DeletingManager deletingManager = new DeletingManager((AppCompatActivity)context);
+                        DeletingManager deletingManager = new DeletingManager((AppCompatActivity) context);
 
                         if (parent == FROM_CHAPTER) {
                             deletingManager.showDeletingDialog(context.getString(R.string.del_chapter),
@@ -191,17 +188,17 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         textView.setText(chapter.getName());
         NoteViewModel noteModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
         noteModel.getNotesByParent(chapter.getId()).observe(activity, notes -> {
-            adapter = new NotesRecViewAdapter(context);
-            adapter.setNotesList(notes);
-            recView.setAdapter(adapter);
-            recView.setLayoutManager(new GridLayoutManager(context, 1));
+                    adapter = new NotesRecViewAdapter(context);
+                    adapter.setNotesList(notes);
+                    recView.setAdapter(adapter);
+                    recView.setLayoutManager(new GridLayoutManager(context, 1));
 
-            QuoteViewModel quoteViewModel = ViewModelProviders.of(activity).get(QuoteViewModel.class);
-            quoteViewModel.getQuotesByChapter(parentChapter.getId()).observe(activity, quotes -> {
-                quotesAdapter.setQuotes(quotes);
-                quotesRecView.setAdapter(quotesAdapter);
-            });
-        }
+                    QuoteViewModel quoteViewModel = ViewModelProviders.of(activity).get(QuoteViewModel.class);
+                    quoteViewModel.getQuotesByChapter(parentChapter.getId()).observe(activity, quotes -> {
+                        quotesAdapter.setQuotes(quotes);
+                        quotesRecView.setAdapter(quotesAdapter);
+                    });
+                }
         );
     }
 
@@ -241,21 +238,17 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void setQuotesViewVisible(boolean b){
-        if(b){
-            quotesRecView.setVisibility(View.VISIBLE);
-        }else {
-            quotesRecView.setVisibility(View.GONE);
-        }
+    private void setQuotesViewVisible(boolean b) {
+        quotesRecView.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
-    private void expandWithChildren(boolean b){
-        NoteViewModel viewModel = ViewModelProviders.of((FragmentActivity)context).get(NoteViewModel.class);
+    private void expandWithChildren(boolean b) {
+        NoteViewModel viewModel = ViewModelProviders.of((FragmentActivity) context).get(NoteViewModel.class);
         viewModel.getNotesByParent(parent == FROM_CHAPTER ?
                 parentChapter.getId() :
                 parentNote.getId())
-                .observe((FragmentActivity)context, notes -> {
-                    for (int i=0; i<notes.size(); i++){
+                .observe((FragmentActivity) context, notes -> {
+                    for (int i = 0; i < notes.size(); i++) {
                         adapter.getViewHolders().get(i).expandWithChildren(b);
                     }
                     setRecViewVisible(b);
