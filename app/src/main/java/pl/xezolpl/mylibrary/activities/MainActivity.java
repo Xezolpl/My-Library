@@ -1,6 +1,7 @@
 package pl.xezolpl.mylibrary.activities;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import pl.xezolpl.mylibrary.fragments.CategoriesFragment;
 import pl.xezolpl.mylibrary.fragments.ContactFragment;
 import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import spencerstudios.com.ezdialoglib.EZDialog;
+import spencerstudios.com.ezdialoglib.Font;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CategoriesFragment categoriesFragment;
     private QuotesTabFragment quotesFragment;
     private ContactFragment contactFragment;
+
+    private EZDialog.Builder ezDialogBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     allBooksFragment).commit();
             nav_view.setCheckedItem(R.id.nav_books);
         }
+
+        //set up exit dialog builder
+        ezDialogBuilder = new EZDialog.Builder(this)
+                .setTitle(getString(R.string.exit_app))
+                .setMessage(getString(R.string.exit_app_msg))
+                .setPositiveBtnText(getString(R.string.just_exit))
+                .setNegativeBtnText(getString(R.string.lets_read))
+                .OnPositiveClicked(() -> finish())
+                .OnNegativeClicked(() -> {})
+                //stylization
+                .setTitleDividerLineColor(Color.parseColor("#ed0909"))
+                .setTitleTextColor(Color.parseColor("#EE311B"))
+                .setButtonTextColor(Color.parseColor("#ed0909"))
+                .setMessageTextColor(Color.parseColor("#333333"))
+                .setFont(Font.COMFORTAA)
+                .setCancelableOnTouchOutside(true);
     }
 
     @Override
@@ -78,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
             case R.id.nav_categories: {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,  categoriesFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, categoriesFragment).commit();
                 break;
             }
             case R.id.nav_quotes: {
@@ -96,20 +116,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void setNavViewItem(int position){
+
+    public void setNavViewItem(int position) {
         nav_view.setCheckedItem(position);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK){
-            new EZDialog.Builder(this)
-                    .setTitle(getString(R.string.exit_app))
-                    .setMessage(getString(R.string.exit_app_msg))
-                    .setPositiveBtnText(getString(R.string.yes))
-                    .setNegativeBtnText(getString(R.string.no))
-                    .OnPositiveClicked(() -> finish())
-                    .OnNegativeClicked(()->{});
+        if (keyCode == KeyEvent.KEYCODE_BACK && !drawer.isDrawerOpen(GravityCompat.START)) {
+            if(nav_view.getMenu().findItem(R.id.nav_categories).isChecked() && categoriesFragment.getAdapter().isCategoryPicked()){
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, categoriesFragment).commit();
+            }else{
+                ezDialogBuilder.build();
+            }
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }

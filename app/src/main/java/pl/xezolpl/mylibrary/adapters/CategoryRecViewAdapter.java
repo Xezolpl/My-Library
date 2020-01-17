@@ -38,6 +38,8 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
     private String bookId;
     private CategoriesViewModel categoriesViewModel;
 
+    private boolean inCategory = false;
+
     public CategoryRecViewAdapter(Context context, int mode, FragmentManager fm, String bookId) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
@@ -47,6 +49,14 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         loadCategories();
 
         categoriesViewModel = ViewModelProviders.of((FragmentActivity) context).get(CategoriesViewModel.class);
+    }
+
+    public void setCategoryPicked(boolean b){
+        inCategory = b;
+    }
+
+    public boolean isCategoryPicked(){
+        return inCategory;
     }
 
     private void loadCategories() {
@@ -108,6 +118,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
 
         holder.relLay.setOnClickListener(view -> {
             if (mode == NORMAL_MODE) {
+                inCategory = true;
                 fm.beginTransaction().replace(R.id.fragment_container,
                         new BooksListTabFragment(context.getString(category.getNameR()))).commit();
                 ((MainActivity) context).setNavViewItem(0);
@@ -150,6 +161,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
             txtView.setText(context.getResources().getString(nameR));
             imgView.setBackground(context.getResources().getDrawable(imgR));
         }
-
     }
+
+
 }

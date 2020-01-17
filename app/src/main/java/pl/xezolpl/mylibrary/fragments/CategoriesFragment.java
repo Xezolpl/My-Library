@@ -35,4 +35,14 @@ public class CategoriesFragment extends Fragment {
 
         return view;
     }
+
+    public CategoryRecViewAdapter getAdapter() {
+        return adapter;
+    }
+
+    @Override
+    public void onResume() {
+        adapter.setCategoryPicked(false);
+        super.onResume();
+    }
 }

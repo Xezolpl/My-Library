@@ -116,7 +116,6 @@ public class DeletingManager {
 
     /**
      * Deletes note with its children.
-     *
      * @param note note which will be deleted.
      */
     private void deleteNote(Note note) {

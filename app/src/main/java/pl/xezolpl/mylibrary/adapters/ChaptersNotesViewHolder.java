@@ -25,9 +25,9 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddChapterActivity;
 import pl.xezolpl.mylibrary.activities.AddNoteActivity;
 import pl.xezolpl.mylibrary.activities.InsertQuoteActivity;
+import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.models.Note;
-import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
@@ -47,6 +47,7 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
     private QuotesRecViewAdapter quotesAdapter;
 
     private boolean isRecViewVisible = true;
+    private boolean isRecViewVisibleWithChildren = false;
     private int parent;
 
     private Context context;
@@ -103,8 +104,8 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         });
 
         wholeRelLay.setOnLongClickListener(view -> {
-            //TODO:EXPAND EVERY CHILD
-            return false;
+            expandWithChildren(!isRecViewVisibleWithChildren);
+            return true;
         });
 
         moreBtn.setOnClickListener(view -> {
@@ -239,12 +240,27 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
             isRecViewVisible = false;
         }
     }
+
     private void setQuotesViewVisible(boolean b){
         if(b){
             quotesRecView.setVisibility(View.VISIBLE);
         }else {
             quotesRecView.setVisibility(View.GONE);
         }
+    }
+
+    private void expandWithChildren(boolean b){
+        NoteViewModel viewModel = ViewModelProviders.of((FragmentActivity)context).get(NoteViewModel.class);
+        viewModel.getNotesByParent(parent == FROM_CHAPTER ?
+                parentChapter.getId() :
+                parentNote.getId())
+                .observe((FragmentActivity)context, notes -> {
+                    for (int i=0; i<notes.size(); i++){
+                        adapter.getViewHolders().get(i).expandWithChildren(b);
+                    }
+                    setRecViewVisible(b);
+                    isRecViewVisibleWithChildren = b;
+                });
     }
 }
 
