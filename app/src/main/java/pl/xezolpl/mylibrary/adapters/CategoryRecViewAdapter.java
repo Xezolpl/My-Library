@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
@@ -29,6 +30,7 @@ import pl.xezolpl.mylibrary.viewmodels.CategoriesViewModel;
 public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecViewAdapter.ViewHolder> {
     public static final int NORMAL_MODE = 1;
     public static final int SELECTING_CATEGORIES_MODE = 2;
+    public static final int EDITING_CATEGORIES_MODE = 3;
 
     private Context context;
     private int mode;
@@ -51,11 +53,11 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         categoriesViewModel = ViewModelProviders.of((FragmentActivity) context).get(CategoriesViewModel.class);
     }
 
-    public void setCategoryPicked(boolean b){
+    public void setCategoryPicked(boolean b) {
         inCategory = b;
     }
 
-    public boolean isCategoryPicked(){
+    public boolean isCategoryPicked() {
         return inCategory;
     }
 
@@ -110,7 +112,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         categoriesViewModel.getCategoriesByBook(bookId).observe((FragmentActivity) context, categories -> {
             for (int i = 0; i < categories.size(); i++) {
                 if (categories.get(i).getCategory().equals(categoryName)) {
-                    holder.checked = true;
+                    holder.setChecked(true);
                 }
             }
         });
@@ -128,11 +130,11 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
                 if (holder.checked) {
                     categoriesViewModel.delete(new CategoryWithBook(bookId + categoryName1, bookId, categoryName1));
                     Toast.makeText(context, "Category deleted", Toast.LENGTH_SHORT).show();
-                    holder.checked = false;
+                    holder.setChecked(false);
                 } else {
                     categoriesViewModel.insert(new CategoryWithBook(bookId + categoryName1, bookId, categoryName1));
                     Toast.makeText(context, "Category inserted", Toast.LENGTH_SHORT).show();
-                    holder.checked = true;
+                    holder.setChecked(true);
                 }
             }
         });
@@ -148,6 +150,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         private ImageView imgView;
         private RelativeLayout relLay;
         private boolean checked = false;
+        private int drawableR;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -160,8 +163,12 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         void setData(int nameR, int imgR) {
             txtView.setText(context.getResources().getString(nameR));
             imgView.setBackground(context.getResources().getDrawable(imgR));
+            drawableR = imgR;
+        }
+
+        void setChecked(boolean b) {
+            checked = b;
+            imgView.setBackground(ContextCompat.getDrawable(context, b ? R.drawable.check : drawableR));
         }
     }
-
-
 }
