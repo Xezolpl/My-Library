@@ -195,12 +195,9 @@ public class FetchBook extends AsyncTask<String, Void, String> {
                     Toast.makeText(activity, activity.getString(R.string.no_covers_found), Toast.LENGTH_LONG).show();
                     adapter.setBookCovers(new ArrayList<>());
                     ((SelectCoverActivity)activity).setMoreCoversBtnVisible(false);
-
                 }
             });
-
             Log.e(TAG, "onPostExecute: ", e);
         }
-
     }
 }

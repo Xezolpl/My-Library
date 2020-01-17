@@ -48,7 +48,6 @@ import static pl.xezolpl.mylibrary.managers.IntentManager.PICK_CAMERA_CODE;
 import static pl.xezolpl.mylibrary.managers.IntentManager.PICK_GALLERY_CODE;
 
 public class SelectCoverActivity extends AppCompatActivity {
-    private static final String TAG = "SelectCoverActivity";
 
     private MaterialEditText bookInput;
     private FitButton refreshBtn, moreCoversBtn, galleryBtn, cameraBtn;
@@ -124,6 +123,11 @@ public class SelectCoverActivity extends AppCompatActivity {
         });
     }
 
+    public void setMoreCoversBtnVisible(boolean b){
+        moreCoversBtn.setVisibility(b ? View.VISIBLE : View.GONE);
+    }
+
+
     public void searchBooks(String search) {
         // Check the status of the network connection.
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -136,6 +140,59 @@ public class SelectCoverActivity extends AppCompatActivity {
             Toast.makeText(this, "No internet connection.", Toast.LENGTH_LONG).show();
         }
     }
+
+    /**
+     * Creates a bitmap from uri next scales it into the cover's format (280px-385pix)
+     * then creates a file from bitmap and saves it into the application's directory/files/covers
+     *
+     * @param bitmap scaled bitmap with image
+     * @return successfully created file's' path in app directory, if there was an error - returns null
+     */
+    public Bitmap scaleBitmap(Bitmap bitmap, int newWidth, int newHeight) {
+        int oldWidth = bitmap.getWidth();
+        int oldHeight = bitmap.getHeight();
+
+        float scaleWidth = ((float) newWidth) / oldWidth;
+        float scaleHeight = ((float) newHeight) / oldHeight;
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        return Bitmap.createBitmap(bitmap, 0, 0, oldWidth, oldHeight, matrix, true);
+    }
+
+    public String createCoverFileInAppDirectory(@NotNull Bitmap bitmap) {
+
+        String createdFilePath = null;
+        try {
+            //compress to JPEG
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+
+            //create file's path in app directory
+            String newFilePath = getApplicationInfo().dataDir;
+            newFilePath += "/files/covers/" + UUID.randomUUID().toString() + ".jpg";
+
+            //create file
+            File f = new File(newFilePath);
+            if (f.createNewFile()) {
+                createdFilePath = newFilePath;
+                //write the bytes into the file
+                FileOutputStream fo = new FileOutputStream(f);
+                fo.write(bytes.toByteArray());
+                fo.close();
+            }
+
+
+            // remember close the streams
+            bytes.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return createdFilePath;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -216,59 +273,6 @@ public class SelectCoverActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Creates a bitmap from uri next scales it into the cover's format (280px-385pix)
-     * then creates a file from bitmap and saves it into the application's directory/files/covers
-     *
-     * @param bitmap scaled bitmap with image
-     * @return successfully created file's' path in app directory, if there was an error - returns null
-     */
-    public String createCoverFileInAppDirectory(@NotNull Bitmap bitmap) {
-
-        String createdFilePath = null;
-        try {
-            //compress to JPEG
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
-
-            //create file's path in app directory
-            String newFilePath = getApplicationInfo().dataDir;
-            newFilePath += "/files/covers/" + UUID.randomUUID().toString() + ".jpg";
-
-            //create file
-            File f = new File(newFilePath);
-            if (f.createNewFile()) {
-                createdFilePath = newFilePath;
-                //write the bytes into the file
-                FileOutputStream fo = new FileOutputStream(f);
-                fo.write(bytes.toByteArray());
-                fo.close();
-            }
-
-
-            // remember close the streams
-            bytes.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return createdFilePath;
-    }
-
-
-    public Bitmap scaleBitmap(Bitmap bitmap, int newWidth, int newHeight) {
-        int oldWidth = bitmap.getWidth();
-        int oldHeight = bitmap.getHeight();
-
-        float scaleWidth = ((float) newWidth) / oldWidth;
-        float scaleHeight = ((float) newHeight) / oldHeight;
-
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        return Bitmap.createBitmap(bitmap, 0, 0, oldWidth, oldHeight, matrix, true);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PermissionsManager.CAMERA_REQUEST) {
@@ -293,7 +297,4 @@ public class SelectCoverActivity extends AppCompatActivity {
         }
     }
 
-    public void setMoreCoversBtnVisible(boolean b){
-        moreCoversBtn.setVisibility(b ? View.VISIBLE : View.GONE);
-    }
 }
