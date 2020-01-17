@@ -93,6 +93,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-vision:19.0.0'
 
+    implementation 'commons-io:commons-io:2.6'
 
     repositories {
         mavenCentral()

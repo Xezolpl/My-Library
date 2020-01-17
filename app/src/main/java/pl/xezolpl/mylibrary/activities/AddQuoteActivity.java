@@ -3,7 +3,6 @@ package pl.xezolpl.mylibrary.activities;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,7 +21,6 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,9 +31,10 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.QuoteCategorySpinnerAdapter;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
-import pl.xezolpl.mylibrary.utilities.DeletingHelper;
+import pl.xezolpl.mylibrary.managers.DeletingManager;
+import pl.xezolpl.mylibrary.managers.IntentManager;
 import pl.xezolpl.mylibrary.utilities.Markers;
-import pl.xezolpl.mylibrary.utilities.TextRecognitionHelper;
+import pl.xezolpl.mylibrary.managers.PermissionsManager;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
@@ -53,9 +52,7 @@ public class AddQuoteActivity extends AppCompatActivity {
     private QuoteCategoryViewModel categoryViewModel;
     private QuoteCategorySpinnerAdapter spinnerAdapter;
 
-    private TextRecognitionHelper helper;
-    private Uri cropUri;
-
+    private Uri imgUri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,11 +81,6 @@ public class AddQuoteActivity extends AppCompatActivity {
 
             if (inEdition) loadQuoteData(thisQuote);
         });
-
-        helper = new TextRecognitionHelper(this);
-        if(helper.checkCameraPermission()){
-            helper.setUpImgUri();
-        }
     }
 
     private void loadFromIntent() {
@@ -149,10 +141,10 @@ public class AddQuoteActivity extends AppCompatActivity {
             QuoteCategory qc = ((QuoteCategory) (spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
 
             if (!qc.getId().equals(getString(R.string.uncategorized))) {
-                DeletingHelper deletingHelper = new DeletingHelper(this);
-                deletingHelper.showDeletingDialog(getString(R.string.del_quote_category),
+                DeletingManager deletingManager = new DeletingManager(this);
+                deletingManager.showDeletingDialog(getString(R.string.del_quote_category),
                         getString(R.string.delete_quote_category),
-                        DeletingHelper.QUOTECATEGORY,
+                        DeletingManager.QUOTECATEGORY,
                         qc);
             } else {
                 Toast.makeText(this, "Its basic category, you cannot edit or delete it.", Toast.LENGTH_SHORT).show();
@@ -179,10 +171,11 @@ public class AddQuoteActivity extends AppCompatActivity {
         });
 
         camera_btn.setOnClickListener(view -> {
-            if (!helper.checkCameraPermission()) {
-                helper.requestCameraPermission();
+            if (!PermissionsManager.checkCameraPermission(this)) {
+                PermissionsManager.requestCameraPermission(this);
             } else {
-                helper.pickCamera();
+                imgUri = IntentManager.setUpOutputUri(this);
+                IntentManager.pickCamera(this, imgUri);
             }
         });
     }
@@ -234,13 +227,15 @@ public class AddQuoteActivity extends AppCompatActivity {
     //handle permissions results
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == TextRecognitionHelper.CAMERA_REQUEST) {
+        if (requestCode == PermissionsManager.CAMERA_REQUEST) {
             if (grantResults.length > 0) {
+
                 boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
                 if (cameraAccepted && writeStorageAccepted) {
-                    helper.setUpImgUri();
-                    helper.pickCamera();
+                    imgUri = IntentManager.setUpOutputUri(this);
+                    IntentManager.pickCamera(this, imgUri);
                 }
             }
         }
@@ -252,21 +247,16 @@ public class AddQuoteActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             if (resultCode == RESULT_OK) {
-                if (requestCode == TextRecognitionHelper.PICK_CAMERA_CODE) {
-                    //got image from camera
-                    cropUri = helper.getImgUri();
-                    CropImage.activity(cropUri)
-                            .setOutputUri(cropUri)
-                            .setGuidelines(CropImageView.Guidelines.OFF)
-                            .setMinCropWindowSize(50,50)
-                            .start(AddQuoteActivity.this);
+                if (requestCode == IntentManager.PICK_CAMERA_CODE) {
+                    imgUri = IntentManager.setUpOutputUri(this);
+                    IntentManager.pickCropper(this, imgUri, 50,50);
                 }
             }
             //CROP IMAGE
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
                 Bitmap bitmap;
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), cropUri);
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
                 } catch (Exception e) {
                     e.printStackTrace();
                     return;
@@ -281,24 +271,15 @@ public class AddQuoteActivity extends AppCompatActivity {
                         .addOnFailureListener(Throwable::printStackTrace);
 
                 //DELETING IMAGE FILE
-                new File(getImagePath(cropUri)).delete();
-
-                helper.setUpImgUri();
+                new File(IntentManager.getRealPath(this, imgUri)).delete();
             }
         }catch (Exception exc){
             Toast.makeText(this, "Sorry, something is wrong!" +
                             " If you use custom camera application - try to use device's default." +
                             " If it won't help, probably your device is unsupported by the application.",
                     Toast.LENGTH_SHORT).show();
+            exc.printStackTrace();
         }
     }
 
-    public String getImagePath(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        startManagingCursor(cursor);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
 }

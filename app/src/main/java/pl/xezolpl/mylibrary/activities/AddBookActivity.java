@@ -69,6 +69,7 @@ public class AddBookActivity extends AppCompatActivity {
         add_book_pages.setText(String.valueOf(thisBook.getPages()));
         status_spinner.setSelection(thisBook.getStatus());
         Glide.with(this).asBitmap().load(thisBook.getImageUrl()).into(add_book_image);
+        imageUrl = thisBook.getImageUrl();
     }
 
     private void initWidgets() {
@@ -162,6 +163,10 @@ public class AddBookActivity extends AppCompatActivity {
                 Toast.makeText(this, "Type pages as a number", Toast.LENGTH_SHORT).show();
                 return false;
             }
+        }
+
+        if (imageUrl==null){
+            imageUrl = getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
         }
 
         thisBook = new Book(title, author, imageUrl, description, pages, bookId, status);

@@ -29,7 +29,7 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddBookActivity;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
 import pl.xezolpl.mylibrary.models.Book;
-import pl.xezolpl.mylibrary.utilities.DeletingHelper;
+import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.utilities.Requests;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import spencerstudios.com.ezdialoglib.EZDialog;
@@ -89,12 +89,12 @@ public class BookDetailsTabFragment extends Fragment {
 
         MenuItem delItem = menu.findItem(R.id.action_delete);
         delItem.setOnMenuItemClickListener(menuItem -> {
-            DeletingHelper deletingHelper = new DeletingHelper((AppCompatActivity)context);
-            deletingHelper.showDeletingDialog(getString(R.string.del_book),
+            DeletingManager deletingManager = new DeletingManager((AppCompatActivity)context);
+            deletingManager.showDeletingDialog(getString(R.string.del_book),
                     getString(R.string.delete_book_1) +
                             " \"" + thisBook.getTitle() + "\" " +
                             getString(R.string.delete_book_2),
-                    DeletingHelper.BOOK, thisBook);
+                    DeletingManager.BOOK, thisBook);
             return false;
         });
 

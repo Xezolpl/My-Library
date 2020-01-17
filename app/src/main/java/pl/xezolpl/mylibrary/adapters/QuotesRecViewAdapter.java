@@ -28,7 +28,7 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
-import pl.xezolpl.mylibrary.utilities.DeletingHelper;
+import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 
@@ -79,10 +79,10 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         });
 
         holder.delBtn.setOnClickListener(view -> {
-            DeletingHelper deletingHelper = new DeletingHelper((AppCompatActivity) context);
-            deletingHelper.showDeletingDialog(context.getString(R.string.del_quote),
+            DeletingManager deletingManager = new DeletingManager((AppCompatActivity) context);
+            deletingManager.showDeletingDialog(context.getString(R.string.del_quote),
                     context.getString(R.string.delete_quote),
-                    DeletingHelper.QUOTE,
+                    DeletingManager.QUOTE,
                     quote);
             notifyDataSetChanged();
         });

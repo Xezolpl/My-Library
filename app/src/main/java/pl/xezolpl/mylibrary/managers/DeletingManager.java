@@ -1,4 +1,4 @@
-package pl.xezolpl.mylibrary.utilities;
+package pl.xezolpl.mylibrary.managers;
 
 import android.graphics.Color;
 
@@ -26,7 +26,7 @@ import spencerstudios.com.ezdialoglib.Font;
 /**
  * This class provides deleting items from database with their children.
  */
-public class DeletingHelper {
+public class DeletingManager {
 
     private BookViewModel bookViewModel;
     private CategoriesViewModel categoriesViewModel;
@@ -48,7 +48,7 @@ public class DeletingHelper {
      *
      * @param activity for classes that inherit from AppCompactActivity.
      */
-    public DeletingHelper(AppCompatActivity activity) {
+    public DeletingManager(AppCompatActivity activity) {
         this.activity = activity;
 
         bookViewModel = ViewModelProviders.of(activity).get(BookViewModel.class);
@@ -62,7 +62,7 @@ public class DeletingHelper {
     /**
      * Deletes book with its categories, chapters, notes and optionally with quotes.
      *
-     * @param book       book which will be deleted.
+     * @param book book which will be deleted.
      * @param withQuotes delete also that book's  quotes ?
      */
     private void deleteBook(Book book, boolean withQuotes) {

@@ -27,7 +27,7 @@ import pl.xezolpl.mylibrary.activities.AddNoteActivity;
 import pl.xezolpl.mylibrary.activities.InsertQuoteActivity;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.models.Note;
-import pl.xezolpl.mylibrary.utilities.DeletingHelper;
+import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
@@ -156,17 +156,17 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
                         break;
                     }
                     case R.id.deleteMenuBtn: {
-                        DeletingHelper deletingHelper = new DeletingHelper((AppCompatActivity)context);
+                        DeletingManager deletingManager = new DeletingManager((AppCompatActivity)context);
 
                         if (parent == FROM_CHAPTER) {
-                            deletingHelper.showDeletingDialog(context.getString(R.string.del_chapter),
+                            deletingManager.showDeletingDialog(context.getString(R.string.del_chapter),
                                     context.getString(R.string.delete_chapter),
-                                    DeletingHelper.CHAPTER,
+                                    DeletingManager.CHAPTER,
                                     parentChapter);
                         } else {
-                            deletingHelper.showDeletingDialog(context.getString(R.string.del_note),
+                            deletingManager.showDeletingDialog(context.getString(R.string.del_note),
                                     context.getString(R.string.delete_note),
-                                    DeletingHelper.NOTE,
+                                    DeletingManager.NOTE,
                                     parentNote);
                         }
                         break;

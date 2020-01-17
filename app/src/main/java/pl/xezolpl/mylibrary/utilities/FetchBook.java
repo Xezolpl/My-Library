@@ -1,4 +1,4 @@
-package pl.xezolpl.mylibrary;
+package pl.xezolpl.mylibrary.utilities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,6 +20,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.activities.SelectCoverActivity;
 import pl.xezolpl.mylibrary.adapters.CoversRevViewAdapter;
 
 /**
@@ -119,11 +121,10 @@ public class FetchBook extends AsyncTask<String, Void, String> {
                     Toast.makeText(activity, activity.getString(R.string.no_more_covers), Toast.LENGTH_LONG).show();
                 }
             });
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-
-            // Close the connections.
         } finally {
+            // Close the connections.
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
@@ -183,12 +184,18 @@ public class FetchBook extends AsyncTask<String, Void, String> {
                 // Move to the next item.
                 i++;
             }
-            activity.runOnUiThread(() -> adapter.setBookCovers(covers));
-        } catch (Exception e) {
             activity.runOnUiThread(() -> {
-                if(coversToSearch==10){
+                adapter.setBookCovers(covers);
+                ((SelectCoverActivity)activity).setMoreCoversBtnVisible(true);
+            });
+        } catch (Exception e) {
+
+            activity.runOnUiThread(() -> {
+                if (coversToSearch == 10) {
                     Toast.makeText(activity, activity.getString(R.string.no_covers_found), Toast.LENGTH_LONG).show();
                     adapter.setBookCovers(new ArrayList<>());
+                    ((SelectCoverActivity)activity).setMoreCoversBtnVisible(false);
+
                 }
             });
 
