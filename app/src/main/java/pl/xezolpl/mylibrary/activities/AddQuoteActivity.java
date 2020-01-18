@@ -248,7 +248,6 @@ public class AddQuoteActivity extends AppCompatActivity {
         try {
             if (resultCode == RESULT_OK) {
                 if (requestCode == IntentManager.PICK_CAMERA_CODE) {
-                    imgUri = IntentManager.setUpOutputUri(this);
                     IntentManager.pickCropper(this, imgUri, 50,50);
                 }
             }

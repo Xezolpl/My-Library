@@ -23,8 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.nikartm.button.FitButton;
 import com.rengwuxian.materialedittext.MaterialEditText;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -200,11 +198,7 @@ public class SelectCoverActivity extends AppCompatActivity {
 
         //START CROPPING ACTIVITY
         if (resultCode == RESULT_OK && requestCode == PICK_CAMERA_CODE) {
-            CropImage.activity(imgUri)
-                    .setOutputUri(imgUri)
-                    .setGuidelines(CropImageView.Guidelines.OFF)
-                    .setMinCropWindowSize(200, 200)
-                    .start(SelectCoverActivity.this);
+            IntentManager.pickCropper(this, imgUri, 200, 200);
         }
 
         if (resultCode == RESULT_OK && (requestCode == CROP_IMAGE_ACTIVITY_REQUEST_CODE

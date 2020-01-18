@@ -220,4 +220,6 @@ public class BookDetailsTabFragment extends Fragment {
         bookViewModel.update(thisBook);
         Toast.makeText(getContext(), getString(R.string.successfully_changed_status), Toast.LENGTH_SHORT).show();
     }
+
+
 }
