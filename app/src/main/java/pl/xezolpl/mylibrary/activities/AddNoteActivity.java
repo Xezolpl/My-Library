@@ -2,7 +2,6 @@ package pl.xezolpl.mylibrary.activities;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,7 +34,7 @@ public class AddNoteActivity extends AppCompatActivity {
     private FitButton ok_btn, cancel_btn, add_note_color_btn;
 
     private int currentMarkerType = Markers.NUMBER_MARKER;
-    private int color = Color.BLUE;
+    private int color = Markers.BLUE_START_COLOR ;
 
     private String parentId;
     private String id;
@@ -138,7 +137,7 @@ public class AddNoteActivity extends AppCompatActivity {
         add_note_imgView = findViewById(R.id.add_note_imgView);
         try {
             add_note_imgView.setImageDrawable(Markers.getLetterMarker(Markers.NUMBER_MARKER,
-                    0, Color.BLUE));
+                    0, Markers.BLUE_START_COLOR));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -186,6 +185,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 @Override
                 public void onChooseColor(int position, int color) {
                     add_note_imgView.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+                    add_note_imgView.invalidate();
                     AddNoteActivity.this.color = color;
                 }
 
