@@ -31,7 +31,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<ChaptersNotesViewH
         notifyDataSetChanged();
     }
 
-    List<ChaptersNotesViewHolder> getViewHolders(){
+    List<ChaptersNotesViewHolder> getViewHolders() {
         return viewHolders;
     }
 
@@ -40,9 +40,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<ChaptersNotesViewH
     public ChaptersNotesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.listitem_note, parent, false);
         ChaptersNotesViewHolder viewHolder = new ChaptersNotesViewHolder(v, context, ChaptersNotesViewHolder.FROM_NOTE);
-        if(!viewHolders.contains(viewHolder)){
-            viewHolders.add(viewHolder);
-        }
+        viewHolders.add(viewHolder);
         return viewHolder;
     }
 

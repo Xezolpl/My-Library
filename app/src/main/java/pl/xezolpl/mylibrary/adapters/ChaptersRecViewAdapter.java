@@ -17,6 +17,7 @@ import pl.xezolpl.mylibrary.models.Chapter;
 public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersNotesViewHolder> {
 
     private List<Chapter> chapters = new ArrayList<>();
+    private List<ChaptersNotesViewHolder> viewHolders = new ArrayList<>();
 
     private Context context;
     private LayoutInflater inflater;
@@ -31,11 +32,17 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersNotesVi
         notifyDataSetChanged();
     }
 
+    public List<ChaptersNotesViewHolder> getViewHolders() {
+        return viewHolders;
+    }
+
     @NonNull
     @Override
     public ChaptersNotesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = inflater.inflate(R.layout.listitem_chapter, parent, false);
-        return new ChaptersNotesViewHolder(v, context, ChaptersNotesViewHolder.FROM_CHAPTER);
+        ChaptersNotesViewHolder holder = new ChaptersNotesViewHolder(v, context, ChaptersNotesViewHolder.FROM_CHAPTER);
+        viewHolders.add(holder);
+        return holder;
     }
 
     @Override
