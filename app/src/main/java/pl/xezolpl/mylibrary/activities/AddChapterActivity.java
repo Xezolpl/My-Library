@@ -48,9 +48,7 @@ public class AddChapterActivity extends AppCompatActivity {
             add_chapter_name.setText(thisChapter.getName());
             add_chapter_number.setText(String.valueOf(thisChapter.getNumber()));
         }
-
-        bookId = intent.getStringExtra("bookId");
-
+            bookId = intent.getStringExtra("bookId");
     }
 
     private void initWidgets() {
@@ -81,7 +79,11 @@ public class AddChapterActivity extends AppCompatActivity {
         String id;
         int number;
 
-        if (inEdition) id = thisChapter.getId();
+        if (inEdition){
+            id = thisChapter.getId();
+            bookId = thisChapter.getBookId();
+
+        }
         else id = UUID.randomUUID().toString();
 
 

@@ -111,6 +111,9 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
             popupMenu.inflate(R.menu.chapter_note_popup_menu);
             if (parent == FROM_NOTE) {
                 popupMenu.getMenu().getItem(2).setVisible(false);
+            }else{
+                popupMenu.getMenu().getItem(1).setTitle("Edit chapter");
+                popupMenu.getMenu().getItem(3).setTitle("Delete chapter");
             }
             popupMenu.setOnMenuItemClickListener(menuItem -> {
                 switch (menuItem.getItemId()) {
