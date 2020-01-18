@@ -30,7 +30,6 @@ import pl.xezolpl.mylibrary.viewmodels.CategoriesViewModel;
 public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecViewAdapter.ViewHolder> {
     public static final int NORMAL_MODE = 1;
     public static final int SELECTING_CATEGORIES_MODE = 2;
-    public static final int EDITING_CATEGORIES_MODE = 3;
 
     private Context context;
     private int mode;
@@ -39,7 +38,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
     private FragmentManager fm;
     private String bookId;
     private CategoriesViewModel categoriesViewModel;
-
+    private List<Integer> checkedPositions = new ArrayList<>();
     private boolean inCategory = false;
 
     public CategoryRecViewAdapter(Context context, int mode, FragmentManager fm, String bookId) {
@@ -51,6 +50,17 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         loadCategories();
 
         categoriesViewModel = ViewModelProviders.of((FragmentActivity) context).get(CategoriesViewModel.class);
+        categoriesViewModel.getCategoriesByBook(bookId).observe((FragmentActivity)context, categoriesWithBooks -> {
+            for (CategoryWithBook categoryWithBook : categoriesWithBooks){
+                for (int i = 0; i<categories.size(); i++){
+                    if (categoryWithBook.getCategory().equals(context.getString(categories.get(i).getNameR()))){
+                        checkedPositions.add(i);
+                    }
+                }
+            }
+            notifyDataSetChanged();
+        });
+
     }
 
     public void setCategoryPicked(boolean b) {
@@ -108,15 +118,6 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         final Category category = categories.get(position);
 
         holder.setData(category.getNameR(), category.getImgR());
-        final String categoryName = context.getString(category.getNameR());
-        categoriesViewModel.getCategoriesByBook(bookId).observe((FragmentActivity) context, categories -> {
-            for (int i = 0; i < categories.size(); i++) {
-                if (categories.get(i).getCategory().equals(categoryName)) {
-                    holder.setChecked(true);
-                }
-            }
-        });
-
 
         holder.relLay.setOnClickListener(view -> {
             if (mode == NORMAL_MODE) {
@@ -138,12 +139,17 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
                 }
             }
         });
+
+        if (checkedPositions.contains(position)){
+            holder.setChecked(true);
+        }
     }
 
     @Override
     public int getItemCount() {
         return categories.size();
     }
+
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView txtView;
