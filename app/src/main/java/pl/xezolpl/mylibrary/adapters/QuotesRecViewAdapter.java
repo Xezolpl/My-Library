@@ -26,9 +26,9 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
+import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
-import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 
@@ -170,9 +170,16 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             } else {
                 String filteredPattern = charSequence.toString().toLowerCase().trim();
                 for (Quote q : quotesFull) {
-                    if (q.getTitle().toLowerCase().contains(filteredPattern) ||
-                            q.getQuote().toLowerCase().contains(filteredPattern) ||
-                            q.getCategoryId().toLowerCase().contains(filteredPattern)) {
+                    String thisQuoteCategory = null;
+                    for (QuoteCategory category : allCategories){
+                        if (q.getCategoryId().equals(category.getId())){
+                            thisQuoteCategory = category.getName();
+                        }
+                    }
+                    if (q.getTitle().toLowerCase().contains(filteredPattern) || //pattern contains title
+                            q.getQuote().toLowerCase().contains(filteredPattern) || //pattern contains quote
+                            q.getAuthor().toLowerCase().contains(filteredPattern) || //pattern contains author
+                            thisQuoteCategory != null) { // category is not null - pattern contains category
                         filteredList.add(q);
                     }
                 }

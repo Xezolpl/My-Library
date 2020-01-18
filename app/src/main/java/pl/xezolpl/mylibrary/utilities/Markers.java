@@ -38,14 +38,19 @@ public abstract class Markers {
     public static final int NUMBER_MARKER = 11;
 
     private static final String[] alphabet = new String[]{"a)", "b)", "c)", "d)", "e)", "f)", "g)", "h)", "i)"
-            , "j)", "k)", "l)", "m)", "n)", "o)", "p)", "q)", "r)", "s)", "t)", "u)", "v)", "w)", "x)", "y)", "z)"};
+            , "j)", "k)", "l)", "m)", "n)", "o)", "p)", "q)", "r)", "s)", "t)", "u)", "v)", "w)", "x)", "y)", "z)"}; //26
 
 
     public static Drawable getLetterMarker(int markerType, int markerPosition, int color) throws IOException {
         String text;
 
         if (markerType == LETTER_MARKER) {
+            if (markerPosition>=26){
+                int multiplier = markerPosition/26;
+                markerPosition = markerPosition-26*multiplier;
+            }
             text = alphabet[markerPosition];
+            //if markerPosition >= 26 (alphabet size (0-25)) then
         } else if (markerType == NUMBER_MARKER) {
             text = String.valueOf(markerPosition + 1);
             text += '.';

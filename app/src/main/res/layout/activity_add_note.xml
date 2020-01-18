@@ -21,8 +21,7 @@
         android:layout_toEndOf="@id/add_note_imgView"
         android:layout_marginTop="41.5dp"
 
-        app:fb_icon="@drawable/ic_color_lens_black_32dp"
-        app:fb_iconColor="#ed0909"/>
+        app:fb_icon="@drawable/ic_color_lens_black_32dp"/>
 
     <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/add_note_name"
@@ -36,9 +35,9 @@
         android:hint="@string/note"
         android:imeOptions="actionDone"
         android:inputType="textMultiLine"
-        app:met_underlineColor="#EF5350"
-        app:met_textColor="#666666"
-        app:met_textColorHint="#EF5350"/>
+        app:met_underlineColor="#666666"
+        app:met_textColor="#545454"
+        app:met_textColorHint="#545454"/>
 
     <LinearLayout
         android:id="@+id/lay2"
