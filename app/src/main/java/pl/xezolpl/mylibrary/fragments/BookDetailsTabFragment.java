@@ -11,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,12 +23,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
+import com.github.nikartm.button.FitButton;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddBookActivity;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
-import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.managers.DeletingManager;
+import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.utilities.Requests;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import spencerstudios.com.ezdialoglib.EZDialog;
@@ -42,7 +42,7 @@ public class BookDetailsTabFragment extends Fragment {
 
     private TextView bookTitle_text, bookDescription_text, bookPages_text, bookAuthor_text;
     private ImageView book_image;
-    private Button setToRead_btn, setCurrReading_btn, setAlreadyRead_btn;
+    private FitButton setToRead_btn, setCurrReading_btn, setAlreadyRead_btn;
 
     private Book thisBook;
     private BookViewModel bookViewModel;

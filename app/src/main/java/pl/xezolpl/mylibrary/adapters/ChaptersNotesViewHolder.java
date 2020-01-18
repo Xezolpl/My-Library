@@ -242,18 +242,13 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         quotesRecView.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
-    public void expandWithChildren(boolean b){
-        NoteViewModel viewModel = ViewModelProviders.of((FragmentActivity)context).get(NoteViewModel.class);
-        viewModel.getNotesByParent(parent == FROM_CHAPTER ?
-                parentChapter.getId() :
-                parentNote.getId())
-                .observe((FragmentActivity)context, notes -> {
-                    for (int i=0; i<notes.size(); i++){
-                        adapter.getViewHolders().get(i).expandWithChildren(b);
-                    }
-                    setRecViewVisible(b);
-                    isRecViewVisibleWithChildren = b;
-                });
+    public void expandWithChildren(boolean b) {
+        for (ChaptersNotesViewHolder viewHolder : adapter.getViewHolders()) {
+            viewHolder.expandWithChildren(b);
+        }
+        setRecViewVisible(b);
+        isRecViewVisibleWithChildren = b;
+
     }
 }
 
