@@ -1,10 +1,9 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -101,6 +100,7 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
                 } else {
                     model.insert(thisCategory);
                 }
+                setResult(RESULT_OK, new Intent().putExtra("category", thisCategory));
                 finish();
             }
         });

@@ -87,6 +87,7 @@
     <string name="adding_cover_error">Could not successfully add the cover, please try again.</string>
     <string name="just_exit">Just exit</string>
     <string name="lets_read">Let\'s read</string>
+    <string name="recognition_error">Sorry, something is wrong! If you use custom camera application - try to use device\'s default. If it won\'t help, probably your device is unsupported by the application.</string>
 
     <!-- Layout strings -->
 

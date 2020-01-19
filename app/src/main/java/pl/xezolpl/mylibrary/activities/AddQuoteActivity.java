@@ -25,16 +25,18 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.QuoteCategorySpinnerAdapter;
-import pl.xezolpl.mylibrary.models.Quote;
-import pl.xezolpl.mylibrary.models.QuoteCategory;
 import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.managers.IntentManager;
-import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.managers.PermissionsManager;
+import pl.xezolpl.mylibrary.models.Quote;
+import pl.xezolpl.mylibrary.models.QuoteCategory;
+import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
@@ -43,14 +45,19 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     private MaterialEditText title_EditTxt, quote_EditTxt, page_EditTxt, author_EditTxt;
     private Spinner category_spinner;
-    private FitButton ok_btn, cancel_btn,add_category_btn, quote_author_btn, edit_category_btn, delete_category_btn, camera_btn;
+    private FitButton ok_btn, cancel_btn, add_category_btn, quote_author_btn, edit_category_btn, delete_category_btn, camera_btn;
+
     private Quote thisQuote = null;
-    private boolean inEdition = false;
     private String bookId;
     private String chapterId = "";
 
+    private boolean inEdition = false;
+
+    public static final int ADD_QUOTE_CATEGORY_REQUEST_CODE = 7;
+
     private QuoteCategoryViewModel categoryViewModel;
     private QuoteCategorySpinnerAdapter spinnerAdapter;
+    private List<QuoteCategory> categories = new ArrayList<>();
 
     private Uri imgUri;
 
@@ -76,7 +83,8 @@ public class AddQuoteActivity extends AppCompatActivity {
                 categoryViewModel.insert(qc);
                 quoteCategories.add(qc);
             }
-            spinnerAdapter.setCategories(quoteCategories);
+            categories = quoteCategories;
+            spinnerAdapter.setCategories(categories);
             category_spinner.setAdapter(spinnerAdapter);
 
             if (inEdition) loadQuoteData(thisQuote);
@@ -114,16 +122,21 @@ public class AddQuoteActivity extends AppCompatActivity {
         quote_EditTxt.setText(quote.getQuote());
         author_EditTxt.setText(quote.getAuthor());
         page_EditTxt.setText(String.valueOf(quote.getPage()));
-        category_spinner.setSelection(spinnerAdapter.getItemPosition(quote.getCategoryId()));
         chapterId = quote.getChapterId();
 
+        for (int i=0; i<categories.size(); i++){
+            if (thisQuote.getCategoryId().equals(categories.get(i).getId())){
+                category_spinner.setSelection(i);
+                break;
+            }
+        }
     }
 
     private void setOnClickListeners() {
 
         add_category_btn.setOnClickListener(view -> {
             Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, ADD_QUOTE_CATEGORY_REQUEST_CODE);
         });
         edit_category_btn.setOnClickListener(view -> {
             QuoteCategory qc = ((QuoteCategory) (spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
@@ -131,8 +144,8 @@ public class AddQuoteActivity extends AppCompatActivity {
             if (!qc.getId().equals(getString(R.string.uncategorized))) {
                 Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
                 intent.putExtra("category", qc);
-                startActivity(intent);
-            }else{
+                startActivityForResult(intent, ADD_QUOTE_CATEGORY_REQUEST_CODE);
+            } else {
                 Toast.makeText(this, "Its basic category, you cannot edit or delete it.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -247,35 +260,47 @@ public class AddQuoteActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             if (resultCode == RESULT_OK) {
+
                 if (requestCode == IntentManager.PICK_CAMERA_CODE) {
-                    IntentManager.pickCropper(this, imgUri, 50,50);
+                    IntentManager.pickCropper(this, imgUri, 50, 50);
+
+                } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                    Bitmap bitmap;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    //RECOGNITION TEXT ON A IMAGE
+                    FirebaseVisionImage visionImage = FirebaseVisionImage.fromBitmap(bitmap);
+                    FirebaseVisionTextRecognizer cloudRecognizer = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
+                    cloudRecognizer.processImage(visionImage)
+                            .addOnSuccessListener(firebaseVisionText ->
+                                    quote_EditTxt.setText(firebaseVisionText.getText()))
+                            .addOnFailureListener(Throwable::printStackTrace);
+
+                    //DELETING IMAGE FILE
+                    new File(IntentManager.getRealPath(this, imgUri)).delete();
+
+                } else if (requestCode == ADD_QUOTE_CATEGORY_REQUEST_CODE && data != null) {
+                    QuoteCategory newCategory = (QuoteCategory) data.getSerializableExtra("category");
+                    if (newCategory != null) {
+                        for (int i = 0; i < categories.size(); i++) {
+                            if (categories.get(i).getId().equals(newCategory.getId())) {
+                                category_spinner.setSelection(i);
+                                category_spinner.invalidate();
+                                break;
+                            }
+                        }
+                    }
+
+
                 }
             }
-            //CROP IMAGE
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-                Bitmap bitmap;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-                //RECOGNITION TEXT ON A IMAGE
-                FirebaseVisionImage visionImage = FirebaseVisionImage.fromBitmap(bitmap);
-                FirebaseVisionTextRecognizer cloudRecognizer = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
-                cloudRecognizer.processImage(visionImage)
-                        .addOnSuccessListener(firebaseVisionText ->
-                                quote_EditTxt.setText(firebaseVisionText.getText()))
-                        .addOnFailureListener(Throwable::printStackTrace);
-
-                //DELETING IMAGE FILE
-                new File(IntentManager.getRealPath(this, imgUri)).delete();
-            }
-        }catch (Exception exc){
-            Toast.makeText(this, "Sorry, something is wrong!" +
-                            " If you use custom camera application - try to use device's default." +
-                            " If it won't help, probably your device is unsupported by the application.",
+        } catch (Exception exc) {
+            Toast.makeText(this, getString(R.string.recognition_error),
                     Toast.LENGTH_SHORT).show();
             exc.printStackTrace();
         }

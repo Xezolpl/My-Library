@@ -144,12 +144,11 @@ public class DeletingManager {
             for (Quote quote : quotes) {
                 //sets category to uncategorized in every quote where this category was used
                 quote.setCategoryId(uncategorized);
+                quoteViewModel.update(quote);
             }
         });
 
-        if (!quoteCategoryId.equals(uncategorized)) {
-            quoteCategoryViewModel.delete(quoteCategory);
-        }
+        quoteCategoryViewModel.delete(quoteCategory);
     }
 
     /**
