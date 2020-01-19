@@ -60,4 +60,5 @@ public class Note implements Serializable {
     public int getColor() {
         return color;
     }
+
 }

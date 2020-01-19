@@ -56,6 +56,8 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
     private Chapter parentChapter = null;
     private Note parentNote = null;
 
+    private NoteViewModel noteModel;
+
     ChaptersNotesViewHolder(@NonNull View itemView, Context context, int parent) {
         super(itemView);
         this.context = context;
@@ -69,6 +71,8 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
             quotesAdapter = new QuotesRecViewAdapter(context);
             quotesRecView.setLayoutManager(new GridLayoutManager(context, 1));
         }
+        noteModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
+
 
     }
 
@@ -222,7 +226,6 @@ public class ChaptersNotesViewHolder extends RecyclerView.ViewHolder {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        NoteViewModel noteModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
         noteModel.getNotesByParent(note.getId()).observe(activity, notes -> {
             adapter = new NotesRecViewAdapter(context);
             adapter.setNotesList(notes);

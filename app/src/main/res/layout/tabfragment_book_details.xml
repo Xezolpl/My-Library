@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activities.OpenedBookActivity">
 
     <RelativeLayout
@@ -62,96 +61,22 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/linlay2"
+    <ScrollView
+        android:id="@+id/rel_lay_2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_below="@+id/rel_lay_1">
-        <ScrollView
-            android:id="@+id/rel_lay_2"
+        android:layout_below="@+id/rel_lay_1"
+        android:layout_marginStart="20dp"
+
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="15dp">
+
+        <TextView
+            android:id="@+id/bookDescription_text"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp">
+            android:layout_height="wrap_content"
+            android:text="@string/very_long_lorem_ipsum" />
+    </ScrollView>
 
-            <TextView
-                android:id="@+id/bookDescription_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/very_long_lorem_ipsum" />
-        </ScrollView>
-
-        <LinearLayout
-            android:id="@+id/linlay3"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="10dp">
-
-            <com.github.nikartm.button.FitButton
-                android:id="@+id/setToRead_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="0.5"
-                android:lines="2"
-                android:gravity="center"
-
-                app:fb_text="@string/want_to_read"
-                app:fb_textSize="14sp"
-                app:fb_textAllCaps="true"
-                app:fb_textColor="@color/white"
-                app:fb_textStyle="bold|italic"
-                app:fb_textPaddingStart="5dp"
-                app:fb_textPaddingEnd="5dp"
-                app:fb_backgroundColor="#ed0909"
-                app:fb_cornerRadius="15dp"/>
-
-            <com.github.nikartm.button.FitButton
-                android:id="@+id/setCurrReading_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="0.5"
-                android:lines="2"
-                android:gravity="center"
-
-                app:fb_text="@string/currently_reading"
-                app:fb_textSize="14sp"
-                app:fb_textAllCaps="true"
-                app:fb_textColor="@color/white"
-                app:fb_textPaddingStart="5dp"
-                app:fb_textPaddingEnd="5dp"
-                app:fb_textStyle="bold|italic"
-                app:fb_backgroundColor="#ed0909"
-                app:fb_cornerRadius="15dp"/>
-
-            <com.github.nikartm.button.FitButton
-                android:id="@+id/setAlreadyRead_btn"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="0.5"
-                android:lines="2"
-                android:gravity="center"
-
-                app:fb_text="@string/already_read"
-                app:fb_textSize="14sp"
-                app:fb_textAllCaps="true"
-                app:fb_textColor="@color/white"
-                app:fb_textStyle="bold|italic"
-                app:fb_textPaddingStart="5dp"
-                app:fb_textPaddingEnd="5dp"
-                app:fb_backgroundColor="#ed0909"
-                app:fb_cornerRadius="15dp"/>
-        </LinearLayout>
-    </LinearLayout>
 </RelativeLayout>

@@ -23,7 +23,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
-import com.github.nikartm.button.FitButton;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddBookActivity;
@@ -42,12 +41,13 @@ public class BookDetailsTabFragment extends Fragment {
 
     private TextView bookTitle_text, bookDescription_text, bookPages_text, bookAuthor_text;
     private ImageView book_image;
-    private FitButton setToRead_btn, setCurrReading_btn, setAlreadyRead_btn;
 
     private Book thisBook;
     private BookViewModel bookViewModel;
 
     private Context context;
+    private EZDialog.Builder builder;
+
 
     public BookDetailsTabFragment(Book thisBook, Context context) {
         this.context = context;
@@ -67,11 +67,100 @@ public class BookDetailsTabFragment extends Fragment {
 
         initWidgets(view);
         loadBookData();
-        createOnClickListeners();
-
         setHasOptionsMenu(true);
 
+        builder = new EZDialog.Builder(context);
+
+        //stylization
+        builder.setTitleDividerLineColor(Color.parseColor("#ed0909"))
+                .setTitleTextColor(Color.parseColor("#EE311B"))
+                .setButtonTextColor(Color.parseColor("#ed0909"))
+                .setMessageTextColor(Color.parseColor("#333333"))
+                .setFont(Font.COMFORTAA)
+
+                .setTitle(getString(R.string.status_change))
+                .setNegativeBtnText(getString(R.string.no))
+                .OnNegativeClicked(() -> {
+                })
+
+                .setCancelableOnTouchOutside(true);
+
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.action_edit: {
+                Intent intent = new Intent(context, AddBookActivity.class);
+                intent.putExtra("book", thisBook);
+                startActivityForResult(intent, Requests.EDIT_REQUEST);
+                break;
+            }
+
+            case R.id.action_delete: {
+                DeletingManager deletingManager = new DeletingManager((AppCompatActivity) context);
+                deletingManager.showDeletingDialog(getString(R.string.del_book),
+                        getString(R.string.delete_book_1) +
+                                " \"" + thisBook.getTitle() + "\" " +
+                                getString(R.string.delete_book_2),
+                        DeletingManager.BOOK, thisBook);
+                break;
+            }
+
+            case R.id.favourite: {
+                if (thisBook.isFavourite()) {
+                    item.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
+                    thisBook.setFavourite(false);
+                } else {
+                    thisBook.setFavourite(true);
+                    item.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star));
+                }
+                bookViewModel.update(thisBook);
+                break;
+            }
+
+            case R.id.toRead: {
+                if (thisBook.getStatus() == Book.STATUS_WANT_TO_READ) {
+                    builder.setMessage(getString(R.string.onWantToRead))
+                            .setPositiveBtnText(getString(R.string.yes))
+
+                            .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
+                            .build();
+                } else {
+                    updateBook(Book.STATUS_WANT_TO_READ);
+                }
+                break;
+            }
+
+            case R.id.currReading: {
+                if (thisBook.getStatus() == Book.STATUS_CURRENTLY_READING) {
+                    builder.setMessage(getString(R.string.onCurrReading))
+                            .setPositiveBtnText(getString(R.string.yes))
+
+                            .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
+                            .build();
+                } else {
+                    updateBook(Book.STATUS_CURRENTLY_READING);
+                }
+                break;
+            }
+
+            case R.id.alreadyRead: {
+                if (thisBook.getStatus() == Book.STATUS_ALREADY_READ) {
+                    builder.setMessage(getString(R.string.onAlreadyRead))
+                            .setPositiveBtnText(getString(R.string.yes))
+
+                            .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
+                            .build();
+                } else {
+                    updateBook(Book.STATUS_ALREADY_READ);
+                }
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -79,43 +168,9 @@ public class BookDetailsTabFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.opened_book_menu, menu);
 
-        MenuItem editItem = menu.findItem(R.id.action_edit);
-        editItem.setOnMenuItemClickListener(menuItem -> {
-            Intent intent = new Intent(context, AddBookActivity.class);
-            intent.putExtra("book", thisBook);
-            startActivityForResult(intent, Requests.EDIT_REQUEST);
-            return false;
-        });
-
-        MenuItem delItem = menu.findItem(R.id.action_delete);
-        delItem.setOnMenuItemClickListener(menuItem -> {
-            DeletingManager deletingManager = new DeletingManager((AppCompatActivity)context);
-            deletingManager.showDeletingDialog(getString(R.string.del_book),
-                    getString(R.string.delete_book_1) +
-                            " \"" + thisBook.getTitle() + "\" " +
-                            getString(R.string.delete_book_2),
-                    DeletingManager.BOOK, thisBook);
-            return false;
-        });
-
-        final MenuItem favouriteItem = menu.findItem(R.id.action_favourite);
-
         if (!thisBook.isFavourite()) {
-            favouriteItem.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
+            menu.findItem(R.id.favourite).setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
         }
-
-        favouriteItem.setOnMenuItemClickListener(menuItem -> {
-            if (thisBook.isFavourite()) {
-                favouriteItem.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
-                thisBook.setFavourite(false);
-            } else {
-                thisBook.setFavourite(true);
-                favouriteItem.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star));
-            }
-            bookViewModel.update(thisBook);
-            return false;
-        });
-
     }
 
     @Override
@@ -142,10 +197,6 @@ public class BookDetailsTabFragment extends Fragment {
         bookDescription_text = v.findViewById(R.id.bookDescription_text);
 
         book_image = v.findViewById(R.id.book_image);
-
-        setToRead_btn = v.findViewById(R.id.setToRead_btn);
-        setCurrReading_btn = v.findViewById(R.id.setCurrReading_btn);
-        setAlreadyRead_btn = v.findViewById(R.id.setAlreadyRead_btn);
     }
 
     private void loadBookData() {
@@ -155,64 +206,6 @@ public class BookDetailsTabFragment extends Fragment {
         bookPages_text.setText(pages);
         bookDescription_text.setText(thisBook.getDescription());
         Glide.with(this).asBitmap().load(thisBook.getImageUrl()).into(book_image);
-    }
-
-    private void createOnClickListeners() {
-        final EZDialog.Builder builder = new EZDialog.Builder(context);
-
-        //stylization
-        builder.setTitleDividerLineColor(Color.parseColor("#ed0909"))
-                .setTitleTextColor(Color.parseColor("#EE311B"))
-                .setButtonTextColor(Color.parseColor("#ed0909"))
-                .setMessageTextColor(Color.parseColor("#333333"))
-                .setFont(Font.COMFORTAA)
-
-                .setTitle(getString(R.string.status_change))
-                .setNegativeBtnText(getString(R.string.no))
-                .OnNegativeClicked(()->{})
-
-                .setCancelableOnTouchOutside(true);
-
-        //listeners
-        setToRead_btn.setOnClickListener(view -> {
-            if (thisBook.getStatus() == Book.STATUS_WANT_TO_READ) {
-                builder.setMessage(getString(R.string.onWantToRead))
-                        .setPositiveBtnText(getString(R.string.yes))
-
-                        .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
-                        .build();
-            } else {
-                updateBook(Book.STATUS_WANT_TO_READ);
-            }
-
-        });
-
-
-        setCurrReading_btn.setOnClickListener(view -> {
-            if (thisBook.getStatus() == Book.STATUS_CURRENTLY_READING) {
-                builder.setMessage(getString(R.string.onCurrReading))
-                        .setPositiveBtnText(getString(R.string.yes))
-
-                        .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
-                        .build();
-            } else {
-                thisBook.setStatus(Book.STATUS_CURRENTLY_READING);
-            }
-            updateBook(Book.STATUS_CURRENTLY_READING);
-        });
-
-
-        setAlreadyRead_btn.setOnClickListener(view -> {
-            if (thisBook.getStatus() == Book.STATUS_ALREADY_READ) {
-                builder.setMessage(getString(R.string.onAlreadyRead))
-                        .setPositiveBtnText(getString(R.string.yes))
-
-                        .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
-                        .build();
-            } else {
-                updateBook(Book.STATUS_ALREADY_READ);
-            }
-        });
     }
 
     private void updateBook(int status) {

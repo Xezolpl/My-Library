@@ -2,11 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/action_favourite"
-        android:icon="@mipmap/favourite_star"
-        android:title=""
-        app:showAsAction="always"/>
+
     <item
         android:id="@+id/action_edit"
         android:icon="@drawable/ic_edit_white_24dp"
@@ -17,4 +13,27 @@
         android:icon="@drawable/ic_delete_white_24dp"
         android:title=""
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_more"
+        android:icon="@drawable/ic_more_vert_white_24dp"
+        android:title=""
+        app:showAsAction="always" >
+
+        <menu>
+            <item
+                android:id="@+id/favourite"
+                android:icon="@mipmap/favourite_star"
+                android:title="Add to favourites" />
+
+            <item android:id="@+id/toRead"
+                android:title="@string/want_to_read"/>
+
+            <item android:id="@+id/currReading"
+                android:title="@string/currently_reading"/>
+
+            <item android:id="@+id/alreadyRead"
+                android:title="@string/already_read"/>
+        </menu>
+
+    </item>
 </menu>
