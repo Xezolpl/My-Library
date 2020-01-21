@@ -199,9 +199,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
             textView.setText(chapter.getName());
 
             NoteViewModel noteModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
-            noteModel.getNotesByParent(chapter.getId()).observe(activity, notes -> {
-                adapter.setNotes(notes);
-            });
+            noteModel.getNotesByParent(chapter.getId()).observe(activity, notes -> adapter.setNotes(notes));
 
             QuoteViewModel quoteViewModel = ViewModelProviders.of(activity).get(QuoteViewModel.class);
             quoteViewModel.getQuotesByChapter(chapter.getId()).observe(activity, quotes -> {

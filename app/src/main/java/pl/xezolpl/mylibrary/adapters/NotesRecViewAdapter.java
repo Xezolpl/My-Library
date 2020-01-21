@@ -44,7 +44,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
         this.context = context;
     }
 
-    public List<NoteViewHolder> getNoteViewHolders() {
+    List<NoteViewHolder> getNoteViewHolders() {
         return noteViewHolders;
     }
 
@@ -194,9 +194,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
             }
 
             NoteViewModel noteModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
-            noteModel.getNotesByParent(note.getId()).observe(activity, notes -> {
-                adapter.setNotes(notes);
-            });
+            noteModel.getNotesByParent(note.getId()).observe(activity, notes -> adapter.setNotes(notes));
         }
 
         private void setRecViewVisible(boolean b) {
@@ -204,7 +202,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
             isRecViewVisible = b;
         }
 
-        public void expandWithChildren(boolean b) {
+        void expandWithChildren(boolean b) {
             for (NoteViewHolder viewHolder : adapter.getNoteViewHolders()) {
                 viewHolder.expandWithChildren(b);
             }
