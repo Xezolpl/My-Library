@@ -29,10 +29,16 @@ public class BookNotesTabFragment extends Fragment {
     private Book thisBook;
     private TabFragmentPagerAdapter adapter;
     private QuotesTabFragment quotesTabFragment;
+    private ChaptersTabFragment chaptersTabFragment;
 
     public BookNotesTabFragment(Book thisBook, Context context) {
         this.thisBook = thisBook;
         this.context = context;
+    }
+
+    private void initWidgets(View v) {
+        book_notes_tablayout = v.findViewById(R.id.book_notes_tablayout);
+        book_notes_viewpager = v.findViewById(R.id.book_notes_viewpager);
     }
 
     @Override
@@ -42,7 +48,7 @@ public class BookNotesTabFragment extends Fragment {
         adapter = new TabFragmentPagerAdapter(Objects.requireNonNull(getFragmentManager(), "Requires non null FragmentPager!"));
 
         quotesTabFragment = new QuotesTabFragment(context, thisBook.getId());
-        ChaptersTabFragment chaptersTabFragment = new ChaptersTabFragment(context, thisBook.getId());
+        chaptersTabFragment = new ChaptersTabFragment(context, thisBook.getId());
 
         adapter.addFragment(chaptersTabFragment, "Chapters & Notes");
         adapter.addFragment(quotesTabFragment, "Quotes");
@@ -73,10 +79,5 @@ public class BookNotesTabFragment extends Fragment {
     public void onDestroyOptionsMenu() {
         super.onDestroyOptionsMenu();
         quotesTabFragment.setMenuVisibility(false);
-    }
-
-    private void initWidgets(View v) {
-        book_notes_tablayout = v.findViewById(R.id.book_notes_tablayout);
-        book_notes_viewpager = v.findViewById(R.id.book_notes_viewpager);
     }
 }
