@@ -29,7 +29,7 @@ public class OpenedBookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opened_book);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         thisBook = (Book) getIntent().getSerializableExtra("book");
 

@@ -61,7 +61,7 @@ public class SelectCoverActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_cover);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         initWidgets();
         setOnClickListeners();

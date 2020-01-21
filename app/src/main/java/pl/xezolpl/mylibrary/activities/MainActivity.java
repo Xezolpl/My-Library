@@ -1,9 +1,7 @@
 package pl.xezolpl.mylibrary.activities;
 
 import android.content.pm.ActivityInfo;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -17,14 +15,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.IOException;
-
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.fragments.AllBooksFragment;
 import pl.xezolpl.mylibrary.fragments.CategoriesFragment;
 import pl.xezolpl.mylibrary.fragments.ContactFragment;
 import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
-import pl.xezolpl.mylibrary.utilities.Markers;
 import spencerstudios.com.ezdialoglib.EZDialog;
 import spencerstudios.com.ezdialoglib.Font;
 
@@ -43,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
