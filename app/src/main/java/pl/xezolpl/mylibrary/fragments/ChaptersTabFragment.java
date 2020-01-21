@@ -29,6 +29,7 @@ public class ChaptersTabFragment extends Fragment {
     private Context context;
 
     private ChaptersRecViewAdapter adapter;
+    private int invocation = 0;
 
     ChaptersTabFragment(Context context, String bookId) {
         this.bookId = bookId;
@@ -69,12 +70,16 @@ public class ChaptersTabFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.chapters_menu, menu);
-        try {
-            for (ChaptersRecViewAdapter.ChapterViewHolder viewHolder : adapter.getChapterViewHolders()){
-                viewHolder.expandWithChildren(false);
+        if (invocation <=1){
+            try {
+                for (ChaptersRecViewAdapter.ChapterViewHolder viewHolder : adapter.getChapterViewHolders()){
+                    viewHolder.expandWithChildren(false);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            invocation++;
         }
+
     }
 }
