@@ -16,7 +16,6 @@ import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -27,6 +26,7 @@ import pl.xezolpl.mylibrary.activities.AddChapterActivity;
 import pl.xezolpl.mylibrary.activities.AddNoteActivity;
 import pl.xezolpl.mylibrary.activities.InsertQuoteActivity;
 import pl.xezolpl.mylibrary.managers.DeletingManager;
+import pl.xezolpl.mylibrary.managers.LinearLayoutManagerWrapper;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
@@ -98,8 +98,8 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
             adapter = new NotesRecViewAdapter(context);
             quotesAdapter = new QuotesRecViewAdapter(context);
 
-            recView.setLayoutManager(new GridLayoutManager(context, 1));
-            quotesRecView.setLayoutManager(new GridLayoutManager(context, 1));
+            recView.setLayoutManager(new LinearLayoutManagerWrapper(context));
+            quotesRecView.setLayoutManager(new LinearLayoutManagerWrapper(context));
 
             recView.setAdapter(adapter);
             quotesRecView.setAdapter(quotesAdapter);

@@ -19,7 +19,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
@@ -30,6 +29,7 @@ import pl.xezolpl.mylibrary.NoteDiffCallback;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddNoteActivity;
 import pl.xezolpl.mylibrary.managers.DeletingManager;
+import pl.xezolpl.mylibrary.managers.LinearLayoutManagerWrapper;
 import pl.xezolpl.mylibrary.models.Note;
 import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
@@ -106,7 +106,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
 
             adapter = new NotesRecViewAdapter(context);
             recView.setAdapter(adapter);
-            recView.setLayoutManager(new GridLayoutManager(context, 1));
+            recView.setLayoutManager(new LinearLayoutManagerWrapper(context));
         }
 
         private void initWidgets() {

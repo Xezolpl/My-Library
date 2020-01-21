@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddChapterActivity;
 import pl.xezolpl.mylibrary.adapters.ChaptersRecViewAdapter;
+import pl.xezolpl.mylibrary.managers.LinearLayoutManagerWrapper;
 import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 
 public class ChaptersTabFragment extends Fragment {
@@ -53,7 +53,7 @@ public class ChaptersTabFragment extends Fragment {
 
         RecyclerView recView = view.findViewById(R.id.chapters_recView);
         recView.setAdapter(adapter);
-        recView.setLayoutManager(new GridLayoutManager(context, 1));
+        recView.setLayoutManager(new LinearLayoutManagerWrapper(context));
 
 
         FloatingActionButton fab = view.findViewById(R.id.chapters_fab);
