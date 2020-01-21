@@ -20,7 +20,6 @@ import java.util.UUID;
 
 import petrov.kristiyan.colorpicker.ColorPicker;
 import pl.xezolpl.mylibrary.R;
-import pl.xezolpl.mylibrary.adapters.ChaptersNotesViewHolder;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.models.Note;
 import pl.xezolpl.mylibrary.utilities.Markers;
@@ -72,7 +71,7 @@ public class AddNoteActivity extends AppCompatActivity {
         int parent = intent.getIntExtra("parent", 0);
 
         switch (parent) {
-            case ChaptersNotesViewHolder.FROM_CHAPTER: {
+            case 1: {
                 final Chapter chapter = (Chapter) intent.getSerializableExtra("chapter");
                 parentId = chapter.getId();
                 id = UUID.randomUUID().toString();
@@ -89,7 +88,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 });
                 break;
             }
-            case ChaptersNotesViewHolder.FROM_NOTE: {
+            case 2: {
                 final Note note = (Note) intent.getSerializableExtra("note");
                 currentMarkerType = Markers.incrementMarker(note.getMarkerType());
                 parentId = note.getId();
@@ -107,7 +106,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 });
                 break;
             }
-            case ChaptersNotesViewHolder.EDITION: {
+            case 3: {
                 final Note note = (Note) intent.getSerializableExtra("note");
                 add_note_name.setText(note.getNote());
                 currentMarkerType = note.getMarkerType();
@@ -171,6 +170,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 } else {
                     viewModel.insert(thisNote);
                 }
+                setResult(RESULT_OK, new Intent().putExtra("note", thisNote));
                 finish();
             } else {
                 Toast.makeText(AddNoteActivity.this, "Note can't be empty!", Toast.LENGTH_SHORT).show();

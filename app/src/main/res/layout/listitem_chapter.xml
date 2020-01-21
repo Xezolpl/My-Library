@@ -32,7 +32,8 @@
             android:textSize="18sp"
             android:text="@string/placeholder_chapter"
             android:maxLength="110"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:padding="5dp"/>
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView

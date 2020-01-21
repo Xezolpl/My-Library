@@ -20,7 +20,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddChapterActivity;
-import pl.xezolpl.mylibrary.adapters.ChaptersNotesViewHolder;
 import pl.xezolpl.mylibrary.adapters.ChaptersRecViewAdapter;
 import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 
@@ -71,11 +70,10 @@ public class ChaptersTabFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.chapters_menu, menu);
         try {
-            Thread.sleep(0,100);
-            for (ChaptersNotesViewHolder viewHolder : adapter.getViewHolders()){
+            for (ChaptersRecViewAdapter.ChapterViewHolder viewHolder : adapter.getChapterViewHolders()){
                 viewHolder.expandWithChildren(false);
             }
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
