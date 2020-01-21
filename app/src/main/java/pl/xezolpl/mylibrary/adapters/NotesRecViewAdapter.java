@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.xezolpl.mylibrary.NoteDiffCallback;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.models.Note;
 
@@ -27,8 +29,12 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<ChaptersNotesViewH
     }
 
     void setNotesList(List<Note> notes) {
-        this.notes = notes;
-        notifyDataSetChanged();
+            final NoteDiffCallback callback = new NoteDiffCallback(this.notes, notes);
+            final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback);
+
+            this.notes.clear();
+            this.notes.addAll(notes);
+            diffResult.dispatchUpdatesTo(this);
     }
 
     List<ChaptersNotesViewHolder> getViewHolders() {
