@@ -69,14 +69,16 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
         color_btn = findViewById(R.id.add_category_color_btn);
         ok_btn = findViewById(R.id.add_category_ok_btn);
         cancel_btn = findViewById(R.id.add_category_cancel_btn);
-        colorPicker = new ColorPicker(AddQuoteCategoryActivity.this);
     }
 
     private void setOnClickListeners() {
 
         color_btn.setOnClickListener(view -> {
             final int hexdecColorCopy = hexdecColor;
-            colorPicker.setDefaultColorButton(Markers.BLUE_START_COLOR);
+
+            ColorPicker colorPicker = new ColorPicker(AddQuoteCategoryActivity.this);
+            colorPicker.setDefaultColorButton(hexdecColor);
+
             colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
                 @Override
                 public void onChooseColor(int position, int color) {

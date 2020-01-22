@@ -61,6 +61,9 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     private Uri imgUri;
 
+    private boolean selectNewCategory = false;
+    private QuoteCategory newCategory;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +91,11 @@ public class AddQuoteActivity extends AppCompatActivity {
             category_spinner.setAdapter(spinnerAdapter);
 
             if (inEdition) loadQuoteData(thisQuote);
+
+            if(selectNewCategory){
+                category_spinner.setSelection(spinnerAdapter.getItemPosition(newCategory.getName()));
+                selectNewCategory = false;
+            }
         });
     }
 
@@ -285,18 +293,8 @@ public class AddQuoteActivity extends AppCompatActivity {
                     new File(IntentManager.getRealPath(this, imgUri)).delete();
 
                 } else if (requestCode == ADD_QUOTE_CATEGORY_REQUEST_CODE && data != null) {
-                    QuoteCategory newCategory = (QuoteCategory) data.getSerializableExtra("category");
-                    if (newCategory != null) {
-                        for (int i = 0; i < categories.size(); i++) {
-                            if (categories.get(i).getId().equals(newCategory.getId())) {
-                                category_spinner.setSelection(i);
-                                category_spinner.invalidate();
-                                break;
-                            }
-                        }
-                    }
-
-
+                    newCategory = (QuoteCategory) data.getSerializableExtra("category");
+                    selectNewCategory = true;
                 }
             }
         } catch (Exception exc) {
