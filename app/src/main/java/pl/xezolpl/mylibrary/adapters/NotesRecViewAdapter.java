@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.xezolpl.mylibrary.NoteDiffCallback;
+import pl.xezolpl.mylibrary.adapters.Callbacks.NoteDiffCallback;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddNoteActivity;
 import pl.xezolpl.mylibrary.managers.DeletingManager;
@@ -33,6 +33,9 @@ import pl.xezolpl.mylibrary.managers.LinearLayoutManagerWrapper;
 import pl.xezolpl.mylibrary.models.Note;
 import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
+
+import static pl.xezolpl.mylibrary.activities.AddNoteActivity.EDITION;
+import static pl.xezolpl.mylibrary.activities.AddNoteActivity.PARENT_NOTE;
 
 public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapter.NoteViewHolder> {
 
@@ -68,12 +71,23 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
+        if (!notes.get(position).equals(holder.thisNote))
         holder.setData(notes.get(position), position);
     }
 
     @Override
     public int getItemCount() {
         return notes.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
 
@@ -93,7 +107,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
         private Context context;
         private FragmentActivity activity;
 
-        private Note parentNote = null;
+        private Note thisNote = null;
 
         NoteViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
@@ -131,15 +145,14 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
             moreBtn.setOnClickListener(view -> {
 
                 PopupMenu popupMenu = new PopupMenu(context, view);
-                popupMenu.inflate(R.menu.chapter_note_popup_menu);
-                popupMenu.getMenu().getItem(2).setVisible(false);
+                popupMenu.inflate(R.menu.note_popup_menu);
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     switch (menuItem.getItemId()) {
                         case R.id.addMenuBtn: {
 
                             Intent intent = new Intent(context, AddNoteActivity.class);
-                            intent.putExtra("note", parentNote);
-                            intent.putExtra("parent", 2);
+                            intent.putExtra("note", thisNote);
+                            intent.putExtra("parent", PARENT_NOTE);
                             context.startActivity(intent);
                             break;
                         }
@@ -147,8 +160,8 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
 
                             Intent intent;
                             intent = new Intent(context, AddNoteActivity.class);
-                            intent.putExtra("note", parentNote);
-                            intent.putExtra("parent", 3);
+                            intent.putExtra("note", thisNote);
+                            intent.putExtra("parent", EDITION);
 
                             context.startActivity(intent);
                             break;
@@ -159,7 +172,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                             deletingManager.showDeletingDialog(context.getString(R.string.del_note),
                                     context.getString(R.string.delete_note),
                                     DeletingManager.NOTE,
-                                    parentNote);
+                                    thisNote);
                             break;
                         }
                         default:
@@ -177,7 +190,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
 
         void setData(Note note, int position) {
 
-            parentNote = note;
+            thisNote = note;
             textView.setText(note.getNote());
             try {
                 Drawable drawable;
@@ -200,6 +213,8 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
         private void setRecViewVisible(boolean b) {
             recView.setVisibility(b ? View.VISIBLE : View.GONE);
             isRecViewVisible = b;
+            if (!b) isRecViewVisibleWithChildren = false;
+
         }
 
         void expandWithChildren(boolean b) {

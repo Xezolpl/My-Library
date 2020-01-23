@@ -1,4 +1,4 @@
-package pl.xezolpl.mylibrary;
+package pl.xezolpl.mylibrary.adapters.Callbacks;
 
 import androidx.recyclerview.widget.DiffUtil;
 

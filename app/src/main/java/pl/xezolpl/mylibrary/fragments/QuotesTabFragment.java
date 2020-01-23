@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,6 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
 import pl.xezolpl.mylibrary.adapters.QuotesRecViewAdapter;
+import pl.xezolpl.mylibrary.managers.LinearLayoutManagerWrapper;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesTabFragment extends Fragment {
@@ -31,7 +31,7 @@ public class QuotesTabFragment extends Fragment {
     private String bookId;
 
     private QuotesRecViewAdapter quotesRecViewAdapter;
-
+    private RecyclerView quotes_recView =  null;
 
     public QuotesTabFragment(Context context, String bookId) {
         this.context = context;
@@ -46,9 +46,16 @@ public class QuotesTabFragment extends Fragment {
 
         QuoteViewModel quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
         if (bookId.isEmpty()) {
-            quoteViewModel.getAllQuotes().observe(this, quotes -> quotesRecViewAdapter.setQuotes(quotes));
+            quoteViewModel.getAllQuotes().observe(this, quotes ->{
+                quotesRecViewAdapter.setQuotes(quotes);
+                if(quotes_recView!=null) quotes_recView.invalidate();
+            });
         } else {
-            quoteViewModel.getQuotesByBook(bookId).observe(this, quotes -> quotesRecViewAdapter.setQuotes(quotes));
+            quoteViewModel.getQuotesByBook(bookId).observe(this, quotes -> {
+                quotesRecViewAdapter.setQuotes(quotes);
+                if(quotes_recView!=null) quotes_recView.invalidate();
+
+            });
         }
 
     }
@@ -59,12 +66,12 @@ public class QuotesTabFragment extends Fragment {
         View view = inflater.inflate(R.layout.tabfragment_quotes, container, false);
 
 
-        RecyclerView quotes_recView = view.findViewById(R.id.quotes_recView);
+        quotes_recView = view.findViewById(R.id.quotes_recView);
         quotes_recView.setAdapter(quotesRecViewAdapter);
-        quotes_recView.setLayoutManager(new GridLayoutManager(context, 1));
+        quotes_recView.setLayoutManager(new LinearLayoutManagerWrapper(context));
 
-        FloatingActionButton quotes_fab = view.findViewById(R.id.quotes_fab);
-        quotes_fab.setOnClickListener(view1 -> {
+        FloatingActionButton fab = view.findViewById(R.id.quotes_fab);
+        fab.setOnClickListener(view1 -> {
             Intent intent = new Intent(context, AddQuoteActivity.class);
             intent.putExtra("bookId", bookId);
             context.startActivity(intent);

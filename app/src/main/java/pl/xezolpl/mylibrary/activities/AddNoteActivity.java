@@ -28,6 +28,10 @@ import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 public class AddNoteActivity extends AppCompatActivity {
     private static final String TAG = "AddNoteActivity";
 
+    public static final int PARENT_CHAPTER = 1;
+    public static final int PARENT_NOTE = 2;
+    public static final int EDITION = 3;
+
     private MaterialEditText add_note_name;
     private ImageView add_note_imgView;
     private FitButton ok_btn, cancel_btn, add_note_color_btn;

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
+import pl.xezolpl.mylibrary.adapters.Callbacks.QuoteDiffCallback;
 import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
@@ -50,7 +52,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         this.inflater = LayoutInflater.from(context);
 
         QuoteCategoryViewModel viewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteCategoryViewModel.class);
-        viewModel.getAllCategories().observe((FragmentActivity) context, quoteCategories -> allCategories = quoteCategories);
+        viewModel.getAllCategories().observe((FragmentActivity) context, quoteCategories ->  allCategories = quoteCategories);
     }
 
     //SETTERS & GETTERS
@@ -63,52 +65,16 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     }
 
     public void setQuotes(List<Quote> quotes) {
-        this.quotes = quotes;
         quotesFull = new ArrayList<>(quotes);
         chapterQuotes = new ArrayList<>();
-        notifyDataSetChanged();
-    }
 
-    private void setOnClickListeners(final ViewHolder holder, final Quote quote) {
+        QuoteDiffCallback callback = new QuoteDiffCallback(this.quotes, quotes);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback);
 
-        holder.editBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(context, AddQuoteActivity.class);
-            intent.putExtra("quote", quote);
-            context.startActivity(intent);
-            notifyDataSetChanged();
-        });
+        this.quotes.clear();
+        this.quotes.addAll(quotes);
+        diffResult.dispatchUpdatesTo(this);
 
-        holder.delBtn.setOnClickListener(view -> {
-            DeletingManager deletingManager = new DeletingManager((AppCompatActivity) context);
-            deletingManager.showDeletingDialog(context.getString(R.string.del_quote),
-                    context.getString(R.string.delete_quote),
-                    DeletingManager.QUOTE,
-                    quote);
-            notifyDataSetChanged();
-        });
-
-        holder.quote_lay.setOnClickListener(view -> {
-            if (!holder.isExpanded) {
-                holder.setExpanded(true);
-            } else {
-                holder.setExpanded(false);
-            }
-        });
-
-        if (inserting) {
-            holder.quote_lay.setOnLongClickListener(view -> {
-                if (!holder.isSelected) {
-                    chapterQuotes.remove(quote);
-                    quote.setChapterId(chapterId);
-                    chapterQuotes.add(quote);
-                    holder.setSelected(true);
-                } else {
-                    chapterQuotes.get(chapterQuotes.indexOf(quote)).setChapterId("");
-                    holder.setSelected(false);
-                }
-                return true;
-            });
-        }
     }
 
     public List<Quote> getChapterQuotes() {
@@ -120,18 +86,17 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.listitem_quote, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, context);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-
         //GET CATEGORY
         QuoteCategory category = null;
-        final Quote q = quotes.get(position);
+        final Quote quote = quotes.get(position);
 
         for (int i = 0; i < allCategories.size(); i++) {
-            if (allCategories.get(i).getId().equals(q.getCategoryId())) {
+            if (allCategories.get(i).getId().equals(quote.getCategoryId())) {
                 category = allCategories.get(i);
                 break;
             }
@@ -145,19 +110,31 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             color = Markers.BLUE_START_COLOR;
         }
 
-        if (chapterId.equals(q.getChapterId()) && inserting) {
+        if (chapterId.equals(quote.getChapterId()) && inserting) {
             holder.setSelected(true);
-            chapterQuotes.add(q);
+            chapterQuotes.add(quote);
         }
 
+        holder.setData(quote, color);
 
-        holder.setData(q.getTitle(), q.getQuote(), q.getAuthor(), q.getCategoryId(), q.getPage(), color);
-        setOnClickListeners(holder, q);
+       // if (position==0 && !chapterId.equals(quotes.get(0).getChapterId())){
+       //     holder.setSelected(false);
+       // }
     }
 
     @Override
     public int getItemCount() {
         return quotes.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     //FILTERING
@@ -171,8 +148,8 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 String filteredPattern = charSequence.toString().toLowerCase().trim();
                 for (Quote q : quotesFull) {
                     String thisQuoteCategory = null;
-                    for (QuoteCategory category : allCategories){
-                        if (q.getCategoryId().equals(category.getId())){
+                    for (QuoteCategory category : allCategories) {
+                        if (q.getCategoryId().equals(category.getId())) {
                             thisQuoteCategory = category.getName();
                         }
                     }
@@ -206,50 +183,116 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView quote_title_txtView, quote_txtView_expanded, quote_txtView_collapsed,
                 category_txtView, quote_page_txtView, quote_author_txtView;
+
         private ImageView category_imgView;
+
         private RelativeLayout quote_expanded_lay, quote_collapsed_lay, quote_lay;
+
         private Button editBtn, delBtn;
+
         private boolean isExpanded = false;
         private boolean isSelected = false;
 
-        ViewHolder(@NonNull View itemView) {
+        private Quote thisQuote;
+
+        private Context context;
+
+        ViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
+            this.context = context;
+
+            initWidgets();
+            setOnClickListeners();
+
+        }
+
+        private void initWidgets() {
             quote_title_txtView = itemView.findViewById(R.id.quote_title_txtView);
             quote_author_txtView = itemView.findViewById(R.id.quote_author_txtView);
-            quote_txtView_expanded = itemView.findViewById(R.id.quote_txtView_expanded);
-            quote_txtView_collapsed = itemView.findViewById(R.id.quote_txtView_collapsed);
             category_txtView = itemView.findViewById(R.id.category_txtView);
             quote_page_txtView = itemView.findViewById(R.id.quote_page_txtView);
+            quote_txtView_expanded = itemView.findViewById(R.id.quote_txtView_expanded);
+            quote_txtView_collapsed = itemView.findViewById(R.id.quote_txtView_collapsed);
+
             category_imgView = itemView.findViewById(R.id.category_imgView);
 
+            quote_lay = itemView.findViewById(R.id.quote_lay);
             quote_expanded_lay = itemView.findViewById(R.id.quote_expanded_lay);
             quote_collapsed_lay = itemView.findViewById(R.id.quote_collapsed_lay);
-            quote_lay = itemView.findViewById(R.id.quote_lay);
 
             editBtn = itemView.findViewById(R.id.editBtn);
             delBtn = itemView.findViewById(R.id.delBtn);
 
             quote_expanded_lay.setVisibility(View.GONE);
-
         }
 
-        void setData(String title, String quote, String author, String categoryid, int page, int hexdecColor) {
-            quote_title_txtView.setText(title);
-            quote_author_txtView.setText(author);
-            quote_txtView_expanded.setText(quote);
-            quote_txtView_collapsed.setText(quote);
-            quote_txtView_collapsed.setText(quote);
+        private void setOnClickListeners() {
+
+            editBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(context, AddQuoteActivity.class);
+                intent.putExtra("quote", thisQuote);
+                context.startActivity(intent);
+                notifyDataSetChanged();
+            });
+
+            delBtn.setOnClickListener(view -> {
+                DeletingManager deletingManager = new DeletingManager((AppCompatActivity) context);
+                deletingManager.showDeletingDialog(context.getString(R.string.del_quote),
+                        context.getString(R.string.delete_quote),
+                        DeletingManager.QUOTE,
+                        thisQuote);
+                notifyDataSetChanged();
+            });
+
+            quote_lay.setOnClickListener(view -> {
+                if (!isExpanded) {
+                    setExpanded(true);
+                } else {
+                    setExpanded(false);
+                }
+            });
+
+            if (inserting) {
+                quote_lay.setOnLongClickListener(view -> {
+                    if (!isSelected) {
+                        chapterQuotes.remove(thisQuote);
+                        thisQuote.setChapterId(chapterId);
+                        chapterQuotes.add(thisQuote);
+                        setSelected(true);
+                    } else {
+                        int index = chapterQuotes.indexOf(thisQuote);
+                        if (index > -1)
+                        chapterQuotes.get(index).setChapterId("");
+                        setSelected(false);
+                    }
+                    return true;
+                });
+            }
+        }
+
+        void setData(Quote quote, int color) {
+
+            thisQuote = quote;
+
+            //Fill the textviews
+            quote_title_txtView.setText(quote.getTitle());
+            quote_author_txtView.setText(quote.getAuthor());
+            quote_txtView_expanded.setText(quote.getQuote());
+            quote_txtView_collapsed.setText(quote.getQuote());
+            int page = quote.getPage();
             String pageString = "Page: " + page;
             quote_page_txtView.setText(pageString);
 
+            //Set drawable's color
             GradientDrawable drawable = (GradientDrawable) category_imgView.getBackground();
-            drawable.setColor(hexdecColor);
+            drawable.setColor(color);
 
+            //If page is 0 - set its visibility to GONE
             if (page == 0) quote_page_txtView.setVisibility(View.GONE); ///TODO:WTF
             else quote_page_txtView.setVisibility(View.VISIBLE);
 
             for (int i = 0; i < allCategories.size(); i++) {
-                if (allCategories.get(i).getId().equals(categoryid)) {
+                if (allCategories.get(i).getId().equals(quote.getCategoryId())) {
                     category_txtView.setText(allCategories.get(i).getName());
                 }
             }
@@ -268,13 +311,12 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         }
 
         void setSelected(boolean b) {
-            if (b) {
+             if (b) {
                 Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.selected_quote_background, null);
                 quote_lay.setBackground(drawable);
                 isSelected = true;
             } else {
-                Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.quote_background, null);
-                quote_lay.setBackground(drawable);
+                quote_lay.setBackground(null);
                 isSelected = false;
             }
         }

@@ -43,11 +43,11 @@ public class InsertQuoteActivity extends AppCompatActivity {
         adapter.setChapterId(chapter.getId());
 
         recView.setLayoutManager(new GridLayoutManager(this, 1));
+        recView.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
         viewModel.getQuotesByBook(chapter.getBookId()).observe(this, quotes -> {
             adapter.setQuotes(quotes);
-            recView.setAdapter(adapter);
         });
     }
 

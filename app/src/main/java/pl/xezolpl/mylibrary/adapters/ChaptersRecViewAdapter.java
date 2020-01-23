@@ -16,11 +16,13 @@ import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.xezolpl.mylibrary.adapters.Callbacks.ChapterDiffCallback;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddChapterActivity;
 import pl.xezolpl.mylibrary.activities.AddNoteActivity;
@@ -30,6 +32,8 @@ import pl.xezolpl.mylibrary.managers.LinearLayoutManagerWrapper;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
+
+import static pl.xezolpl.mylibrary.activities.AddNoteActivity.PARENT_CHAPTER;
 
 public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecViewAdapter.ChapterViewHolder> {
 
@@ -46,8 +50,12 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
     }
 
     public void setChaptersList(List<Chapter> chapters) {
-        this.chapters = chapters;
-        notifyDataSetChanged();
+        final ChapterDiffCallback callback = new ChapterDiffCallback(this.chapters, chapters);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback);
+
+        this.chapters.clear();
+        this.chapters.addAll(chapters);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -61,7 +69,18 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
 
     @Override
     public void onBindViewHolder(@NonNull ChapterViewHolder holder, int position) {
+        if (!chapters.get(position).equals(holder.thisChapter))
         holder.setData(chapters.get(position));
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     @Override
@@ -93,7 +112,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
 
             initWidgets();
             setOnClickListeners();
-            setRecViewVisible(true);
+            setQuotesNotesRecViewVisible(true);
 
             adapter = new NotesRecViewAdapter(context);
             quotesAdapter = new QuotesRecViewAdapter(context);
@@ -119,10 +138,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
 
         private void setOnClickListeners() {
 
-            wholeRelLay.setOnClickListener(view -> {
-                setRecViewVisible(!isRecViewVisible);
-                setQuotesViewVisible(!isRecViewVisible);
-            });
+            wholeRelLay.setOnClickListener(view -> setQuotesNotesRecViewVisible(!isRecViewVisible));
 
             wholeRelLay.setOnLongClickListener(view -> {
                 expandWithChildren(!isRecViewVisibleWithChildren);
@@ -132,20 +148,16 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
             moreBtn.setOnClickListener(view -> {
                 //change the  menu
                 PopupMenu popupMenu = new PopupMenu(context, view);
-                popupMenu.inflate(R.menu.chapter_note_popup_menu);
-
-                popupMenu.getMenu().getItem(1).setTitle("Edit chapter");
-                popupMenu.getMenu().getItem(3).setTitle("Delete chapter");
+                popupMenu.inflate(R.menu.chapter_popup_menu);
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     switch (menuItem.getItemId()) {
                         case R.id.addMenuBtn: {
 
                             Intent intent = new Intent(context, AddNoteActivity.class);
                             intent.putExtra("chapter", thisChapter);
-                            intent.putExtra("parent", 1);
+                            intent.putExtra("parent", PARENT_CHAPTER);
 
-                            setQuotesViewVisible(true);
-                            setRecViewVisible(true);
+                            setQuotesNotesRecViewVisible(true);
 
                             context.startActivity(intent);
                             break;
@@ -159,13 +171,13 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
                             context.startActivity(intent);
                             break;
                         }
+
                         case R.id.insertQuoteMenuBtn: {
 
                             Intent intent = new Intent(context, InsertQuoteActivity.class);
                             intent.putExtra("chapter", thisChapter);
 
-                            setRecViewVisible(true);
-                            setQuotesViewVisible(true);
+                            setQuotesNotesRecViewVisible(true);
 
                             context.startActivity(intent);
                             break;
@@ -199,30 +211,30 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
             textView.setText(chapter.getName());
 
             NoteViewModel noteModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
-            noteModel.getNotesByParent(chapter.getId()).observe(activity, notes -> adapter.setNotes(notes));
+            noteModel.getNotesByParent(chapter.getId()).observe(activity, notes -> {
+                adapter.setNotes(notes);
+                this.recView.invalidate();
+            });
 
             QuoteViewModel quoteViewModel = ViewModelProviders.of(activity).get(QuoteViewModel.class);
             quoteViewModel.getQuotesByChapter(chapter.getId()).observe(activity, quotes -> {
                 quotesAdapter.setQuotes(quotes);
-                quotesRecView.setAdapter(quotesAdapter);
+                this.quotesRecView.invalidate();
             });
-
         }
 
-        private void setRecViewVisible(boolean b) {
+        private void setQuotesNotesRecViewVisible(boolean b) {
             recView.setVisibility(b ? View.VISIBLE : View.GONE);
-            isRecViewVisible = b;
-        }
-
-        private void setQuotesViewVisible(boolean b) {
             quotesRecView.setVisibility(b ? View.VISIBLE : View.GONE);
+            isRecViewVisible = b;
+            if (!b) isRecViewVisibleWithChildren = false;
         }
 
         public void expandWithChildren(boolean b) {
             for (NotesRecViewAdapter.NoteViewHolder viewHolder : adapter.getNoteViewHolders()) {
                 viewHolder.expandWithChildren(b);
             }
-            setRecViewVisible(b);
+            setQuotesNotesRecViewVisible(b);
             isRecViewVisibleWithChildren = b;
 
         }
