@@ -19,7 +19,7 @@
 
         android:hint="@string/chapters_name"
         android:maxLength="100"
-        android:inputType="textMultiLine"
+        android:inputType="textMultiLine|textCapSentences"
         android:imeOptions="actionNext"
         android:textAlignment="center"
         app:met_underlineColor="#EF5350"
@@ -41,7 +41,7 @@
             android:hint="@string/chapter_number"
             android:maxLength="5"
             android:lines="1"
-            android:inputType="number"
+            android:inputType="number|textCapSentences"
             android:textAlignment="center"
             app:met_underlineColor="#EF5350"
             app:met_textColor="#666666"

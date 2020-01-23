@@ -73,7 +73,7 @@
             android:layout_marginEnd="10dp"
             android:hint="@string/book_title_author"
             android:imeOptions="actionDone"
-            android:inputType="text"
+            android:inputType="text|textCapSentences"
             android:maxLength="100"
             app:met_textColor="#666666"
             app:met_textColorHint="#EF5350"

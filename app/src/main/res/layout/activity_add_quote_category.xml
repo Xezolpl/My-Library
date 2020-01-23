@@ -13,7 +13,7 @@
         android:hint="@string/category_name"
         android:maxLines="1"
         android:maxLength="25"
-        android:inputType="text"
+        android:inputType="text|textCapSentences"
         android:imeOptions="actionDone"
         android:layout_margin="15dp"
         app:met_underlineColor="#EF5350"
