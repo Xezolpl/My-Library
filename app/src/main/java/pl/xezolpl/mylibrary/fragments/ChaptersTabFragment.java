@@ -70,16 +70,5 @@ public class ChaptersTabFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.chapters_menu, menu);
-        if (invocation <=1){
-            try {
-                for (ChaptersRecViewAdapter.ChapterViewHolder viewHolder : adapter.getChapterViewHolders()){
-                    viewHolder.expandWithChildren(false);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            invocation++;
-        }
-
     }
 }

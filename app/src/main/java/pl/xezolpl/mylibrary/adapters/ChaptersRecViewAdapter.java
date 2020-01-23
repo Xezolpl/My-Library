@@ -38,16 +38,12 @@ import static pl.xezolpl.mylibrary.activities.AddNoteActivity.PARENT_CHAPTER;
 public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecViewAdapter.ChapterViewHolder> {
 
     private List<Chapter> chapters = new ArrayList<>();
-    private List<ChapterViewHolder> chapterViewHolders = new ArrayList<>();
     private Context context;
 
     public ChaptersRecViewAdapter(Context context) {
         this.context = context;
     }
 
-    public List<ChapterViewHolder> getChapterViewHolders() {
-        return chapterViewHolders;
-    }
 
     public void setChaptersList(List<Chapter> chapters) {
         final ChapterDiffCallback callback = new ChapterDiffCallback(this.chapters, chapters);
@@ -62,9 +58,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
     @Override
     public ChapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.listitem_chapter, parent, false);
-        ChapterViewHolder holder = new ChapterViewHolder(v, context);
-        chapterViewHolders.add(holder);
-        return holder;
+        return new ChapterViewHolder(v, context);
     }
 
     @Override
@@ -88,6 +82,15 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
         return chapters.size();
     }
 
+    @Override
+    public void onViewAttachedToWindow(@NonNull ChaptersRecViewAdapter.ChapterViewHolder holder) {
+        if (holder.firstUse){
+            holder.setQuotesNotesRecViewVisible(false);
+            holder.firstUse = false;
+        }
+        super.onViewAttachedToWindow(holder);
+    }
+
     public class ChapterViewHolder extends RecyclerView.ViewHolder {
         private TextView textView;
         private RecyclerView recView, quotesRecView;
@@ -101,6 +104,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
 
         private boolean isRecViewVisible = false;
         private boolean isRecViewVisibleWithChildren = false;
+        private boolean firstUse = true;
 
         private Context context;
         private FragmentActivity activity;
@@ -213,13 +217,11 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
             NoteViewModel noteModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
             noteModel.getNotesByParent(chapter.getId()).observe(activity, notes -> {
                 adapter.setNotes(notes);
-                this.recView.invalidate();
             });
 
             QuoteViewModel quoteViewModel = ViewModelProviders.of(activity).get(QuoteViewModel.class);
             quoteViewModel.getQuotesByChapter(chapter.getId()).observe(activity, quotes -> {
                 quotesAdapter.setQuotes(quotes);
-                this.quotesRecView.invalidate();
             });
         }
 

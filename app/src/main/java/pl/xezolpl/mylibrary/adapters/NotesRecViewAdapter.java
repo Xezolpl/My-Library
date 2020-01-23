@@ -90,6 +90,14 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
         return position;
     }
 
+    @Override
+    public void onViewAttachedToWindow(@NonNull NoteViewHolder holder) {
+        if (holder.firstUse){
+            holder.setRecViewVisible(false);
+            holder.firstUse = false;
+        }
+        super.onViewAttachedToWindow(holder);
+    }
 
     class NoteViewHolder extends RecyclerView.ViewHolder {
 
@@ -103,6 +111,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
 
         private boolean isRecViewVisible = false;
         private boolean isRecViewVisibleWithChildren = false;
+        private boolean firstUse = true;
 
         private Context context;
         private FragmentActivity activity;

@@ -7,8 +7,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chapters_recView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="40dp"/>
+        android:layout_height="wrap_content"
+        android:paddingBottom="60dp"
+        android:clipToPadding="false"
+        android:descendantFocusability="blocksDescendants" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/chapters_fab"
