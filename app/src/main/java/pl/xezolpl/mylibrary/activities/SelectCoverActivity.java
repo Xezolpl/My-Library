@@ -135,7 +135,7 @@ public class SelectCoverActivity extends AppCompatActivity {
         if (networkInfo != null && networkInfo.isConnected()) {
             new FetchBook(adapter, this, coversToSearch).execute(search);
         } else {
-            Toast.makeText(this, "No internet connection.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
         }
     }
 

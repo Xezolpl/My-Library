@@ -202,7 +202,7 @@ public class BookDetailsTabFragment extends Fragment {
     private void loadBookData() {
         bookTitle_text.setText(thisBook.getTitle());
         bookAuthor_text.setText(thisBook.getAuthor());
-        String pages = "Pages: " + thisBook.getPages();
+        String pages = getString(R.string.pages) +" :" + thisBook.getPages();
         bookPages_text.setText(pages);
         bookDescription_text.setText(thisBook.getDescription());
         Glide.with(this).asBitmap().load(thisBook.getImageUrl()).into(book_image);

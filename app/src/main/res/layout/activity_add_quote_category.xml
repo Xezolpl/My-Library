@@ -41,7 +41,7 @@
         app:fb_textColor="#fff"
         app:fb_textStyle="bold"
         app:fb_textSize="18sp"
-        app:fb_textPaddingStart="15dp"
+        app:fb_textPaddingStart="10dp"
 
         app:fb_backgroundColor="#ed0909"
         app:fb_cornerRadius="15dp"
@@ -52,8 +52,8 @@
 
         app:fb_icon="@drawable/ic_color_lens_black_32dp"
         app:fb_iconColor="#FFF"
-        app:fb_iconMarginEnd="10dp"
-        app:fb_iconMarginStart="10dp"
+        app:fb_iconMarginEnd="7dp"
+        app:fb_iconMarginStart="7dp"
         app:fb_iconPosition="left"
         app:fb_iconWidth="32dp"
         app:fb_iconHeight="32dp"

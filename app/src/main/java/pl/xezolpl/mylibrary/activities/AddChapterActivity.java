@@ -90,12 +90,12 @@ public class AddChapterActivity extends AppCompatActivity {
         try {
             number = Integer.valueOf(add_chapter_number.getText().toString());
         } catch (NumberFormatException exc) {
-            Toast.makeText(this, "Write it as natural number.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.type_it_as_a_number), Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (name.length() < 1) {
-            Toast.makeText(this, "Chapter's name can not be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.chapter_name_empty), Toast.LENGTH_SHORT).show();
             return false;
         }
         thisChapter = new Chapter(id, number, name, bookId);

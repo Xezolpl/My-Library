@@ -29,7 +29,6 @@ public class BookNotesTabFragment extends Fragment {
     private Book thisBook;
     private TabFragmentPagerAdapter adapter;
     private QuotesTabFragment quotesTabFragment;
-    private ChaptersTabFragment chaptersTabFragment;
 
     public BookNotesTabFragment(Book thisBook, Context context) {
         this.thisBook = thisBook;
@@ -48,10 +47,10 @@ public class BookNotesTabFragment extends Fragment {
         adapter = new TabFragmentPagerAdapter(Objects.requireNonNull(getFragmentManager(), "Requires non null FragmentPager!"));
 
         quotesTabFragment = new QuotesTabFragment(context, thisBook.getId());
-        chaptersTabFragment = new ChaptersTabFragment(context, thisBook.getId());
+        ChaptersTabFragment chaptersTabFragment = new ChaptersTabFragment(context, thisBook.getId());
 
-        adapter.addFragment(chaptersTabFragment, "Chapters & Notes");
-        adapter.addFragment(quotesTabFragment, "Quotes");
+        adapter.addFragment(chaptersTabFragment, getString(R.string.chapters_notes));
+        adapter.addFragment(quotesTabFragment, getString(R.string.quotes));
 
         setHasOptionsMenu(true);
         quotesTabFragment.setMenuVisibility(false);

@@ -29,7 +29,6 @@ public class ChaptersTabFragment extends Fragment {
     private Context context;
 
     private ChaptersRecViewAdapter adapter;
-    private int invocation = 0;
 
     ChaptersTabFragment(Context context, String bookId) {
         this.bookId = bookId;

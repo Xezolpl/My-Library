@@ -77,6 +77,7 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
             final int hexdecColorCopy = hexdecColor;
 
             ColorPicker colorPicker = new ColorPicker(AddQuoteCategoryActivity.this);
+            colorPicker.setTitle(getString(R.string.select_color));
             colorPicker.setDefaultColorButton(hexdecColor);
 
             colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
@@ -121,7 +122,7 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
         String name = name_edtTxt.getText().toString();
 
         if (name.isEmpty()) {
-            Toast.makeText(this, "Category's name cannot be empty.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.category_empty), Toast.LENGTH_SHORT).show();
             return false;
         }
         thisCategory = new QuoteCategory(id, name, hexdecColor);

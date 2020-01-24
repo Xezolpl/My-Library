@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="actionAndAdventure" translatable="true">Action and Adventure</string>
+    <string name="">Action and Adventure</string>
     <string name="art" translatable="true">Art</string>
     <string name="biography" translatable="true">Biography</string>
     <string name="business" translatable="true">Business</string>
@@ -22,7 +22,7 @@
     <string name="politic" translatable="true">Political</string>
     <string name="psychology" translatable="true">Psychology</string>
     <string name="religion" translatable="true">Religion</string>
-    <string name="self_improvement" translatable="true">Self Improvement</string>
+    <string name="self_improvement" translatable="true">Self improvement</string>
     <string name="science" translatable="true">Science</string>
     <string name="science_fiction" translatable="true">Science Fiction</string>
     <string name="textbook" translatable="true">Textbook</string>

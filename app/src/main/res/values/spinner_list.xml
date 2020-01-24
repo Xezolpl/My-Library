@@ -6,4 +6,10 @@
         <item>Currently reading books</item>
         <item>Already read books</item>
     </string-array>
+    <string-array name="spinner_array_pl">
+        <item>Wszystkie książki</item>
+        <item>Do przeczytania</item>
+        <item>Obecnie czytane</item>
+        <item>Już przeczytane</item>
+    </string-array>
 </resources>

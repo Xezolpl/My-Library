@@ -154,7 +154,7 @@ public class AddQuoteActivity extends AppCompatActivity {
                 intent.putExtra("category", qc);
                 startActivityForResult(intent, ADD_QUOTE_CATEGORY_REQUEST_CODE);
             } else {
-                Toast.makeText(this, "Its basic category, you cannot edit or delete it.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.basic_category), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -168,7 +168,7 @@ public class AddQuoteActivity extends AppCompatActivity {
                         DeletingManager.QUOTECATEGORY,
                         qc);
             } else {
-                Toast.makeText(this, "Its basic category, you cannot edit or delete it.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.basic_category), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -208,7 +208,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         //isQuoteShorterThan3
         if (quote_EditTxt.getText().length() < 3) {
-            Toast.makeText(this, "Quote can't be that short!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.quote_short) , Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -235,7 +235,7 @@ public class AddQuoteActivity extends AppCompatActivity {
             try {
                 page = Integer.valueOf(page_EditTxt.getText().toString());
             } catch (NumberFormatException exc) {
-                Toast.makeText(this, "Type pages as a number", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.type_pages_as_a_number), Toast.LENGTH_SHORT).show();
                 return false;
             }
         }

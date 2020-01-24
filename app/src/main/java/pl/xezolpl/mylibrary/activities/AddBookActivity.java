@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.github.nikartm.button.FitButton;
 
+import java.util.Locale;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
@@ -137,8 +138,21 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
     private void setUpStatusSpinner() {
-        ArrayAdapter<CharSequence> statusArrayAdapter = ArrayAdapter.createFromResource(this,
-                R.array.spinner_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> statusArrayAdapter;
+        String language = Locale.getDefault().getLanguage();
+        switch (language){
+            case "pl":{
+                statusArrayAdapter = ArrayAdapter.createFromResource(this,
+                        R.array.spinner_array_pl, android.R.layout.simple_spinner_item);
+                break;
+            }
+            default:{
+                statusArrayAdapter = ArrayAdapter.createFromResource(this,
+                        R.array.spinner_array, android.R.layout.simple_spinner_item);
+                break;
+            }
+        }
+
         statusArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         status_spinner.setAdapter(statusArrayAdapter);
     }
@@ -160,7 +174,7 @@ public class AddBookActivity extends AppCompatActivity {
             try {
                 pages = Integer.valueOf(add_book_pages.getText().toString());
             } catch (NumberFormatException exc) {
-                Toast.makeText(this, "Type pages as a number", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.type_pages_as_a_number), Toast.LENGTH_SHORT).show();
                 return false;
             }
         }

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -130,11 +129,9 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
                 String categoryName1 = context.getString(category.getNameR());
                 if (holder.checked) {
                     categoriesViewModel.delete(new CategoryWithBook(bookId + categoryName1, bookId, categoryName1));
-                    Toast.makeText(context, "Category deleted", Toast.LENGTH_SHORT).show();
                     holder.setChecked(false);
                 } else {
                     categoriesViewModel.insert(new CategoryWithBook(bookId + categoryName1, bookId, categoryName1));
-                    Toast.makeText(context, "Category inserted", Toast.LENGTH_SHORT).show();
                     holder.setChecked(true);
                 }
             }

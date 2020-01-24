@@ -17,13 +17,13 @@
         android:id="@+id/action_more"
         android:icon="@drawable/ic_more_vert_white_24dp"
         android:title=""
-        app:showAsAction="always" >
+        app:showAsAction="ifRoom" >
 
         <menu>
             <item
                 android:id="@+id/favourite"
                 android:icon="@mipmap/favourite_star"
-                android:title="Add to favourites" />
+                android:title="@string/add_to_favourites" />
 
             <item android:id="@+id/toRead"
                 android:title="@string/want_to_read"/>

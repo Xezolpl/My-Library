@@ -7,25 +7,25 @@
         <item
             android:id="@+id/nav_books"
             android:icon="@drawable/ic_book_black_24dp"
-            android:title="All books" />
+            android:title="@string/all_books" />
         <item
             android:id="@+id/nav_categories"
             android:icon="@drawable/ic_apps_black_24dp"
-            android:title="Categories" />
+            android:title="@string/categories" />
         <item
             android:id="@+id/nav_quotes"
             android:icon="@drawable/ic_format_quote_black_24dp"
-            android:title="Quotes" />
+            android:title="@string/quotes" />
 
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Settings" />
+            android:title="@string/settings" />
 
         <item
             android:id="@+id/nav_contact"
             android:icon="@drawable/ic_contact_mail_black_24dp"
-            android:title="Contact and about" />
+            android:title="@string/contact_and_about" />
     </group>
 
 </menu>
