@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="">Action and Adventure</string>
+    <string name="actionAndAdventure">Action and Adventure</string>
     <string name="art" translatable="true">Art</string>
     <string name="biography" translatable="true">Biography</string>
     <string name="business" translatable="true">Business</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Moja biblioteczka</string>
-    <string name="">Akcja i przygody</string>
+    <string name="actionAndAdventure">Akcja i przygody</string>
     <string name="action_settings">Ustawienia</string>
     <string name="add_category">Dodaj kategorie</string>
     <string name="add_quote">Dodaj cytat</string>
