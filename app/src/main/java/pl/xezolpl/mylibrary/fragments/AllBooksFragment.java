@@ -71,7 +71,6 @@ public class AllBooksFragment extends Fragment {
         });
     }
 
-
     private void initWidgets(View v) {
         books_viewPager = v.findViewById(R.id.books_viewPager);
         books_tabLayout = v.findViewById(R.id.books_tabLayout);
@@ -105,9 +104,6 @@ public class AllBooksFragment extends Fragment {
         }else {
             Log.e(TAG, "setUpViewPager: ", new NullPointerException("getFragmentManager == null"));
         }
-
-
-
     }
 
 }

@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +20,6 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.MainActivity;
-import pl.xezolpl.mylibrary.fragments.BooksListTabFragment;
 import pl.xezolpl.mylibrary.models.Category;
 import pl.xezolpl.mylibrary.models.CategoryWithBook;
 import pl.xezolpl.mylibrary.viewmodels.CategoriesViewModel;
@@ -34,17 +32,14 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
     private int mode;
     private LayoutInflater inflater;
     private List<Category> categories = new ArrayList<>();
-    private FragmentManager fm;
     private String bookId;
     private CategoriesViewModel categoriesViewModel;
     private List<Integer> checkedPositions = new ArrayList<>();
-    private boolean inCategory = false;
 
-    public CategoryRecViewAdapter(Context context, int mode, FragmentManager fm, String bookId) {
+    public CategoryRecViewAdapter(Context context, int mode, String bookId) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.mode = mode;
-        this.fm = fm;
         this.bookId = bookId;
         loadCategories();
 
@@ -60,14 +55,6 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
             notifyDataSetChanged();
         });
 
-    }
-
-    public void setCategoryPicked(boolean b) {
-        inCategory = b;
-    }
-
-    public boolean isCategoryPicked() {
-        return inCategory;
     }
 
     private void loadCategories() {
@@ -120,11 +107,10 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
 
         holder.relLay.setOnClickListener(view -> {
             if (mode == NORMAL_MODE) {
-                inCategory = true;
-                fm.beginTransaction().replace(R.id.fragment_container,
-                        new BooksListTabFragment(context.getString(category.getNameR()))).commit();
-                ((MainActivity) context).setNavViewItem(0);
-
+                ((MainActivity)context).setSelectedCategory(context.getString(category.getNameR()));
+                //fm.beginTransaction().add(R.id.fragment_container,
+                //        new BooksListTabFragment(context.getString(category.getNameR())))
+                 //       .detach().commit();
             } else if (mode == SELECTING_CATEGORIES_MODE) {
                 String categoryName1 = context.getString(category.getNameR());
                 if (holder.checked) {

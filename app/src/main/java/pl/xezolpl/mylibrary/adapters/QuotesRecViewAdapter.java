@@ -288,7 +288,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             drawable.setColor(color);
 
             //If page is 0 - set its visibility to GONE
-            if (page == 0) quote_page_txtView.setVisibility(View.GONE); ///TODO:WTF
+            if (page == 0) quote_page_txtView.setVisibility(View.GONE);
             else quote_page_txtView.setVisibility(View.VISIBLE);
 
             for (int i = 0; i < allCategories.size(); i++) {

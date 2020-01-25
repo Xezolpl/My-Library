@@ -21,7 +21,7 @@ public class CategoriesFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new CategoryRecViewAdapter(getContext(), CategoryRecViewAdapter.NORMAL_MODE, getFragmentManager(), null);
+        adapter = new CategoryRecViewAdapter(getContext(), CategoryRecViewAdapter.NORMAL_MODE, null);
     }
 
     @Nullable
@@ -38,11 +38,5 @@ public class CategoriesFragment extends Fragment {
 
     public CategoryRecViewAdapter getAdapter() {
         return adapter;
-    }
-
-    @Override
-    public void onResume() {
-        adapter.setCategoryPicked(false);
-        super.onResume();
     }
 }

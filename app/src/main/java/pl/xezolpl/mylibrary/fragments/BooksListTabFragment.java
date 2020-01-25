@@ -61,6 +61,7 @@ public class BooksListTabFragment extends Fragment {
                 if (categoryName == null) {
                     booksRecViewAdapter.setBooks(books);
                 } else {
+                    /*BOOKS WITH CATEGORY*/
                     final List<Book> booksWithCategory = new ArrayList<>();
 
                     CategoriesViewModel categoriesViewModel = ViewModelProviders.of((FragmentActivity) context)

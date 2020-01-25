@@ -12,11 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.fragments.AllBooksFragment;
+import pl.xezolpl.mylibrary.fragments.BooksListTabFragment;
 import pl.xezolpl.mylibrary.fragments.CategoriesFragment;
 import pl.xezolpl.mylibrary.fragments.ContactFragment;
 import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
@@ -25,7 +28,6 @@ import spencerstudios.com.ezdialoglib.Font;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private NavigationView nav_view;
 
     private AllBooksFragment allBooksFragment;
     private CategoriesFragment categoriesFragment;
@@ -33,6 +35,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ContactFragment contactFragment;
 
     private EZDialog.Builder ezDialogBuilder;
+
+    private FragmentManager fm;
+    private Fragment currFragment;
+    private boolean fromCategory = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
-        nav_view = findViewById(R.id.nav_view);
+        NavigationView nav_view = findViewById(R.id.nav_view);
         nav_view.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -56,8 +62,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             quotesFragment = new QuotesTabFragment(this, "");
             contactFragment = new ContactFragment();
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    allBooksFragment).commit();
+            fm = getSupportFragmentManager();
+
+            fm.beginTransaction()
+                    .add(R.id.fragment_container, allBooksFragment)
+                    .add(R.id.fragment_container, categoriesFragment)
+                    .add(R.id.fragment_container, quotesFragment)
+                    .add(R.id.fragment_container, contactFragment)
+                    .detach(categoriesFragment)
+                    .detach(quotesFragment)
+                    .detach(contactFragment)
+                    .commit();
+
+            currFragment = allBooksFragment;
+
             nav_view.setCheckedItem(R.id.nav_books);
         }
 
@@ -67,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setMessage(getString(R.string.exit_app_msg))
                 .setPositiveBtnText(getString(R.string.just_exit))
                 .setNegativeBtnText(getString(R.string.lets_read))
-                .OnPositiveClicked(() -> finish())
+                .OnPositiveClicked(this::finish)
                 .OnNegativeClicked(() -> {})
                 //stylization
                 .setTitleDividerLineColor(Color.parseColor("#ed0909"))
@@ -91,40 +109,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_books: {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, allBooksFragment).commit();
+                fm.beginTransaction().detach(currFragment).attach(allBooksFragment).commit();
+                currFragment = allBooksFragment;
                 allBooksFragment.setUpViewPager();
-                //yup setUpViewPager has to be invoked after the transaction because transaction creates the view
                 break;
             }
             case R.id.nav_categories: {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, categoriesFragment).commit();
+                fm.beginTransaction().detach(currFragment).attach(categoriesFragment).commit();
+                currFragment = categoriesFragment;
                 break;
             }
             case R.id.nav_quotes: {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, quotesFragment).commit();
+                fm.beginTransaction().detach(currFragment).attach(quotesFragment).commit();
+                currFragment = quotesFragment;
                 break;
             }
             case R.id.nav_contact: {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, contactFragment).commit();
+                fm.beginTransaction().detach(currFragment).attach(contactFragment).commit();
+                currFragment = contactFragment;
                 break;
             }
             default: {
                 return false;
             }
         }
+        fromCategory = false;
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    public void setNavViewItem(int position) {
-        nav_view.setCheckedItem(position);
+    public void setSelectedCategory(String category) {
+        BooksListTabFragment booksWithCategoryFragment = new BooksListTabFragment(category);
+
+        fm.beginTransaction().add(R.id.fragment_container, booksWithCategoryFragment)
+                .detach(currFragment).commit();
+
+        currFragment = booksWithCategoryFragment;
+        fromCategory = true;
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && !drawer.isDrawerOpen(GravityCompat.START)) {
-            if(nav_view.getMenu().findItem(R.id.nav_categories).isChecked() && categoriesFragment.getAdapter().isCategoryPicked()){
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, categoriesFragment).commit();
+            if(fromCategory){
+                fm.beginTransaction().detach(currFragment).attach(categoriesFragment).commit();
+                currFragment = categoriesFragment;
+                fromCategory = false;
             }else{
                 ezDialogBuilder.build();
             }

@@ -105,7 +105,7 @@ public class AddBookActivity extends AppCompatActivity {
             RecyclerView recView = dialog.findViewById(R.id.recView);
             if (recView != null) {
                 recView.setAdapter(new CategoryRecViewAdapter(AddBookActivity.this,
-                        CategoryRecViewAdapter.SELECTING_CATEGORIES_MODE, getSupportFragmentManager(), bookId));
+                        CategoryRecViewAdapter.SELECTING_CATEGORIES_MODE, bookId));
                 recView.setLayoutManager(new GridLayoutManager(AddBookActivity.this, 2));
             } else {
                 Log.w(TAG, "select_category_btn -> onClick: ", new NullPointerException());
