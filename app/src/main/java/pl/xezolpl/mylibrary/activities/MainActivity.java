@@ -23,6 +23,7 @@ import pl.xezolpl.mylibrary.fragments.BooksListTabFragment;
 import pl.xezolpl.mylibrary.fragments.CategoriesFragment;
 import pl.xezolpl.mylibrary.fragments.ContactFragment;
 import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
+import pl.xezolpl.mylibrary.fragments.SettingsFragment;
 import spencerstudios.com.ezdialoglib.EZDialog;
 import spencerstudios.com.ezdialoglib.Font;
 
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AllBooksFragment allBooksFragment;
     private CategoriesFragment categoriesFragment;
     private QuotesTabFragment quotesFragment;
+    private SettingsFragment settingsFragment;
     private ContactFragment contactFragment;
 
     private EZDialog.Builder ezDialogBuilder;
@@ -49,17 +51,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
+
         NavigationView nav_view = findViewById(R.id.nav_view);
         nav_view.setNavigationItemSelectedListener(this);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
         if (savedInstanceState == null) {
             allBooksFragment = new AllBooksFragment();
             categoriesFragment = new CategoriesFragment();
             quotesFragment = new QuotesTabFragment(this, "");
+            settingsFragment = new SettingsFragment();
             contactFragment = new ContactFragment();
 
             fm = getSupportFragmentManager();
@@ -68,10 +74,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .add(R.id.fragment_container, allBooksFragment)
                     .add(R.id.fragment_container, categoriesFragment)
                     .add(R.id.fragment_container, quotesFragment)
+                    .add(R.id.fragment_container, settingsFragment)
                     .add(R.id.fragment_container, contactFragment)
+
                     .detach(categoriesFragment)
                     .detach(quotesFragment)
+                    .detach(settingsFragment)
                     .detach(contactFragment)
+
                     .commit();
 
             currFragment = allBooksFragment;
@@ -122,6 +132,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_quotes: {
                 fm.beginTransaction().detach(currFragment).attach(quotesFragment).commit();
                 currFragment = quotesFragment;
+                break;
+            }
+            case R.id.nav_settings: {
+                fm.beginTransaction().detach(currFragment).attach(settingsFragment).commit();
+                currFragment = settingsFragment;
                 break;
             }
             case R.id.nav_contact: {

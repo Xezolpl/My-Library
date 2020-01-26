@@ -109,6 +109,8 @@
     <string name="quote_short">Quote can\'t be that short.</string>
     <string name="category_empty">Category\'s name cannot be empty.</string>
     <string name="no_internet">No internet connection.</string>
+    <string name="theme">Theme</string>
+    <string name="language">Language</string>
 
     <!-- Layout strings -->
 

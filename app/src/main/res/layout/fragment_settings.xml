@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rellay1"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <TextView
+                android:id="@+id/txtview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/theme"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:textColor="#ed0909" />
+
+            <ImageView
+                android:layout_width="220dp"
+                android:layout_height="1.5dp"
+                android:layout_below="@id/txtview"
+                android:background="#ed0909"
+                android:layout_alignStart="@id/txtview"
+                android:layout_alignEnd="@id/txtview"/>
+
+            <Spinner
+                android:id="@+id/theme_spinner"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"/>
+
+            <com.github.nikartm.button.FitButton
+                android:id="@+id/save_theme_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="20dp"
+
+                app:fb_text="Save"
+                app:fb_textColor="@color/white"
+                app:fb_textStyle="bold"
+                app:fb_textSize="18sp"
+
+                app:fb_backgroundColor="#ed0909"
+                app:fb_cornerRadius="15dp"
+
+                app:fb_icon="@drawable/ic_save_white_24dp"
+                app:fb_iconColor="@color/white"
+                app:fb_iconPosition="left"
+                app:fb_iconHeight="23dp"
+                app:fb_iconWidth="23dp"
+                app:fb_iconMarginStart="7dp"
+                app:fb_iconMarginEnd="7dp"
+
+                app:fb_divWidth="1.5dp"
+                app:fb_divHeight="25dp"
+                app:fb_divColor="@color/white"
+                app:fb_divMarginEnd="10dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rellay2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/txtview2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/language"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:textColor="#ed0909" />
+
+            <ImageView
+                android:layout_width="220dp"
+                android:layout_height="1.5dp"
+                android:layout_below="@id/txtview2"
+                android:background="#ed0909"
+                android:layout_alignStart="@id/txtview2"
+                android:layout_alignEnd="@id/txtview2"/>
+
+            <Spinner
+                android:id="@+id/language_spinner"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"/>
+
+            <com.github.nikartm.button.FitButton
+                android:id="@+id/save_language_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="20dp"
+
+                app:fb_text="Save"
+                app:fb_textColor="@color/white"
+                app:fb_textStyle="bold"
+                app:fb_textSize="18sp"
+
+                app:fb_backgroundColor="#ed0909"
+                app:fb_cornerRadius="15dp"
+
+                app:fb_icon="@drawable/ic_save_white_24dp"
+                app:fb_iconColor="@color/white"
+                app:fb_iconPosition="left"
+                app:fb_iconHeight="23dp"
+                app:fb_iconWidth="23dp"
+                app:fb_iconMarginStart="7dp"
+                app:fb_iconMarginEnd="7dp"
+
+                app:fb_divWidth="1.5dp"
+                app:fb_divHeight="25dp"
+                app:fb_divColor="@color/white"
+                app:fb_divMarginEnd="10dp" />
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>
