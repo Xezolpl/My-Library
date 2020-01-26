@@ -92,7 +92,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
             if (inEdition) loadQuoteData(thisQuote);
 
-            if(selectNewCategory){
+            if (selectNewCategory) {
                 category_spinner.setSelection(spinnerAdapter.getItemPosition(newCategory.getName()));
                 selectNewCategory = false;
             }
@@ -132,8 +132,8 @@ public class AddQuoteActivity extends AppCompatActivity {
         page_EditTxt.setText(String.valueOf(quote.getPage()));
         chapterId = quote.getChapterId();
 
-        for (int i=0; i<categories.size(); i++){
-            if (thisQuote.getCategoryId().equals(categories.get(i).getId())){
+        for (int i = 0; i < categories.size(); i++) {
+            if (thisQuote.getCategoryId().equals(categories.get(i).getId())) {
                 category_spinner.setSelection(i);
                 break;
             }
@@ -208,7 +208,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         //isQuoteShorterThan3
         if (quote_EditTxt.getText().length() < 3) {
-            Toast.makeText(this, getString(R.string.quote_short) , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.quote_short), Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -286,7 +286,11 @@ public class AddQuoteActivity extends AppCompatActivity {
                     FirebaseVisionTextRecognizer cloudRecognizer = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
                     cloudRecognizer.processImage(visionImage)
                             .addOnSuccessListener(firebaseVisionText ->
-                                    quote_EditTxt.setText(firebaseVisionText.getText()))
+                            {
+                                String textWithoutNextLines = firebaseVisionText.getText().replace('\n', ' ');
+                                quote_EditTxt.setText(textWithoutNextLines);
+
+                            })
                             .addOnFailureListener(Throwable::printStackTrace);
 
                     //DELETING IMAGE FILE
