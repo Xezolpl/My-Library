@@ -34,15 +34,18 @@ public class TextDrawable extends Drawable {
         int width = r.width();
         int height = r.height();
 
-        float textSize = Math.min(width, height) * 1.15f;
+        float textSize = Math.min(width, height);
         if (text.charAt(1) == ')') {
             if (textSize > 50) {
-                textSize -= 25;
+                textSize -= 15;
             } else if (textSize > 100) {
-                textSize -= 50;
+                textSize -= 30;
             } else if (textSize > 200) {
-                textSize -= 100;
+                textSize -= 60;
             }
+        }
+        if (text.length()==3){
+            textSize*=0.83f;
         }
         paint.setTextSize(textSize);
 

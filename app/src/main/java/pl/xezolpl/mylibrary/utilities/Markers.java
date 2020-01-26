@@ -51,10 +51,10 @@ public abstract class Markers {
             }
             text = alphabet[markerPosition];
             //if markerPosition >= 26 (alphabet size (0-25)) then
-        } else if (markerType == NUMBER_MARKER) {
+        } else if (markerType == NUMBER_MARKER && markerPosition<99) {
             text = String.valueOf(markerPosition + 1);
             text += '.';
-        } else throw new IOException();
+        } else throw new IOException("Limit is 99");
 
 
         TextDrawable drawable = new TextDrawable(text);

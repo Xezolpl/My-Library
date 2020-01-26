@@ -75,7 +75,7 @@ public class AddNoteActivity extends AppCompatActivity {
         int parent = intent.getIntExtra("parent", 0);
 
         switch (parent) {
-            case 1: {
+            case PARENT_CHAPTER: {
                 final Chapter chapter = (Chapter) intent.getSerializableExtra("chapter");
                 parentId = chapter.getId();
                 id = UUID.randomUUID().toString();
@@ -84,7 +84,7 @@ public class AddNoteActivity extends AppCompatActivity {
                     if (notes.size() > 0) {
                         currentMarkerType = notes.get(0).getMarkerType();
                         markerTypeLocked = true;
-                        color = notes.get(0).getColor();
+                        color = notes.get(notes.size()-1).getColor();
                     } else {
                         color = Markers.BLUE_START_COLOR;
                     }
@@ -92,7 +92,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 });
                 break;
             }
-            case 2: {
+            case PARENT_NOTE: {
                 final Note note = (Note) intent.getSerializableExtra("note");
                 currentMarkerType = Markers.incrementMarker(note.getMarkerType());
                 parentId = note.getId();
@@ -102,7 +102,7 @@ public class AddNoteActivity extends AppCompatActivity {
                     if (notes.size() > 0) {
                         currentMarkerType = notes.get(0).getMarkerType();
                         markerTypeLocked = true;
-                        color = notes.get(0).getColor();
+                        color = notes.get(notes.size()-1).getColor();
                     } else {
                         color = note.getColor();
                     }
@@ -110,7 +110,7 @@ public class AddNoteActivity extends AppCompatActivity {
                 });
                 break;
             }
-            case 3: {
+            case EDITION: {
                 final Note note = (Note) intent.getSerializableExtra("note");
                 add_note_name.setText(note.getNote());
                 currentMarkerType = note.getMarkerType();
