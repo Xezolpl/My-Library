@@ -289,7 +289,6 @@ public class AddQuoteActivity extends AppCompatActivity {
                             {
                                 String textWithoutNextLines = firebaseVisionText.getText().replace('\n', ' ');
                                 quote_EditTxt.setText(textWithoutNextLines);
-
                             })
                             .addOnFailureListener(Throwable::printStackTrace);
 
