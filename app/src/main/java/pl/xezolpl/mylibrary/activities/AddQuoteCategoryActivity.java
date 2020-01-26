@@ -44,6 +44,7 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
         setFinishOnTouchOutside(false);
         setOnClickListeners();
 
+        colorPicker = new ColorPicker(AddQuoteCategoryActivity.this);
         drawable = (GradientDrawable) selected_color_imgView.getBackground();
 
         if (getIntent().hasExtra("category")) {
@@ -75,8 +76,7 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 
         color_btn.setOnClickListener(view -> {
             final int hexdecColorCopy = hexdecColor;
-
-            ColorPicker colorPicker = new ColorPicker(AddQuoteCategoryActivity.this);
+            colorPicker = new ColorPicker(AddQuoteCategoryActivity.this);
             colorPicker.setTitle(getString(R.string.select_color));
             colorPicker.setDefaultColorButton(hexdecColor);
 
