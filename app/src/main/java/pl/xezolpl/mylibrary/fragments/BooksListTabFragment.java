@@ -104,6 +104,8 @@ public class BooksListTabFragment extends Fragment {
     }
 
      void setFilter(String filter) {
-        booksRecViewAdapter.getFilter().filter(filter);
+        if (booksRecViewAdapter!=null){
+            booksRecViewAdapter.getFilter().filter(filter);
+        }
     }
 }

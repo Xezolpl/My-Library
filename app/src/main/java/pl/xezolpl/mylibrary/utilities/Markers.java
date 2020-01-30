@@ -22,10 +22,9 @@ public abstract class Markers {
     //SIMPLE MARKERS
     private static final int DOT_MARKER = R.drawable.color_dot;
     private static final int DASH_MARKER = R.drawable.color_dash;
-    private static final int STAR_MARKER = R.drawable.color_star;
 
     public static Drawable getSimpleMarker(Context context, int marker, int color) throws IOException {
-        if (marker == DOT_MARKER || marker == DASH_MARKER || marker == STAR_MARKER) {
+        if (marker == DOT_MARKER || marker == DASH_MARKER) {
             GradientDrawable drawable = (GradientDrawable) ContextCompat.getDrawable(context, marker);
             Objects.requireNonNull(drawable, "Drawable was null inside markers").setColor(color);
             return drawable;
@@ -79,10 +78,6 @@ public abstract class Markers {
                 break;
             }
             case DASH_MARKER: {
-                marker = STAR_MARKER;
-                break;
-            }
-            case STAR_MARKER: {
                 marker = NUMBER_MARKER;
                 break;
             }

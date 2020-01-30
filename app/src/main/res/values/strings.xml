@@ -111,6 +111,8 @@
     <string name="no_internet">No internet connection.</string>
     <string name="theme">Theme</string>
     <string name="language">Language</string>
+    <string name="book_details">Book\'s details</string>
+    <string name="book_notes">Book\'s notes</string>
 
     <!-- Layout strings -->
 

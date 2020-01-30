@@ -77,7 +77,7 @@ public class QuotesTabFragment extends Fragment {
             context.startActivity(intent);
         });
         setHasOptionsMenu(true);
-        setMenuVisibility(false);
+        if (!bookId.isEmpty())setMenuVisibility(false);
 
         return view;
     }

@@ -115,4 +115,6 @@
     <string name="type_it_as_a_number">Wpisz to jako liczba.</string>
     <string name="theme">Motyw</string>
     <string name="language">Język</string>
+    <string name="book_details">Szczegóły książki</string>
+    <string name="book_notes">Notatki i cytaty</string>
 </resources>

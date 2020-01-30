@@ -25,9 +25,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.xezolpl.mylibrary.adapters.Callbacks.NoteDiffCallback;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddNoteActivity;
+import pl.xezolpl.mylibrary.adapters.Callbacks.NoteDiffCallback;
 import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.managers.LinearLayoutManagerWrapper;
 import pl.xezolpl.mylibrary.models.Note;
@@ -209,6 +209,11 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                     drawable = Markers.getLetterMarker(markerType, position, note.getColor());
                 } else {
                     drawable = Markers.getSimpleMarker(context, note.getMarkerType(), note.getColor());
+                    ViewGroup.LayoutParams params = marker_imgView.getLayoutParams();
+                    marker_imgView.setPadding(5,0,0,0);
+                    params.width=69;
+                    params.height=64;
+                    marker_imgView.setLayoutParams(params);
                 }
                 marker_imgView.setImageDrawable(drawable);
             } catch (IOException e) {

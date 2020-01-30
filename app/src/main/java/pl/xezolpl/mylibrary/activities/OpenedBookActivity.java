@@ -44,8 +44,8 @@ public class OpenedBookActivity extends AppCompatActivity {
         Fragment bookDetailsTabFragment = new BookDetailsTabFragment(thisBook, this);
         Fragment bookNotesTabFragment = new BookNotesTabFragment(thisBook, this);
 
-        adapter.addFragment(bookDetailsTabFragment, "Book's details");
-        adapter.addFragment(bookNotesTabFragment, "Book's notes");
+        adapter.addFragment(bookDetailsTabFragment, getString(R.string.book_details));
+        adapter.addFragment(bookNotesTabFragment, getString(R.string.book_notes));
 
         opened_book_viewpager.setAdapter(adapter);
         opened_book_tablayout.setupWithViewPager(opened_book_viewpager);

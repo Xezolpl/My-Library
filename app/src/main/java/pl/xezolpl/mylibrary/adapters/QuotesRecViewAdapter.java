@@ -149,7 +149,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 for (Quote q : quotesFull) {
                     String thisQuoteCategory = null;
                     for (QuoteCategory category : allCategories) {
-                        if (q.getCategoryId().equals(category.getId())) {
+                        if (filteredPattern.equals(category.getName())) {
                             thisQuoteCategory = category.getName();
                         }
                     }
@@ -168,9 +168,16 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            List<Quote> filteredQuotes = (List)filterResults.values;
+
+            QuoteDiffCallback callback = new QuoteDiffCallback(quotes, filteredQuotes);
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback);
+
             quotes.clear();
-            quotes.addAll((List) filterResults.values);
-            notifyDataSetChanged();
+            quotes.addAll(filteredQuotes);
+
+            diffResult.dispatchUpdatesTo(QuotesRecViewAdapter.this);
+
         }
     };
 

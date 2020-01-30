@@ -13,7 +13,7 @@ public class TabFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
-    //TODO: ITS DEPRECATED! CHANGE IT
+
     public TabFragmentPagerAdapter(@NonNull FragmentManager fm){
         super(fm);
     }
