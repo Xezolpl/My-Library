@@ -117,4 +117,8 @@
     <string name="language">Język</string>
     <string name="book_details">Szczegóły książki</string>
     <string name="book_notes">Notatki i cytaty</string>
+    <string name="backup">Kopia zapasowa</string>
+    <string name="backup_off">Po reinstalacji aplikacji, nie odzyskasz danych jeżeli nie wykonałeś wcześniej kopii zapasowej.</string>
+    <string name="backup_on">Kopia zapasowa będzie tworzona na twoim koncie google po każdym zamknięciu aplikacji.</string>
+    <string name="backup_title">Automatycznie twórz kopię zapasową.</string>
 </resources>

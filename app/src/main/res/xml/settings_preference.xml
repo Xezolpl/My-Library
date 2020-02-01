@@ -1,0 +1,44 @@
+<!--
+  ~ Copyright 2018 The app Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="@string/language">
+
+        <ListPreference
+            app:defaultValue="reply"
+            app:entries="@array/languages"
+            app:entryValues="@array/languages_values"
+            app:key="lang"
+            app:title="@string/language"
+            app:useSimpleSummaryProvider="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/backup">
+
+        <SwitchPreferenceCompat
+            app:key="sync"
+            app:title="@string/backup_title"
+            app:summaryOn="@string/backup_on"
+            app:summaryOff="@string/backup_off"/>
+
+        <Preference android:title="Export database" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -86,6 +86,7 @@ public class AllBooksFragment extends Fragment {
     }
 
 
+
     public void setUpViewPager() {
         if (getFragmentManager() != null) {
             sectionsPagerAdapter = new TabFragmentPagerAdapter(getFragmentManager());

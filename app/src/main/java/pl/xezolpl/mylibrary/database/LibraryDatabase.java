@@ -42,7 +42,7 @@ public abstract class LibraryDatabase extends RoomDatabase {
             synchronized (LibraryDatabase.class) {
                 if (libraryDatabaseInstance == null) {
                     libraryDatabaseInstance = Room.databaseBuilder(context.getApplicationContext(),
-                            LibraryDatabase.class, "library_database")
+                            LibraryDatabase.class, "library_database.db")
                             .build();
                 }
             }

@@ -11,22 +11,20 @@ import androidx.fragment.app.Fragment;
 
 import pl.xezolpl.mylibrary.R;
 
-public class SettingsFragment extends Fragment {
 
+public class SettingsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         initWidgets(view);
-        createOnClickListeners();
+        setOnClickListeners();
         return view;
     }
-
     private void initWidgets(View v){
 
     }
-
-    private void createOnClickListeners(){
+    private void setOnClickListeners(){
 
     }
 }
