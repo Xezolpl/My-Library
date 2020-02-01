@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -196,5 +197,11 @@ public class AddBookActivity extends AppCompatActivity {
                 Glide.with(this).asBitmap().load(imageUrl).into(add_book_image);
             }
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
+        return super.onKeyDown(keyCode,event);
     }
 }

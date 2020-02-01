@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -37,7 +38,7 @@ public class AddNoteActivity extends AppCompatActivity {
     private FitButton ok_btn, cancel_btn, add_note_color_btn;
 
     private int currentMarkerType = Markers.NUMBER_MARKER;
-    private int color = Markers.BLUE_START_COLOR ;
+    private int color = Markers.BLUE_START_COLOR;
 
     private String parentId;
     private String id;
@@ -49,18 +50,17 @@ public class AddNoteActivity extends AppCompatActivity {
     private NoteViewModel viewModel;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setFinishOnTouchOutside(false);
 
         initWidgets();
         setOnClickListeners();
 
         viewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
-
         try {
             loadFromIntent();
         } catch (Exception exc) {
@@ -84,7 +84,7 @@ public class AddNoteActivity extends AppCompatActivity {
                     if (notes.size() > 0) {
                         currentMarkerType = notes.get(0).getMarkerType();
                         markerTypeLocked = true;
-                        color = notes.get(notes.size()-1).getColor();
+                        color = notes.get(notes.size() - 1).getColor();
                     } else {
                         color = Markers.BLUE_START_COLOR;
                     }
@@ -102,7 +102,7 @@ public class AddNoteActivity extends AppCompatActivity {
                     if (notes.size() > 0) {
                         currentMarkerType = notes.get(0).getMarkerType();
                         markerTypeLocked = true;
-                        color = notes.get(notes.size()-1).getColor();
+                        color = notes.get(notes.size() - 1).getColor();
                     } else {
                         color = note.getColor();
                     }
@@ -222,6 +222,10 @@ public class AddNoteActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
+        return super.onKeyDown(keyCode, event);
+    }
 
 }

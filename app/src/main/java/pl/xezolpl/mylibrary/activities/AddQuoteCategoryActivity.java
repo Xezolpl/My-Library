@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -128,5 +129,11 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
         thisCategory = new QuoteCategory(id, name, hexdecColor);
         return true;
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
+        return super.onKeyDown(keyCode,event);
     }
 }
