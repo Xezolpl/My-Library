@@ -162,15 +162,10 @@ public class FetchBook extends AsyncTask<String, Void, String> {
             int i = 0;
             String url;
 
-            // Look for results in the items array, exiting when both the title and author
-            // are found or when all items have been checked.
             while (i < itemsArray.length()) {
-                // Get the current item information.
                 JSONObject book = itemsArray.getJSONObject(i);
                 JSONObject volumeInfo = book.getJSONObject("volumeInfo");
 
-                // Try to get the author and title from the current item,
-                // catch if either field is empty and move on.
                 try {
                     JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
                     url = imageLinks.getString("smallThumbnail");
@@ -181,7 +176,6 @@ public class FetchBook extends AsyncTask<String, Void, String> {
                     e.printStackTrace();
                 }
 
-                // Move to the next item.
                 i++;
             }
             activity.runOnUiThread(() -> {

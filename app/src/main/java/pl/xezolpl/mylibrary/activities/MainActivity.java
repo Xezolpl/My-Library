@@ -1,16 +1,12 @@
 package pl.xezolpl.mylibrary.activities;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,18 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.material.navigation.NavigationView;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
-
-import java.util.Collections;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.fragments.AllBooksFragment;
@@ -39,15 +24,11 @@ import pl.xezolpl.mylibrary.fragments.CategoriesFragment;
 import pl.xezolpl.mylibrary.fragments.ContactFragment;
 import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import pl.xezolpl.mylibrary.fragments.SettingsFragment;
-import pl.xezolpl.mylibrary.managers.DriveServiceManager;
 import pl.xezolpl.mylibrary.managers.PermissionsManager;
 import spencerstudios.com.ezdialoglib.EZDialog;
 import spencerstudios.com.ezdialoglib.Font;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private static final int GOOGLE_SIGN_IN_REQ_CODE = 200;
-    private static final String TAG = "MainActivity";
-    private DriveServiceManager driveServiceManager;
 
     private DrawerLayout drawer;
 
@@ -207,60 +188,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-
-    //GOOGLE DRIVE API
-    public void requestSignIn(){
-        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
-                .build();
-
-        GoogleSignInClient client = GoogleSignIn.getClient(this, options);
-
-        startActivityForResult(client.getSignInIntent(), GOOGLE_SIGN_IN_REQ_CODE);
-    }
-
-    public void handleSignInIntent(@NonNull Intent data){
-        GoogleSignIn.getSignedInAccountFromIntent(data)
-                .addOnSuccessListener(googleSignInAccount -> {
-
-                    GoogleAccountCredential credential = GoogleAccountCredential
-                            .usingOAuth2(this, Collections.singleton(DriveScopes.DRIVE_FILE));
-
-                    credential.setSelectedAccountName(googleSignInAccount.getEmail());
-
-                    Drive googleDriveService = new Drive.Builder(AndroidHttp.newCompatibleTransport(),
-                            new AndroidJsonFactory(), credential) //todo there may be error (factory) to gson
-                            .setApplicationName(getString(R.string.app_name))
-                            .build();
-
-                    driveServiceManager = new DriveServiceManager(googleDriveService);
-                    uploadDatabaseFile();
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "handleSignInIntent: ", e);
-                    Toast.makeText(this, "Could not log in google's account. Error text: "+ e.toString(), Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    public void uploadDatabaseFile(){
-        driveServiceManager.createDatabaseFile()
-                .addOnSuccessListener(s -> {
-                    Toast.makeText(this, "Successfully uploaded the database.", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "You've fucked up "+ e.toString(), Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == GOOGLE_SIGN_IN_REQ_CODE && resultCode == RESULT_OK && data!=null){
-            handleSignInIntent(data);
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }
