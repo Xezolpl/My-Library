@@ -30,6 +30,10 @@ public class QuoteCategoryViewModel extends AndroidViewModel {
         return categoryDao.getQuoteCategory(name);
     }
 
+    public LiveData<QuoteCategory> getCategory(String id) {
+        return categoryDao.getCategory(id);
+    }
+
     public void insert(QuoteCategory quote) {
         new InsertAsyncTask(categoryDao).execute(quote);
     }

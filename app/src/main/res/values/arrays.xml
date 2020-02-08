@@ -1,12 +1,35 @@
 <resources>
-    <!-- Reply Preference -->
+
+    <!-- Language -->
     <string-array name="languages">
-        <item>English</item>
-        <item>Polski</item>
+        <item>@string/english</item>
+        <item>@string/polish</item>
     </string-array>
 
     <string-array name="languages_values">
         <item>english</item>
-        <item>polski</item>
+        <item>polish</item>
     </string-array>
+
+
+    <!-- Theme -->
+    <string-array name="themes">
+        <item>@string/light</item>
+        <item>@string/dark</item>
+    </string-array>
+
+    <string-array name="themes_values">
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+
+
+    <!-- Book status -->
+    <string-array name="status_array">
+        <item>@string/all_books</item>
+        <item>@string/want_to_read</item>
+        <item>@string/currently_reading</item>
+        <item>@string/already_read</item>
+    </string-array>
+
 </resources>

@@ -196,7 +196,7 @@ public class AddQuoteActivity extends AppCompatActivity {
             if (!PermissionsManager.checkCameraPermission(this)) {
                 PermissionsManager.requestCameraPermission(this);
             } else {
-                imgUri = IntentManager.setUpOutputUri(this);
+                imgUri = IntentManager.setUpImageOutputUri(this);
                 IntentManager.pickCamera(this, imgUri);
             }
         });
@@ -256,7 +256,7 @@ public class AddQuoteActivity extends AppCompatActivity {
                 boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
 
                 if (cameraAccepted && writeStorageAccepted) {
-                    imgUri = IntentManager.setUpOutputUri(this);
+                    imgUri = IntentManager.setUpImageOutputUri(this);
                     IntentManager.pickCamera(this, imgUri);
                 }
             }

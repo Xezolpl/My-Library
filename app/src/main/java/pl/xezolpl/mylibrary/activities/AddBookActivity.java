@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.github.nikartm.button.FitButton;
 
-import java.util.Locale;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
@@ -139,21 +138,8 @@ public class AddBookActivity extends AppCompatActivity {
     }
 
     private void setUpStatusSpinner() {
-        ArrayAdapter<CharSequence> statusArrayAdapter;
-        String language = Locale.getDefault().getLanguage();
-        switch (language){
-            case "pl":{
-                statusArrayAdapter = ArrayAdapter.createFromResource(this,
-                        R.array.spinner_array_pl, android.R.layout.simple_spinner_item);
-                break;
-            }
-            default:{
-                statusArrayAdapter = ArrayAdapter.createFromResource(this,
-                        R.array.spinner_array, android.R.layout.simple_spinner_item);
-                break;
-            }
-        }
-
+        ArrayAdapter<CharSequence> statusArrayAdapter = ArrayAdapter.createFromResource(this,
+                R.array.status_array, android.R.layout.simple_spinner_item);
         statusArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         status_spinner.setAdapter(statusArrayAdapter);
     }
@@ -180,7 +166,7 @@ public class AddBookActivity extends AppCompatActivity {
             }
         }
 
-        if (imageUrl==null){
+        if (imageUrl == null) {
             imageUrl = getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
         }
 
@@ -202,6 +188,6 @@ public class AddBookActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) return true;
-        return super.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
     }
 }

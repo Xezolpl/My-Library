@@ -121,4 +121,8 @@
     <string name="backup_off">Po reinstalacji aplikacji, nie odzyskasz danych jeżeli nie wykonałeś wcześniej kopii zapasowej.</string>
     <string name="backup_on">Kopia zapasowa będzie tworzona na twoim koncie google po każdym zamknięciu aplikacji.</string>
     <string name="backup_title">Automatycznie twórz kopię zapasową.</string>
+    <string name="dark">Ciemny</string>
+    <string name="english">Angielski</string>
+    <string name="light">Jasny</string>
+    <string name="polish">Polski</string>
 </resources>

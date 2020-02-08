@@ -1,12 +1,15 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,6 +27,7 @@ import pl.xezolpl.mylibrary.fragments.CategoriesFragment;
 import pl.xezolpl.mylibrary.fragments.ContactFragment;
 import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import pl.xezolpl.mylibrary.fragments.SettingsFragment;
+import pl.xezolpl.mylibrary.managers.IntentManager;
 import pl.xezolpl.mylibrary.managers.PermissionsManager;
 import spencerstudios.com.ezdialoglib.EZDialog;
 import spencerstudios.com.ezdialoglib.Font;
@@ -46,6 +50,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (getIntent().hasExtra("theme")){
+            int themeId;
+            if (getIntent().getStringExtra("theme").equals("dark")){
+                themeId = R.style.AppThemeDark;
+            }else{
+                themeId = R.style.AppTheme;
+            }
+            setTheme(themeId);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -98,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initWidgets(){
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
 
@@ -188,5 +202,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == IntentManager.PICK_DATABASE){
+            if(resultCode== RESULT_OK && data!=null){
+                //FIRST CONFIRM WITH EZDIALOG
+                Toast.makeText(this, "Successfully restored database", Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(this, getString(R.string.restore_db_fail), Toast.LENGTH_LONG).show();
+            }
+        }else if(requestCode == IntentManager.SAVE_DATABASE){
+
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -38,11 +38,13 @@
             android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
+
         <activity
             android:name=".activities.AddChapterActivity"
             android:parentActivityName=".activities.OpenedBookActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
+
         <activity
             android:name=".activities.AddNoteActivity"
             android:parentActivityName=".activities.OpenedBookActivity"
@@ -52,29 +54,35 @@
                 <action android:name="android.intent.action.INSERT_OR_EDIT" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.AddQuoteActivity"
             android:parentActivityName=".activities.OpenedBookActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
+
         <activity
             android:name=".activities.AddQuoteCategoryActivity"
             android:parentActivityName=".activities.AddQuoteActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
+
         <activity
             android:name=".activities.InsertQuoteActivity"
             android:parentActivityName=".activities.OpenedBookActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AlertDialog.AppCompat.Light.Dialog.NoActionBar" />
+
         <activity
             android:name=".activities.OpenedBookActivity"
             android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activities.SelectCoverActivity"
             android:parentActivityName=".activities.AddBookActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait">
@@ -82,8 +90,11 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:screenOrientation="portrait"

@@ -41,4 +41,8 @@ public class QuoteCategory implements Serializable {
     public int getColor() {
         return color;
     }
+
+    public void setName(@NonNull String name) {
+        this.name = name;
+    }
 }

@@ -31,7 +31,7 @@
     <string name="select_color">Select color</string>
     <string name="select_book_cover">Select book\'s cover</string>
     <string name="mateusz_pietras_xezolpl" translatable="false">Mateusz Pietras \'XezolPL\'</string>
-    <string name="app_description">Simple application your books  managment, making clear notes and writing  quotes.</string>
+    <string name="app_description">Simple application your books  management, making clear notes and writing  quotes.</string>
     <string name="category_image">Category image</string>
     <string name="placeholder_quote_title" translatable="false">Very long title placeholder</string>
     <string name="placeholder_quote_author" translatable="false">An author and the second one</string>
@@ -120,7 +120,16 @@
     <string name="backup_on">The backup will be created on your google account every app closing</string>
 
     <string name="theme">Theme</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+
+    <!-- Languages -->
     <string name="language">Language</string>
+    <string name="polish">Polish</string>
+    <string name="english">English</string>
+    <string name="export_db">Export database</string>
+    <string name="import_db">Import database</string>
+    <string name="restore_db_fail">Unable to restore database. You chose wrong database file or the file is damaged.</string>
 
 
 </resources>
