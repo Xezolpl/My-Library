@@ -29,6 +29,7 @@ import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import pl.xezolpl.mylibrary.fragments.SettingsFragment;
 import pl.xezolpl.mylibrary.managers.IntentManager;
 import pl.xezolpl.mylibrary.managers.PermissionsManager;
+import pl.xezolpl.mylibrary.managers.SettingsManager;
 import spencerstudios.com.ezdialoglib.EZDialog;
 import spencerstudios.com.ezdialoglib.Font;
 
@@ -50,15 +51,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (getIntent().hasExtra("theme")){
-            int themeId;
-            if (getIntent().getStringExtra("theme").equals("dark")){
-                themeId = R.style.AppThemeDark;
-            }else{
-                themeId = R.style.AppTheme;
-            }
-            setTheme(themeId);
-        }
+        SettingsManager manager = new SettingsManager(this);
+        manager.loadLanguage();
+        manager.loadTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
