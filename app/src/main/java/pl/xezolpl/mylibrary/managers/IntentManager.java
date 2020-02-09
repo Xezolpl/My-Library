@@ -14,8 +14,10 @@ public abstract class IntentManager {
 
     public static final int PICK_CAMERA_CODE = 300;
     public static final int PICK_GALLERY_CODE = 301;
+    public static final int PICK_DATABASE = 302;
+    public static final int SAVE_DATABASE = 303;
 
-    public static Uri setUpOutputUri(Activity activity){
+    public static Uri setUpImageOutputUri(Activity activity){
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "New image");
         values.put(MediaStore.Images.Media.DESCRIPTION, "Image");
@@ -43,6 +45,18 @@ public abstract class IntentManager {
         activity.startActivityForResult(intent, PICK_GALLERY_CODE);
     }
 
+    public static void pickDatabase(Activity activity){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        activity.startActivityForResult(intent, PICK_DATABASE);
+    }
+
+    public static void saveDatabase(Activity activity){
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        //File file = activity.getDatabasePath("library_database.db");
+        //intent.putExtra("file", file);
+        activity.startActivityForResult(intent, SAVE_DATABASE);
+    }
+
     public static String getRealPath(Activity activity, Uri uri) {
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
@@ -58,4 +72,5 @@ public abstract class IntentManager {
         }
         return null;
     }
+
 }

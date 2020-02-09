@@ -215,7 +215,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, getString(R.string.restore_db_fail), Toast.LENGTH_LONG).show();
             }
         }else if(requestCode == IntentManager.SAVE_DATABASE){
+            if(resultCode == RESULT_OK && data!=null){
+                String filePath = data.getData().getPath();
 
+            }else{
+
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
