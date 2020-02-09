@@ -38,7 +38,6 @@
     <string name="placeholder_page" translatable="false">Page: 1234</string>
     <string name="placeholder_quote_description" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed bibendum et sapien id facilisis. Duis mattis ornare dictum. Duis pulvinar condimentum rutrum. . Duis mattis ornare dictum. Duis pulvinar condimentum rutrum.</string>
     <string name="category_name_background">Category name background</string>
-    <string name="placeholder_category_name" translatable="false">categoryId place</string>
     <string name="placeholder_book_title" translatable="false">Funny book</string>
     <string name="placeholder_category">Category</string>
     <string name="placeholder_chapter" translatable="false">Chapter I: The beginning</string>

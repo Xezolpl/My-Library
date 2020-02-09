@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/category_imgView"
                 android:layout_margin="5dp"
-                android:text="@string/placeholder_category_name"
+                android:text="@string/uncategorized"
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:textStyle="bold" />
