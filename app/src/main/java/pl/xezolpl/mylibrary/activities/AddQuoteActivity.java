@@ -64,6 +64,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     private boolean selectNewCategory = false;
     private QuoteCategory newCategory;
+    private Quote latestQuote;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +92,18 @@ public class AddQuoteActivity extends AppCompatActivity {
             spinnerAdapter.setCategories(categories);
             category_spinner.setAdapter(spinnerAdapter);
 
+            //set spinner's selection on last used category
+            if (latestQuote!=null){
+                for (int i=0; i<categories.size(); i++){
+                    if (categories.get(i).getId().equals(latestQuote.getCategoryId())){
+                        category_spinner.setSelection(i);
+                        break;
+                    }
+                }
+            }
+
+
+
             if (inEdition) loadQuoteData(thisQuote);
 
             if (selectNewCategory) {
@@ -103,6 +116,8 @@ public class AddQuoteActivity extends AppCompatActivity {
     private void loadFromIntent() {
         Intent intent = getIntent();
         bookId = intent.getStringExtra("bookId");
+        latestQuote = (Quote) intent.getSerializableExtra("latestQuote");
+
 
         if (intent.hasExtra("quote")) {
             thisQuote = (Quote) getIntent().getSerializableExtra("quote");

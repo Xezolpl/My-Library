@@ -23,6 +23,7 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
 import pl.xezolpl.mylibrary.adapters.QuotesRecViewAdapter;
 import pl.xezolpl.mylibrary.managers.LinearLayoutManagerWrapper;
+import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesTabFragment extends Fragment {
@@ -32,6 +33,8 @@ public class QuotesTabFragment extends Fragment {
 
     private QuotesRecViewAdapter quotesRecViewAdapter;
     private RecyclerView quotes_recView =  null;
+
+    private Quote latestQuote = null;
 
     public QuotesTabFragment(Context context, String bookId) {
         this.context = context;
@@ -48,11 +51,13 @@ public class QuotesTabFragment extends Fragment {
         if (bookId.isEmpty()) {
             quoteViewModel.getAllQuotes().observe(this, quotes ->{
                 quotesRecViewAdapter.setQuotes(quotes);
+                latestQuote = quotes.get(quotes.size()-1);
                 if(quotes_recView!=null) quotes_recView.invalidate();
             });
         } else {
             quoteViewModel.getQuotesByBook(bookId).observe(this, quotes -> {
                 quotesRecViewAdapter.setQuotes(quotes);
+                latestQuote = quotes.get(quotes.size()-1);
                 if(quotes_recView!=null) quotes_recView.invalidate();
 
             });
@@ -74,6 +79,7 @@ public class QuotesTabFragment extends Fragment {
         fab.setOnClickListener(view1 -> {
             Intent intent = new Intent(context, AddQuoteActivity.class);
             intent.putExtra("bookId", bookId);
+            intent.putExtra("latestQuote", latestQuote);
             context.startActivity(intent);
         });
         setHasOptionsMenu(true);
