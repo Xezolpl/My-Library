@@ -52,7 +52,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         this.inflater = LayoutInflater.from(context);
 
         QuoteCategoryViewModel viewModel = ViewModelProviders.of((FragmentActivity) context).get(QuoteCategoryViewModel.class);
-        viewModel.getAllCategories().observe((FragmentActivity) context, quoteCategories ->  allCategories = quoteCategories);
+        viewModel.getAllCategories().observe((FragmentActivity) context, quoteCategories -> allCategories = quoteCategories);
     }
 
     //SETTERS & GETTERS
@@ -117,9 +117,9 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
         holder.setData(quote, color);
 
-       // if (position==0 && !chapterId.equals(quotes.get(0).getChapterId())){
-       //     holder.setSelected(false);
-       // }
+        // if (position==0 && !chapterId.equals(quotes.get(0).getChapterId())){
+        //     holder.setSelected(false);
+        // }
     }
 
     @Override
@@ -146,11 +146,15 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 filteredList.addAll(quotesFull);
             } else {
                 String filteredPattern = charSequence.toString().toLowerCase().trim();
+
                 for (Quote q : quotesFull) {
                     String thisQuoteCategory = null;
                     for (QuoteCategory category : allCategories) {
-                        if (filteredPattern.equals(category.getName())) {
-                            thisQuoteCategory = category.getName();
+                        if (category.getId().equals(q.getCategoryId())) {
+                            if (category.getName().toLowerCase().contains(filteredPattern)) {
+                                thisQuoteCategory = category.getName();
+                            }
+                            break;
                         }
                     }
                     if (q.getTitle().toLowerCase().contains(filteredPattern) || //pattern contains title
@@ -168,7 +172,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            List<Quote> filteredQuotes = (List)filterResults.values;
+            List<Quote> filteredQuotes = (List) filterResults.values;
 
             QuoteDiffCallback callback = new QuoteDiffCallback(quotes, filteredQuotes);
             DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback);
@@ -269,7 +273,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                     } else {
                         int index = chapterQuotes.indexOf(thisQuote);
                         if (index > -1)
-                        chapterQuotes.get(index).setChapterId("");
+                            chapterQuotes.get(index).setChapterId("");
                         setSelected(false);
                     }
                     return true;
@@ -318,7 +322,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         }
 
         void setSelected(boolean b) {
-             if (b) {
+            if (b) {
                 Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.selected_quote_background, null);
                 quote_lay.setBackground(drawable);
                 isSelected = true;

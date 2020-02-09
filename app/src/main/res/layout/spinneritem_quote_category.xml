@@ -21,6 +21,6 @@
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@id/spinner_category_imgView"
         android:textSize="16sp"
-        android:text="@string/placeholder_category_name"
+        android:text="@string/uncategorized"
         android:layout_centerVertical="true" />
 </RelativeLayout>
