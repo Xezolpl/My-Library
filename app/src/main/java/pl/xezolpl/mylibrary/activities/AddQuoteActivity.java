@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.widget.Spinner;
@@ -65,6 +66,8 @@ public class AddQuoteActivity extends AppCompatActivity {
     private boolean selectNewCategory = false;
     private QuoteCategory newCategory;
     private Quote latestQuote;
+
+    private int backCounter = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -325,7 +328,16 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (backCounter == 0){
+                backCounter = 1;
+                (new Handler()).postDelayed(()->backCounter=0, 2000);
+            } else {
+                backCounter = 0;
+                finish();
+            }
+            return true;
+        }
         return super.onKeyDown(keyCode,event);
     }
 

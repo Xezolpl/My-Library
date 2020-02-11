@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -34,6 +35,8 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 
     private int hexdecColor;
     private boolean inEditing = false;
+
+    private int backCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +136,16 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (backCounter == 0){
+                backCounter = 1;
+                (new Handler()).postDelayed(()->backCounter=0, 2000);
+            } else {
+                backCounter = 0;
+                finish();
+            }
+            return true;
+        }
         return super.onKeyDown(keyCode,event);
     }
 }

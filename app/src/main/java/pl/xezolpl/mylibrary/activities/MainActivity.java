@@ -2,8 +2,8 @@ package pl.xezolpl.mylibrary.activities;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -30,8 +30,6 @@ import pl.xezolpl.mylibrary.fragments.SettingsFragment;
 import pl.xezolpl.mylibrary.managers.IntentManager;
 import pl.xezolpl.mylibrary.managers.PermissionsManager;
 import pl.xezolpl.mylibrary.managers.SettingsManager;
-import spencerstudios.com.ezdialoglib.EZDialog;
-import spencerstudios.com.ezdialoglib.Font;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SettingsFragment settingsFragment;
     private ContactFragment contactFragment;
 
-    private EZDialog.Builder ezDialogBuilder;
+    private int backCounter = 0;
 
     private FragmentManager fm;
     private Fragment currFragment;
@@ -86,24 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             currFragment = allBooksFragment;
         }
-
-        //set up exit dialog builder
-        ezDialogBuilder = new EZDialog.Builder(this)
-                .setTitle(getString(R.string.exit_app))
-                .setMessage(getString(R.string.exit_app_msg))
-                .setPositiveBtnText(getString(R.string.just_exit))
-                .setNegativeBtnText(getString(R.string.lets_read))
-                .OnPositiveClicked(this::finish)
-                .OnNegativeClicked(() -> {})
-                //stylization
-                .setTitleDividerLineColor(Color.parseColor("#ed0909"))
-                .setTitleTextColor(Color.parseColor("#EE311B"))
-                .setButtonTextColor(Color.parseColor("#ed0909"))
-                .setMessageTextColor(Color.parseColor("#333333"))
-                .setFont(Font.COMFORTAA)
-                .setCancelableOnTouchOutside(true);
     }
-
     private void initWidgets(){
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
@@ -187,12 +168,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && !drawer.isDrawerOpen(GravityCompat.START)) {
-            if(fromCategory){
+            if(fromCategory){ //IN THE CATEGORIES FRAGMENT
                 fm.beginTransaction().detach(currFragment).attach(categoriesFragment).commit();
                 currFragment = categoriesFragment;
                 fromCategory = false;
             }else{
-                ezDialogBuilder.build();
+                handleBackKeycode();
             }
             return true;
         }
@@ -218,5 +199,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void handleBackKeycode(){
+        if (backCounter==0){
+            backCounter = 1;
+            Toast.makeText(this, "Click again to exit the application.", Toast.LENGTH_SHORT).show();
+            (new Handler()).postDelayed(() -> backCounter = 0, 2000);
+
+        } else{
+            backCounter = 0;
+            finish();
+        }
     }
 }

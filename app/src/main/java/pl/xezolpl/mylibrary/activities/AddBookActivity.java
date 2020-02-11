@@ -3,6 +3,7 @@ package pl.xezolpl.mylibrary.activities;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ArrayAdapter;
@@ -40,6 +41,7 @@ public class AddBookActivity extends AppCompatActivity {
     private boolean inEditing = false;
 
     public static final int SELECT_COVER_REQ_CODE = 1;
+    private int backCounter =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +189,16 @@ public class AddBookActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
-        return super.onKeyDown(keyCode, event);
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (backCounter == 0){
+                backCounter = 1;
+                (new Handler()).postDelayed(()->backCounter=0, 2000);
+            } else {
+                backCounter = 0;
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode,event);
     }
 }

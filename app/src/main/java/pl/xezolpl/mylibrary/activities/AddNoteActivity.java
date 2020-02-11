@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ImageView;
@@ -48,6 +49,8 @@ public class AddNoteActivity extends AppCompatActivity {
 
     private Note thisNote;
     private NoteViewModel viewModel;
+
+    private int backCounter = 0;
 
 
     @Override
@@ -224,8 +227,17 @@ public class AddNoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
-        return super.onKeyDown(keyCode, event);
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (backCounter == 0){
+                backCounter = 1;
+                (new Handler()).postDelayed(()->backCounter=0, 2000);
+            } else {
+                backCounter = 0;
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode,event);
     }
 
 }

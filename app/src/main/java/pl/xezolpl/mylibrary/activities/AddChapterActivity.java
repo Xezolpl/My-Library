@@ -3,6 +3,7 @@ package pl.xezolpl.mylibrary.activities;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -29,6 +30,8 @@ public class AddChapterActivity extends AppCompatActivity {
     private String bookId;
     private boolean inEdition = false;
     private Chapter thisChapter = null;
+
+    private int backCounter =0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,7 +108,16 @@ public class AddChapterActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) return true;
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (backCounter == 0){
+                backCounter = 1;
+                (new Handler()).postDelayed(()->backCounter=0, 2000);
+            } else {
+                backCounter = 0;
+                finish();
+            }
+            return true;
+        }
         return super.onKeyDown(keyCode,event);
     }
 }
