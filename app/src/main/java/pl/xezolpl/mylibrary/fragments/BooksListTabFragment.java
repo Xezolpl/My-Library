@@ -111,7 +111,7 @@ public class BooksListTabFragment extends Fragment {
         booksRecView.setAdapter(booksRecViewAdapter);
         booksRecView.setLayoutManager(new GridLayoutManager(context, 2));
 
-        no_books_lay = view.findViewById(R.id.no_books_imgView);
+        no_books_lay = view.findViewById(R.id.no_books_lay);
         no_books_lay.setVisibility(View.GONE);
         if (booksRecViewAdapter.getItemCount()==0) no_books_lay.setVisibility(View.VISIBLE);
 
