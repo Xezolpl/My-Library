@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +34,8 @@ public class BooksListTabFragment extends Fragment {
 
     private String categoryName = null;
 
+    private RelativeLayout no_books_lay = null;
+
     public BooksListTabFragment() {
         tabBooksStatus = Book.STATUS_NEUTRAL;
     }
@@ -60,6 +63,8 @@ public class BooksListTabFragment extends Fragment {
             bookViewModel.getAllBooks().observe(this, books -> {
                 if (categoryName == null) {
                     booksRecViewAdapter.setBooks(books);
+                    if (booksRecViewAdapter.getItemCount() == 0) no_books_lay.setVisibility(View.VISIBLE);
+                    else no_books_lay.setVisibility(View.GONE);
                 } else {
                     /*BOOKS WITH CATEGORY*/
                     final List<Book> booksWithCategory = new ArrayList<>();
@@ -81,13 +86,19 @@ public class BooksListTabFragment extends Fragment {
 
                                 }
                                 booksRecViewAdapter.setBooks(booksWithCategory);
+                                if (booksRecViewAdapter.getItemCount() == 0) no_books_lay.setVisibility(View.VISIBLE);
+                                else no_books_lay.setVisibility(View.GONE);
                             });
                 }
             });
         }
         /*OTHER STATUS*/
         else {
-            bookViewModel.getBookWithStatus(tabBooksStatus).observe(this, books -> booksRecViewAdapter.setBooks(books));
+            bookViewModel.getBookWithStatus(tabBooksStatus).observe(this, books -> {
+                booksRecViewAdapter.setBooks(books);
+                if (booksRecViewAdapter.getItemCount() == 0) no_books_lay.setVisibility(View.VISIBLE);
+                else no_books_lay.setVisibility(View.GONE);
+            });
         }
     }
 
@@ -99,6 +110,11 @@ public class BooksListTabFragment extends Fragment {
         RecyclerView booksRecView = view.findViewById(R.id.booksRecView);
         booksRecView.setAdapter(booksRecViewAdapter);
         booksRecView.setLayoutManager(new GridLayoutManager(context, 2));
+
+        no_books_lay = view.findViewById(R.id.no_books_imgView);
+        no_books_lay.setVisibility(View.GONE);
+        if (booksRecViewAdapter.getItemCount()==0) no_books_lay.setVisibility(View.VISIBLE);
+
 
         return view;
     }

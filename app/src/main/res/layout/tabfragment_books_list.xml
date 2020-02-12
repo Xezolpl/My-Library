@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/booksLayout"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:id="@+id/booksLayout">
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/no_books_lay"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/no_books_imgView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/ic_book_black_24dp"
+            android:backgroundTint="@color/colorAccent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/no_books_imgView"
+            android:text="@string/no_books"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="26sp" />
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/booksRecView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/booksRecView"/>
-</LinearLayout>
+        android:layout_height="match_parent" />
+
+
+</RelativeLayout>

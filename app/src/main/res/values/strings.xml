@@ -129,6 +129,7 @@
     <string name="export_db">Export database</string>
     <string name="import_db">Import database</string>
     <string name="restore_db_fail">Unable to restore database. You chose wrong database file or the file is damaged.</string>
+    <string name="no_books">No books here</string>
 
 
 </resources>

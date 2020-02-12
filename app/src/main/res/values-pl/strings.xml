@@ -125,4 +125,8 @@
     <string name="english">Angielski</string>
     <string name="light">Jasny</string>
     <string name="polish">Polski</string>
+    <string name="no_books">Nie ma tutaj książek. Możesz dodać pierwszą klikając na przycisk w prawym dolnym rogu.</string>
+    <string name="restore_db_fail">Nie udało się przywrócić bazy danych. Wybrałeś zły plik lub jest on uszkodzony.</string>
+    <string name="export_db">Eksportuj bazę danych</string>
+    <string name="import_db">Importuj bazę danych</string>
 </resources>
