@@ -291,7 +291,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             quote_txtView_expanded.setText(quote.getQuote());
             quote_txtView_collapsed.setText(quote.getQuote());
             int page = quote.getPage();
-            String pageString = "Page: " + page;
+            String pageString = context.getString(R.string.page) + " " + page;
             quote_page_txtView.setText(pageString);
 
             //Set drawable's color
@@ -299,7 +299,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             drawable.setColor(color);
 
             //If page is 0 - set its visibility to GONE
-            if (page == 0) quote_page_txtView.setVisibility(View.GONE);
+            if (page == 0) quote_page_txtView.setVisibility(View.INVISIBLE);
             else quote_page_txtView.setVisibility(View.VISIBLE);
 
             for (int i = 0; i < allCategories.size(); i++) {
