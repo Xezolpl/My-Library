@@ -2,7 +2,10 @@ package pl.xezolpl.mylibrary.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
@@ -117,6 +121,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
         private FragmentActivity activity;
 
         private Note thisNote = null;
+        @ColorInt private int color;
 
         NoteViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
@@ -130,6 +135,11 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
             adapter = new NotesRecViewAdapter(context);
             recView.setAdapter(adapter);
             recView.setLayoutManager(new LinearLayoutManagerWrapper(context));
+
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = context.getTheme();
+            theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
+            color = typedValue.data;
         }
 
         private void initWidgets() {
@@ -155,6 +165,11 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
 
                 PopupMenu popupMenu = new PopupMenu(context, view);
                 popupMenu.inflate(R.menu.note_popup_menu);
+
+                for (int i=0; i<popupMenu.getMenu().size(); i++){
+                    popupMenu.getMenu().getItem(i).getIcon().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+                }
+
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     switch (menuItem.getItemId()) {
                         case R.id.addMenuBtn: {

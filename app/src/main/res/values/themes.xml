@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Standard AppTheme -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="backgroundColor">@color/colorBackground</item>
+        <item name="noteBackgroundColor">@color/colorNoteBackground</item>
+
+        <item name="textColorOnPrimaryColor">@color/white</item>
+        <item name="drawerIconColor">?attr/colorPrimary</item>
+        <item name="drawerTextColor">?attr/colorPrimaryDark</item>
+
+        <item name="android:windowBackground">?attr/backgroundColor</item>
+        <item name="android:textColor">?attr/colorPrimaryDark</item>
+        <item name="android:itemBackground">?backgroundColor</item>
+        
+    </style>
+
+
+    <!-- Mild AppTheme -->
+    <style name="AppThemeMild" parent="AppTheme">
+
+        <item name="colorPrimary">@color/colorPrimary2</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark2</item>
+        <item name="colorAccent">@color/colorAccent2</item>
+        <item name="backgroundColor">@color/colorBackground2</item>
+        <item name="noteBackgroundColor">@color/colorNoteBackground2</item>
+
+
+        <item name="textColorOnPrimaryColor">?attr/backgroundColor</item>
+
+    </style>
+
+
+    <!-- Dark AppTheme -->
+    <style name="AppThemeDark" parent="AppTheme">
+
+        <item name="colorPrimary">@color/colorPrimary3</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark3</item>
+        <item name="colorAccent">@color/colorAccent3</item>
+        <item name="backgroundColor">@color/colorBackground3</item>
+        <item name="noteBackgroundColor">@color/colorNoteBackground3</item>
+
+        <item name="textColorOnPrimaryColor">?attr/backgroundColor</item>
+
+        <item name="android:textColorSecondary">@color/colorPrimaryLight3</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+
+        <item name="drawerIconColor">?attr/colorPrimary</item>
+        <item name="drawerTextColor">?attr/colorPrimary</item>
+        <item name="alertDialogTheme">@style/AppThemeDarkDialog.AlertDialog</item>
+
+    </style>
+
+
+    <!-- Light AppTheme -->
+    <style name="AppThemeLight" parent="AppTheme">
+
+        <item name="colorPrimary">@color/colorPrimary4</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark4</item>
+        <item name="colorAccent">@color/colorAccent4</item>
+        <item name="backgroundColor">@color/colorBackground4</item>
+        <item name="noteBackgroundColor">@color/colorNoteBackground4</item>
+
+
+        <item name="textColorOnPrimaryColor">?attr/colorPrimaryDark</item>
+
+    </style>
+
+
+</resources>

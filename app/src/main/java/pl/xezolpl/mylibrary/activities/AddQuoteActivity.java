@@ -36,6 +36,7 @@ import pl.xezolpl.mylibrary.adapters.QuoteCategorySpinnerAdapter;
 import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.managers.IntentManager;
 import pl.xezolpl.mylibrary.managers.PermissionsManager;
+import pl.xezolpl.mylibrary.managers.SettingsManager;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 import pl.xezolpl.mylibrary.utilities.Markers;
@@ -71,6 +72,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        new SettingsManager(this).loadDialogTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_quote);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

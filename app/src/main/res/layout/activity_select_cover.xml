@@ -13,7 +13,7 @@
         android:padding="25dp"
         android:text="@string/select_book_cover"
         android:textAlignment="center"
-        android:textColor="#ed0909"
+        android:textColor="?attr/colorAccent"
         android:textSize="32sp"
         android:textStyle="bold" />
 
@@ -29,33 +29,24 @@
             android:id="@+id/galleryBtn"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:gravity="center"
             android:layout_marginEnd="30dp"
 
             app:fb_icon="@drawable/ic_image_black_24dp"
-            app:fb_iconColor="@color/white"
-            app:fb_iconWidth="40dp"
-            app:fb_iconHeight="40dp"
-
-            app:fb_backgroundColor="#ed0909"
-            app:fb_cornerRadius="15dp"/>
+            app:fb_iconColor="?attr/colorPrimary"
+            app:fb_iconWidth="42dp"
+            app:fb_iconHeight="42dp"/>
 
         <com.github.nikartm.button.FitButton
             android:id="@+id/cameraBtn"
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:gravity="center"
             android:layout_toEndOf="@id/galleryBtn"
             android:layout_marginStart="30dp"
 
-
             app:fb_icon="@drawable/ic_camera_alt_black_24dp"
-            app:fb_iconColor="@color/white"
-            app:fb_iconWidth="40dp"
-            app:fb_iconHeight="40dp"
-
-            app:fb_backgroundColor="#ed0909"
-            app:fb_cornerRadius="15dp"/>
+            app:fb_iconColor="?attr/colorPrimary"
+            app:fb_iconWidth="42dp"
+            app:fb_iconHeight="42dp"/>
 
     </RelativeLayout>
 
@@ -71,26 +62,23 @@
             android:layout_width="236dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
+            android:theme="@style/MaterialEditText"
+
             android:hint="@string/book_title_author"
             android:imeOptions="actionDone"
             android:inputType="text|textCapSentences"
-            android:maxLength="100"
-            app:met_textColor="#666666"
-            app:met_textColorHint="#EF5350"
-            app:met_underlineColor="#EF5350" />
+            android:maxLength="100"/>
 
         <com.github.nikartm.button.FitButton
             android:id="@+id/refreshBtn"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            app:fb_backgroundColor="#ed0909"
-            app:fb_cornerRadius="15dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
 
             app:fb_icon="@drawable/ic_refresh_black_24dp"
-            app:fb_iconColor="#FFF"
-            app:fb_iconHeight="34dp"
-            app:fb_iconPosition="center"
-            app:fb_iconWidth="34dp" />
+            app:fb_iconColor="?attr/colorPrimary"
+            app:fb_iconWidth="36dp"
+            app:fb_iconHeight="36dp"
+            app:fb_shadow="0dp"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -116,17 +104,16 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:theme="@style/FitButton"
+
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
 
-            app:fb_backgroundColor="#ed0909"
-            app:fb_cornerRadius="15dp"
-
             app:fb_icon="@drawable/ic_keyboard_arrow_down_black_24dp"
-            app:fb_iconColor="#FFF"
             app:fb_iconHeight="40dp"
-            app:fb_iconWidth="40dp" />
+            app:fb_iconWidth="40dp"
+            app:fb_divWidth="0dp"/>
 
     </RelativeLayout>
 

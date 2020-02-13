@@ -15,6 +15,7 @@ import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.QuotesRecViewAdapter;
+import pl.xezolpl.mylibrary.managers.SettingsManager;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
@@ -29,6 +30,7 @@ public class InsertQuoteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        new SettingsManager(this).loadDialogTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_quote);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

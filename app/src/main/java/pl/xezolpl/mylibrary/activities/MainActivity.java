@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SettingsManager manager = new SettingsManager(this);
         manager.loadLanguage();
         manager.loadTheme();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

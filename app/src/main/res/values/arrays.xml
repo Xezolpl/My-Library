@@ -14,13 +14,18 @@
 
     <!-- Theme -->
     <string-array name="themes">
-        <item>@string/light</item>
+        <item>@string/standard</item>
+        <item>@string/mild</item>
         <item>@string/dark</item>
+        <item>@string/light</item>
+
     </string-array>
 
     <string-array name="themes_values">
-        <item>light</item>
+        <item>standard</item>
+        <item>mild</item>
         <item>dark</item>
+        <item>light</item>
     </string-array>
 
 

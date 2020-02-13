@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.CategoryRecViewAdapter;
+import pl.xezolpl.mylibrary.managers.SettingsManager;
 import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 
@@ -45,6 +46,7 @@ public class AddBookActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        new SettingsManager(this).loadDialogTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_book);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -141,7 +143,7 @@ public class AddBookActivity extends AppCompatActivity {
 
     private void setUpStatusSpinner() {
         ArrayAdapter<CharSequence> statusArrayAdapter = ArrayAdapter.createFromResource(this,
-                R.array.status_array, android.R.layout.simple_spinner_item);
+                R.array.status_array, R.layout.simple_spinner_item);
         statusArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         status_spinner.setAdapter(statusArrayAdapter);
     }

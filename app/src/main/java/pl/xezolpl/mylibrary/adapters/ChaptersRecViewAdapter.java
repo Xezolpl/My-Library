@@ -2,6 +2,9 @@ package pl.xezolpl.mylibrary.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.PorterDuff;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
@@ -109,6 +113,8 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
         private Context context;
         private FragmentActivity activity;
 
+        @ColorInt private int color;
+
         ChapterViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
             this.context = context;
@@ -126,6 +132,11 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
 
             recView.setAdapter(adapter);
             quotesRecView.setAdapter(quotesAdapter);
+
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = context.getTheme();
+            theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
+            color = typedValue.data;
         }
 
         private void initWidgets() {
@@ -153,6 +164,11 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
                 //change the  menu
                 PopupMenu popupMenu = new PopupMenu(context, view);
                 popupMenu.inflate(R.menu.chapter_popup_menu);
+
+                for (int i=0; i<popupMenu.getMenu().size(); i++){
+                    popupMenu.getMenu().getItem(i).getIcon().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+                }
+
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     switch (menuItem.getItemId()) {
                         case R.id.addMenuBtn: {

@@ -119,8 +119,11 @@
     <string name="backup_on">The backup will be created on your google account every app closing</string>
 
     <string name="theme">Theme</string>
-    <string name="light">Light</string>
+    <string name="standard">Standard</string>
+    <string name="mild">Mild</string>
     <string name="dark">Dark</string>
+    <string name="light">Light</string>
+
 
     <!-- Languages -->
     <string name="language">Language</string>

@@ -49,7 +49,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void loadPreferencesState() {
         langListPref.setValue(preferences.getString("lang", "english"));
-        themeListPref.setValue(preferences.getString("theme", "light"));
+        themeListPref.setValue(preferences.getString("theme", "standard"));
     }
 
     private void setListeners() {

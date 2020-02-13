@@ -5,7 +5,8 @@
     android:layout_height="40dp"
     android:orientation="horizontal"
     android:layout_margin="15dp"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:background="?backgroundColor">
 
     <ImageView
         android:id="@+id/spinner_category_imgView"
@@ -22,5 +23,6 @@
         android:layout_toEndOf="@id/spinner_category_imgView"
         android:textSize="16sp"
         android:text="@string/uncategorized"
+        android:textColor="?android:textColor"
         android:layout_centerVertical="true" />
 </RelativeLayout>

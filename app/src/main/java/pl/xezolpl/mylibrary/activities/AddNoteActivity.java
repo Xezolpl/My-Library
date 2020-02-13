@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import petrov.kristiyan.colorpicker.ColorPicker;
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.managers.SettingsManager;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.models.Note;
 import pl.xezolpl.mylibrary.utilities.Markers;
@@ -55,6 +56,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        new SettingsManager(this).loadDialogTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

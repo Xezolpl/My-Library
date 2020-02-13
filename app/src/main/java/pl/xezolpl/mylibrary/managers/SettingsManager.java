@@ -26,13 +26,33 @@ public class SettingsManager {
     }
 
     public void loadTheme() {
-        String theme = mPreferences.getString("theme", "light");
+        String theme = mPreferences.getString("theme", "standard");
         int themeId;
 
-        if (theme != null && theme.equals("dark")) {
+        if (theme != null && theme.equals("mild")) {
+            themeId = R.style.AppThemeMild;
+        } else if (theme != null && theme.equals("dark")) {
             themeId = R.style.AppThemeDark;
+        } else if (theme != null && theme.equals("light")) {
+            themeId = R.style.AppThemeLight;
         } else {
             themeId = R.style.AppTheme;
+        }
+        context.setTheme(themeId);
+    }
+
+    public void loadDialogTheme() {
+        String theme = mPreferences.getString("theme", "standard");
+        int themeId;
+
+        if (theme != null && theme.equals("mild")) {
+            themeId = R.style.AppThemeMildDialog;
+        } else if (theme != null && theme.equals("dark")) {
+            themeId = R.style.AppThemeDarkDialog;
+        } else if (theme != null && theme.equals("light")) {
+            themeId = R.style.AppThemeLightDialog;
+        } else {
+            themeId = R.style.AppThemeDialog;
         }
         context.setTheme(themeId);
     }
@@ -55,9 +75,9 @@ public class SettingsManager {
         res.updateConfiguration(conf, dm);
 
         //Uncategorized
-        QuoteCategoryViewModel qcvm = ViewModelProviders.of((AppCompatActivity)context).get(QuoteCategoryViewModel.class);
+        QuoteCategoryViewModel qcvm = ViewModelProviders.of((AppCompatActivity) context).get(QuoteCategoryViewModel.class);
 
-        qcvm.getCategory("Uncategorized").observe((AppCompatActivity)context, quoteCategory -> {
+        qcvm.getCategory("Uncategorized").observe((AppCompatActivity) context, quoteCategory -> {
             quoteCategory.setName(context.getString(R.string.uncategorized));
             qcvm.update(quoteCategory);
         });

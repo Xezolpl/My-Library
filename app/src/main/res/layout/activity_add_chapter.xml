@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
+        android:theme="@style/MaterialEditText"
 
         android:layout_marginLeft="5dp"
         android:layout_marginTop="15dp"
@@ -21,10 +22,7 @@
         android:maxLength="100"
         android:inputType="textMultiLine|textCapSentences"
         android:imeOptions="actionNext"
-        android:textAlignment="center"
-        app:met_underlineColor="#EF5350"
-        app:met_textColor="#666666"
-        app:met_textColorHint="#EF5350"/>
+        android:textAlignment="center"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/add_chapter_number"
@@ -32,20 +30,18 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/add_chapter_name"
+            android:theme="@style/MaterialEditText"
 
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginRight="5dp"
 
             android:hint="@string/chapter_number"
             android:maxLength="5"
             android:lines="1"
             android:inputType="number|textCapSentences"
-            android:textAlignment="center"
-            app:met_underlineColor="#EF5350"
-            app:met_textColor="#666666"
-            app:met_textColorHint="#EF5350"/>
+            android:textAlignment="center"/>
 
     <LinearLayout
         android:id="@+id/lay2"
@@ -59,22 +55,17 @@
             android:layout_width="130dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
-            android:gravity="center_vertical"
+            android:theme="@style/FitButton"
 
-            app:fb_backgroundColor="#ed0909"
-            app:fb_cornerRadius="15dp"
-            app:fb_divColor="#fff"
             app:fb_divHeight="25dp"
-            app:fb_divWidth="1dp"
+
             app:fb_icon="@drawable/ic_check_black_24dp"
-            app:fb_iconColor="#FFF"
+            app:fb_iconWidth="32dp"
             app:fb_iconHeight="20dp"
             app:fb_iconMarginEnd="10dp"
             app:fb_iconMarginStart="10dp"
-            app:fb_iconPosition="left"
-            app:fb_iconWidth="32dp"
+
             app:fb_text="@string/ok"
-            app:fb_textColor="#FFF"
             app:fb_textPaddingStart="20dp" />
 
         <com.github.nikartm.button.FitButton
@@ -82,22 +73,17 @@
             android:layout_width="130dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
-            android:gravity="center_vertical"
+            android:theme="@style/FitButton"
 
-            app:fb_backgroundColor="#ed0909"
-            app:fb_cornerRadius="15dp"
-            app:fb_divColor="#fff"
             app:fb_divHeight="25dp"
-            app:fb_divWidth="1dp"
+
             app:fb_icon="@drawable/ic_close_black_24dp"
-            app:fb_iconColor="#FFF"
+            app:fb_iconWidth="32dp"
             app:fb_iconHeight="20dp"
             app:fb_iconMarginEnd="10dp"
             app:fb_iconMarginStart="10dp"
-            app:fb_iconPosition="left"
-            app:fb_iconWidth="32dp"
+
             app:fb_text="@string/cancel"
-            app:fb_textColor="#FFF"
             app:fb_textPaddingStart="15dp" />
     </LinearLayout>
 </RelativeLayout>

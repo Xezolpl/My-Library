@@ -39,6 +39,7 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.CoversRevViewAdapter;
 import pl.xezolpl.mylibrary.managers.IntentManager;
 import pl.xezolpl.mylibrary.managers.PermissionsManager;
+import pl.xezolpl.mylibrary.managers.SettingsManager;
 import pl.xezolpl.mylibrary.utilities.FetchBook;
 
 import static com.theartofdev.edmodo.cropper.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE;
@@ -59,6 +60,7 @@ public class SelectCoverActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        new SettingsManager(this).loadTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_cover);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

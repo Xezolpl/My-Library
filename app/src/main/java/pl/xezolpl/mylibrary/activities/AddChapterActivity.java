@@ -17,6 +17,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.managers.SettingsManager;
 import pl.xezolpl.mylibrary.models.Chapter;
 import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 
@@ -35,6 +36,7 @@ public class AddChapterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        new SettingsManager(this).loadDialogTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_chapter);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

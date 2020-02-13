@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import petrov.kristiyan.colorpicker.ColorPicker;
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.managers.SettingsManager;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
@@ -40,6 +41,7 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        new SettingsManager(this).loadDialogTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_quote_category);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

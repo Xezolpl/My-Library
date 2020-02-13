@@ -8,19 +8,17 @@
         android:id="@+id/applayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/Toolbar">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/opened_book_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ToolbarWhiteItems"/>
+            android:layout_height="wrap_content"/>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/opened_book_tablayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabTextColor="@color/white"
             android:elevation="5dp" />
     </com.google.android.material.appbar.AppBarLayout>
 

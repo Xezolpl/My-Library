@@ -21,7 +21,8 @@
         android:layout_toEndOf="@id/add_note_imgView"
         android:layout_marginTop="41.5dp"
 
-        app:fb_icon="@drawable/ic_color_lens_black_32dp"/>
+        app:fb_icon="@drawable/ic_color_lens_black_32dp"
+        app:fb_iconColor="?attr/colorPrimary"/>
 
     <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/add_note_name"
@@ -30,14 +31,13 @@
         android:layout_margin="5dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/add_note_imgView"
+        android:theme="@style/MaterialEditText"
+
         android:textAlignment="center"
         android:maxLength="100"
         android:hint="@string/note"
         android:imeOptions="actionDone"
-        android:inputType="textMultiLine|textCapSentences"
-        app:met_underlineColor="#666666"
-        app:met_textColor="#545454"
-        app:met_textColorHint="#545454"/>
+        android:inputType="textMultiLine|textCapSentences"/>
 
     <LinearLayout
         android:id="@+id/lay2"
@@ -51,22 +51,17 @@
             android:layout_width="130dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
-            android:gravity="center_vertical"
+            android:theme="@style/FitButton"
 
-            app:fb_backgroundColor="#ed0909"
-            app:fb_cornerRadius="15dp"
-            app:fb_divColor="#fff"
             app:fb_divHeight="25dp"
-            app:fb_divWidth="1dp"
+
             app:fb_icon="@drawable/ic_check_black_24dp"
-            app:fb_iconColor="#FFF"
+            app:fb_iconWidth="32dp"
             app:fb_iconHeight="20dp"
             app:fb_iconMarginEnd="10dp"
             app:fb_iconMarginStart="10dp"
-            app:fb_iconPosition="left"
-            app:fb_iconWidth="32dp"
+
             app:fb_text="@string/ok"
-            app:fb_textColor="#FFF"
             app:fb_textPaddingStart="20dp" />
 
         <com.github.nikartm.button.FitButton
@@ -74,22 +69,17 @@
             android:layout_width="130dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
-            android:gravity="center_vertical"
+            android:theme="@style/FitButton"
 
-            app:fb_backgroundColor="#ed0909"
-            app:fb_cornerRadius="15dp"
-            app:fb_divColor="#fff"
             app:fb_divHeight="25dp"
-            app:fb_divWidth="1dp"
+
             app:fb_icon="@drawable/ic_close_black_24dp"
-            app:fb_iconColor="#FFF"
+            app:fb_iconWidth="32dp"
             app:fb_iconHeight="20dp"
             app:fb_iconMarginEnd="10dp"
             app:fb_iconMarginStart="10dp"
-            app:fb_iconPosition="left"
-            app:fb_iconWidth="32dp"
+
             app:fb_text="@string/cancel"
-            app:fb_textColor="#FFF"
             app:fb_textPaddingStart="15dp" />
     </LinearLayout>
 </RelativeLayout>

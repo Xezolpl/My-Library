@@ -1,7 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
 import android.content.pm.ActivityInfo;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +16,7 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.TabFragmentPagerAdapter;
 import pl.xezolpl.mylibrary.fragments.BookDetailsTabFragment;
 import pl.xezolpl.mylibrary.fragments.BookNotesTabFragment;
+import pl.xezolpl.mylibrary.managers.SettingsManager;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class OpenedBookActivity extends AppCompatActivity {
@@ -27,6 +27,7 @@ public class OpenedBookActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        new SettingsManager(this).loadTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_opened_book);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -54,16 +55,16 @@ public class OpenedBookActivity extends AppCompatActivity {
     private void initWidgets() {
         opened_book_viewpager = findViewById(R.id.opened_book_viewpager);
         opened_book_tablayout = findViewById(R.id.opened_book_tablayout);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            opened_book_toolbar = findViewById(R.id.opened_book_toolbar);
-            opened_book_toolbar.setTitle(thisBook.getTitle());
-            setSupportActionBar(opened_book_toolbar);
-            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+
+        opened_book_toolbar = findViewById(R.id.opened_book_toolbar);
+        opened_book_toolbar.setTitle(thisBook.getTitle());
+        setSupportActionBar(opened_book_toolbar);
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-    public void setToolbarTitle(String title){
+    public void setToolbarTitle(String title) {
         opened_book_toolbar.setTitle(title);
     }
 

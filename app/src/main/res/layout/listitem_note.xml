@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="80dp"
-        android:background="@drawable/note_item_background">
+        android:background="?attr/noteBackgroundColor">
 
         <ImageView
             android:id="@+id/marker_imgView"
@@ -27,7 +27,8 @@
             android:layout_height="30dp"
             android:layout_margin="3dp"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/ic_more_vert_black_24dp" />
+            android:background="@drawable/ic_more_vert_black_24dp"
+            android:backgroundTint="?colorPrimary"/>
 
         <TextView
             android:id="@+id/textView"
@@ -40,16 +41,17 @@
             android:layout_toEndOf="@+id/marker_imgView"
             android:layout_toStartOf="@id/moreBtn"
             android:text="@string/very_long_lorem_ipsum"/>
+
     </RelativeLayout>
 
     <ImageView
-        android:layout_width="1dp"
+        android:layout_width="1.25dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/noteLay"
         android:layout_alignBottom="@id/recView"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="9.25dp"
         android:layout_marginTop="2dp"
-        android:background="@drawable/gray_line" />
+        android:background="?attr/colorPrimary" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recView"

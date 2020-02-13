@@ -129,4 +129,6 @@
     <string name="restore_db_fail">Nie udało się przywrócić bazy danych. Wybrałeś zły plik lub jest on uszkodzony.</string>
     <string name="export_db">Eksportuj bazę danych</string>
     <string name="import_db">Importuj bazę danych</string>
+    <string name="standard">Standardowy</string>
+    <string name="mild">Łagodny</string>
 </resources>

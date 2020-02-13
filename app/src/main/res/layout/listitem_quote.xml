@@ -73,14 +73,16 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="3dp"
-                android:background="@drawable/ic_edit_black_24dp" />
+                android:background="@drawable/ic_edit_black_24dp"
+                android:backgroundTint="?colorPrimary"/>
 
             <Button
                 android:id="@+id/delBtn"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="3dp"
-                android:background="@drawable/ic_delete_black_24dp" />
+                android:background="@drawable/ic_delete_black_24dp"
+                android:backgroundTint="?colorPrimary"/>
 
         </LinearLayout>
 

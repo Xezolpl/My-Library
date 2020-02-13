@@ -1,10 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ED0909</color>
-    <color name="colorPrimaryDark">#DE0909</color>
-    <color name="colorAccent">#6ba802</color>
+    <!--Standard theme colors-->
+    <color name="colorPrimary">#2C786C</color>
+    <color name="colorPrimaryDark">#004445</color>
+    <color name="colorAccent">#F8B400</color>
+    <color name="colorBackground">#FAF5E4</color>
+    <color name="colorNoteBackground">#FFFAE9</color>
 
-    <color name="colorPrimary2">#ABCDEF</color>
-    <color name="colorPrimaryDark2">#666666</color>
-    <color name="colorAccent2">#DD0077</color>
+    <!--Mild theme colors-->
+    <color name="colorPrimary2">#3498DB</color>
+    <color name="colorPrimaryDark2">#34495E</color>
+    <color name="colorAccent2">#FAC40F</color>
+    <color name="colorBackground2">#ECF0F1</color>
+    <color name="colorNoteBackground2">#F1F6F6</color>
+
+    <!--Dark theme colors-->
+    <color name="colorPrimary3">#E3E3E3</color>
+    <color name="colorPrimaryDark3">#393E46</color>
+    <color name="colorPrimaryLight3">#888888</color>
+    <color name="colorAccent3">#00ADB5</color>
+    <color name="colorBackground3">#283136</color>
+    <color name="colorNoteBackground3">#2D363B</color>
+
+    <!--Light theme colors-->
+    <color name="colorPrimary4">#ACE4E7</color>
+    <color name="colorPrimaryDark4">#BBCBAE</color>
+    <color name="colorAccent4">#8F8787</color>
+    <color name="colorBackground4">#F4F4F4</color>
+    <color name="colorNoteBackground4">#F4F4F4</color>
+
 </resources>

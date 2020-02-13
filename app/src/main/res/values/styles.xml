@@ -1,39 +1,48 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <!-- Base FitButton stylization -->
+    <style name="FitButton">
+
+        <item name="android:gravity">center_vertical</item>
+        <item name="fb_iconPosition">left</item>
+        <item name="fb_divWidth">1dp</item>
+
+        <item name="fb_cornerRadius">15dp</item>
+
+        <item name="fb_backgroundColor">?attr/colorPrimary</item>
+        <item name="fb_divColor">?attr/textColorOnPrimaryColor</item>
+        <item name="fb_iconColor">?attr/textColorOnPrimaryColor</item>
+        <item name="fb_textColor">?attr/textColorOnPrimaryColor</item>
     </style>
 
-    <style name="AppThemeDark" parent="AppTheme">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary2</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark2</item>
-        <item name="colorAccent">@color/colorAccent2</item>
+    <style name="MaterialEditText">
+
+        <item name="met_textColor">?android:textColor</item>
+        <item name="met_underlineColor">?attr/colorAccent</item>
+        <item name="met_textColorHint">?attr/colorAccent</item>
+        <item name="met_primaryColor">?attr/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="Toolbar">
+        <item name="android:textColorPrimary">?attr/textColorOnPrimaryColor</item>
+        <item name="android:textColorSecondary">?attr/textColorOnPrimaryColor</item>
+        <item name="actionBarTabTextStyle">?attr/textColorOnPrimaryColor</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="AlertDialog.AppCompat.Light.Dialog.NoActionBar" parent="Theme.AppCompat.Light.Dialog">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <!-- Spinner -->
+    <style name="Spinner" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:background">?attr/backgroundColor</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_margin">5dp</item>
     </style>
 
-    <style name="ToolbarWhiteItems" parent="AppTheme">
-        <item name="android:textColorSecondary">#fff</item>
-        <item name="android:textColorPrimary">#fff</item>
-        <item name="android:background">#ed0909</item>
-        <item name="android:actionBarTabTextStyle">@color/white</item>
+    <style name="Spinner.DropDownItem">
+        <item name="android:textColor">?attr/colorPrimaryDark</item>
     </style>
+
+    <style name="Spinner.DropDownItem.Dark">
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
 
 </resources>
