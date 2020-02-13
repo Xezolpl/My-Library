@@ -298,7 +298,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             GradientDrawable drawable = (GradientDrawable) category_imgView.getBackground();
             drawable.setColor(color);
 
-            //If page is 0 - set its visibility to GONE
+            //If page is 0 -> set its visibility to INVISIBLE
             if (page == 0) quote_page_txtView.setVisibility(View.INVISIBLE);
             else quote_page_txtView.setVisibility(View.VISIBLE);
 
