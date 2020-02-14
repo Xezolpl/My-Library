@@ -17,7 +17,6 @@
         <item>@string/standard</item>
         <item>@string/mild</item>
         <item>@string/dark</item>
-        <item>@string/light</item>
 
     </string-array>
 
@@ -25,7 +24,6 @@
         <item>standard</item>
         <item>mild</item>
         <item>dark</item>
-        <item>light</item>
     </string-array>
 
 

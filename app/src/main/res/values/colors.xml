@@ -22,11 +22,4 @@
     <color name="colorBackground3">#283136</color>
     <color name="colorNoteBackground3">#2D363B</color>
 
-    <!--Light theme colors-->
-    <color name="colorPrimary4">#ACE4E7</color>
-    <color name="colorPrimaryDark4">#BBCBAE</color>
-    <color name="colorAccent4">#8F8787</color>
-    <color name="colorBackground4">#F4F4F4</color>
-    <color name="colorNoteBackground4">#F4F4F4</color>
-
 </resources>

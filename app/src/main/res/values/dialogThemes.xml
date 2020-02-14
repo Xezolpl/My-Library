@@ -56,17 +56,5 @@
     </style>
 
 
-    <!-- Light AppTheme -->
-    <style name="AppThemeLightDialog" parent="AppThemeDialog">
-
-        <item name="colorPrimary">@color/colorPrimary4</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark4</item>
-        <item name="colorAccent">@color/colorAccent4</item>
-        <item name="backgroundColor">@color/colorBackground4</item>
-
-        <item name="textColorOnPrimaryColor">?attr/colorPrimaryDark</item>
-
-    </style>
-
 
 </resources>

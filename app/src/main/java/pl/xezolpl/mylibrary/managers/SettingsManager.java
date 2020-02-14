@@ -33,8 +33,6 @@ public class SettingsManager {
             themeId = R.style.AppThemeMild;
         } else if (theme != null && theme.equals("dark")) {
             themeId = R.style.AppThemeDark;
-        } else if (theme != null && theme.equals("light")) {
-            themeId = R.style.AppThemeLight;
         } else {
             themeId = R.style.AppTheme;
         }
@@ -49,8 +47,6 @@ public class SettingsManager {
             themeId = R.style.AppThemeMildDialog;
         } else if (theme != null && theme.equals("dark")) {
             themeId = R.style.AppThemeDarkDialog;
-        } else if (theme != null && theme.equals("light")) {
-            themeId = R.style.AppThemeLightDialog;
         } else {
             themeId = R.style.AppThemeDialog;
         }
