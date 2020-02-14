@@ -74,7 +74,7 @@
                 android:layout_height="24dp"
                 android:layout_margin="3dp"
                 android:background="@drawable/ic_edit_black_24dp"
-                android:backgroundTint="?colorPrimary"/>
+                android:backgroundTint="?android:textColor"/>
 
             <Button
                 android:id="@+id/delBtn"
@@ -82,19 +82,19 @@
                 android:layout_height="24dp"
                 android:layout_margin="3dp"
                 android:background="@drawable/ic_delete_black_24dp"
-                android:backgroundTint="?colorPrimary"/>
+                android:backgroundTint="?android:textColor"/>
 
         </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/category_relLay"
-            android:layout_width="132dp"
+            android:layout_width="140dp"
             android:layout_height="32dp"
             android:layout_alignParentEnd="true">
 
             <ImageView
                 android:id="@+id/category_imgView"
-                android:layout_width="132dp"
+                android:layout_width="140dp"
                 android:layout_height="32dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
@@ -109,7 +109,7 @@
                 android:layout_margin="5dp"
                 android:text="@string/uncategorized"
                 android:textAlignment="center"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
         </RelativeLayout>
     </RelativeLayout>

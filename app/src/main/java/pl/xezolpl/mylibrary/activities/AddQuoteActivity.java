@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class AddQuoteActivity extends AppCompatActivity {
+    private static final String TAG = "AddQuoteActivity";
 
     private MaterialEditText title_EditTxt, quote_EditTxt, page_EditTxt, author_EditTxt;
     private Spinner category_spinner;
@@ -209,16 +211,26 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         quote_author_btn.setOnClickListener(view -> {
             BookViewModel bookViewModel = ViewModelProviders.of(AddQuoteActivity.this).get(BookViewModel.class);
-            bookViewModel.getBook(bookId).observe(AddQuoteActivity.this, book -> author_EditTxt.setText(book.getAuthor()));
+            bookViewModel.getBook(bookId).observe(AddQuoteActivity.this, book -> {
+                if(book!=null){
+                    author_EditTxt.setText(book.getAuthor());
+                }
+            });
         });
 
         camera_btn.setOnClickListener(view -> {
-            if (!PermissionsManager.checkCameraPermission(this)) {
-                PermissionsManager.requestCameraPermission(this);
-            } else {
-                imgUri = IntentManager.setUpImageOutputUri(this);
-                IntentManager.pickCamera(this, imgUri);
+            try {
+                if (!PermissionsManager.checkCameraPermission(this)) {
+                    PermissionsManager.requestCameraPermission(this);
+                } else {
+                    imgUri = IntentManager.setUpImageOutputUri(this);
+                    IntentManager.pickCamera(this, imgUri);
+                }
+            } catch (Exception exc){
+                Toast.makeText(this, getString(R.string.recognition_error), Toast.LENGTH_LONG).show();
+                Log.e(TAG, "setOnClickListeners: camera", exc);
             }
+
         });
     }
 

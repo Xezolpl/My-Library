@@ -12,6 +12,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -47,7 +48,8 @@ import static pl.xezolpl.mylibrary.managers.IntentManager.PICK_CAMERA_CODE;
 import static pl.xezolpl.mylibrary.managers.IntentManager.PICK_GALLERY_CODE;
 
 public class SelectCoverActivity extends AppCompatActivity {
-
+    private static final String TAG = "SelectCoverActivity";
+    
     private MaterialEditText bookInput;
     private FitButton refreshBtn, moreCoversBtn, galleryBtn, cameraBtn;
 
@@ -88,19 +90,27 @@ public class SelectCoverActivity extends AppCompatActivity {
     private void setOnClickListeners() {
         galleryBtn.setOnClickListener(view -> {
             //starting gallery
-            if (!PermissionsManager.checkStoragePermission(this)) {
-                PermissionsManager.requestStoragePermission(this);
-            } else {
-                IntentManager.pickGallery(this);
+            try {
+                if (!PermissionsManager.checkStoragePermission(this)) {
+                    PermissionsManager.requestStoragePermission(this);
+                } else {
+                    IntentManager.pickGallery(this);
+                }
+            }catch (Exception e){
+                Log.e(TAG, "setOnClickListeners: ", e);
             }
-
         });
         cameraBtn.setOnClickListener(view -> {
-            if (!PermissionsManager.checkCameraPermission(this)) {
-                PermissionsManager.requestCameraPermission(this);
-            } else {
-                imgUri = IntentManager.setUpImageOutputUri(this);
-                IntentManager.pickCamera(this, imgUri);
+            try {
+                if (!PermissionsManager.checkCameraPermission(this)) {
+                    PermissionsManager.requestCameraPermission(this);
+                } else {
+                    imgUri = IntentManager.setUpImageOutputUri(this);
+                    IntentManager.pickCamera(this, imgUri);
+                }
+            } catch (Exception exc) {
+                Toast.makeText(this, getString(R.string.recognition_error), Toast.LENGTH_LONG).show();
+                Log.e(TAG, "setOnClickListeners: camera", exc);
             }
         });
         refreshBtn.setOnClickListener(view -> {
@@ -123,7 +133,7 @@ public class SelectCoverActivity extends AppCompatActivity {
         });
     }
 
-    public void setMoreCoversBtnVisible(boolean b){
+    public void setMoreCoversBtnVisible(boolean b) {
         moreCoversBtn.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 

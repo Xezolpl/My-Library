@@ -74,8 +74,10 @@ public class SettingsManager {
         QuoteCategoryViewModel qcvm = ViewModelProviders.of((AppCompatActivity) context).get(QuoteCategoryViewModel.class);
 
         qcvm.getCategory("Uncategorized").observe((AppCompatActivity) context, quoteCategory -> {
-            quoteCategory.setName(context.getString(R.string.uncategorized));
-            qcvm.update(quoteCategory);
+            if(quoteCategory!=null) {
+                quoteCategory.setName(context.getString(R.string.uncategorized));
+                qcvm.update(quoteCategory);
+            }
         });
     }
 }

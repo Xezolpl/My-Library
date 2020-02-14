@@ -32,7 +32,7 @@ public class QuotesTabFragment extends Fragment {
     private String bookId;
 
     private QuotesRecViewAdapter quotesRecViewAdapter;
-    private RecyclerView quotes_recView =  null;
+    private RecyclerView quotes_recView = null;
 
     private Quote latestQuote = null;
 
@@ -49,17 +49,20 @@ public class QuotesTabFragment extends Fragment {
 
         QuoteViewModel quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
         if (bookId.isEmpty()) {
-            quoteViewModel.getAllQuotes().observe(this, quotes ->{
-                quotesRecViewAdapter.setQuotes(quotes);
-                latestQuote = quotes.get(quotes.size()-1);
-                if(quotes_recView!=null) quotes_recView.invalidate();
+            quoteViewModel.getAllQuotes().observe(this, quotes -> {
+                if (quotes.size() > 0) {
+                    quotesRecViewAdapter.setQuotes(quotes);
+                    latestQuote = quotes.get(quotes.size() - 1);
+                    if (quotes_recView != null) quotes_recView.invalidate();
+                }
             });
         } else {
             quoteViewModel.getQuotesByBook(bookId).observe(this, quotes -> {
-                quotesRecViewAdapter.setQuotes(quotes);
-                latestQuote = quotes.get(quotes.size()-1);
-                if(quotes_recView!=null) quotes_recView.invalidate();
-
+                if (quotes.size() > 0) {
+                    quotesRecViewAdapter.setQuotes(quotes);
+                    latestQuote = quotes.get(quotes.size() - 1);
+                    if (quotes_recView != null) quotes_recView.invalidate();
+                }
             });
         }
 
@@ -83,7 +86,7 @@ public class QuotesTabFragment extends Fragment {
             context.startActivity(intent);
         });
         setHasOptionsMenu(true);
-        if (!bookId.isEmpty())setMenuVisibility(false);
+        if (!bookId.isEmpty()) setMenuVisibility(false);
 
         return view;
     }
