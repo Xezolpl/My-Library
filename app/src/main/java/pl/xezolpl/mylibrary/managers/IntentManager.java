@@ -46,14 +46,13 @@ public abstract class IntentManager {
     }
 
     public static void pickDatabase(Activity activity){
-        Intent intent = new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("file/*");
         activity.startActivityForResult(intent, PICK_DATABASE);
     }
 
     public static void saveDatabase(Activity activity){
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-        //File file = activity.getDatabasePath("library_database.db");
-        //intent.putExtra("file", file);
         activity.startActivityForResult(intent, SAVE_DATABASE);
     }
 

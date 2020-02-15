@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,6 +21,9 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.File;
+import java.io.IOException;
+
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.fragments.AllBooksFragment;
 import pl.xezolpl.mylibrary.fragments.BooksListTabFragment;
@@ -27,12 +31,13 @@ import pl.xezolpl.mylibrary.fragments.CategoriesFragment;
 import pl.xezolpl.mylibrary.fragments.ContactFragment;
 import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import pl.xezolpl.mylibrary.fragments.SettingsFragment;
+import pl.xezolpl.mylibrary.managers.FileManager;
 import pl.xezolpl.mylibrary.managers.IntentManager;
 import pl.xezolpl.mylibrary.managers.PermissionsManager;
 import pl.xezolpl.mylibrary.managers.SettingsManager;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
+    private static final String TAG = "MainActivity";
     private DrawerLayout drawer;
 
     private AllBooksFragment allBooksFragment;
@@ -185,16 +190,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == IntentManager.PICK_DATABASE){
             if(resultCode== RESULT_OK && data!=null){
-                //FIRST CONFIRM WITH EZDIALOG
-                Toast.makeText(this, "Successfully restored database", Toast.LENGTH_LONG).show();
+                try {
+                    File file = new File(data.getData().getPath());
+                    FileManager fileManager = new FileManager(this);
+
+                    if(fileManager.importDatabaseFile(file)){
+                        Toast.makeText(this, getString(R.string.db_restore_success), Toast.LENGTH_LONG).show();
+                        Thread.sleep(3500);
+                        Intent intent = new Intent(this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        Toast.makeText(this, getString(R.string.db_restore_unknown_error), Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (IOException e) {
+                    Toast.makeText(this, getString(R.string.restore_db_fail), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "onActivityResult: ", e);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
             else{
                 Toast.makeText(this, getString(R.string.restore_db_fail), Toast.LENGTH_LONG).show();
             }
         }else if(requestCode == IntentManager.SAVE_DATABASE){
             if(resultCode == RESULT_OK && data!=null){
-                String filePath = data.getData().getPath();
-
+                File directory = new File(data.getData().getPath());
+                try {
+                    new FileManager(this).exportDatabaseFile(directory);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }else{
 
             }

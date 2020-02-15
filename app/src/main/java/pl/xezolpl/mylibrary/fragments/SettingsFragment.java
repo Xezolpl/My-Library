@@ -67,6 +67,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             prefEditor.putString("lang", newValue.toString()).commit();
             Intent intent = new Intent(getContext(), MainActivity.class);
             startActivity(intent);
+            getActivity().finish();
             return true;
         });
 
@@ -74,6 +75,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             prefEditor.putString("theme", newValue.toString()).commit();
             Intent intent = new Intent(getContext(), MainActivity.class);
             startActivity(intent);
+            getActivity().finish();
             return true;
         });
     }
