@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.Locale;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.models.QuoteCategory;
+import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 
 public class SettingsManager {
@@ -77,6 +79,9 @@ public class SettingsManager {
             if(quoteCategory!=null) {
                 quoteCategory.setName(context.getString(R.string.uncategorized));
                 qcvm.update(quoteCategory);
+            } else {
+                QuoteCategory uncategorized = new QuoteCategory("Uncategorized", context.getString(R.string.uncategorized), Markers.BLUE_START_COLOR);
+                qcvm.insert(uncategorized);
             }
         });
     }

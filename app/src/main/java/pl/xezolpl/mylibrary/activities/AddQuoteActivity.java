@@ -184,7 +184,7 @@ public class AddQuoteActivity extends AppCompatActivity {
         delete_category_btn.setOnClickListener(view -> {
             QuoteCategory qc = ((QuoteCategory) (spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
 
-            if (!qc.getId().equals(getString(R.string.uncategorized))) {
+            if (!qc.getId().equals("Uncategorized")) {
                 DeletingManager deletingManager = new DeletingManager(this);
                 deletingManager.showDeletingDialog(getString(R.string.del_quote_category),
                         getString(R.string.delete_quote_category),
