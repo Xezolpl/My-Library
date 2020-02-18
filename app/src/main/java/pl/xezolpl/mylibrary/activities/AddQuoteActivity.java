@@ -172,7 +172,7 @@ public class AddQuoteActivity extends AppCompatActivity {
         edit_category_btn.setOnClickListener(view -> {
             QuoteCategory qc = ((QuoteCategory) (spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
 
-            if (!qc.getId().equals(getString(R.string.uncategorized))) {
+            if (!qc.getId().equals("Uncategorized")) {
                 Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
                 intent.putExtra("category", qc);
                 startActivityForResult(intent, ADD_QUOTE_CATEGORY_REQUEST_CODE);
