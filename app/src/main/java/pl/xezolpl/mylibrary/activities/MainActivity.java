@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             currFragment = allBooksFragment;
         }
     }
-    private void initWidgets(){
+
+    private void initWidgets() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
@@ -107,8 +108,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nav_view.setCheckedItem(R.id.nav_books);
     }
 
-    private void checkPermissions(){
-        if (!PermissionsManager.checkInternetPermission(this)){
+    private void checkPermissions() {
+        if (!PermissionsManager.checkInternetPermission(this)) {
             PermissionsManager.requestInternetPermission(this);
         }
     }
@@ -173,11 +174,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && !drawer.isDrawerOpen(GravityCompat.START)) {
-            if(fromCategory){ //IN THE CATEGORIES FRAGMENT
+            if (fromCategory) { //IN THE CATEGORIES FRAGMENT
                 fm.beginTransaction().detach(currFragment).attach(categoriesFragment).commit();
                 currFragment = categoriesFragment;
                 fromCategory = false;
-            }else{
+            } else {
                 handleBackKeycode();
             }
             return true;
@@ -188,19 +189,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         //IMPORT THE DATABASE
-        if(requestCode == IntentManager.PICK_DATABASE){
-            if(resultCode== RESULT_OK && data!=null){
+        if (requestCode == IntentManager.PICK_DATABASE) {
+            if (resultCode == RESULT_OK && data != null) {
                 try {
                     File file = new File(data.getData().getPath());
 
-                    if(new FileManager(this).importDatabaseFile(file)){
+                    if (new FileManager(this).importDatabaseFile(file)) {
                         Toast.makeText(this, getString(R.string.db_restore_success), Toast.LENGTH_LONG).show();
 
                         Intent intent = new Intent(this, MainActivity.class);
-                        (new Handler()).postDelayed(()->startActivity(intent), 2000);
+                        (new Handler()).postDelayed(() -> {
+                            startActivity(intent);
+                            finish();
+                        }, 2000);
 
-                        finish();
-                    }else{
+
+                    } else {
                         Toast.makeText(this, getString(R.string.db_restore_unknown_error), Toast.LENGTH_SHORT).show();
                     }
 
@@ -208,44 +212,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(this, getString(R.string.restore_db_fail), Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "onActivityResult: ", e);
                 }
-            }
-            else{
+            } else {
                 Toast.makeText(this, getString(R.string.restore_db_fail), Toast.LENGTH_SHORT).show();
             }
         }
         //EXPORT THE DATABASE
-        else if(requestCode == IntentManager.SAVE_DATABASE){
-            if(resultCode == RESULT_OK && data!=null){
+        else if (requestCode == IntentManager.SAVE_DATABASE) {
+            if (resultCode == RESULT_OK && data != null) {
                 try {
-                File directory = new File(data.getStringExtra("data"));
-
-                    if (directory.isDirectory()){
-                        if( new FileManager(this).exportDatabaseFile(directory)){
-                            Toast.makeText(this, getString(R.string.export_db_success), Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(this, getString(R.string.export_db_fail), Toast.LENGTH_SHORT).show();
-                        }
-                    }else {
-                        Toast.makeText(this, getString(R.string.chose_directory_db_fail), Toast.LENGTH_SHORT).show();
+                    if (new FileManager(this).exportDatabaseFile(new File(data.getData().getPath()))) {
+                        Toast.makeText(this, getString(R.string.export_db_success), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, getString(R.string.export_db_fail), Toast.LENGTH_SHORT).show();
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(this, getString(R.string.export_db_fail) + "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
                 }
-            }else{
+            } else {
                 Toast.makeText(this, getString(R.string.export_db_fail), Toast.LENGTH_SHORT).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void handleBackKeycode(){
-        if (backCounter==0){
+    private void handleBackKeycode() {
+        if (backCounter == 0) {
             backCounter = 1;
             Toast.makeText(this, "Click again to exit the application.", Toast.LENGTH_SHORT).show();
             (new Handler()).postDelayed(() -> backCounter = 0, 2000);
 
-        } else{
+        } else {
             backCounter = 0;
             finish();
         }

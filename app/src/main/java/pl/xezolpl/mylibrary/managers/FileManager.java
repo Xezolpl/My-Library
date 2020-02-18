@@ -1,6 +1,7 @@
 package pl.xezolpl.mylibrary.managers;
 
 import android.content.Context;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -125,10 +126,21 @@ public class FileManager {
     }
 
     public boolean exportDatabaseFile(File exportDir) {
-        File dbCopy = new File(exportDir.getAbsolutePath() + "/library_database.db");
+        System.out.println(Environment.getExternalStorageDirectory().getPath());
+        File dbCopy = new File(Environment.getExternalStorageDirectory().getPath() +
+                exportDir.getParentFile() + "/library_database"+time+".db");
+        exportDir.delete();
+
         boolean result = false;
 
         try {
+
+            if (!dbCopy.exists()){
+                if (!dbCopy.createNewFile()){
+                    return false;
+                }
+            }
+
             FileChannel sourceChannel = new FileInputStream(dbOriginal).getChannel();
             FileChannel destChannel = new FileOutputStream(dbCopy).getChannel();
 

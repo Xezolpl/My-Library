@@ -52,7 +52,8 @@ public abstract class IntentManager {
     }
 
     public static void saveDatabase(Activity activity){
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.setType("*/*");
         activity.startActivityForResult(intent, SAVE_DATABASE);
     }
 
