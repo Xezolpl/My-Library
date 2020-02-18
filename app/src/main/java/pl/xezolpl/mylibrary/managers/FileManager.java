@@ -94,6 +94,10 @@ public class FileManager {
             return false;
         }
 
+        if (importedFile.getAbsolutePath().substring(0,5).contains("/root")) {
+            importedFile = new File(importedFile.getAbsolutePath().substring(5));
+        }
+
         File dbBackup = createBackupFile();
 
         try {

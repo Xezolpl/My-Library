@@ -66,16 +66,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         langListPref.setOnPreferenceChangeListener((preference, newValue) -> {
             prefEditor.putString("lang", newValue.toString()).commit();
             Intent intent = new Intent(getContext(), MainActivity.class);
-            startActivity(intent);
             getActivity().finish();
+            startActivity(intent);
             return true;
         });
 
         themeListPref.setOnPreferenceChangeListener((preference, newValue) -> {
             prefEditor.putString("theme", newValue.toString()).commit();
             Intent intent = new Intent(getContext(), MainActivity.class);
-            startActivity(intent);
             getActivity().finish();
+            startActivity(intent);
             return true;
         });
     }
