@@ -22,7 +22,6 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
-import java.io.IOException;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.fragments.AllBooksFragment;
@@ -188,43 +187,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //IMPORT THE DATABASE
         if(requestCode == IntentManager.PICK_DATABASE){
             if(resultCode== RESULT_OK && data!=null){
                 try {
                     File file = new File(data.getData().getPath());
-                    FileManager fileManager = new FileManager(this);
 
-                    if(fileManager.importDatabaseFile(file)){
+                    if(new FileManager(this).importDatabaseFile(file)){
                         Toast.makeText(this, getString(R.string.db_restore_success), Toast.LENGTH_LONG).show();
-                        Thread.sleep(3500);
+
                         Intent intent = new Intent(this, MainActivity.class);
-                        startActivity(intent);
+                        (new Handler()).postDelayed(()->startActivity(intent), 2000);
+
                         finish();
                     }else{
                         Toast.makeText(this, getString(R.string.db_restore_unknown_error), Toast.LENGTH_SHORT).show();
                     }
 
-                } catch (IOException e) {
+                } catch (Exception e) {
                     Toast.makeText(this, getString(R.string.restore_db_fail), Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "onActivityResult: ", e);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
-
             }
             else{
-                Toast.makeText(this, getString(R.string.restore_db_fail), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.restore_db_fail), Toast.LENGTH_SHORT).show();
             }
-        }else if(requestCode == IntentManager.SAVE_DATABASE){
+        }
+        //EXPORT THE DATABASE
+        else if(requestCode == IntentManager.SAVE_DATABASE){
             if(resultCode == RESULT_OK && data!=null){
-                File directory = new File(data.getData().getPath());
                 try {
-                    new FileManager(this).exportDatabaseFile(directory);
+                File directory = new File(data.getStringExtra("data"));
+
+                    if (directory.isDirectory()){
+                        if( new FileManager(this).exportDatabaseFile(directory)){
+                            Toast.makeText(this, getString(R.string.export_db_success), Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(this, getString(R.string.export_db_fail), Toast.LENGTH_SHORT).show();
+                        }
+                    }else {
+                        Toast.makeText(this, getString(R.string.chose_directory_db_fail), Toast.LENGTH_SHORT).show();
+                    }
                 }catch (Exception e){
                     e.printStackTrace();
+                    Toast.makeText(this, getString(R.string.export_db_fail) + "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
                 }
             }else{
-
+                Toast.makeText(this, getString(R.string.export_db_fail), Toast.LENGTH_SHORT).show();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

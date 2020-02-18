@@ -20,6 +20,11 @@ public class FileManager {
     private final String databaseFolderPath;
     private String time;
 
+
+    /**
+     * Sets up the attributes
+     * @param context needed for getting database path
+     */
     public FileManager(Context context) {
         dbOriginal = context.getDatabasePath("library_database.db");
         databaseFolderPath = dbOriginal.getAbsolutePath().replace("library_database.db", "");
@@ -41,8 +46,13 @@ public class FileManager {
         }
         return true;
     }
-    //Create a copy of original database and transport it to the backup folder
 
+    /**
+     * Creates a copy file of original database, and deletes old backups
+     *
+     * @return created, raw, empty copy
+     * @throws IOException if something got wrong or the pathName was wrong
+     */
     private File createBackupFile() throws IOException {
         File[] listFiles = dbBackupDir.listFiles();
         int length = listFiles.length;
@@ -69,7 +79,7 @@ public class FileManager {
      *
      * @param importedFile file from intent / from anywhere
      * @return true if success else false
-     * @throws IOException in some cases Channels can throw unexpected Exceptions
+     * @throws IOException in some cases createBackupFile can throw unexpected exceptions
      */
     public boolean importDatabaseFile(File importedFile) throws IOException {
         boolean result = false;
@@ -114,7 +124,25 @@ public class FileManager {
         return result;
     }
 
-    public boolean exportDatabaseFile(File file) {
-        return true;
+    public boolean exportDatabaseFile(File exportDir) {
+        File dbCopy = new File(exportDir.getAbsolutePath() + "/library_database.db");
+        boolean result = false;
+
+        try {
+            FileChannel sourceChannel = new FileInputStream(dbOriginal).getChannel();
+            FileChannel destChannel = new FileOutputStream(dbCopy).getChannel();
+
+            if(sourceChannel.transferTo(0, sourceChannel.size(), destChannel)>0){
+                result = true;
+            }
+
+            sourceChannel.close();
+            destChannel.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }
