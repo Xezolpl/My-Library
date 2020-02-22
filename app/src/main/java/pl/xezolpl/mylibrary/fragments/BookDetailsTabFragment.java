@@ -111,11 +111,11 @@ public class BookDetailsTabFragment extends Fragment {
 
             case R.id.favourite: {
                 if (thisBook.isFavourite()) {
-                    item.setTitle(getString(R.string.remove_from_favourites));
+                    item.setTitle(getString(R.string.add_to_favourites));
                     item.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
                     thisBook.setFavourite(false);
                 } else {
-                    item.setTitle(getString(R.string.add_to_favourites));
+                    item.setTitle(getString(R.string.remove_from_favourites));
                     item.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star));
                     thisBook.setFavourite(true);
                 }

@@ -3,12 +3,17 @@ package pl.xezolpl.mylibrary.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -33,7 +38,7 @@ public class BooksListTabFragment extends Fragment {
     private BooksRecViewAdapter booksRecViewAdapter;
 
     private String categoryName = null;
-
+    private boolean favourites = false;
     private RelativeLayout no_books_lay = null;
 
     public BooksListTabFragment() {
@@ -53,6 +58,7 @@ public class BooksListTabFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
+        setHasOptionsMenu(true);
 
         booksRecViewAdapter = new BooksRecViewAdapter(context);
 
@@ -119,9 +125,40 @@ public class BooksListTabFragment extends Fragment {
         return view;
     }
 
-     void setFilter(String filter) {
-        if (booksRecViewAdapter!=null){
-            booksRecViewAdapter.getFilter().filter(filter);
-        }
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.books_list_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (booksRecViewAdapter!=null){
+                    booksRecViewAdapter.getFilter().filter(s);
+                }
+                return false;
+            }
+        });
+
+        MenuItem action_favourite = menu.findItem(R.id.action_favourite);
+        action_favourite.setOnMenuItemClickListener(menuItem -> {
+            if (favourites) {
+                action_favourite.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
+                booksRecViewAdapter.setFavouriteFilter(false);
+                favourites = false;
+            } else {
+                action_favourite.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star));
+                booksRecViewAdapter.setFavouriteFilter(true);
+                favourites = true;
+            }
+            return false;
+        });
     }
 }

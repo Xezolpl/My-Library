@@ -40,6 +40,21 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
         this.inflater = LayoutInflater.from(context);
     }
 
+    public void setFavouriteFilter(boolean b){
+        if(b){
+            books.clear();
+            for (Book book : booksFull){
+                if (book.isFavourite()) {
+                    books.add(book);
+                }
+            }
+        }else {
+            books.clear();
+            books.addAll(booksFull);
+        }
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

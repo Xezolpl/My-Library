@@ -1,16 +1,11 @@
 package pl.xezolpl.mylibrary.fragments;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,8 +26,6 @@ public class AllBooksFragment extends Fragment {
     private ViewPager books_viewPager;
     private TabLayout books_tabLayout;
 
-    private TabFragmentPagerAdapter sectionsPagerAdapter;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,33 +36,8 @@ public class AllBooksFragment extends Fragment {
         setUpViewPager();
 
         books_tabLayout.setupWithViewPager(books_viewPager);
-        setHasOptionsMenu(true);
 
         return view;
-    }
-
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.main_menu, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                BooksListTabFragment tabFragment = (BooksListTabFragment) sectionsPagerAdapter
-                        .getItem(books_viewPager.getCurrentItem());
-                tabFragment.setFilter(s);
-                return false;
-            }
-        });
     }
 
     private void initWidgets(View v) {
@@ -86,11 +54,9 @@ public class AllBooksFragment extends Fragment {
         });
     }
 
-
-
     public void setUpViewPager() {
         if (getFragmentManager() != null) {
-            sectionsPagerAdapter = new TabFragmentPagerAdapter(getFragmentManager());
+            TabFragmentPagerAdapter sectionsPagerAdapter = new TabFragmentPagerAdapter(getFragmentManager());
 
             Fragment allBooksFragment = new BooksListTabFragment(Book.STATUS_NEUTRAL);
             Fragment wantBooksFragment = new BooksListTabFragment(Book.STATUS_WANT_TO_READ);
