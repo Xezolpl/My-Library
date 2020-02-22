@@ -2,6 +2,8 @@ package pl.xezolpl.mylibrary.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,6 +24,7 @@ public class CategoriesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new CategoryRecViewAdapter(getContext(), CategoryRecViewAdapter.NORMAL_MODE, null);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -38,5 +41,10 @@ public class CategoriesFragment extends Fragment {
 
     public CategoryRecViewAdapter getAdapter() {
         return adapter;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        menu.clear();
     }
 }

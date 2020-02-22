@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 
+import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -31,6 +34,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.settings_preference, null);
+
         preferences = PreferenceManager.getDefaultSharedPreferences(Objects.requireNonNull(getContext()));
         prefEditor = preferences.edit();
         settingsManager = new SettingsManager(Objects.requireNonNull(getContext()));
@@ -38,6 +42,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         initPreferences();
         loadPreferencesState();
         setListeners();
+        setHasOptionsMenu(true);
     }
 
     private void initPreferences() {
@@ -80,5 +85,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
     }
 
-
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        menu.clear();
+    }
 }

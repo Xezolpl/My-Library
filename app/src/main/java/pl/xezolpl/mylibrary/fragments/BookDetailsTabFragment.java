@@ -170,7 +170,11 @@ public class BookDetailsTabFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.opened_book_menu, menu);
 
-        if (!thisBook.isFavourite()) {
+        if (thisBook.isFavourite()) {
+            menu.findItem(R.id.favourite).setTitle(getString(R.string.remove_from_favourites));
+            menu.findItem(R.id.favourite).setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star));
+        }else{
+            menu.findItem(R.id.favourite).setTitle(getString(R.string.add_to_favourites));
             menu.findItem(R.id.favourite).setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
         }
     }

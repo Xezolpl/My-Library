@@ -127,6 +127,7 @@ public class BooksListTabFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.books_list_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
@@ -148,6 +149,7 @@ public class BooksListTabFragment extends Fragment {
         });
 
         MenuItem action_favourite = menu.findItem(R.id.action_favourite);
+        action_favourite.setIcon(ContextCompat.getDrawable(context, favourites ? R.mipmap.favourite_star :R.mipmap.favourite_star_off));
         action_favourite.setOnMenuItemClickListener(menuItem -> {
             if (favourites) {
                 action_favourite.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));

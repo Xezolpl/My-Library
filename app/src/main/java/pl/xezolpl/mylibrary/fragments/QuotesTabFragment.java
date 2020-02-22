@@ -93,6 +93,7 @@ public class QuotesTabFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.quotes_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.quotes_searchView);
