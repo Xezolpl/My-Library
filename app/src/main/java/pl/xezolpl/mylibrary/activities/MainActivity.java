@@ -195,13 +195,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     File file = new File(data.getData().getPath());
 
                     if (new FileManager(this).importDatabaseFile(file)) {
-                        Toast.makeText(this, getString(R.string.db_restore_success), Toast.LENGTH_LONG).show();
-
                         Intent intent = new Intent(this, MainActivity.class);
-                        (new Handler()).postDelayed(() -> {
-                            startActivity(intent);
-                            finish();
-                        }, 2000);
+                        startActivity(intent);
+                        finish();
+//                        Toast.makeText(this, getString(R.string.db_restore_success), Toast.LENGTH_LONG).show();
+
+
+                        //  }, 2000);
 
 
                     } else {

@@ -12,26 +12,26 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import pl.xezolpl.mylibrary.database.LibraryDatabase;
+
 public class FileManager {
-    private static final String TAG = "FileManager";
-
-
     private final File dbOriginal;
     private final File dbBackupDir;
     private final String databaseFolderPath;
     private String time;
-
+    private Context context;
 
     /**
      * Sets up the attributes
      * @param context needed for getting database path
      */
     public FileManager(Context context) {
+        this.context = context;
         dbOriginal = context.getDatabasePath("library_database.db");
         databaseFolderPath = dbOriginal.getAbsolutePath().replace("library_database.db", "");
         dbBackupDir = new File(databaseFolderPath + "/backup");
 
-        time = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        time = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault()).format(new Date());
     }
 
     /**
@@ -41,9 +41,7 @@ public class FileManager {
      */
     private boolean checkBackupDir() {
         if (!dbBackupDir.exists()) {
-            if (!dbBackupDir.mkdir()) {
-                return false;
-            }
+            return dbBackupDir.mkdir();
         }
         return true;
     }
@@ -84,7 +82,6 @@ public class FileManager {
      */
     public boolean importDatabaseFile(File importedFile) throws IOException {
         boolean result = false;
-
         if (!checkBackupDir()) {
             return false;
         }
@@ -115,10 +112,10 @@ public class FileManager {
                 FileChannel destinationChannel = new FileOutputStream(dbOriginal).getChannel();
 
                 //if transferredBytes>0 again then we successfully imported the database file
+                LibraryDatabase.getDatabase(context.getApplicationContext()).close();
                 if (importChannel.transferTo(0, importChannel.size(), destinationChannel) > 0) {
                     result = true;
                 }
-
                 importChannel.close();
                 destinationChannel.close();
             }
@@ -129,16 +126,19 @@ public class FileManager {
         return result;
     }
 
-    public boolean exportDatabaseFile(File exportDir) {
-        System.out.println(Environment.getExternalStorageDirectory().getPath());
-        File dbCopy = new File(Environment.getExternalStorageDirectory().getPath() +
-                exportDir.getParentFile() + "/library_database"+time+".db");
-        exportDir.delete();
+    public boolean exportDatabaseFile(File exportFile) {
+        String fileName = "library_database-"+time+".db";
+        String dirPath = (Environment.getExternalStorageDirectory().getPath() +
+                exportFile.getParentFile()).replace("document/primary:","");
+        String absoluteFilePath = dirPath + "/" + fileName;
+
+        new File(dirPath + "/" + exportFile.getName()).delete();
+
+        File dbCopy = new File(absoluteFilePath);
 
         boolean result = false;
 
         try {
-
             if (!dbCopy.exists()){
                 if (!dbCopy.createNewFile()){
                     return false;

@@ -50,4 +50,9 @@ public abstract class LibraryDatabase extends RoomDatabase {
         return libraryDatabaseInstance;
     }
 
+    @Override
+    public void close() {
+        super.close();
+        libraryDatabaseInstance = null;
+    }
 }
