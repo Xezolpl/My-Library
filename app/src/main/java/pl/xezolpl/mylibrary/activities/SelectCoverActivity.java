@@ -49,7 +49,7 @@ import static pl.xezolpl.mylibrary.managers.IntentManager.PICK_GALLERY_CODE;
 
 public class SelectCoverActivity extends AppCompatActivity {
     private static final String TAG = "SelectCoverActivity";
-    
+
     private MaterialEditText bookInput;
     private FitButton refreshBtn, moreCoversBtn, galleryBtn, cameraBtn;
 
@@ -96,7 +96,7 @@ public class SelectCoverActivity extends AppCompatActivity {
                 } else {
                     IntentManager.pickGallery(this);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 Log.e(TAG, "setOnClickListeners: ", e);
             }
         });
@@ -156,7 +156,7 @@ public class SelectCoverActivity extends AppCompatActivity {
      * then creates a file from bitmap and saves it into the application's directory/files/covers
      *
      * @param bitmap scaled bitmap with image
-     * @return successfully created file's' path in app directory, if there was an error - returns null
+     * @return successfully created file's path in app directory, if there was an error - returns null
      */
     public Bitmap scaleBitmap(Bitmap bitmap, int newWidth, int newHeight) {
         int oldWidth = bitmap.getWidth();
@@ -179,8 +179,24 @@ public class SelectCoverActivity extends AppCompatActivity {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
 
-            //create file's path in app directory
+            //check do files and covers folders exist
             String newFilePath = getApplicationInfo().dataDir;
+
+            File filesDir = new File(newFilePath + "/files");
+            if (!filesDir.exists()) {
+                if (!filesDir.mkdir()) {
+                    return null;
+                }
+            }
+
+            File coversDir = new File(newFilePath + "/files/covers");
+            if (!coversDir.exists()) {
+                if (!coversDir.mkdir()) {
+                    return null;
+                }
+            }
+
+            //create file's path in app directory
             newFilePath += "/files/covers/" + UUID.randomUUID().toString() + ".jpg";
 
             //create file
@@ -197,7 +213,7 @@ public class SelectCoverActivity extends AppCompatActivity {
             // remember close the streams
             bytes.close();
 
-        } catch (IOException e) {
+        }  catch (IOException e) {
             e.printStackTrace();
         }
         return createdFilePath;

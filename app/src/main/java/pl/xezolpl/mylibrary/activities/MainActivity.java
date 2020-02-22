@@ -30,7 +30,7 @@ import pl.xezolpl.mylibrary.fragments.CategoriesFragment;
 import pl.xezolpl.mylibrary.fragments.ContactFragment;
 import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import pl.xezolpl.mylibrary.fragments.SettingsFragment;
-import pl.xezolpl.mylibrary.managers.FileManager;
+import pl.xezolpl.mylibrary.managers.BackupManager;
 import pl.xezolpl.mylibrary.managers.IntentManager;
 import pl.xezolpl.mylibrary.managers.PermissionsManager;
 import pl.xezolpl.mylibrary.managers.SettingsManager;
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 try {
                     File file = new File(data.getData().getPath());
 
-                    if (new FileManager(this).importDatabaseFile(file)) {
+                    if (new BackupManager(this).importDatabaseFile(file)) {
                         Intent intent = new Intent(this, MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (requestCode == IntentManager.SAVE_DATABASE) {
             if (resultCode == RESULT_OK && data != null) {
                 try {
-                    if (new FileManager(this).exportDatabaseFile(new File(data.getData().getPath()))) {
+                    if (new BackupManager(this).exportDatabaseFile(new File(data.getData().getPath()))) {
                         Toast.makeText(this, getString(R.string.export_db_success), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, getString(R.string.export_db_fail), Toast.LENGTH_SHORT).show();

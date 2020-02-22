@@ -14,7 +14,7 @@ import java.util.Locale;
 
 import pl.xezolpl.mylibrary.database.LibraryDatabase;
 
-public class FileManager {
+public class BackupManager {
     private final File dbOriginal;
     private final File dbBackupDir;
     private final String databaseFolderPath;
@@ -25,7 +25,7 @@ public class FileManager {
      * Sets up the attributes
      * @param context needed for getting database path
      */
-    public FileManager(Context context) {
+    public BackupManager(Context context) {
         this.context = context;
         dbOriginal = context.getDatabasePath("library_database.db");
         databaseFolderPath = dbOriginal.getAbsolutePath().replace("library_database.db", "");
