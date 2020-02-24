@@ -170,10 +170,6 @@ public class AddBookActivity extends AppCompatActivity {
             }
         }
 
-        if (imageUrl == null) {
-            imageUrl = getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
-        }
-
         thisBook = new Book(title, author, imageUrl, description, pages, bookId, status);
         return true;
     }

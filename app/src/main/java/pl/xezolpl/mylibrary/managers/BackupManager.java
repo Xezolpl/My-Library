@@ -1,16 +1,24 @@
 package pl.xezolpl.mylibrary.managers;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Environment;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import pl.xezolpl.mylibrary.database.LibraryDatabase;
 
@@ -23,6 +31,7 @@ public class BackupManager {
 
     /**
      * Sets up the attributes
+     *
      * @param context needed for getting database path
      */
     public BackupManager(Context context) {
@@ -91,7 +100,7 @@ public class BackupManager {
             return false;
         }
 
-        if (importedFile.getAbsolutePath().substring(0,5).contains("/root")) {
+        if (importedFile.getAbsolutePath().substring(0, 5).contains("/root")) {
             importedFile = new File(importedFile.getAbsolutePath().substring(5));
         }
 
@@ -127,9 +136,9 @@ public class BackupManager {
     }
 
     public boolean exportDatabaseFile(File exportFile) {
-        String fileName = "library_database-"+time+".db";
+        String fileName = "library_database-" + time + ".db";
         String dirPath = (Environment.getExternalStorageDirectory().getPath() +
-                exportFile.getParentFile()).replace("document/primary:","");
+                exportFile.getParentFile()).replace("document/primary:", "");
         String absoluteFilePath = dirPath + "/" + fileName;
 
         new File(dirPath + "/" + exportFile.getName()).delete();
@@ -139,8 +148,8 @@ public class BackupManager {
         boolean result = false;
 
         try {
-            if (!dbCopy.exists()){
-                if (!dbCopy.createNewFile()){
+            if (!dbCopy.exists()) {
+                if (!dbCopy.createNewFile()) {
                     return false;
                 }
             }
@@ -148,7 +157,7 @@ public class BackupManager {
             FileChannel sourceChannel = new FileInputStream(dbOriginal).getChannel();
             FileChannel destChannel = new FileOutputStream(dbCopy).getChannel();
 
-            if(sourceChannel.transferTo(0, sourceChannel.size(), destChannel)>0){
+            if (sourceChannel.transferTo(0, sourceChannel.size(), destChannel) > 0) {
                 result = true;
             }
 
@@ -161,4 +170,55 @@ public class BackupManager {
 
         return result;
     }
+
+    public static boolean downloadCover(String imgUrl){
+
+        File filesDir = new File(imgUrl.replace("/covers/standard_cover.jpg",""));
+        if (!filesDir.exists()) filesDir.mkdir();
+
+        File coversDir = new File(imgUrl.replace("/standard_cover.jpg",""));
+        if (!coversDir.exists()) coversDir.mkdir();
+
+        try {
+            return new CoverDownloader().execute(imgUrl).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static class CoverDownloader extends AsyncTask<String, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            try {
+                URL url = new URL("https://i.pinimg.com/236x/90/49/e5/9049e5a4e33d49807bbbccf25339d266--old-books-vintage-books.jpg");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+
+                Bitmap myBitmap = BitmapFactory.decodeStream(input);
+                //create a file to write bitmap data
+                File f = new File(strings[0]);
+                f.createNewFile();
+
+                //Convert bitmap to byte array
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                myBitmap.compress(Bitmap.CompressFormat.JPEG, 80 , bos);
+                byte[] bitmapdata = bos.toByteArray();
+
+                //write the bytes in file
+                FileOutputStream fos = new FileOutputStream(f);
+                fos.write(bitmapdata);
+                fos.flush();
+                fos.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+    }
+
 }

@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
+import pl.xezolpl.mylibrary.managers.BackupManager;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapter.ViewHolder> implements Filterable {
@@ -125,11 +127,16 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
         }
 
         void setData(String title, String imgUrl) {
-            bookTitle.setText(title);
-            if (imgUrl == null) {
-                imgUrl = "https://i.pinimg.com/236x/90/49/e5/9049e5a4e33d49807bbbccf25339d266--old-books-vintage-books.jpg";
+            if (imgUrl==null){
+                imgUrl = context.getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
+                if (!new File(imgUrl).exists()){
+                    BackupManager.downloadCover(imgUrl);
+                }
             }
+
+            bookTitle.setText(title);
             Glide.with(context).asBitmap().load(imgUrl).into(bookImage);
+
         }
     }
 }
