@@ -3,6 +3,7 @@ package pl.xezolpl.mylibrary.models;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
@@ -57,6 +58,19 @@ public class Book implements Serializable {
         this.id = id;
         this.status = status;
         favourite = false;
+    }
+
+    @Ignore
+    public Book(@NonNull String title, @NonNull String author, String imageUrl, String description,
+                int pages, @NonNull String id, int status, boolean favourite) {
+        this.title = title;
+        this.author = author;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.pages = pages;
+        this.id = id;
+        this.status = status;
+        this.favourite = favourite;
     }
 
     @NotNull

@@ -40,6 +40,7 @@ public class AddBookActivity extends AppCompatActivity {
     private Book thisBook = null;
     private String bookId, imageUrl = null;
     private boolean inEditing = false;
+    private boolean isFavourite = false;
 
     public static final int SELECT_COVER_REQ_CODE = 1;
     private int backCounter =0;
@@ -62,6 +63,7 @@ public class AddBookActivity extends AppCompatActivity {
             inEditing = true;
             loadBookData(thisBook);
             bookId = thisBook.getId();
+            isFavourite = thisBook.isFavourite();
         } else {
             bookId = UUID.randomUUID().toString();
         }
@@ -170,7 +172,11 @@ public class AddBookActivity extends AppCompatActivity {
             }
         }
 
-        thisBook = new Book(title, author, imageUrl, description, pages, bookId, status);
+        if (imageUrl == null){
+            imageUrl = getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
+        }
+
+        thisBook = new Book(title, author, imageUrl, description, pages, bookId, status, isFavourite);
         return true;
     }
 
