@@ -19,7 +19,7 @@
         android:layout_marginRight="5dp"
 
         android:hint="@string/chapters_name"
-        android:maxLength="100"
+        android:maxLength="200"
         android:inputType="textMultiLine|textCapSentences"
         android:imeOptions="actionNext"
         android:textAlignment="center"/>
@@ -38,7 +38,7 @@
             android:layout_marginRight="5dp"
 
             android:hint="@string/chapter_number"
-            android:maxLength="5"
+            android:maxLength="10"
             android:lines="1"
             android:inputType="number|textCapSentences"
             android:textAlignment="center"/>

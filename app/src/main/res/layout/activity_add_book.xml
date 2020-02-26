@@ -84,7 +84,7 @@
             android:layout_margin="5dp"
 
             android:hint="@string/title"
-            android:maxLength="100"
+            android:maxLength="200"
 
             android:inputType="textMultiLine|textCapSentences"
             android:imeOptions="actionNext"
@@ -100,7 +100,7 @@
             android:layout_margin="5dp"
 
             android:hint="@string/author_optional"
-            android:maxLength="50"
+            android:maxLength="200"
 
             android:inputType="textMultiLine|textCapSentences"
             android:imeOptions="actionNext"
@@ -116,7 +116,7 @@
             android:theme="@style/MaterialEditText"
 
             android:hint="@string/description_optional"
-            android:maxLength="1000"
+            android:maxLength="2000"
             android:inputType="textMultiLine|textCapSentences"
             android:imeOptions="actionNext"
             android:textAlignment="center"/>
@@ -137,7 +137,7 @@
                 android:theme="@style/MaterialEditText"
 
                 android:hint="@string/pages"
-                android:maxLength="5"
+                android:maxLength="10"
                 android:maxLines="1"
 
                 android:inputType="number|textCapSentences"
