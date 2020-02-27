@@ -11,7 +11,7 @@
     <color name="colorPrimary2">#3498DB</color>
     <color name="colorPrimaryDark2">#34495E</color>
     <color name="colorAccent2">#FAC40F</color>
-    <color name="colorBackground2">#DCE0E1</color>
+    <color name="colorBackground2">#F2FCFF</color>
     <color name="colorNoteBackground2">#F1F6F6</color>
 
     <!--Dark theme colors-->

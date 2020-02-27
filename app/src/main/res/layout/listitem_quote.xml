@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4.5dp"
             android:layout_toStartOf="@id/category_relLay"
-            android:layout_marginStart="10dp">
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="7dp">
 
             <TextView
                 android:id="@+id/quote_title_txtView"
