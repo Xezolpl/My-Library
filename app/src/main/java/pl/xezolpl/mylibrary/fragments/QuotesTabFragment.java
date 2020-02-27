@@ -14,7 +14,7 @@ import android.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -47,7 +47,7 @@ public class QuotesTabFragment extends Fragment {
 
         quotesRecViewAdapter = new QuotesRecViewAdapter(context);
 
-        QuoteViewModel quoteViewModel = ViewModelProviders.of(this).get(QuoteViewModel.class);
+        QuoteViewModel quoteViewModel = new ViewModelProvider(this).get(QuoteViewModel.class);
         if (bookId.isEmpty()) {
             quoteViewModel.getAllQuotes().observe(this, quotes -> {
                 if (quotes.size() > 0) {
@@ -65,14 +65,12 @@ public class QuotesTabFragment extends Fragment {
                 }
             });
         }
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tabfragment_quotes, container, false);
-
 
         quotes_recView = view.findViewById(R.id.quotes_recView);
         quotes_recView.setAdapter(quotesRecViewAdapter);

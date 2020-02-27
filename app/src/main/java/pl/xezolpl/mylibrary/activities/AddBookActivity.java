@@ -30,16 +30,22 @@ import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.utilities.Requests;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 
+/**
+ * Most of the "add" classes have similar or that same methods so documentation for methods such as
+ * initWidgets, setOnClickListeners etc. search here. I hope you enjoy ;)
+ */
 public class AddBookActivity extends AppCompatActivity {
 
     //Widgets
-    private EditText add_book_title, add_book_author, add_book_description, add_book_pages;
+    private EditText add_book_title, add_book_author, add_book_description, add_book_pages; // basically they are MaterialEditTexts
     private ImageView add_book_image;
     private Spinner status_spinner;
     private FitButton add_book_ok_btn, add_book_cancel_btn, select_category_btn, select_image_btn;
 
-    //Variables
+    //Models
     private Book thisBook = null;
+
+    //Variables
     private String bookId, imageUrl = null;
     private boolean inEdition = false;
     private boolean isFavourite = false;
@@ -108,10 +114,9 @@ public class AddBookActivity extends AppCompatActivity {
      */
     private void setOnClickListeners() {
 
-        select_image_btn.setOnClickListener(view -> {
-            Intent intent = new Intent(AddBookActivity.this, SelectCoverActivity.class);
-            startActivityForResult(intent, Requests.SELECT_COVER_REQUEST);
-        });
+        select_image_btn.setOnClickListener(view ->
+            startActivityForResult(new Intent(this,
+                    SelectCoverActivity.class), Requests.SELECT_COVER_REQUEST));
 
         select_category_btn.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(AddBookActivity.this)

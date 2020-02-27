@@ -3,7 +3,6 @@ package pl.xezolpl.mylibrary.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -14,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.nikartm.button.FitButton;
-import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +32,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
@@ -50,7 +48,7 @@ import static pl.xezolpl.mylibrary.managers.IntentManager.PICK_GALLERY_CODE;
 public class SelectCoverActivity extends AppCompatActivity {
     private static final String TAG = "SelectCoverActivity";
 
-    private MaterialEditText bookInput;
+    private EditText bookInput;
     private FitButton refreshBtn, moreCoversBtn, galleryBtn, cameraBtn;
 
     private CoversRevViewAdapter adapter;
@@ -64,6 +62,7 @@ public class SelectCoverActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         new SettingsManager(this).loadTheme();
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_select_cover);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -71,9 +70,8 @@ public class SelectCoverActivity extends AppCompatActivity {
         setOnClickListeners();
 
         adapter = new CoversRevViewAdapter(this);
-        recView.setLayoutManager(new GridLayoutManager(this, 2));
         recView.setAdapter(adapter);
-
+        recView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
     private void initWidgets() {
@@ -88,8 +86,7 @@ public class SelectCoverActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        galleryBtn.setOnClickListener(view -> {
-            //starting gallery
+        galleryBtn.setOnClickListener(view -> { // pick from gallery
             try {
                 if (!PermissionsManager.checkStoragePermission(this)) {
                     PermissionsManager.requestStoragePermission(this);
@@ -97,10 +94,12 @@ public class SelectCoverActivity extends AppCompatActivity {
                     IntentManager.pickGallery(this);
                 }
             } catch (Exception e) {
+                Toast.makeText(this, getString(R.string.something_went_wrong_try_again), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "setOnClickListeners: ", e);
             }
         });
-        cameraBtn.setOnClickListener(view -> {
+
+        cameraBtn.setOnClickListener(view -> { //pick camera
             try {
                 if (!PermissionsManager.checkCameraPermission(this)) {
                     PermissionsManager.requestCameraPermission(this);
@@ -113,19 +112,19 @@ public class SelectCoverActivity extends AppCompatActivity {
                 Log.e(TAG, "setOnClickListeners: camera", exc);
             }
         });
-        refreshBtn.setOnClickListener(view -> {
+
+        refreshBtn.setOnClickListener(view -> { // search for covers
             if (!PermissionsManager.checkInternetPermission(this)) {
                 PermissionsManager.requestInternetPermission(this);
 
-            } else if (Objects.requireNonNull(bookInput.getText()).length() > 0) {
-
+            } else if (bookInput != null && bookInput.getText().length() > 0) {
                 searchString = bookInput.getText().toString();
                 coversToSearch = 10;
                 searchBooks(searchString);
             }
         });
 
-        moreCoversBtn.setOnClickListener(view -> {
+        moreCoversBtn.setOnClickListener(view -> { // show more covers
             if (!searchString.isEmpty()) {
                 coversToSearch += 10;
                 searchBooks(searchString);
@@ -137,11 +136,16 @@ public class SelectCoverActivity extends AppCompatActivity {
         moreCoversBtn.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
-
+    /**
+     * Searches for the covers by FetchBook AsyncTask
+     *
+     * @param search specified search String (may be e.g. author, title isbn or anything ;)
+     */
     public void searchBooks(String search) {
         // Check the status of the network connection.
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
+
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         // If the network is active and the search field is not empty, start a FetchBook AsyncTask.
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -213,82 +217,75 @@ public class SelectCoverActivity extends AppCompatActivity {
             // remember close the streams
             bytes.close();
 
-        }  catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return createdFilePath;
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_CAMERA_CODE) {
+                IntentManager.pickCropper(this, imgUri, 200, 200);
 
-        //START CROPPING ACTIVITY
-        if (resultCode == RESULT_OK && requestCode == PICK_CAMERA_CODE) {
-            IntentManager.pickCropper(this, imgUri, 200, 200);
-        }
+            } else if (requestCode == CROP_IMAGE_ACTIVITY_REQUEST_CODE || requestCode == PICK_GALLERY_CODE) {
+                Bitmap imageBitmap = null;
+                try {
 
-        if (resultCode == RESULT_OK && (requestCode == CROP_IMAGE_ACTIVITY_REQUEST_CODE
-                || requestCode == PICK_GALLERY_CODE)) {
+                    //From cropper
+                    if (imgUri != null) {
+                        //Get real file uri
+                        Uri realUri = Uri.parse(IntentManager.getRealPath(this, imgUri));
 
-            Bitmap imageBitmap = null;
+                        //Create buffers to convert uri to bitmap
+                        FileInputStream in = new FileInputStream(realUri.toString());
+                        BufferedInputStream buf = new BufferedInputStream(in);
 
-            try {
-                //FROM CROPPING
-                if (imgUri != null && requestCode == CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                        //Create bitmap
+                        imageBitmap = BitmapFactory.decodeStream(buf);
 
-                    //Get real file uri
-                    Uri realUri = Uri.parse(IntentManager.getRealPath(this, imgUri));
+                        //Close the streams
+                        in.close();
+                        buf.close();
 
-                    //Create buffers to convert uri to bitmap
-                    FileInputStream in = new FileInputStream(realUri.toString());
-                    BufferedInputStream buf = new BufferedInputStream(in);
+                        //Delete the original file from camera
+                        new File(realUri.toString()).delete();
+                    }
 
-                    //Create bitmap
-                    imageBitmap = BitmapFactory.decodeStream(buf);
+                    //From gallery
+                    else if (data != null) {
 
-                    //Close the streams
-                    in.close();
-                    buf.close();
+                        //Get uri
+                        Uri photoUri = data.getData();
 
-                    //Delete the original file from camera
-                    new File(realUri.toString()).delete();
-                }
-                //FROM GALLERY
-                else if (data != null && requestCode == PICK_GALLERY_CODE) {
+                        //create bitmap
+                        imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                    }
 
-                    //Get uri
-                    Uri photoUri = data.getData();
+                    //If image bitmap is successfully created
+                    if (imageBitmap != null) {
 
-                    //create bitmap
-                    imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
-                }
-            }
+                        //Scale bitmap
+                        Bitmap scaledBitmap = scaleBitmap(imageBitmap, 280, 385);
 
-            //If there was an error such as FileNotFound or FileInputStream
-            catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(this, getString(R.string.adding_cover_error),
-                        Toast.LENGTH_LONG).show();
-                return;
-            }
+                        //Create file in app directory
+                        String fileUrl = createCoverFileInAppDirectory(scaledBitmap);
 
-            //If image bitmap is successfully created
-            if (imageBitmap != null) {
+                        //Set the result
+                        if (fileUrl != null) {
+                            setResult(RESULT_OK, new Intent().putExtra("url", fileUrl));
+                            finish();
+                        } else {
+                            Toast.makeText(this, getString(R.string.adding_cover_error),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
 
-                //scale bitmap
-                Bitmap scaledBitmap = scaleBitmap(imageBitmap, 280, 385);
-
-                //create file in app directory
-                String fileUrl = createCoverFileInAppDirectory(scaledBitmap);
-
-                //set the result
-                if (fileUrl != null) {
-                    setResult(RESULT_OK, new Intent().putExtra("url", fileUrl));
-                    finish();
-                } else {
-                    Toast.makeText(this, getString(R.string.adding_cover_error),
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, getString(R.string.adding_cover_error) + "Error: " + e.toString(),
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -297,26 +294,15 @@ public class SelectCoverActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PermissionsManager.CAMERA_REQUEST) {
-            if (grantResults.length > 0) {
-                boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+        if (PermissionsManager.handlePermissionsResult(requestCode, grantResults)) { //if we granted the permissions
 
-                if (cameraAccepted && writeStorageAccepted) {
-                    imgUri = IntentManager.setUpImageOutputUri(this);
-                    IntentManager.pickCamera(this, imgUri);
-                }
-            }
-        } else if (requestCode == PermissionsManager.STORAGE_REQUEST) {
-            if (grantResults.length > 0) {
-                boolean readStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+            if (requestCode == PermissionsManager.CAMERA_REQUEST) {
+                imgUri = IntentManager.setUpImageOutputUri(this);
+                IntentManager.pickCamera(this, imgUri);
 
-                if (readStorageAccepted && writeStorageAccepted) {
-                    IntentManager.pickGallery(this);
-                }
+            } else if (requestCode == PermissionsManager.STORAGE_REQUEST) {
+                IntentManager.pickGallery(this);
             }
         }
     }
-
 }

@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
+import java.util.Objects;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.fragments.AllBooksFragment;
@@ -32,12 +33,15 @@ import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import pl.xezolpl.mylibrary.fragments.SettingsFragment;
 import pl.xezolpl.mylibrary.managers.BackupManager;
 import pl.xezolpl.mylibrary.managers.IntentManager;
-import pl.xezolpl.mylibrary.managers.PermissionsManager;
 import pl.xezolpl.mylibrary.managers.SettingsManager;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
+
     private DrawerLayout drawer;
+
+    private FragmentManager fm;
+    private Fragment currFragment;
 
     private AllBooksFragment allBooksFragment;
     private CategoriesFragment categoriesFragment;
@@ -46,9 +50,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ContactFragment contactFragment;
 
     private int backCounter = 0;
-
-    private FragmentManager fm;
-    private Fragment currFragment;
     private boolean fromCategory = false;
 
     @Override
@@ -56,14 +57,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SettingsManager manager = new SettingsManager(this);
         manager.loadLanguage();
         manager.loadTheme();
-
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         initWidgets();
-        checkPermissions();
 
+        //set up the drawer layout and its fragment
         if (savedInstanceState == null) {
             allBooksFragment = new AllBooksFragment();
             categoriesFragment = new CategoriesFragment();
@@ -95,23 +96,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
-        drawer = findViewById(R.id.drawer_layout);
 
         NavigationView nav_view = findViewById(R.id.nav_view);
         nav_view.setNavigationItemSelectedListener(this);
+        nav_view.setCheckedItem(R.id.nav_books);
 
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        nav_view.setCheckedItem(R.id.nav_books);
-    }
-
-    private void checkPermissions() {
-        if (!PermissionsManager.checkInternetPermission(this)) {
-            PermissionsManager.requestInternetPermission(this);
-        }
     }
 
     @Override
@@ -123,13 +118,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Navigation between the fragments
+     * @param menuItem drawer's tab clicked - corresponding to the specific frame's fragment
+     * @return true
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_books: {
                 fm.beginTransaction().detach(currFragment).attach(allBooksFragment).commit();
                 currFragment = allBooksFragment;
-                allBooksFragment.setUpViewPager();
+                allBooksFragment.setUpViewPager(); //because the listItems weren't showing the books
                 break;
             }
             case R.id.nav_categories: {
@@ -161,6 +161,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Sets currentFragment to booksListTabFragment of categoryFragment - we can
+     * se books attributed to the specific category
+     * @param category specific category
+     */
     public void setSelectedCategory(String category) {
         BooksListTabFragment booksWithCategoryFragment = new BooksListTabFragment(category);
 
@@ -171,15 +176,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fromCategory = true;
     }
 
+    /**
+     * If keycode is KEYCODE_BACK -> if we are in category books - we returns to the categoriesFragment
+     * else first shows toast, on the second key back click - close the application
+     * @return true if KEYCODE_BACK else super
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && !drawer.isDrawerOpen(GravityCompat.START)) {
-            if (fromCategory) { //IN THE CATEGORIES FRAGMENT
+            if (fromCategory) { //we are in the categoriesFragment
                 fm.beginTransaction().detach(currFragment).attach(categoriesFragment).commit();
                 currFragment = categoriesFragment;
                 fromCategory = false;
             } else {
-                handleBackKeycode();
+                if (backCounter == 0) { //first backClick - the second time application will be closed (after 2s counter resets)
+                    backCounter = 1;
+                    Toast.makeText(this, getString(R.string.exit_app), Toast.LENGTH_SHORT).show();
+                    (new Handler()).postDelayed(() -> backCounter = 0, 2000);
+                } else {
+                    backCounter = 0;
+                    finish();
+                }
             }
             return true;
         }
@@ -188,22 +205,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
         //IMPORT THE DATABASE
         if (requestCode == IntentManager.PICK_DATABASE) {
             if (resultCode == RESULT_OK && data != null) {
                 try {
-                    File file = new File(data.getData().getPath());
+                    File file = new File(Objects.requireNonNull(data.getData()).getPath());
 
                     if (new BackupManager(this).importDatabaseFile(file)) {
-                        Intent intent = new Intent(this, MainActivity.class);
-                        startActivity(intent);
+                        startActivity(new Intent(this, MainActivity.class));
                         finish();
-//                        Toast.makeText(this, getString(R.string.db_restore_success), Toast.LENGTH_LONG).show();
-
-
-                        //  }, 2000);
-
-
                     } else {
                         Toast.makeText(this, getString(R.string.db_restore_unknown_error), Toast.LENGTH_SHORT).show();
                     }
@@ -216,35 +227,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, getString(R.string.restore_db_fail), Toast.LENGTH_SHORT).show();
             }
         }
+
         //EXPORT THE DATABASE
         else if (requestCode == IntentManager.SAVE_DATABASE) {
             if (resultCode == RESULT_OK && data != null) {
                 try {
-                    if (new BackupManager(this).exportDatabaseFile(new File(data.getData().getPath()))) {
+                    if (new BackupManager(this).exportDatabaseFile(new File(Objects.requireNonNull(data.getData()).getPath()))) {
                         Toast.makeText(this, getString(R.string.export_db_success), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, getString(R.string.export_db_fail), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(this, getString(R.string.export_db_fail) + "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.export_db_fail) + "Error: " + e.toString(), Toast.LENGTH_LONG).show();
                 }
             } else {
                 Toast.makeText(this, getString(R.string.export_db_fail), Toast.LENGTH_SHORT).show();
             }
         }
+
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void handleBackKeycode() {
-        if (backCounter == 0) {
-            backCounter = 1;
-            Toast.makeText(this, "Click again to exit the application.", Toast.LENGTH_SHORT).show();
-            (new Handler()).postDelayed(() -> backCounter = 0, 2000);
-
-        } else {
-            backCounter = 0;
-            finish();
-        }
     }
 }

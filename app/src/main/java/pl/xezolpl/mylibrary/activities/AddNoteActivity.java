@@ -7,15 +7,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.github.nikartm.button.FitButton;
-import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -35,12 +35,13 @@ public class AddNoteActivity extends AppCompatActivity {
     public static final int PARENT_NOTE = 2;
     public static final int EDITION = 3;
 
-    private MaterialEditText add_note_name;
+    private EditText add_note_name;
     private ImageView add_note_imgView;
     private FitButton ok_btn, cancel_btn, add_note_color_btn;
 
-    private int currentMarkerType = Markers.NUMBER_MARKER;
-    private int color = Markers.BLUE_START_COLOR;
+    private int markerPosition = 0;
+    private int markerType = Markers.NUMBER_MARKER;
+    private int markerColor = Markers.BLUE_START_COLOR;
 
     private String parentId;
     private String id;
@@ -58,6 +59,7 @@ public class AddNoteActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         new SettingsManager(this).loadDialogTheme();
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_note);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setFinishOnTouchOutside(false);
@@ -65,16 +67,22 @@ public class AddNoteActivity extends AppCompatActivity {
         initWidgets();
         setOnClickListeners();
 
-        viewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+        viewModel = new ViewModelProvider(this).get(NoteViewModel.class);
         try {
             loadFromIntent();
         } catch (Exception exc) {
+            Toast.makeText(this, getString(R.string.something_went_wrong_try_again), Toast.LENGTH_SHORT).show();
             Log.e(TAG, "onCreate: cannot read from intent!", exc);
             finish();
         }
 
     }
 
+    /**
+     * Sets all needed variables basing on this note's parent given by the calling intent,
+     * then sets the imageView with adequate markerType and markerColor
+     * @throws NullPointerException when the parent is incorrect
+     */
     private void loadFromIntent() throws NullPointerException {
         Intent intent = getIntent();
         int parent = intent.getIntExtra("parent", 0);
@@ -87,48 +95,51 @@ public class AddNoteActivity extends AppCompatActivity {
 
                 viewModel.getNotesByParent(chapter.getId()).observe(this, notes -> {
                     if (notes.size() > 0) {
-                        currentMarkerType = notes.get(0).getMarkerType();
+                        markerPosition = notes.size();
+                        markerType = notes.get(0).getMarkerType();
                         markerTypeLocked = true;
-                        color = notes.get(notes.size() - 1).getColor();
-                    } else {
-                        color = Markers.BLUE_START_COLOR;
+                        markerColor = notes.get(notes.size() - 1).getColor();
                     }
-                    setImageView(color);
+                    setImageView(markerColor);
                 });
                 break;
             }
             case PARENT_NOTE: {
                 final Note note = (Note) intent.getSerializableExtra("note");
-                currentMarkerType = Markers.incrementMarker(note.getMarkerType());
+                markerType = Markers.incrementMarker(note.getMarkerType());
                 parentId = note.getId();
                 id = UUID.randomUUID().toString();
 
                 viewModel.getNotesByParent(note.getId()).observe(this, notes -> {
                     if (notes.size() > 0) {
-                        currentMarkerType = notes.get(0).getMarkerType();
+                        markerPosition = notes.size();
+                        markerType = notes.get(0).getMarkerType();
                         markerTypeLocked = true;
-                        color = notes.get(notes.size() - 1).getColor();
+                        markerColor = notes.get(notes.size() - 1).getColor();
                     } else {
-                        color = note.getColor();
+                        markerColor = note.getColor();
                     }
-                    setImageView(color);
+                    setImageView(markerColor);
                 });
                 break;
             }
             case EDITION: {
                 final Note note = (Note) intent.getSerializableExtra("note");
                 add_note_name.setText(note.getNote());
-                currentMarkerType = note.getMarkerType();
-                parentId = note.getParentId();
+
+                markerType = note.getMarkerType();
+                markerColor = note.getColor();
+
                 id = note.getId();
-                color = note.getColor();
+                parentId = note.getParentId();
+
                 inEdition = true;
 
                 viewModel.getNotesByParent(note.getParentId()).observe(this, notes -> {
                     if (notes.size() > 1) {
-                        currentMarkerType = notes.get(0).getMarkerType();
+                        markerPosition = notes.size()-1;
                         markerTypeLocked = true;
-                        setImageView(color);
+                        setImageView(markerColor);
                     }
                 });
                 break;
@@ -137,18 +148,12 @@ public class AddNoteActivity extends AppCompatActivity {
                 throw new NullPointerException();
             }
         }
-        setImageView(color);
+        setImageView(markerColor);
     }
 
     private void initWidgets() {
         add_note_name = findViewById(R.id.add_note_name);
         add_note_imgView = findViewById(R.id.add_note_imgView);
-        try {
-            add_note_imgView.setImageDrawable(Markers.getLetterMarker(Markers.NUMBER_MARKER,
-                    0, Markers.BLUE_START_COLOR));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         ok_btn = findViewById(R.id.ok_btn);
         cancel_btn = findViewById(R.id.cancel_btn);
         add_note_color_btn = findViewById(R.id.add_note_color_btn);
@@ -157,18 +162,22 @@ public class AddNoteActivity extends AppCompatActivity {
     private void setOnClickListeners() {
 
         add_note_imgView.setOnClickListener(view -> {
+            //markerType is locked when this note isn't the first note of its parent - then we can't change the markerType
             if (!markerTypeLocked) {
-                currentMarkerType = Markers.incrementMarker(currentMarkerType);
+                markerType = Markers.incrementMarker(markerType); // markerType +1 (basing on specific ids)
                 try {
-                    if (currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER) {
-                        add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType, 0,
-                                color));
+                    if (markerType == Markers.NUMBER_MARKER || markerType == Markers.LETTER_MARKER) {
+                        add_note_imgView.setImageDrawable(Markers
+                                .getLetterMarker(markerType, markerPosition, markerColor));
                     } else {
-                        add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this, currentMarkerType, color));
+                        add_note_imgView.setImageDrawable(Markers
+                                .getSimpleMarker(this, markerType, markerColor));
                     }
                 } catch (IOException exc) {
                     exc.printStackTrace();
                 }
+            } else {
+                Toast.makeText(this, getString(R.string.cant_change_not_first_note), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -181,8 +190,6 @@ public class AddNoteActivity extends AppCompatActivity {
                 }
                 setResult(RESULT_OK, new Intent().putExtra("note", thisNote));
                 finish();
-            } else {
-                Toast.makeText(AddNoteActivity.this, getString(R.string.note_empty), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -192,10 +199,10 @@ public class AddNoteActivity extends AppCompatActivity {
             ColorPicker picker = new ColorPicker(AddNoteActivity.this);
             picker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
                 @Override
-                public void onChooseColor(int position, int color) {
+                public void onChooseColor(int position, int color) { //sets picked color on the add_note_imgView
                     add_note_imgView.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
                     add_note_imgView.invalidate();
-                    AddNoteActivity.this.color = color;
+                    markerColor = color;
                 }
 
                 @Override
@@ -203,26 +210,30 @@ public class AddNoteActivity extends AppCompatActivity {
                 }
             }).show();
         });
-
-
     }
 
     private boolean areValidOutputs() {
         String note = add_note_name.getText().toString();
-        if (note.length() < 2) return false;
+        if (note.length() < 2){
+            Toast.makeText(this, getString(R.string.too_short), Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-        thisNote = new Note(id, currentMarkerType, note, parentId, color);
+        thisNote = new Note(id, markerType, note, parentId, markerColor);
         return true;
     }
 
+    /**
+     * Sets the marker's imgView from basing on the markerType
+     */
     private void setImageView(int markerColor) {
         try {
-            if (currentMarkerType == Markers.NUMBER_MARKER || currentMarkerType == Markers.LETTER_MARKER) {
-                add_note_imgView.setImageDrawable(Markers.getLetterMarker(currentMarkerType, 0, markerColor));
+            if (markerType == Markers.NUMBER_MARKER || markerType == Markers.LETTER_MARKER) {
+                add_note_imgView.setImageDrawable(Markers.getLetterMarker(markerType, markerPosition, markerColor));
             } else {
-                add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this, currentMarkerType, markerColor));
+                add_note_imgView.setImageDrawable(Markers.getSimpleMarker(AddNoteActivity.this, markerType, markerColor));
             }
-        } catch (IOException exc) {
+        } catch (IOException exc) { // Markers.get?Marker() throws IOException if the input was incorrect
             exc.printStackTrace();
         }
     }

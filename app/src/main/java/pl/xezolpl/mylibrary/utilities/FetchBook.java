@@ -74,7 +74,7 @@ public class FetchBook extends AsyncTask<String, Void, String> {
             final String MAX_RESULTS = "maxResults"; // Parameter that limits search results.
             final String PRINT_TYPE = "printType"; // Parameter to filter by print type.
 
-            // Build up your query URI, limiting results to 10 items and printed books.
+            // Build up your query URI.
             Uri builtURI = Uri.parse(BOOK_BASE_URL).buildUpon()
                     .appendQueryParameter(QUERY_PARAM, queryString)
                     .appendQueryParameter(MAX_RESULTS, String.valueOf(coversToSearch))

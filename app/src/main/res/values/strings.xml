@@ -78,14 +78,12 @@
     <string name="delete_chapter_short">Delete chapter</string>
     <string name="del_note">Delete note</string>
     <string name="delete_note">Delete this note? It will delete all its notes?</string>
-    <string name="exit_app">Exit application</string>
-    <string name="exit_app_msg">Are you sure you want exit the application? Maybe you would like to read 5 pages more? :)</string>
+    <string name="exit_app">Click again to exit the application.</string>
     <string name="book_title_author">Book\'s title or/and author</string>
     <string name="more">More</string>
     <string name="no_more_covers">No more covers in database. If you cannot find suitable cover, you can take a photo of your book.</string>
     <string name="no_covers_found">No covers found.</string>
     <string name="adding_cover_error">Could not successfully add the cover, please try again.</string>
-    <string name="just_exit">Just exit</string>
     <string name="lets_read">Let\'s read</string>
     <string name="recognition_error">Sorry, something went wrong. If you use custom camera application - try to use device\'s default. If it won\'t help, probably your device is unsupported by the application.</string>
     <string name="add_note">Add note</string>
@@ -141,6 +139,9 @@
     <string name="remove_from_favourites">Remove from favourites</string>
     <string name="short_title">Too short title.</string>
     <string name="something_went_wrong_try_again">Sorry, something went wrong. Please try again.</string>
+    <string name="too_short">Can\'t be that short!</string>
+    <string name="cant_change_not_first_note">You cannot change the markerType because it isn\'t the first note of its parent.</string>
+    <string name="need_permission_to_use_function">You have to permit it to use this function.</string>
 
 
 </resources>

@@ -42,15 +42,13 @@
     <string name="description_optional">Opis (opcjonalne)</string>
     <string name="dictionary">Słownik</string>
     <string name="drama">Dramat</string>
-    <string name="exit_app">Wyjdź z aplikacji</string>
-    <string name="exit_app_msg">Na pewno chcesz wyjść z aplikacji? Może chciałbyś przeczytać jeszcze 5 stron? :)</string>
+    <string name="exit_app">Naciśnij ponownie by wyjść z aplikacji.</string>
     <string name="fantasy">Fantastyka</string>
     <string name="guide">Poradnik</string>
     <string name="health">Zdrowie</string>
     <string name="history">Historia</string>
     <string name="horror">Horror</string>
     <string name="journal">Pamiętnik</string>
-    <string name="just_exit">Po prostu wyjdź</string>
     <string name="lets_read">"Przeczytajmy "</string>
     <string name="marker_type">Rodzaj wskaźnika</string>
     <string name="more">Więcej</string>

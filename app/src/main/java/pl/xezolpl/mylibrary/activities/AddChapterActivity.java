@@ -5,14 +5,14 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.github.nikartm.button.FitButton;
-import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.UUID;
 
@@ -23,7 +23,7 @@ import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 
 public class AddChapterActivity extends AppCompatActivity {
 
-    private MaterialEditText add_chapter_name, add_chapter_number;
+    private EditText add_chapter_name, add_chapter_number;
     private FitButton ok_btn, cancel_btn;
 
     private ChapterViewModel viewModel;
@@ -31,26 +31,28 @@ public class AddChapterActivity extends AppCompatActivity {
     private String bookId;
     private boolean inEdition = false;
     private Chapter thisChapter = null;
-
     private int backCounter =0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         new SettingsManager(this).loadDialogTheme();
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_chapter);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setFinishOnTouchOutside(false);
 
         initWidgets();
         setOnClickListeners();
 
-        viewModel = ViewModelProviders.of(this).get(ChapterViewModel.class);
-        Intent intent = getIntent();
+        viewModel = new ViewModelProvider(this).get(ChapterViewModel.class);
 
+        Intent intent = getIntent();
         if (intent.hasExtra("chapter")) {
             thisChapter = (Chapter) intent.getSerializableExtra("chapter");
             inEdition = true;
 
+            //load chapter's data
             add_chapter_name.setText(thisChapter.getName());
             add_chapter_number.setText(String.valueOf(thisChapter.getNumber()));
         }
@@ -65,7 +67,6 @@ public class AddChapterActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-
         ok_btn.setOnClickListener(view -> {
             if (areValidOutputs()) {
                 if (inEdition) {
@@ -88,10 +89,9 @@ public class AddChapterActivity extends AppCompatActivity {
         if (inEdition){
             id = thisChapter.getId();
             bookId = thisChapter.getBookId();
-
+        }else {
+            id = UUID.randomUUID().toString();
         }
-        else id = UUID.randomUUID().toString();
-
 
         try {
             number = Integer.valueOf(add_chapter_number.getText().toString());
@@ -104,6 +104,7 @@ public class AddChapterActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.chapter_name_empty), Toast.LENGTH_SHORT).show();
             return false;
         }
+
         thisChapter = new Chapter(id, number, name, bookId);
         return true;
     }

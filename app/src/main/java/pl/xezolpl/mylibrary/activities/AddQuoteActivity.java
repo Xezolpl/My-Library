@@ -2,7 +2,6 @@ package pl.xezolpl.mylibrary.activities;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,19 +9,16 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.github.nikartm.button.FitButton;
-import com.google.firebase.ml.vision.FirebaseVision;
-import com.google.firebase.ml.vision.common.FirebaseVisionImage;
-import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
-import com.rengwuxian.materialedittext.MaterialEditText;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import org.jetbrains.annotations.NotNull;
@@ -38,9 +34,11 @@ import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.managers.IntentManager;
 import pl.xezolpl.mylibrary.managers.PermissionsManager;
 import pl.xezolpl.mylibrary.managers.SettingsManager;
+import pl.xezolpl.mylibrary.managers.TextRecognitionManager;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 import pl.xezolpl.mylibrary.utilities.Markers;
+import pl.xezolpl.mylibrary.utilities.Requests;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
@@ -48,17 +46,18 @@ import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 public class AddQuoteActivity extends AppCompatActivity {
     private static final String TAG = "AddQuoteActivity";
 
-    private MaterialEditText title_EditTxt, quote_EditTxt, page_EditTxt, author_EditTxt;
+    private EditText title_EditTxt, quote_EditTxt, page_EditTxt, author_EditTxt;
     private Spinner category_spinner;
     private FitButton ok_btn, cancel_btn, add_category_btn, quote_author_btn, edit_category_btn, delete_category_btn, camera_btn;
 
     private Quote thisQuote = null;
+    private Quote latestQuote;
+    private QuoteCategory newCategory;
+
     private String bookId;
     private String chapterId = "";
 
     private boolean inEdition = false;
-
-    public static final int ADD_QUOTE_CATEGORY_REQUEST_CODE = 7;
 
     private QuoteCategoryViewModel categoryViewModel;
     private QuoteCategorySpinnerAdapter spinnerAdapter;
@@ -67,8 +66,6 @@ public class AddQuoteActivity extends AppCompatActivity {
     private Uri imgUri;
 
     private boolean selectNewCategory = false;
-    private QuoteCategory newCategory;
-    private Quote latestQuote;
 
     private int backCounter = 0;
 
@@ -76,19 +73,21 @@ public class AddQuoteActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         new SettingsManager(this).loadDialogTheme();
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_quote);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setFinishOnTouchOutside(false);
 
         initWidgets();
         setOnClickListeners();
-        setFinishOnTouchOutside(false);
         loadFromIntent();
 
         spinnerAdapter = new QuoteCategorySpinnerAdapter(this);
-        categoryViewModel = ViewModelProviders.of(this).get(QuoteCategoryViewModel.class);
+
+        categoryViewModel = new ViewModelProvider(this).get(QuoteCategoryViewModel.class);
 
         categoryViewModel.getAllCategories().observe(this, quoteCategories -> {
-            if (quoteCategories.size() == 0) {
+            if (quoteCategories.size() == 0) { // if basic category isn't created
                 String uncategorized = getString(R.string.uncategorized);
 
                 QuoteCategory qc = new QuoteCategory(uncategorized, uncategorized, Markers.BLUE_START_COLOR);
@@ -100,20 +99,18 @@ public class AddQuoteActivity extends AppCompatActivity {
             category_spinner.setAdapter(spinnerAdapter);
 
             //set spinner's selection on last used category
-            if (latestQuote!=null){
-                for (int i=0; i<categories.size(); i++){
-                    if (categories.get(i).getId().equals(latestQuote.getCategoryId())){
+            if (latestQuote != null) {
+                for (int i = 0; i < categories.size(); i++) {
+                    if (categories.get(i).getId().equals(latestQuote.getCategoryId())) {
                         category_spinner.setSelection(i);
                         break;
                     }
                 }
             }
 
-
-
             if (inEdition) loadQuoteData(thisQuote);
 
-            if (selectNewCategory) {
+            if (selectNewCategory) { // if we created a new QuoteCategory -> select it
                 category_spinner.setSelection(spinnerAdapter.getItemPosition(newCategory.getName()));
                 selectNewCategory = false;
             }
@@ -124,7 +121,6 @@ public class AddQuoteActivity extends AppCompatActivity {
         Intent intent = getIntent();
         bookId = intent.getStringExtra("bookId");
         latestQuote = (Quote) intent.getSerializableExtra("latestQuote");
-
 
         if (intent.hasExtra("quote")) {
             thisQuote = (Quote) getIntent().getSerializableExtra("quote");
@@ -155,6 +151,7 @@ public class AddQuoteActivity extends AppCompatActivity {
         page_EditTxt.setText(String.valueOf(quote.getPage()));
         chapterId = quote.getChapterId();
 
+        //set spinner selection on thisQuote's category
         for (int i = 0; i < categories.size(); i++) {
             if (thisQuote.getCategoryId().equals(categories.get(i).getId())) {
                 category_spinner.setSelection(i);
@@ -165,17 +162,16 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     private void setOnClickListeners() {
 
-        add_category_btn.setOnClickListener(view -> {
-            Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
-            startActivityForResult(intent, ADD_QUOTE_CATEGORY_REQUEST_CODE);
-        });
+        add_category_btn.setOnClickListener(view ->
+                startActivityForResult(new Intent(this, AddQuoteCategoryActivity.class),
+                        Requests.ADD_REQUEST));
+
         edit_category_btn.setOnClickListener(view -> {
             QuoteCategory qc = ((QuoteCategory) (spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
 
-            if (!qc.getId().equals("Uncategorized")) {
-                Intent intent = new Intent(AddQuoteActivity.this, AddQuoteCategoryActivity.class);
-                intent.putExtra("category", qc);
-                startActivityForResult(intent, ADD_QUOTE_CATEGORY_REQUEST_CODE);
+            if (!qc.getId().equals(getString(R.string.uncategorized))) {
+                startActivityForResult(new Intent(this, AddQuoteCategoryActivity.class)
+                        .putExtra("category", qc), Requests.ADD_REQUEST);
             } else {
                 Toast.makeText(this, getString(R.string.basic_category), Toast.LENGTH_SHORT).show();
             }
@@ -197,7 +193,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         ok_btn.setOnClickListener(view -> {
             if (areValidOutputs()) {
-                QuoteViewModel viewModel = ViewModelProviders.of(AddQuoteActivity.this).get(QuoteViewModel.class);
+                QuoteViewModel viewModel = new ViewModelProvider(AddQuoteActivity.this).get(QuoteViewModel.class);
                 if (inEdition) {
                     viewModel.update(thisQuote);
                 } else {
@@ -210,9 +206,9 @@ public class AddQuoteActivity extends AppCompatActivity {
         cancel_btn.setOnClickListener(view -> finish());
 
         quote_author_btn.setOnClickListener(view -> {
-            BookViewModel bookViewModel = ViewModelProviders.of(AddQuoteActivity.this).get(BookViewModel.class);
+            BookViewModel bookViewModel = new ViewModelProvider(AddQuoteActivity.this).get(BookViewModel.class);
             bookViewModel.getBook(bookId).observe(AddQuoteActivity.this, book -> {
-                if(book!=null){
+                if (book != null) {
                     author_EditTxt.setText(book.getAuthor());
                 }
             });
@@ -226,11 +222,10 @@ public class AddQuoteActivity extends AppCompatActivity {
                     imgUri = IntentManager.setUpImageOutputUri(this);
                     IntentManager.pickCamera(this, imgUri);
                 }
-            } catch (Exception exc){
+            } catch (Exception exc) {
                 Toast.makeText(this, getString(R.string.recognition_error), Toast.LENGTH_LONG).show();
                 Log.e(TAG, "setOnClickListeners: camera", exc);
             }
-
         });
     }
 
@@ -239,8 +234,8 @@ public class AddQuoteActivity extends AppCompatActivity {
         String title, quote, id, categoryId, author;
         int page = 0;
 
-        //isQuoteShorterThan3
-        if (quote_EditTxt.getText().length() < 3) {
+        //isQuoteShorterThan2
+        if (quote_EditTxt.getText().length() < 2) {
             Toast.makeText(this, getString(R.string.quote_short), Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -275,23 +270,20 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         thisQuote = new Quote(id, quote, title, author, categoryId, page, bookId);
         thisQuote.setChapterId(chapterId);
+
         return true;
     }
 
-    //handle permissions results
+    /**
+     * Handles the permissionsResult and if permitted -> picks camera
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PermissionsManager.CAMERA_REQUEST) {
-            if (grantResults.length > 0) {
-
-                boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-
-                if (cameraAccepted && writeStorageAccepted) {
-                    imgUri = IntentManager.setUpImageOutputUri(this);
-                    IntentManager.pickCamera(this, imgUri);
-                }
-            }
+        if (PermissionsManager.handlePermissionsResult(requestCode, grantResults)) { //here its always camera permission request
+            imgUri = IntentManager.setUpImageOutputUri(this);
+            IntentManager.pickCamera(this, imgUri);
+        } else {
+            Toast.makeText(this, getString(R.string.need_permission_to_use_function), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -301,34 +293,20 @@ public class AddQuoteActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             if (resultCode == RESULT_OK) {
-
                 if (requestCode == IntentManager.PICK_CAMERA_CODE) {
                     IntentManager.pickCropper(this, imgUri, 50, 50);
 
                 } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-                    Bitmap bitmap;
                     try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
+                        String recognizedText = TextRecognitionManager.getRecognizedTextFromBitmap(bitmap, true);
+                        new File(IntentManager.getRealPath(this, imgUri)).delete();
+                        quote_EditTxt.setText(recognizedText);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        return;
                     }
 
-                    //RECOGNITION TEXT ON A IMAGE
-                    FirebaseVisionImage visionImage = FirebaseVisionImage.fromBitmap(bitmap);
-                    FirebaseVisionTextRecognizer cloudRecognizer = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
-                    cloudRecognizer.processImage(visionImage)
-                            .addOnSuccessListener(firebaseVisionText ->
-                            {
-                                String textWithoutNextLines = firebaseVisionText.getText().replace('\n', ' ');
-                                quote_EditTxt.setText(textWithoutNextLines);
-                            })
-                            .addOnFailureListener(Throwable::printStackTrace);
-
-                    //DELETING IMAGE FILE
-                    new File(IntentManager.getRealPath(this, imgUri)).delete();
-
-                } else if (requestCode == ADD_QUOTE_CATEGORY_REQUEST_CODE && data != null) {
+                } else if (requestCode == Requests.ADD_REQUEST && data != null) {
                     newCategory = (QuoteCategory) data.getSerializableExtra("category");
                     selectNewCategory = true;
                 }
@@ -343,16 +321,16 @@ public class AddQuoteActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (backCounter == 0){
+            if (backCounter == 0) {
                 backCounter = 1;
-                (new Handler()).postDelayed(()->backCounter=0, 2000);
+                (new Handler()).postDelayed(() -> backCounter = 0, 2000);
             } else {
                 backCounter = 0;
                 finish();
             }
             return true;
         }
-        return super.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
     }
 
 }

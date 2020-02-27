@@ -14,6 +14,4 @@ public class LinearLayoutManagerWrapper extends LinearLayoutManager {
     public boolean supportsPredictiveItemAnimations() {
         return false;
     }
-
-
 }

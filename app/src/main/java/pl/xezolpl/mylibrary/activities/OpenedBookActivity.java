@@ -23,12 +23,14 @@ public class OpenedBookActivity extends AppCompatActivity {
     private TabLayout opened_book_tablayout;
     private ViewPager opened_book_viewpager;
     private Toolbar opened_book_toolbar;
+
     private Book thisBook = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         new SettingsManager(this).loadTheme();
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_opened_book);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -36,7 +38,6 @@ public class OpenedBookActivity extends AppCompatActivity {
 
         initWidgets();
         setUpViewPager();
-
     }
 
     private void setUpViewPager() {

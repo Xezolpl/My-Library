@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -97,6 +98,9 @@ public class BackupManager {
 
         //Check the database exists
         if (!dbOriginal.exists()) {
+            return false;
+        }
+        if (!importedFile.getName().contains(".db")){
             return false;
         }
 

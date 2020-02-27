@@ -6,14 +6,14 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.github.nikartm.button.FitButton;
-import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.UUID;
 
@@ -27,7 +27,7 @@ import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 public class AddQuoteCategoryActivity extends AppCompatActivity {
     private QuoteCategory thisCategory = null;
 
-    private MaterialEditText name_edtTxt;
+    private EditText name_edtTxt;
     private ImageView selected_color_imgView;
     private FitButton ok_btn, cancel_btn, color_btn;
 
@@ -43,11 +43,12 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         new SettingsManager(this).loadDialogTheme();
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_quote_category);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setFinishOnTouchOutside(false);
 
         initWidgets();
-        setFinishOnTouchOutside(false);
         setOnClickListeners();
 
         colorPicker = new ColorPicker(AddQuoteCategoryActivity.this);
@@ -103,7 +104,7 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 
         ok_btn.setOnClickListener(view -> {
             if (areValidOutputs()) {
-                QuoteCategoryViewModel model = ViewModelProviders.of(AddQuoteCategoryActivity.this).get(QuoteCategoryViewModel.class);
+                QuoteCategoryViewModel model = new ViewModelProvider(this).get(QuoteCategoryViewModel.class);
                 if (inEditing) {
                     model.update(thisCategory);
                 } else {
@@ -118,7 +119,6 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
     }
 
     private boolean areValidOutputs() {
-
         String id;
         if (thisCategory != null){
             id = thisCategory.getId();
@@ -133,7 +133,6 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
         }
         thisCategory = new QuoteCategory(id, name, hexdecColor);
         return true;
-
     }
 
     @Override
