@@ -37,7 +37,6 @@
             android:layout_centerVertical="true"
             android:layout_margin="8dp"
             android:textSize="16sp"
-            android:maxLength="100"
             android:layout_toEndOf="@+id/marker_imgView"
             android:layout_toStartOf="@id/moreBtn"
             android:text="@string/very_long_lorem_ipsum"/>
