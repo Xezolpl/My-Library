@@ -9,8 +9,9 @@
         android:id="@+id/quotes_recView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="60dp"
-        android:clipToPadding="false"/>
+        android:paddingBottom="50dp"
+        android:clipToPadding="false"
+        android:descendantFocusability="blocksDescendants"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/quotes_fab"

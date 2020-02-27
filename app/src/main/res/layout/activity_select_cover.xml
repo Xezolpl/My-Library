@@ -96,7 +96,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/book_covers_rec_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants"/>
         </ScrollView>
 
         <com.github.nikartm.button.FitButton
