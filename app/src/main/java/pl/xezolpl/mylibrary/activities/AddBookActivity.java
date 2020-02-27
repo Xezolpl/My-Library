@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -15,7 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,57 +27,66 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.CategoryRecViewAdapter;
 import pl.xezolpl.mylibrary.managers.SettingsManager;
 import pl.xezolpl.mylibrary.models.Book;
+import pl.xezolpl.mylibrary.utilities.Requests;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 
 public class AddBookActivity extends AppCompatActivity {
-    private static final String TAG = "AddBookActivity";
 
+    //Widgets
     private EditText add_book_title, add_book_author, add_book_description, add_book_pages;
     private ImageView add_book_image;
     private Spinner status_spinner;
     private FitButton add_book_ok_btn, add_book_cancel_btn, select_category_btn, select_image_btn;
+
+    //Variables
     private Book thisBook = null;
     private String bookId, imageUrl = null;
-    private boolean inEditing = false;
+    private boolean inEdition = false;
     private boolean isFavourite = false;
-
-    public static final int SELECT_COVER_REQ_CODE = 1;
-    private int backCounter =0;
+    private int backCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         new SettingsManager(this).loadDialogTheme();
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_book);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setFinishOnTouchOutside(false);
 
         initWidgets();
         setUpStatusSpinner();
-        setFinishOnTouchOutside(false);
         setOnClickListeners();
 
         Intent intent = getIntent();
-        if (intent.hasExtra("book")) {
+        if (intent.hasExtra("book")) { //if we are editing this book
             thisBook = (Book) intent.getSerializableExtra("book");
-            inEditing = true;
             loadBookData(thisBook);
             bookId = thisBook.getId();
             isFavourite = thisBook.isFavourite();
-        } else {
+            inEdition = true;
+        } else { // we are creating the new book ->  lets set its new, unique id
             bookId = UUID.randomUUID().toString();
         }
     }
 
+    /**
+     * Loads data to the widgets (inEdition)
+     * @param thisBook currently editing book
+     */
     private void loadBookData(Book thisBook) {
         add_book_title.setText(thisBook.getTitle());
         add_book_author.setText(thisBook.getAuthor());
         add_book_description.setText(thisBook.getDescription());
         add_book_pages.setText(String.valueOf(thisBook.getPages()));
         status_spinner.setSelection(thisBook.getStatus());
-        Glide.with(this).asBitmap().load(thisBook.getImageUrl()).into(add_book_image);
         imageUrl = thisBook.getImageUrl();
+        Glide.with(this).asBitmap().load(imageUrl).into(add_book_image);
     }
 
+    /**
+     * Standard widgets initiation
+     */
     private void initWidgets() {
 
         add_book_title = findViewById(R.id.add_book_title);
@@ -95,12 +103,16 @@ public class AddBookActivity extends AppCompatActivity {
         select_category_btn = findViewById(R.id.select_category_btn);
     }
 
+    /**
+     * Sets the onClickListeners to the widgets
+     */
     private void setOnClickListeners() {
+
         select_image_btn.setOnClickListener(view -> {
-            //todo: does user  entered the isbn?
             Intent intent = new Intent(AddBookActivity.this, SelectCoverActivity.class);
-            startActivityForResult(intent, SELECT_COVER_REQ_CODE);
+            startActivityForResult(intent, Requests.SELECT_COVER_REQUEST);
         });
+
         select_category_btn.setOnClickListener(view -> {
             AlertDialog dialog = new AlertDialog.Builder(AddBookActivity.this)
                     .setPositiveButton("OK", null)
@@ -111,20 +123,20 @@ public class AddBookActivity extends AppCompatActivity {
             RecyclerView recView = dialog.findViewById(R.id.recView);
             if (recView != null) {
                 recView.setAdapter(new CategoryRecViewAdapter(AddBookActivity.this,
-                        CategoryRecViewAdapter.SELECTING_CATEGORIES_MODE, bookId));
+                        CategoryRecViewAdapter.SELECT_CATEGORIES_MODE, bookId));
                 recView.setLayoutManager(new GridLayoutManager(AddBookActivity.this, 2));
             } else {
-                Log.w(TAG, "select_category_btn -> onClick: ", new NullPointerException());
+                Toast.makeText(this, getString(R.string.something_went_wrong_try_again), Toast.LENGTH_LONG).show();
             }
         });
 
-
         add_book_ok_btn.setOnClickListener(view -> {
             if (areValidOutputs()) {
-                BookViewModel model = ViewModelProviders.of(AddBookActivity.this).get(BookViewModel.class);
-                if (inEditing) {
+                BookViewModel model = new ViewModelProvider(this).get(BookViewModel.class);
+                if (inEdition) {
                     model.update(thisBook);
 
+                    //Returns intent to set the new values to the widgets in BookDetailsTabFragment
                     Intent intent = new Intent();
                     intent.putExtra("book", thisBook);
                     setResult(RESULT_OK, intent);
@@ -143,6 +155,9 @@ public class AddBookActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *  Creates adapter for the status_spinner and sets it
+     */
     private void setUpStatusSpinner() {
         ArrayAdapter<CharSequence> statusArrayAdapter = ArrayAdapter.createFromResource(this,
                 R.array.status_array, R.layout.simple_spinner_item);
@@ -150,13 +165,20 @@ public class AddBookActivity extends AppCompatActivity {
         status_spinner.setAdapter(statusArrayAdapter);
     }
 
+    /**
+     * Checks are the outputs valid
+     * @return true if title is longer than 1 char, if pages are not number - false, and in every other case false;
+     */
     private boolean areValidOutputs() {
         String title, author, description;
         int status, pages = 0;
 
         if (add_book_title.getText().length() > 1) {
             title = add_book_title.getText().toString();
-        } else return false;
+        } else {
+            Toast.makeText(this, getString(R.string.short_title), Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
         author = add_book_author.getText().toString();
         description = add_book_description.getText().toString();
@@ -172,7 +194,8 @@ public class AddBookActivity extends AppCompatActivity {
             }
         }
 
-        if (imageUrl == null){
+        //Setting imageUrl to the standard cover if it is a null
+        if (imageUrl == null) {
             imageUrl = getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
         }
 
@@ -180,29 +203,33 @@ public class AddBookActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Getting the imageUrl from SelectCoverActivity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECT_COVER_REQ_CODE) {
-            if (resultCode == RESULT_OK && data != null) {
-                imageUrl = data.getStringExtra("url");
-                Glide.with(this).asBitmap().load(imageUrl).into(add_book_image);
-            }
+        if (requestCode == Requests.SELECT_COVER_REQUEST && resultCode == RESULT_OK && data != null) {
+            imageUrl = data.getStringExtra("url");
+            Glide.with(this).asBitmap().load(imageUrl).into(add_book_image);
         }
     }
 
+    /**
+     * Protection against accidental exit from dialog
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (backCounter == 0){
+            if (backCounter == 0) {
                 backCounter = 1;
-                (new Handler()).postDelayed(()->backCounter=0, 2000);
+                (new Handler()).postDelayed(() -> backCounter = 0, 2000);
             } else {
                 backCounter = 0;
                 finish();
             }
             return true;
         }
-        return super.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
     }
 }

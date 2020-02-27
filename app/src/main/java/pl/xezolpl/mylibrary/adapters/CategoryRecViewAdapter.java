@@ -26,7 +26,7 @@ import pl.xezolpl.mylibrary.viewmodels.CategoriesViewModel;
 
 public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecViewAdapter.ViewHolder> {
     public static final int NORMAL_MODE = 1;
-    public static final int SELECTING_CATEGORIES_MODE = 2;
+    public static final int SELECT_CATEGORIES_MODE = 2;
 
     private Context context;
     private int mode;
@@ -111,7 +111,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
                 //fm.beginTransaction().add(R.id.fragment_container,
                 //        new BooksListTabFragment(context.getString(category.getNameR())))
                  //       .detach().commit();
-            } else if (mode == SELECTING_CATEGORIES_MODE) {
+            } else if (mode == SELECT_CATEGORIES_MODE) {
                 String categoryName1 = context.getString(category.getNameR());
                 if (holder.checked) {
                     categoriesViewModel.delete(new CategoryWithBook(bookId + categoryName1, bookId, categoryName1));

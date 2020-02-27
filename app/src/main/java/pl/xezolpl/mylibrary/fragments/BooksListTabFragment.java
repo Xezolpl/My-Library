@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,7 +63,7 @@ public class BooksListTabFragment extends Fragment {
 
         booksRecViewAdapter = new BooksRecViewAdapter(context);
 
-        BookViewModel bookViewModel = ViewModelProviders.of(this).get(BookViewModel.class);
+        BookViewModel bookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
 
         /*ALL BOOKS*/
         if (tabBooksStatus == Book.STATUS_NEUTRAL) {

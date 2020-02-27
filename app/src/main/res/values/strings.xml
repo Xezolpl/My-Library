@@ -139,6 +139,8 @@
     <string name="export_db_fail">Exporting the database failed.</string>
     <string name="chose_directory_db_fail">You\'ve chosen wrong directory to export database. Please try again, maybe by other file manager?</string>
     <string name="remove_from_favourites">Remove from favourites</string>
+    <string name="short_title">Too short title.</string>
+    <string name="something_went_wrong_try_again">Sorry, something went wrong. Please try again.</string>
 
 
 </resources>
