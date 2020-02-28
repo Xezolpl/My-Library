@@ -26,9 +26,6 @@ public interface QuoteCategoryDao {
     @Query("SELECT * FROM quoteCategories ORDER BY name")
     LiveData<List<QuoteCategory>> getAllQuoteCategories();
 
-    @Query("SELECT * FROM quoteCategories WHERE name=:name")
-    LiveData<QuoteCategory> getQuoteCategory(String name);
-
     @Query("SELECT * FROM quoteCategories WHERE id=:id")
     LiveData<QuoteCategory> getCategory(String id);
 

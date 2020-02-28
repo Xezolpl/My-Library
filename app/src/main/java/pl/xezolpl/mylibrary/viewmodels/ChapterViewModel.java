@@ -35,16 +35,8 @@ public class ChapterViewModel extends AndroidViewModel {
         new DeleteAsyncTask(chapterDao).execute(chapter);
     }
 
-    public LiveData<List<Chapter>> getAllChapters() {
-        return chapterDao.getAllChapters();
-    }
-
     public LiveData<List<Chapter>> getChaptersByBook(String bookId) {
         return chapterDao.getChaptersByBook(bookId);
-    }
-
-    public LiveData<Chapter> getChapter(String id) {
-        return chapterDao.getChapter(id);
     }
 
     private static class OperationsAsyncTask extends AsyncTask<Chapter, Void, Void> {

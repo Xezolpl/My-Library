@@ -15,5 +15,4 @@ public class Category {
     public int getImgR() {
         return imgR;
     }
-
 }

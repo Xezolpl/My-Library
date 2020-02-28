@@ -27,10 +27,6 @@ public class QuoteViewModel extends AndroidViewModel {
         return quoteDao.getAllQuotes();
     }
 
-    public LiveData<Quote> getQuote(String id) {
-        return quoteDao.getQuote(id);
-    }
-
     public LiveData<List<Quote>> getQuotesByCategory(String id) {
         return quoteDao.getQuotesByCategory(id);
     }

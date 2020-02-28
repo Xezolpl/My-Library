@@ -35,19 +35,9 @@ public class NoteViewModel extends AndroidViewModel {
         new DeleteAsyncTask(noteDao).execute(note);
     }
 
-    public LiveData<List<Note>> getAllNotes() {
-        return noteDao.getAllNotes();
-    }
-
     public LiveData<List<Note>> getNotesByParent(String parentId) {
         return noteDao.getNotesByParent(parentId);
     }
-
-    public LiveData<Note> getNote(String id) {
-        return noteDao.getNote(id);
-    }
-
-
 
     private static class OperationsAsyncTask extends AsyncTask<Note, Void, Void> {
         NoteDao operationDao;

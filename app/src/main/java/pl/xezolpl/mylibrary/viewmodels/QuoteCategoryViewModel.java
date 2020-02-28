@@ -26,10 +26,6 @@ public class QuoteCategoryViewModel extends AndroidViewModel {
         return categoryDao.getAllQuoteCategories();
     }
 
-    public LiveData<QuoteCategory> getCategoryByName(String name) {
-        return categoryDao.getQuoteCategory(name);
-    }
-
     public LiveData<QuoteCategory> getCategory(String id) {
         return categoryDao.getCategory(id);
     }

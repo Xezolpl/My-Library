@@ -23,12 +23,6 @@ public interface ChapterDao {
     @Delete
     void delete(Chapter chapter);
 
-    @Query("SELECT * FROM chapters ORDER BY number")
-    LiveData<List<Chapter>> getAllChapters();
-
     @Query("SELECT * FROM chapters WHERE bookId=:bookId ORDER BY number")
     LiveData<List<Chapter>> getChaptersByBook(String bookId);
-
-    @Query("SELECT * FROM chapters WHERE id=:id")
-    LiveData<Chapter> getChapter(String id);
 }

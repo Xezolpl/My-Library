@@ -204,7 +204,8 @@ public class AddBookActivity extends AppCompatActivity {
             imageUrl = getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
         }
 
-        thisBook = new Book(title, author, imageUrl, description, pages, bookId, status, isFavourite);
+        thisBook = new Book(title, author, imageUrl, description, pages, bookId, status);
+        thisBook.setFavourite(isFavourite);
         return true;
     }
 
