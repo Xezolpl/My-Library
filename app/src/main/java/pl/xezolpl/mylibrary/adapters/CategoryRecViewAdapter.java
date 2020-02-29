@@ -25,7 +25,9 @@ import pl.xezolpl.mylibrary.models.CategoryWithBook;
 import pl.xezolpl.mylibrary.viewmodels.CategoriesViewModel;
 
 public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecViewAdapter.ViewHolder> {
+    // After click on a category shows books with that category
     public static final int NORMAL_MODE = 1;
+    // After click on a category selects it (when adding a new book or editing its categories)
     public static final int SELECT_CATEGORIES_MODE = 2;
 
     private Context context;
@@ -35,7 +37,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
     private List<Category> categories = new ArrayList<>();
     private List<Integer> checkedPositions = new ArrayList<>();
 
-    private CategoriesViewModel categoriesViewModel;
+    private CategoriesViewModel categoriesViewModel; // In SELECT_CATEGORIES_MODE
 
     public CategoryRecViewAdapter(Context context, int mode, String bookId) {
         this.context = context;
@@ -45,21 +47,28 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         loadCategories();
 
         categoriesViewModel = new ViewModelProvider((FragmentActivity) context).get(CategoriesViewModel.class);
-        categoriesViewModel.getCategoriesByBook(bookId).observe((FragmentActivity)context, categoriesWithBooks -> {
-            for (CategoryWithBook categoryWithBook : categoriesWithBooks){
-                for (int i = 0; i<categories.size(); i++){
-                    if (categoryWithBook.getCategory().equals(context.getString(categories.get(i).getNameR()))){
-                        checkedPositions.add(i);
+
+        //Load categories for this book
+        if (mode == SELECT_CATEGORIES_MODE) {
+            categoriesViewModel.getCategoriesByBook(bookId).observe((FragmentActivity) context, categoriesWithBooks -> {
+                checkedPositions.clear();
+                for (CategoryWithBook categoryWithBook : categoriesWithBooks) {
+                    for (int i = 0; i < categories.size(); i++) {
+                        if (categoryWithBook.getCategory().equals(context.getString(categories.get(i).getNameR()))) {
+                            checkedPositions.add(i);
+                            break;
+                        }
                     }
                 }
-            }
-            notifyDataSetChanged();
-        });
-
+                notifyDataSetChanged();
+            });
+        }
     }
 
+    /**
+     * Load all categories and sort them by the name (alphabetically)
+     */
     private void loadCategories() {
-
         categories.add(new Category(R.string.actionAndAdventure, R.drawable.action));
         categories.add(new Category(R.string.art, R.drawable.art));
         categories.add(new Category(R.string.biography, R.drawable.biography));
@@ -106,25 +115,25 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
 
         holder.setData(category.getNameR(), category.getImgR());
 
-        holder.relLay.setOnClickListener(view -> {
+        holder.relLay.setOnClickListener(view -> { //
             if (mode == NORMAL_MODE) {
-                ((MainActivity)context).setSelectedCategory(context.getString(category.getNameR()));
-                //fm.beginTransaction().add(R.id.fragment_container,
-                //        new BooksListTabFragment(context.getString(category.getNameR())))
-                 //       .detach().commit();
-            } else if (mode == SELECT_CATEGORIES_MODE) {
-                String categoryName1 = context.getString(category.getNameR());
+                // Begin transition from the categories view to the books in specific category
+                ((MainActivity) context).setSelectedCategory(context.getString(category.getNameR()));
+
+            } else if (mode == SELECT_CATEGORIES_MODE) { // Insert or delete CategoryWithBook
+                String categoryName = context.getString(category.getNameR());
                 if (holder.checked) {
-                    categoriesViewModel.delete(new CategoryWithBook(bookId + categoryName1, bookId, categoryName1));
+                    categoriesViewModel.delete(new CategoryWithBook(bookId + categoryName, bookId, categoryName));
                     holder.setChecked(false);
                 } else {
-                    categoriesViewModel.insert(new CategoryWithBook(bookId + categoryName1, bookId, categoryName1));
+                    categoriesViewModel.insert(new CategoryWithBook(bookId + categoryName, bookId, categoryName));
                     holder.setChecked(true);
                 }
             }
         });
 
-        if (checkedPositions.contains(position)){
+        //Load selected categories
+        if (mode == SELECT_CATEGORIES_MODE && checkedPositions.contains(position)) {
             holder.setChecked(true);
         }
     }
@@ -139,6 +148,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         private TextView txtView;
         private ImageView imgView;
         private RelativeLayout relLay;
+
         private boolean checked = false;
         private int drawableR;
 

@@ -27,45 +27,61 @@ import pl.xezolpl.mylibrary.models.Book;
 
 public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapter.ViewHolder> implements Filterable {
     private Context context;
-    private List<Book> books = new ArrayList<>();
-    private List<Book> favouriteBooks;
-    private List<Book> filteredBooks = null;
-    private List<Book> booksFull;
-    private boolean isFavourite = false;
+
+    private List<Book> books = new ArrayList<>(); // Adapter's operating list
+    private List<Book> booksFull; // Full list of books because filtering clears the books list
+
+    private List<Book> filteredBooks = null; // List of filtered books (correlates with
+                                             // favouriteBooks because user may want to
+                                             // get the favourite books of the filtered list
+
+    private List<Book> favouriteBooks; // List of all favourite books
+
+    private boolean isFavourite = false; // Indicates is the favourite mode enabled
+
 
     public BooksRecViewAdapter(Context context) {
         this.context = context;
     }
 
+    /**
+     * Sets the adapter's books
+     * @param books from the database
+     */
     public void setBooks(List<Book> books) {
         this.books.clear();
         this.books.addAll(books);
 
-        booksFull = new ArrayList<>(this.books);
+        booksFull = new ArrayList<>(this.books); // Copy of the list (different reference)
         favouriteBooks = new ArrayList<>();
 
         for (Book book : books) {
             if (book.isFavourite()) {
-                favouriteBooks.add(book);
+                favouriteBooks.add(book); // Fill the list
             }
         }
-        notifyDataSetChanged();
+        notifyDataSetChanged(); // Simply, without callbacks
     }
 
+    /**
+     * Sets the favourite mode which shows only that books which are favourite by the user.
+     * @param b set on/off the favourite mode
+     */
     public void setFavouriteFilter(boolean b) {
         books.clear();
         isFavourite = b;
+
         if (b) {
-            if (filteredBooks != null) {
+            if (filteredBooks != null) { // Is the filtering enabled
                 for (Book book : filteredBooks) {
                     if (favouriteBooks.contains(book)) {
                         books.add(book);
                     }
                 }
-            } else {
+            } else { // Only favourites without specific filters
                 books.addAll(favouriteBooks);
             }
-        } else {
+        } else { // Set favourite filter off
             books.addAll(filteredBooks != null ? filteredBooks : booksFull);
         }
         notifyDataSetChanged();
@@ -99,15 +115,23 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
         return booksFilter;
     }
 
+
     private final Filter booksFilter = new Filter() {
+
+        /**
+         * Sets the filtering rules, and return the results of filtering
+         */
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<Book> filteredList = new ArrayList<>();
-            if (charSequence == null || charSequence.length() == 0) {
+
+            if (charSequence == null || charSequence.length() == 0) { // The filter is empty
                 filteredList.addAll(isFavourite ? favouriteBooks : booksFull);
             } else {
                 String filteredPattern = charSequence.toString().toLowerCase().trim();
+
                 for (Book b : booksFull) {
+                    // Check for books whose title or author contains the filteredPattern
                     if (b.getTitle().toLowerCase().contains(filteredPattern) ||
                             b.getAuthor().toLowerCase().contains(filteredPattern)) {
                         filteredList.add(b);
@@ -119,16 +143,22 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
             return results;
         }
 
+        /**
+         * Publishes the results of the filtering, distinguish simple filtering from
+         * filtering with favourite mode enabled
+         * @param charSequence pattern of search
+         * @param filterResults results of the performFiltering method - found results
+         */
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             List<Book> filteredResults = (List) filterResults.values;
             books.clear();
 
             if (isFavourite) {
-                if (filteredResults.equals(favouriteBooks)) {
+                if (charSequence == null || charSequence.length() == 0) { // If the filter was empty
                     books.addAll(favouriteBooks);
                     filteredBooks = null;
-                } else {
+                } else { // If the filter was not empty - check for suitable books
                     for (Book book : filteredResults) {
                         if (favouriteBooks.contains(book)) {
                             books.add(book);
@@ -136,7 +166,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
                     }
                     filteredBooks = new ArrayList<>(books);
                 }
-            } else {
+            } else { // Filtering without favourite mode
                 books.addAll(filteredResults);
                 filteredBooks = new ArrayList<>(books);
             }
@@ -156,6 +186,11 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
             relLay = itemView.findViewById(R.id.relLay);
         }
 
+        /**
+         * Sets the ViewHolder widgets' data
+         * @param title title of the TextView
+         * @param imgUrl url to image which will be set in ImageView (by Glide)
+         */
         void setData(String title, String imgUrl) {
             bookTitle.setText(title);
             if (new File(imgUrl).exists()) {

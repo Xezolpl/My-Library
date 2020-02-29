@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +76,6 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
-        if (!notes.get(position).equals(holder.thisNote))
         holder.setData(notes.get(position), position);
     }
 
@@ -94,15 +94,6 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
         return position;
     }
 
-    @Override
-    public void onViewAttachedToWindow(@NonNull NoteViewHolder holder) {
-        if (holder.firstUse){
-            holder.setRecViewVisible(false);
-            holder.firstUse = false;
-        }
-        super.onViewAttachedToWindow(holder);
-    }
-
     class NoteViewHolder extends RecyclerView.ViewHolder {
 
         private TextView textView;
@@ -115,12 +106,12 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
 
         private boolean isRecViewVisible = false;
         private boolean isRecViewVisibleWithChildren = false;
-        private boolean firstUse = true;
 
         private Context context;
         private FragmentActivity activity;
 
         private Note thisNote = null;
+
         @ColorInt private int color;
 
         NoteViewHolder(@NonNull View itemView, Context context) {
@@ -130,7 +121,6 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
 
             initWidgets();
             setOnClickListeners();
-            setRecViewVisible(true);
 
             adapter = new NotesRecViewAdapter(context);
             recView.setAdapter(adapter);
@@ -143,13 +133,12 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
         }
 
         private void initWidgets() {
-
             textView = itemView.findViewById(R.id.textView);
             recView = itemView.findViewById(R.id.recView);
             wholeRelLay = itemView.findViewById(R.id.wholeRelLay);
             marker_imgView = itemView.findViewById(R.id.marker_imgView);
             moreBtn = itemView.findViewById(R.id.moreBtn);
-
+            recView.setVisibility(View.GONE);
         }
 
         private void setOnClickListeners() {
@@ -224,6 +213,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                     drawable = Markers.getLetterMarker(markerType, position, note.getColor());
                 } else {
                     drawable = Markers.getSimpleMarker(context, note.getMarkerType(), note.getColor());
+                    // If its simple marker - set its padding left to 5 dp and stylize to 64x64px
                     ViewGroup.LayoutParams params = marker_imgView.getLayoutParams();
                     marker_imgView.setPadding(5,0,0,0);
                     params.width=69;
@@ -243,16 +233,16 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
             recView.setVisibility(b ? View.VISIBLE : View.GONE);
             isRecViewVisible = b;
             if (!b) isRecViewVisibleWithChildren = false;
-
         }
 
         void expandWithChildren(boolean b) {
-            for (NoteViewHolder viewHolder : adapter.getNoteViewHolders()) {
-                viewHolder.expandWithChildren(b);
-            }
             setRecViewVisible(b);
             isRecViewVisibleWithChildren = b;
-
+            (new Handler()).postDelayed(()->{
+                for (NoteViewHolder viewHolder : adapter.getNoteViewHolders()) {
+                    viewHolder.expandWithChildren(b);
+                }
+            },1);
         }
     }
 }

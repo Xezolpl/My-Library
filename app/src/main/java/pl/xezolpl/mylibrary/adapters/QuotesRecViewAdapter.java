@@ -2,8 +2,9 @@ package pl.xezolpl.mylibrary.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DiffUtil;
@@ -36,7 +36,6 @@ import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 
 public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder> implements Filterable {
     private Context context;
-    private LayoutInflater inflater;
 
     private List<Quote> quotes = new ArrayList<>();
     private List<Quote> quotesFull;
@@ -49,7 +48,6 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
     public QuotesRecViewAdapter(Context context) {
         this.context = context;
-        this.inflater = LayoutInflater.from(context);
 
         QuoteCategoryViewModel viewModel = new ViewModelProvider((FragmentActivity) context).get(QuoteCategoryViewModel.class);
         viewModel.getAllCategories().observe((FragmentActivity) context, quoteCategories -> allCategories = quoteCategories);
@@ -74,7 +72,6 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         this.quotes.clear();
         this.quotes.addAll(quotes);
         diffResult.dispatchUpdatesTo(this);
-
     }
 
     public List<Quote> getChapterQuotes() {
@@ -85,7 +82,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.listitem_quote, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.listitem_quote, parent, false);
         return new ViewHolder(view, context);
     }
 
@@ -110,16 +107,12 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             color = Markers.BLUE_START_COLOR;
         }
 
-        if (chapterId.equals(quote.getChapterId()) && inserting) {
+        if (inserting && chapterId.equals(quote.getChapterId())) {
             holder.setSelected(true);
             chapterQuotes.add(quote);
         }
 
         holder.setData(quote, color);
-
-        // if (position==0 && !chapterId.equals(quotes.get(0).getChapterId())){
-        //     holder.setSelected(false);
-        // }
     }
 
     @Override
@@ -194,11 +187,8 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView quote_title_txtView, quote_txtView_expanded, quote_txtView_collapsed,
                 category_txtView, quote_page_txtView, quote_author_txtView;
-
         private ImageView category_imgView;
-
         private RelativeLayout quote_expanded_lay, quote_collapsed_lay, quote_lay;
-
         private Button editBtn, delBtn;
 
         private boolean isExpanded = false;
@@ -208,6 +198,8 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
         private Context context;
 
+        private int selectedColor, backgroundColor;
+
         ViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
             this.context = context;
@@ -215,6 +207,14 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             initWidgets();
             setOnClickListeners();
 
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = context.getTheme();
+
+            theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
+            selectedColor = typedValue.data;
+
+            theme.resolveAttribute(R.attr.backgroundColor, typedValue, true);
+            backgroundColor = typedValue.data;
         }
 
         private void initWidgets() {
@@ -272,7 +272,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                         setSelected(true);
                     } else {
                         int index = chapterQuotes.indexOf(thisQuote);
-                        if (index > -1)
+                        if (index >= 0)
                             chapterQuotes.get(index).setChapterId("");
                         setSelected(false);
                     }
@@ -323,11 +323,10 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
         void setSelected(boolean b) {
             if (b) {
-                Drawable drawable = ResourcesCompat.getDrawable(context.getResources(), R.drawable.selected_quote_background, null);
-                quote_lay.setBackground(drawable);
+                quote_lay.setBackgroundColor(selectedColor);
                 isSelected = true;
             } else {
-                quote_lay.setBackground(null);
+                quote_lay.setBackgroundColor(backgroundColor);
                 isSelected = false;
             }
         }

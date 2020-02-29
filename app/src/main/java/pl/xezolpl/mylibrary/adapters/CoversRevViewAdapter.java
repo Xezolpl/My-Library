@@ -33,9 +33,6 @@ public class CoversRevViewAdapter extends RecyclerView.Adapter<CoversRevViewAdap
         notifyDataSetChanged();
     }
 
-    public String getSelectedCover() {
-        return selectedCover;
-    }
 
     @NonNull
     @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +49,6 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
         this.context = context;
     }
 
-
     public void setChaptersList(List<Chapter> chapters) {
         final ChapterDiffCallback callback = new ChapterDiffCallback(this.chapters, chapters);
         final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback);
@@ -67,7 +67,6 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
 
     @Override
     public void onBindViewHolder(@NonNull ChapterViewHolder holder, int position) {
-        if (!chapters.get(position).equals(holder.thisChapter))
         holder.setData(chapters.get(position));
     }
 
@@ -86,16 +85,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
         return chapters.size();
     }
 
-    @Override
-    public void onViewAttachedToWindow(@NonNull ChaptersRecViewAdapter.ChapterViewHolder holder) {
-        if (holder.firstUse){
-            holder.setQuotesNotesRecViewVisible(false);
-            holder.firstUse = false;
-        }
-        super.onViewAttachedToWindow(holder);
-    }
-
-    public class ChapterViewHolder extends RecyclerView.ViewHolder {
+    class ChapterViewHolder extends RecyclerView.ViewHolder {
         private TextView textView;
         private RecyclerView recView, quotesRecView;
         private RelativeLayout wholeRelLay;
@@ -108,7 +98,6 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
 
         private boolean isRecViewVisible = false;
         private boolean isRecViewVisibleWithChildren = false;
-        private boolean firstUse = true;
 
         private Context context;
         private FragmentActivity activity;
@@ -122,16 +111,15 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
 
             initWidgets();
             setOnClickListeners();
-            setQuotesNotesRecViewVisible(true);
 
             adapter = new NotesRecViewAdapter(context);
             quotesAdapter = new QuotesRecViewAdapter(context);
 
-            recView.setLayoutManager(new LinearLayoutManagerWrapper(context));
-            quotesRecView.setLayoutManager(new LinearLayoutManagerWrapper(context));
-
             recView.setAdapter(adapter);
             quotesRecView.setAdapter(quotesAdapter);
+
+            recView.setLayoutManager(new LinearLayoutManagerWrapper(context));
+            quotesRecView.setLayoutManager(new LinearLayoutManagerWrapper(context));
 
             TypedValue typedValue = new TypedValue();
             Resources.Theme theme = context.getTheme();
@@ -161,7 +149,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
             });
 
             moreBtn.setOnClickListener(view -> {
-                //change the  menu
+                //Set up the menu
                 PopupMenu popupMenu = new PopupMenu(context, view);
                 popupMenu.inflate(R.menu.chapter_popup_menu);
 
@@ -248,13 +236,14 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
             if (!b) isRecViewVisibleWithChildren = false;
         }
 
-        public void expandWithChildren(boolean b) {
-            for (NotesRecViewAdapter.NoteViewHolder viewHolder : adapter.getNoteViewHolders()) {
-                viewHolder.expandWithChildren(b);
-            }
+        void expandWithChildren(boolean b) {
             setQuotesNotesRecViewVisible(b);
             isRecViewVisibleWithChildren = b;
-
+            (new Handler()).postDelayed(()->{
+                for (NotesRecViewAdapter.NoteViewHolder viewHolder : adapter.getNoteViewHolders()) {
+                    viewHolder.expandWithChildren(b);
+                }
+            },1);
         }
     }
 }
