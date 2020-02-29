@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Locale;
 
@@ -73,7 +73,7 @@ public class SettingsManager {
         res.updateConfiguration(conf, dm);
 
         //Uncategorized
-        QuoteCategoryViewModel qcvm = ViewModelProviders.of((AppCompatActivity) context).get(QuoteCategoryViewModel.class);
+        QuoteCategoryViewModel qcvm = new ViewModelProvider((AppCompatActivity) context).get(QuoteCategoryViewModel.class);
 
         qcvm.getCategory("Uncategorized").observe((AppCompatActivity) context, quoteCategory -> {
             if(quoteCategory!=null) {

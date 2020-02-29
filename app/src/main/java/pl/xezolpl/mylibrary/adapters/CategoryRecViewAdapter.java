@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -30,20 +30,21 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
 
     private Context context;
     private int mode;
-    private LayoutInflater inflater;
-    private List<Category> categories = new ArrayList<>();
     private String bookId;
-    private CategoriesViewModel categoriesViewModel;
+
+    private List<Category> categories = new ArrayList<>();
     private List<Integer> checkedPositions = new ArrayList<>();
+
+    private CategoriesViewModel categoriesViewModel;
 
     public CategoryRecViewAdapter(Context context, int mode, String bookId) {
         this.context = context;
-        this.inflater = LayoutInflater.from(context);
         this.mode = mode;
         this.bookId = bookId;
+
         loadCategories();
 
-        categoriesViewModel = ViewModelProviders.of((FragmentActivity) context).get(CategoriesViewModel.class);
+        categoriesViewModel = new ViewModelProvider((FragmentActivity) context).get(CategoriesViewModel.class);
         categoriesViewModel.getCategoriesByBook(bookId).observe((FragmentActivity)context, categoriesWithBooks -> {
             for (CategoryWithBook categoryWithBook : categoriesWithBooks){
                 for (int i = 0; i<categories.size(); i++){
@@ -95,7 +96,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.listitem_category, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.listitem_category, parent, false);
         return new ViewHolder(view);
     }
 

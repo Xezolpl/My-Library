@@ -21,7 +21,7 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -235,7 +235,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                 e.printStackTrace();
             }
 
-            NoteViewModel noteModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
+            NoteViewModel noteModel = new ViewModelProvider(activity).get(NoteViewModel.class);
             noteModel.getNotesByParent(note.getId()).observe(activity, notes -> adapter.setNotes(notes));
         }
 

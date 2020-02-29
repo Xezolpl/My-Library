@@ -3,7 +3,7 @@ package pl.xezolpl.mylibrary.managers;
 import android.graphics.Color;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.io.Serializable;
 
@@ -51,12 +51,12 @@ public class DeletingManager {
     public DeletingManager(AppCompatActivity activity) {
         this.activity = activity;
 
-        bookViewModel = ViewModelProviders.of(activity).get(BookViewModel.class);
-        categoriesViewModel = ViewModelProviders.of(activity).get(CategoriesViewModel.class);
-        chapterViewModel = ViewModelProviders.of(activity).get(ChapterViewModel.class);
-        noteViewModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
-        quoteCategoryViewModel = ViewModelProviders.of(activity).get(QuoteCategoryViewModel.class);
-        quoteViewModel = ViewModelProviders.of(activity).get(QuoteViewModel.class);
+        bookViewModel = new ViewModelProvider(activity).get(BookViewModel.class);
+        categoriesViewModel = new ViewModelProvider(activity).get(CategoriesViewModel.class);
+        chapterViewModel = new ViewModelProvider(activity).get(ChapterViewModel.class);
+        noteViewModel = new ViewModelProvider(activity).get(NoteViewModel.class);
+        quoteCategoryViewModel = new ViewModelProvider(activity).get(QuoteCategoryViewModel.class);
+        quoteViewModel = new ViewModelProvider(activity).get(QuoteViewModel.class);
     }
 
     /**

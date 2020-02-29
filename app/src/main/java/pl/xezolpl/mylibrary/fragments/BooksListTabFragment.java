@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -76,7 +75,7 @@ public class BooksListTabFragment extends Fragment {
                     /*BOOKS WITH CATEGORY*/
                     final List<Book> booksWithCategory = new ArrayList<>();
 
-                    CategoriesViewModel categoriesViewModel = ViewModelProviders.of((FragmentActivity) context)
+                    CategoriesViewModel categoriesViewModel = new ViewModelProvider((FragmentActivity) context)
                             .get(CategoriesViewModel.class);
 
                     categoriesViewModel.getBooksByCategory(categoryName)

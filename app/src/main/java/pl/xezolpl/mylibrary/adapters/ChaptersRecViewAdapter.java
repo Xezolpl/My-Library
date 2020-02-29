@@ -19,18 +19,18 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.xezolpl.mylibrary.adapters.Callbacks.ChapterDiffCallback;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddChapterActivity;
 import pl.xezolpl.mylibrary.activities.AddNoteActivity;
 import pl.xezolpl.mylibrary.activities.InsertQuoteActivity;
+import pl.xezolpl.mylibrary.adapters.Callbacks.ChapterDiffCallback;
 import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.managers.LinearLayoutManagerWrapper;
 import pl.xezolpl.mylibrary.models.Chapter;
@@ -230,12 +230,12 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
             thisChapter = chapter;
             textView.setText(chapter.getName());
 
-            NoteViewModel noteModel = ViewModelProviders.of(activity).get(NoteViewModel.class);
+            NoteViewModel noteModel = new ViewModelProvider(activity).get(NoteViewModel.class);
             noteModel.getNotesByParent(chapter.getId()).observe(activity, notes -> {
                 adapter.setNotes(notes);
             });
 
-            QuoteViewModel quoteViewModel = ViewModelProviders.of(activity).get(QuoteViewModel.class);
+            QuoteViewModel quoteViewModel = new ViewModelProvider(activity).get(QuoteViewModel.class);
             quoteViewModel.getQuotesByChapter(chapter.getId()).observe(activity, quotes -> {
                 quotesAdapter.setQuotes(quotes);
             });
