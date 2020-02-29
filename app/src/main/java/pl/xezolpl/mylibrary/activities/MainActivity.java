@@ -54,9 +54,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Load theme and language
         SettingsManager manager = new SettingsManager(this);
         manager.loadLanguage();
         manager.loadTheme();
+
+        //Check does standard book's cover image exists
+        String imageUrl = getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
+        if (!new File(imageUrl).exists()){
+            BackupManager.downloadCover(imageUrl);
+        }
+
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -64,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         initWidgets();
 
-        //set up the drawer layout and its fragment
+        //Set up the drawer layout and its fragment
         if (savedInstanceState == null) {
             allBooksFragment = new AllBooksFragment();
             categoriesFragment = new CategoriesFragment();

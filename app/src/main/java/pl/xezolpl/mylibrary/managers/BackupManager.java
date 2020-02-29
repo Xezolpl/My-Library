@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +28,7 @@ public class BackupManager {
     private final String databaseFolderPath;
     private String time;
     private Context context;
+    public final String standardCoverUrl;
 
     /**
      * Sets up the attributes
@@ -42,6 +42,7 @@ public class BackupManager {
         dbBackupDir = new File(databaseFolderPath + "/backup");
 
         time = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault()).format(new Date());
+        standardCoverUrl = context.getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
     }
 
     /**

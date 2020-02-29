@@ -24,9 +24,12 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
+
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddBookActivity;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
+import pl.xezolpl.mylibrary.managers.BackupManager;
 import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.utilities.Requests;
@@ -211,7 +214,13 @@ public class BookDetailsTabFragment extends Fragment {
         String pages = getString(R.string.pages) +": " + thisBook.getPages();
         bookPages_text.setText(pages);
         bookDescription_text.setText(thisBook.getDescription());
-        Glide.with(this).asBitmap().load(thisBook.getImageUrl()).into(book_image);
+
+        String imgUrl = thisBook.getImageUrl();
+        if (new File(imgUrl).exists()) {
+            Glide.with(context).asBitmap().load(imgUrl).into(book_image);
+        } else {
+            Glide.with(context).asBitmap().load(new BackupManager(context).standardCoverUrl).into(book_image);
+        }
     }
 
     private void updateBook(int status) {

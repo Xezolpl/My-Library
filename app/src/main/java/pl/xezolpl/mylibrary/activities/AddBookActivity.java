@@ -21,10 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.github.nikartm.button.FitButton;
 
+import java.io.File;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.adapters.CategoryRecViewAdapter;
+import pl.xezolpl.mylibrary.managers.BackupManager;
 import pl.xezolpl.mylibrary.managers.SettingsManager;
 import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.utilities.Requests;
@@ -87,7 +89,12 @@ public class AddBookActivity extends AppCompatActivity {
         add_book_pages.setText(String.valueOf(thisBook.getPages()));
         status_spinner.setSelection(thisBook.getStatus());
         imageUrl = thisBook.getImageUrl();
-        Glide.with(this).asBitmap().load(imageUrl).into(add_book_image);
+
+        if (new File(imageUrl).exists()) {
+            Glide.with(this).asBitmap().load(imageUrl).into(add_book_image);
+        } else {
+            Glide.with(this).asBitmap().load(new BackupManager(this).standardCoverUrl).into(add_book_image);
+        }
     }
 
     /**

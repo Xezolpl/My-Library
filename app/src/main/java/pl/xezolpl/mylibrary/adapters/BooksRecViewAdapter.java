@@ -28,31 +28,45 @@ import pl.xezolpl.mylibrary.models.Book;
 public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapter.ViewHolder> implements Filterable {
     private Context context;
     private List<Book> books = new ArrayList<>();
+    private List<Book> favouriteBooks;
+    private List<Book> filteredBooks = null;
     private List<Book> booksFull;
-    private LayoutInflater inflater;
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-        booksFull = new ArrayList<>(this.books);
-        notifyDataSetChanged();
-    }
+    private boolean isFavourite = false;
 
     public BooksRecViewAdapter(Context context) {
         this.context = context;
-        this.inflater = LayoutInflater.from(context);
     }
 
-    public void setFavouriteFilter(boolean b){
-        if(b){
-            books.clear();
-            for (Book book : booksFull){
-                if (book.isFavourite()) {
-                    books.add(book);
-                }
+    public void setBooks(List<Book> books) {
+        this.books.clear();
+        this.books.addAll(books);
+
+        booksFull = new ArrayList<>(this.books);
+        favouriteBooks = new ArrayList<>();
+
+        for (Book book : books) {
+            if (book.isFavourite()) {
+                favouriteBooks.add(book);
             }
-        }else {
-            books.clear();
-            books.addAll(booksFull);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setFavouriteFilter(boolean b) {
+        books.clear();
+        isFavourite = b;
+        if (b) {
+            if (filteredBooks != null) {
+                for (Book book : filteredBooks) {
+                    if (favouriteBooks.contains(book)) {
+                        books.add(book);
+                    }
+                }
+            } else {
+                books.addAll(favouriteBooks);
+            }
+        } else {
+            books.addAll(filteredBooks != null ? filteredBooks : booksFull);
         }
         notifyDataSetChanged();
     }
@@ -60,7 +74,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.listitem_book, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.listitem_book, parent, false);
         return new ViewHolder(view);
     }
 
@@ -90,7 +104,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<Book> filteredList = new ArrayList<>();
             if (charSequence == null || charSequence.length() == 0) {
-                filteredList.addAll(booksFull);
+                filteredList.addAll(isFavourite ? favouriteBooks : booksFull);
             } else {
                 String filteredPattern = charSequence.toString().toLowerCase().trim();
                 for (Book b : booksFull) {
@@ -98,7 +112,6 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
                             b.getAuthor().toLowerCase().contains(filteredPattern)) {
                         filteredList.add(b);
                     }
-
                 }
             }
             FilterResults results = new FilterResults();
@@ -108,8 +121,25 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            List<Book> filteredResults = (List) filterResults.values;
             books.clear();
-            books.addAll((List) filterResults.values);
+
+            if (isFavourite) {
+                if (filteredResults.equals(favouriteBooks)) {
+                    books.addAll(favouriteBooks);
+                    filteredBooks = null;
+                } else {
+                    for (Book book : filteredResults) {
+                        if (favouriteBooks.contains(book)) {
+                            books.add(book);
+                        }
+                    }
+                    filteredBooks = new ArrayList<>(books);
+                }
+            } else {
+                books.addAll(filteredResults);
+                filteredBooks = new ArrayList<>(books);
+            }
             notifyDataSetChanged();
         }
     };
@@ -127,16 +157,12 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
         }
 
         void setData(String title, String imgUrl) {
-            if (imgUrl==null){
-                imgUrl = context.getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
-                if (!new File(imgUrl).exists()){
-                    BackupManager.downloadCover(imgUrl);
-                }
-            }
-
             bookTitle.setText(title);
-            Glide.with(context).asBitmap().load(imgUrl).into(bookImage);
-
+            if (new File(imgUrl).exists()) {
+                Glide.with(context).asBitmap().load(imgUrl).into(bookImage);
+            } else {
+                Glide.with(context).asBitmap().load(new BackupManager(context).standardCoverUrl).into(bookImage);
+            }
         }
     }
 }
