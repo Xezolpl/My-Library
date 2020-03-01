@@ -44,12 +44,12 @@ public abstract class Markers {
         String text;
 
         if (markerType == LETTER_MARKER) {
+            //if markerPosition >= 26 (alphabet size (0-25)) then divide it by 26
             if (markerPosition>=26){
                 int multiplier = markerPosition/26;
                 markerPosition = markerPosition-26*multiplier;
             }
             text = alphabet[markerPosition];
-            //if markerPosition >= 26 (alphabet size (0-25)) then
         } else if (markerType == NUMBER_MARKER && markerPosition<99) {
             text = String.valueOf(markerPosition + 1);
             text += '.';
