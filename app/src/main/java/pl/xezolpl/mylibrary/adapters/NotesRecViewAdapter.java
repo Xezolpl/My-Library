@@ -48,6 +48,9 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
     private List<NoteViewHolder> noteViewHolders = new ArrayList<>();
     private Context context;
 
+    /**
+     * Documentation same as in the ChaptersRecViewAdapter
+     */
     NotesRecViewAdapter(Context context) {
         this.context = context;
     }

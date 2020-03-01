@@ -53,7 +53,6 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         viewModel.getAllCategories().observe((FragmentActivity) context, quoteCategories -> allCategories = quoteCategories);
     }
 
-    //SETTERS & GETTERS
     public void setInserting(boolean b) {
         inserting = b;
     }
@@ -74,6 +73,10 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         diffResult.dispatchUpdatesTo(this);
     }
 
+    /**
+     * Used only for inserting quotes to the chapter
+     * @return list of chapters selected in InsertQuoteActivity
+     */
     public List<Quote> getChapterQuotes() {
         return chapterQuotes;
     }
@@ -263,6 +266,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
                 }
             });
 
+            // If in inserting - long click is a selection of quotes which we want to insert to the chapter
             if (inserting) {
                 quote_lay.setOnLongClickListener(view -> {
                     if (!isSelected) {
@@ -321,6 +325,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             }
         }
 
+        //Only visual stylization
         void setSelected(boolean b) {
             if (b) {
                 quote_lay.setBackgroundColor(selectedColor);

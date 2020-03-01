@@ -96,8 +96,8 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
         private NotesRecViewAdapter adapter;
         private QuotesRecViewAdapter quotesAdapter;
 
-        private boolean isRecViewVisible = false;
-        private boolean isRecViewVisibleWithChildren = false;
+        private boolean isRecViewVisible = false; //Chapter's notes
+        private boolean isRecViewVisibleWithChildren = false; // Chapter's notes with their notes
 
         private Context context;
         private FragmentActivity activity;
@@ -154,13 +154,14 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
                 popupMenu.inflate(R.menu.chapter_popup_menu);
 
                 for (int i=0; i<popupMenu.getMenu().size(); i++){
+                    //Change menu items icon color to ?colorPrimary
                     popupMenu.getMenu().getItem(i).getIcon().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
                 }
 
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     switch (menuItem.getItemId()) {
                         case R.id.addMenuBtn: {
-
+                            //Add note activity
                             Intent intent = new Intent(context, AddNoteActivity.class);
                             intent.putExtra("chapter", thisChapter);
                             intent.putExtra("parent", PARENT_CHAPTER);
@@ -171,7 +172,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
                             break;
                         }
                         case R.id.editMenuBtn: {
-
+                            //Edit chapter activity
                             Intent intent;
                             intent = new Intent(context, AddChapterActivity.class);
                             intent.putExtra("chapter", thisChapter);
@@ -181,7 +182,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
                         }
 
                         case R.id.insertQuoteMenuBtn: {
-
+                            //Insert quotes to this chapter activity
                             Intent intent = new Intent(context, InsertQuoteActivity.class);
                             intent.putExtra("chapter", thisChapter);
 
@@ -191,7 +192,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
                             break;
                         }
                         case R.id.deleteMenuBtn: {
-
+                            //Delete chapter dialog
                             DeletingManager deletingManager = new DeletingManager((AppCompatActivity) context);
 
                             deletingManager.showDeletingDialog(context.getString(R.string.del_chapter),
@@ -205,7 +206,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
                     }
                     return true;
                 });
-
+                //Show the menu
                 MenuPopupHelper menuHelper = new MenuPopupHelper(context, (MenuBuilder) popupMenu.getMenu(), view);
                 menuHelper.setForceShowIcon(true);
                 menuHelper.show();
@@ -219,16 +220,15 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
             textView.setText(chapter.getName());
 
             NoteViewModel noteModel = new ViewModelProvider(activity).get(NoteViewModel.class);
-            noteModel.getNotesByParent(chapter.getId()).observe(activity, notes -> {
-                adapter.setNotes(notes);
-            });
+            noteModel.getNotesByParent(chapter.getId()).observe(activity, notes -> adapter.setNotes(notes));
 
             QuoteViewModel quoteViewModel = new ViewModelProvider(activity).get(QuoteViewModel.class);
-            quoteViewModel.getQuotesByChapter(chapter.getId()).observe(activity, quotes -> {
-                quotesAdapter.setQuotes(quotes);
-            });
+            quoteViewModel.getQuotesByChapter(chapter.getId()).observe(activity, quotes -> quotesAdapter.setQuotes(quotes));
         }
 
+        /**
+         *  Set the children visibility
+         */
         private void setQuotesNotesRecViewVisible(boolean b) {
             recView.setVisibility(b ? View.VISIBLE : View.GONE);
             quotesRecView.setVisibility(b ? View.VISIBLE : View.GONE);
@@ -236,6 +236,10 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
             if (!b) isRecViewVisibleWithChildren = false;
         }
 
+        /**
+         * Set the children with their children visibility
+         * @param b true or false
+         */
         void expandWithChildren(boolean b) {
             setQuotesNotesRecViewVisible(b);
             isRecViewVisibleWithChildren = b;

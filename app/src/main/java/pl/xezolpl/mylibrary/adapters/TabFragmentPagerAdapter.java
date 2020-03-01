@@ -14,6 +14,9 @@ public class TabFragmentPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
+    /**
+     * Used to manage the pages in TabLayout
+     */
     public TabFragmentPagerAdapter(@NonNull FragmentManager fm){
         super(fm);
     }
