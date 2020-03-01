@@ -16,13 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
-import pl.xezolpl.mylibrary.managers.BackupManager;
 import pl.xezolpl.mylibrary.models.Book;
 
 public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapter.ViewHolder> implements Filterable {
@@ -32,8 +30,8 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
     private List<Book> booksFull; // Full list of books because filtering clears the books list
 
     private List<Book> filteredBooks = null; // List of filtered books (correlates with
-                                             // favouriteBooks because user may want to
-                                             // get the favourite books of the filtered list
+    // favouriteBooks because user may want to
+    // get the favourite books of the filtered list
 
     private List<Book> favouriteBooks; // List of all favourite books
 
@@ -46,6 +44,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
 
     /**
      * Sets the adapter's books
+     *
      * @param books from the database
      */
     public void setBooks(List<Book> books) {
@@ -65,6 +64,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
 
     /**
      * Sets the favourite mode which shows only that books which are favourite by the user.
+     *
      * @param b set on/off the favourite mode
      */
     public void setFavouriteFilter(boolean b) {
@@ -188,16 +188,13 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
 
         /**
          * Sets the ViewHolder widgets' data
-         * @param title title of the TextView
+         *
+         * @param title  title of the TextView
          * @param imgUrl url to image which will be set in ImageView (by Glide)
          */
         void setData(String title, String imgUrl) {
             bookTitle.setText(title);
-            if (new File(imgUrl).exists()) {
-                Glide.with(context).asBitmap().load(imgUrl).into(bookImage);
-            } else {
-                Glide.with(context).asBitmap().load(new BackupManager(context).standardCoverUrl).into(bookImage);
-            }
+            Glide.with(context).asBitmap().load(imgUrl).into(bookImage);
         }
     }
 }
