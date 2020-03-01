@@ -25,8 +25,10 @@ public class BookNotesTabFragment extends Fragment {
 
     private TabLayout book_notes_tablayout;
     private ViewPager book_notes_viewpager;
+
     private Context context;
     private Book thisBook;
+
     private TabFragmentPagerAdapter adapter;
     private QuotesTabFragment quotesTabFragment;
 

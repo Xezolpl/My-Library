@@ -56,7 +56,7 @@ public class ChaptersTabFragment extends Fragment {
 
 
         FloatingActionButton fab = view.findViewById(R.id.chapters_fab);
-        fab.setOnClickListener(view1 -> {
+        fab.setOnClickListener(view1 -> { //Add new chapter
             Intent intent = new Intent(context, AddChapterActivity.class);
             intent.putExtra("bookId", bookId);
             startActivity(intent);

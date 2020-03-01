@@ -37,7 +37,7 @@ public class BooksListTabFragment extends Fragment {
 
     private BooksRecViewAdapter booksRecViewAdapter;
 
-    private String categoryName = null;
+    private String categoryName = null; // If we are entering here from the category
     private boolean favourites = false;
     private RelativeLayout no_books_lay = null;
 
@@ -64,15 +64,17 @@ public class BooksListTabFragment extends Fragment {
 
         BookViewModel bookViewModel = new ViewModelProvider(this).get(BookViewModel.class);
 
-        /*ALL BOOKS*/
-        if (tabBooksStatus == Book.STATUS_NEUTRAL) {
+
+        if (tabBooksStatus == Book.STATUS_NEUTRAL) { // All books
             bookViewModel.getAllBooks().observe(this, books -> {
-                if (categoryName == null) {
+                if (categoryName == null) { // Normal usage, not from category
                     booksRecViewAdapter.setBooks(books);
+
+                    // Layout informing user about empty library
                     if (booksRecViewAdapter.getItemCount() == 0) no_books_lay.setVisibility(View.VISIBLE);
                     else no_books_lay.setVisibility(View.GONE);
-                } else {
-                    /*BOOKS WITH CATEGORY*/
+                }
+                else { // Books with specific category
                     final List<Book> booksWithCategory = new ArrayList<>();
 
                     CategoriesViewModel categoriesViewModel = new ViewModelProvider((FragmentActivity) context)
@@ -80,28 +82,30 @@ public class BooksListTabFragment extends Fragment {
 
                     categoriesViewModel.getBooksByCategory(categoryName)
                             .observe((FragmentActivity) context, categories -> {
-                                for (int i = 0; i < categories.size(); i++) {
-                                    for (int j = 0; j < books.size(); j++) {
+                                for (int i = 0; i < categories.size(); i++) { // Iterating on the List<CategoryWithBook>
+                                    for (int j = 0; j < books.size(); j++) { // Iterating on the List<Book>
                                         CategoryWithBook cat1 = categories.get(i);
                                         Book book1 = books.get(j);
                                         if (cat1.getBookId().equals(book1.getId())) {
+                                            // If category's bookId is equal to book's id then ad it to the list
                                             booksWithCategory.add(book1);
                                             break;
                                         }
                                     }
 
                                 }
-                                booksRecViewAdapter.setBooks(booksWithCategory);
+                                booksRecViewAdapter.setBooks(booksWithCategory); // Set adapter's list of books
+                                //No books layout visibility
                                 if (booksRecViewAdapter.getItemCount() == 0) no_books_lay.setVisibility(View.VISIBLE);
                                 else no_books_lay.setVisibility(View.GONE);
                             });
                 }
             });
         }
-        /*OTHER STATUS*/
-        else {
+        else { // Other status
             bookViewModel.getBookWithStatus(tabBooksStatus).observe(this, books -> {
                 booksRecViewAdapter.setBooks(books);
+                //No books layout visibility
                 if (booksRecViewAdapter.getItemCount() == 0) no_books_lay.setVisibility(View.VISIBLE);
                 else no_books_lay.setVisibility(View.GONE);
             });
@@ -133,6 +137,7 @@ public class BooksListTabFragment extends Fragment {
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
+        // Filtering mechanic
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -148,6 +153,7 @@ public class BooksListTabFragment extends Fragment {
             }
         });
 
+        // MenuItem favourite - set its icon and text basing on is thisBook favourite or no
         MenuItem action_favourite = menu.findItem(R.id.action_favourite);
         action_favourite.setIcon(ContextCompat.getDrawable(context, favourites ? R.mipmap.favourite_star :R.mipmap.favourite_star_off));
         action_favourite.setOnMenuItemClickListener(menuItem -> {

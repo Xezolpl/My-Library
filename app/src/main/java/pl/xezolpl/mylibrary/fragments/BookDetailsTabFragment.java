@@ -194,7 +194,7 @@ public class BookDetailsTabFragment extends Fragment {
                 }
                 loadBookData();
             } else {
-                Log.w(TAG, "onActivityResult: ", new NullPointerException("Null result book"));
+                Log.e(TAG, "onActivityResult: ", new NullPointerException("Null result book"));
             }
         }
     }
@@ -223,6 +223,9 @@ public class BookDetailsTabFragment extends Fragment {
         }
     }
 
+    /**
+     * Update the book's status
+     */
     private void updateBook(int status) {
         thisBook.setStatus(status);
         bookViewModel.update(thisBook);
