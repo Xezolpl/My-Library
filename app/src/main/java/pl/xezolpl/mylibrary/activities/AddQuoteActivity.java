@@ -19,6 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.github.nikartm.button.FitButton;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +37,6 @@ import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.managers.IntentManager;
 import pl.xezolpl.mylibrary.managers.PermissionsManager;
 import pl.xezolpl.mylibrary.managers.SettingsManager;
-import pl.xezolpl.mylibrary.managers.TextRecognitionManager;
 import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 import pl.xezolpl.mylibrary.utilities.Markers;
@@ -299,9 +301,19 @@ public class AddQuoteActivity extends AppCompatActivity {
                 } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUri);
-                        String recognizedText = TextRecognitionManager.getRecognizedTextFromBitmap(bitmap, true);
+
+                        //Recognize the text
+                        FirebaseVisionImage visionImage = FirebaseVisionImage.fromBitmap(bitmap);
+                        FirebaseVisionTextRecognizer deviceRecognizer = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
+                        deviceRecognizer.processImage(visionImage)
+                                .addOnSuccessListener(firebaseVisionText ->
+                                        quote_EditTxt.setText(firebaseVisionText
+                                                .getText().replace('\n', ' ')))
+                                .addOnFailureListener(Throwable::printStackTrace);
+
+
                         new File(IntentManager.getRealPath(this, imgUri)).delete();
-                        quote_EditTxt.setText(recognizedText);
+                        (new Handler()).postDelayed(()->quote_EditTxt.invalidate(), 1000);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
