@@ -235,7 +235,7 @@ public class SelectCoverActivity extends AppCompatActivity {
                 try {
 
                     //From cropper
-                    if (imgUri != null) {
+                    if (requestCode == CROP_IMAGE_ACTIVITY_REQUEST_CODE && imgUri != null) {
                         //Get real file uri
                         Uri realUri = Uri.parse(IntentManager.getRealPath(this, imgUri));
 
@@ -255,7 +255,7 @@ public class SelectCoverActivity extends AppCompatActivity {
                     }
 
                     //From gallery
-                    else if (data != null) {
+                    else if (requestCode == PICK_GALLERY_CODE && data != null) {
 
                         //Get uri
                         Uri photoUri = data.getData();
@@ -285,7 +285,7 @@ public class SelectCoverActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(this, getString(R.string.adding_cover_error) + "Error: " + e.toString(),
+                    Toast.makeText(this, getString(R.string.adding_cover_error) + "\nError: " + e.toString(),
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -294,7 +294,8 @@ public class SelectCoverActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (PermissionsManager.handlePermissionsResult(requestCode, grantResults)) { //if we granted the permissions
+        if (PermissionsManager.handlePermissionsResult(this, requestCode, grantResults)) {
+            //if we granted the permissions
 
             if (requestCode == PermissionsManager.CAMERA_REQUEST) {
                 imgUri = IntentManager.setUpImageOutputUri(this);

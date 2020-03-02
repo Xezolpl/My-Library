@@ -141,7 +141,7 @@
     <string name="something_went_wrong_try_again">Sorry, something went wrong. Please try again.</string>
     <string name="too_short">Can\'t be that short!</string>
     <string name="cant_change_not_first_note">You cannot change the markerType because it isn\'t the first note of its parent.</string>
-    <string name="need_permission_to_use_function">You have to permit it to use this function.</string>
+    <string name="need_permissions">Sorry, you cannot use this function without previous grant permissions.</string>
 
 
 </resources>
