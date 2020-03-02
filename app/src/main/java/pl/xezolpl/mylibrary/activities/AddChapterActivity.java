@@ -31,7 +31,7 @@ public class AddChapterActivity extends AppCompatActivity {
     private String bookId;
     private boolean inEdition = false;
     private Chapter thisChapter = null;
-    private int backCounter =0;
+    private int backCounter = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +48,8 @@ public class AddChapterActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(ChapterViewModel.class);
 
         Intent intent = getIntent();
+        bookId = intent.getStringExtra("bookId");
+
         if (intent.hasExtra("chapter")) {
             thisChapter = (Chapter) intent.getSerializableExtra("chapter");
             inEdition = true;
@@ -55,8 +57,17 @@ public class AddChapterActivity extends AppCompatActivity {
             //load chapter's data
             add_chapter_name.setText(thisChapter.getName());
             add_chapter_number.setText(String.valueOf(thisChapter.getNumber()));
+        } else { //If its new chapter - display proposalNumber (one more than last chapter's number)
+            viewModel.getChaptersByBook(bookId).observe(this, chapters -> {
+                int proposalNumber = 0;
+                if (chapters.size() > 0) {
+                    proposalNumber = chapters.get(chapters.size() - 1).getNumber() + 1;
+                }
+                add_chapter_number.setText(String.valueOf(proposalNumber));
+            });
         }
-            bookId = intent.getStringExtra("bookId");
+
+
     }
 
     private void initWidgets() {
@@ -86,10 +97,10 @@ public class AddChapterActivity extends AppCompatActivity {
         String id;
         int number;
 
-        if (inEdition){
+        if (inEdition) {
             id = thisChapter.getId();
             bookId = thisChapter.getBookId();
-        }else {
+        } else {
             id = UUID.randomUUID().toString();
         }
 
@@ -112,15 +123,15 @@ public class AddChapterActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (backCounter == 0){
+            if (backCounter == 0) {
                 backCounter = 1;
-                (new Handler()).postDelayed(()->backCounter=0, 2000);
+                (new Handler()).postDelayed(() -> backCounter = 0, 2000);
             } else {
                 backCounter = 0;
                 finish();
             }
             return true;
         }
-        return super.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
     }
 }
