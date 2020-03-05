@@ -2,7 +2,7 @@
 <resources>
 
     <attr name="textColorOnPrimaryColor" format="color|reference"/>
-    <attr name="backgroundColor" format="color|reference"/>
+    <attr name="colorBackground" format="color|reference"/>
     <attr name="drawerIconColor" format="color|reference"/>
     <attr name="drawerTextColor" format="color|reference"/>
     <attr name="noteBackgroundColor" format="color|reference"/>

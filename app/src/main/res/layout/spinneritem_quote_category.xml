@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:layout_margin="15dp"
     android:padding="10dp"
-    android:background="?backgroundColor">
+    android:background="?attr/colorBackground">
 
     <ImageView
         android:id="@+id/spinner_category_imgView"

@@ -1,6 +1,7 @@
 package pl.xezolpl.mylibrary.managers;
 
-import android.graphics.Color;
+import android.content.res.Resources;
+import android.util.TypedValue;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -160,6 +161,18 @@ public class DeletingManager {
      * @param itemToDelete item to delete
      */
     public void showDeletingDialog(String title, String message, int type, Serializable itemToDelete) {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = activity.getTheme();
+
+        theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        int colorPrimary = typedValue.data;
+
+        theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
+        int colorAccent = typedValue.data;
+
+        theme.resolveAttribute(R.attr.colorBackground, typedValue, true);
+        int colorBackground = typedValue.data;
+
         new EZDialog.Builder(activity)
                 .setTitle(title)
                 .setMessage(message)
@@ -202,10 +215,11 @@ public class DeletingManager {
                 .OnNegativeClicked(() -> {
                 })
 
-                .setTitleDividerLineColor(Color.parseColor("#ed0909"))
-                .setTitleTextColor(Color.parseColor("#EE311B"))
-                .setButtonTextColor(Color.parseColor("#ed0909"))
-                .setMessageTextColor(Color.parseColor("#333333"))
+                .setTitleDividerLineColor(colorAccent)
+                .setTitleTextColor(colorAccent)
+                .setButtonTextColor(colorAccent)
+                .setMessageTextColor(colorPrimary)
+                .setBackgroundColor(colorBackground)
                 .setFont(Font.COMFORTAA)
 
                 .setCancelableOnTouchOutside(true)

@@ -33,7 +33,7 @@
 
     <!-- Spinner -->
     <style name="Spinner" parent="Widget.AppCompat.DropDownItem.Spinner">
-        <item name="android:background">?attr/backgroundColor</item>
+        <item name="android:background">?attr/colorBackground</item>
         <item name="android:textSize">16sp</item>
         <item name="android:layout_margin">5dp</item>
     </style>

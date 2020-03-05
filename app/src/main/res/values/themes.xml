@@ -8,16 +8,16 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorAccentTransparent">@color/colorAccentTransparent</item>
-        <item name="backgroundColor">@color/colorBackground</item>
+        <item name="colorBackground">@color/colorBackground</item>
         <item name="noteBackgroundColor">@color/colorNoteBackground</item>
 
         <item name="textColorOnPrimaryColor">@color/white</item>
         <item name="drawerIconColor">?attr/colorPrimary</item>
         <item name="drawerTextColor">?attr/colorPrimaryDark</item>
 
-        <item name="android:windowBackground">?attr/backgroundColor</item>
+        <item name="android:windowBackground">?attr/colorBackground</item>
         <item name="android:textColor">?attr/colorPrimaryDark</item>
-        <item name="android:itemBackground">?backgroundColor</item>
+        <item name="android:itemBackground">?attr/colorBackground</item>
         
     </style>
 
@@ -29,11 +29,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark2</item>
         <item name="colorAccent">@color/colorAccent2</item>
         <item name="colorAccentTransparent">@color/colorAccentTransparent2</item>
-        <item name="backgroundColor">@color/colorBackground2</item>
+        <item name="colorBackground">@color/colorBackground2</item>
         <item name="noteBackgroundColor">@color/colorNoteBackground2</item>
 
 
-        <item name="textColorOnPrimaryColor">?attr/backgroundColor</item>
+        <item name="textColorOnPrimaryColor">?attr/colorBackground</item>
 
     </style>
 
@@ -45,10 +45,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark3</item>
         <item name="colorAccent">@color/colorAccent3</item>
         <item name="colorAccentTransparent">@color/colorAccentTransparent3</item>
-        <item name="backgroundColor">@color/colorBackground3</item>
+        <item name="colorBackground">@color/colorBackground3</item>
         <item name="noteBackgroundColor">@color/colorNoteBackground3</item>
 
-        <item name="textColorOnPrimaryColor">?attr/backgroundColor</item>
+        <item name="textColorOnPrimaryColor">?attr/colorBackground</item>
 
         <item name="android:textColorSecondary">@color/colorPrimaryLight3</item>
         <item name="android:textColor">?attr/colorPrimary</item>

@@ -216,7 +216,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
             selectedColor = typedValue.data;
 
-            theme.resolveAttribute(R.attr.backgroundColor, typedValue, true);
+            theme.resolveAttribute(R.attr.colorBackground, typedValue, true);
             backgroundColor = typedValue.data;
         }
 
