@@ -35,4 +35,32 @@
         <item>@string/already_read</item>
     </string-array>
 
+    <!-- Intro activity -->
+    <string-array name="intro_titles">
+        <item>@string/intro_title1</item>
+        <item>@string/intro_title2</item>
+        <item>@string/intro_title3</item>
+        <item>@string/intro_title4</item>
+        <item>@string/intro_title5</item>
+        <item>@string/intro_title6</item>
+        <item>@string/intro_title7</item>
+        <item>@string/intro_title8</item>
+        <item>@string/intro_title9</item>
+        <item>@string/intro_title10</item>
+    </string-array>
+
+    <string-array name="intro_descriptions">
+        <item>@string/intro_desc1</item>
+        <item>@string/intro_desc2</item>
+        <item>@string/intro_desc3</item>
+        <item>@string/intro_desc4</item>
+        <item>@string/intro_desc5</item>
+        <item>@string/intro_desc6</item>
+        <item>@string/intro_desc7</item>
+        <item>@string/intro_desc8</item>
+        <item>@string/intro_desc9</item>
+        <item>@string/intro_desc10</item>
+
+    </string-array>
+
 </resources>

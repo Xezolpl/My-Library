@@ -4,6 +4,7 @@
     <color name="colorPrimary">#2C786C</color>
     <color name="colorPrimaryDark">#004445</color>
     <color name="colorAccent">#F8B400</color>
+    <color name="colorAccentTransparent">#77F8B400</color>
     <color name="colorBackground">#FAF5E4</color>
     <color name="colorNoteBackground">#FFFAE9</color>
 
@@ -11,6 +12,7 @@
     <color name="colorPrimary2">#3498DB</color>
     <color name="colorPrimaryDark2">#34495E</color>
     <color name="colorAccent2">#FAC40F</color>
+    <color name="colorAccentTransparent2">#77FAC40F</color>
     <color name="colorBackground2">#F2FCFF</color>
     <color name="colorNoteBackground2">#F1F6F6</color>
 
@@ -19,6 +21,7 @@
     <color name="colorPrimaryDark3">#393E46</color>
     <color name="colorPrimaryLight3">#888888</color>
     <color name="colorAccent3">#00ADB5</color>
+    <color name="colorAccentTransparent3">#7700ADB5</color>
     <color name="colorBackground3">#283136</color>
     <color name="colorNoteBackground3">#2D363B</color>
 

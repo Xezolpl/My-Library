@@ -18,12 +18,13 @@ import androidx.preference.PreferenceManager;
 import java.util.Objects;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.activities.IntroActivity;
 import pl.xezolpl.mylibrary.activities.MainActivity;
 import pl.xezolpl.mylibrary.managers.IntentManager;
 
 
 public class SettingsFragment extends PreferenceFragmentCompat {
-    private Preference importPref, exportPref;
+    private Preference importPref, exportPref, tutorialPref;
     private ListPreference langListPref, themeListPref;
 
     private SharedPreferences preferences;
@@ -46,6 +47,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void initPreferences() {
         importPref = findPreference("import");
         exportPref = findPreference("export");
+        tutorialPref = findPreference("tutorial");
         langListPref = findPreference("lang");
         themeListPref = findPreference("theme");
     }
@@ -65,6 +67,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
             exportPref.setOnPreferenceClickListener(preference -> {
                 IntentManager.saveDatabase(activity);
+                return false;
+            });
+
+            tutorialPref.setOnPreferenceClickListener(preference -> {
+                startActivity(new Intent(getContext(), IntroActivity.class));
                 return false;
             });
 

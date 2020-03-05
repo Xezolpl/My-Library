@@ -218,9 +218,9 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                     drawable = Markers.getSimpleMarker(context, note.getMarkerType(), note.getColor());
                     // If its simple marker - set its padding left to 5 dp and stylize to 64x64px
                     ViewGroup.LayoutParams params = marker_imgView.getLayoutParams();
-                    marker_imgView.setPadding(5,0,0,0);
-                    params.width=69;
-                    params.height=64;
+                    marker_imgView.setPadding(5,0,5,0);
+                    params.width= (int) Math.round(params.height/1.5);
+                    params.height/= 1.8;
                     marker_imgView.setLayoutParams(params);
                 }
                 marker_imgView.setImageDrawable(drawable);

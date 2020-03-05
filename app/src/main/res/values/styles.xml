@@ -12,6 +12,7 @@
         <item name="fb_backgroundColor">?attr/colorPrimary</item>
         <item name="fb_divColor">?attr/textColorOnPrimaryColor</item>
         <item name="fb_iconColor">?attr/textColorOnPrimaryColor</item>
+        <item name="fb_textSize">14sp</item>
         <item name="fb_textColor">?attr/textColorOnPrimaryColor</item>
     </style>
 
@@ -27,6 +28,7 @@
         <item name="android:textColorPrimary">?attr/textColorOnPrimaryColor</item>
         <item name="android:textColorSecondary">?attr/textColorOnPrimaryColor</item>
         <item name="actionBarTabTextStyle">?attr/textColorOnPrimaryColor</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <!-- Spinner -->

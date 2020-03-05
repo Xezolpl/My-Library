@@ -85,4 +85,9 @@ public class SettingsManager {
             }
         });
     }
+
+    public boolean isIntroOpenedBefore(){
+        if (mPreferences==null) return false;
+        return mPreferences.getBoolean("isIntroOpenedBefore", false);
+    }
 }

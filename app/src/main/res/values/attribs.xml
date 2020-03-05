@@ -6,5 +6,6 @@
     <attr name="drawerIconColor" format="color|reference"/>
     <attr name="drawerTextColor" format="color|reference"/>
     <attr name="noteBackgroundColor" format="color|reference"/>
+    <attr name="colorAccentTransparent" format="color|reference"/>
 
 </resources>

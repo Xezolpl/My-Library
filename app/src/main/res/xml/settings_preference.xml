@@ -14,10 +14,10 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/language" >
+    <PreferenceCategory app:title="@string/language">
 
         <ListPreference
             app:defaultValue="@string/english"
@@ -25,26 +25,38 @@
             app:entryValues="@array/languages_values"
             app:key="lang"
             app:title="@string/language"
-            app:useSimpleSummaryProvider="true"/>
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/theme">
 
-    <ListPreference
-        app:defaultValue="@string/light"
-        app:entries="@array/themes"
-        app:entryValues="@array/themes_values"
-        app:key="theme"
-        app:title="@string/theme"
-        app:useSimpleSummaryProvider="true"/>
+        <ListPreference
+            app:defaultValue="@string/light"
+            app:entries="@array/themes"
+            app:entryValues="@array/themes_values"
+            app:key="theme"
+            app:title="@string/theme"
+            app:useSimpleSummaryProvider="true" />
 
-</PreferenceCategory>
+    </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/backup">
 
-        <Preference android:title="@string/import_db" android:key="import" />
-        <Preference android:title="@string/export_db" android:key="export" />
+        <Preference
+            android:key="import"
+            android:title="@string/import_db" />
+        <Preference
+            android:key="export"
+            android:title="@string/export_db" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/help">
+
+        <Preference
+            android:key="tutorial"
+            app:title="@string/open_tutorial" />
 
     </PreferenceCategory>
 

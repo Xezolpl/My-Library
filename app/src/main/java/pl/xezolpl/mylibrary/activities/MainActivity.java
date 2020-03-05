@@ -58,6 +58,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SettingsManager manager = new SettingsManager(this);
         manager.loadLanguage();
         manager.loadTheme();
+        super.onCreate(savedInstanceState);
+
+        //If intro hasn't opened yet (its first usage or the data is cleared) then open IntroActivity
+        if (!manager.isIntroOpenedBefore()){
+            startActivity(new Intent(this, IntroActivity.class));
+        }
 
         //Check does standard book's cover image exists
         String imageUrl = getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
@@ -65,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             BackupManager.downloadCover(imageUrl);
         }
 
-
-        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
