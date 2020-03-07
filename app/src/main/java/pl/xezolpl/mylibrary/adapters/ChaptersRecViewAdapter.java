@@ -114,7 +114,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
             initWidgets();
             setOnClickListeners();
 
-            adapter = new NotesRecViewAdapter(context);
+            adapter = new NotesRecViewAdapter(context, 1);
             quotesAdapter = new QuotesRecViewAdapter(context);
 
             recView.setAdapter(adapter);

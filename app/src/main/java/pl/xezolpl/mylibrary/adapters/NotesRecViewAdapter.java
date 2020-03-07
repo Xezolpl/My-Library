@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
@@ -47,12 +48,14 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
     private List<Note> notes = new ArrayList<>();
     private List<NoteViewHolder> noteViewHolders = new ArrayList<>();
     private Context context;
+    private int densityLevel;
 
     /**
      * Documentation same as in the ChaptersRecViewAdapter
      */
-    NotesRecViewAdapter(Context context) {
+    NotesRecViewAdapter(Context context, int densityLevel) {
         this.context = context;
+        this.densityLevel = densityLevel;
     }
 
     List<NoteViewHolder> getNoteViewHolders() {
@@ -131,7 +134,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
             initWidgets();
             setOnClickListeners();
 
-            adapter = new NotesRecViewAdapter(context);
+            adapter = new NotesRecViewAdapter(context, densityLevel+1);
             recView.setAdapter(adapter);
             recView.setLayoutManager(new LinearLayoutManagerWrapper(context));
 
@@ -171,14 +174,18 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     switch (menuItem.getItemId()) {
                         case R.id.addMenuBtn: {
-
+                            if (densityLevel>6){
+                                Toast.makeText(context, context.getString(R.string.too_big_density), Toast.LENGTH_LONG).show();
+                            }else {
                             Intent intent = new Intent(context, AddNoteActivity.class);
                             intent.putExtra("note", thisNote);
                             intent.putExtra("parent", PARENT_NOTE);
 
                             setRecViewVisible(true);
                             context.startActivity(intent);
+                            }
                             break;
+
                         }
                         case R.id.editMenuBtn: {
 
@@ -254,9 +261,8 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
             }
 
             NoteViewModel noteModel = new ViewModelProvider(activity).get(NoteViewModel.class);
-            noteModel.getNotesByParent(note.getId()).observe(activity, notes -> {
-                adapter.setNotes(notes);
-            });
+            noteModel.getNotesByParent(note.getId()).observe(activity, notes ->
+                adapter.setNotes(notes));
         }
 
         private void setRecViewVisible(boolean b) {
