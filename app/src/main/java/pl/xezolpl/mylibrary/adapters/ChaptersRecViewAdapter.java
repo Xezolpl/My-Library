@@ -56,6 +56,8 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
         this.chapters.clear();
         this.chapters.addAll(chapters);
         diffResult.dispatchUpdatesTo(this);
+        notifyDataSetChanged();
+
     }
 
     @NonNull
@@ -177,6 +179,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
                             intent = new Intent(context, AddChapterActivity.class);
                             intent.putExtra("chapter", thisChapter);
 
+                            setQuotesNotesRecViewVisible(true);
                             context.startActivity(intent);
                             break;
                         }
@@ -187,7 +190,6 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
                             intent.putExtra("chapter", thisChapter);
 
                             setQuotesNotesRecViewVisible(true);
-
                             context.startActivity(intent);
                             break;
                         }

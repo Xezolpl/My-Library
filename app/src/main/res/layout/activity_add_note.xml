@@ -34,7 +34,7 @@
         android:theme="@style/MaterialEditText"
 
         android:textAlignment="center"
-        android:maxLength="150"
+        android:maxLength="250"
         android:hint="@string/note"
         android:imeOptions="actionDone"
         android:inputType="textMultiLine|textCapSentences"/>

@@ -18,7 +18,7 @@
         <item name="android:windowBackground">?attr/colorBackground</item>
         <item name="android:textColor">?attr/colorPrimaryDark</item>
         <item name="android:itemBackground">?attr/colorBackground</item>
-        
+
     </style>
 
 

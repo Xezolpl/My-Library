@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             BackupManager.downloadCover(imageUrl);
         }
 
-
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

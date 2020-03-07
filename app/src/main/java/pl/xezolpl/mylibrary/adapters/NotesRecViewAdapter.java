@@ -66,6 +66,10 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
         this.notes.clear();
         this.notes.addAll(notes);
         diffResult.dispatchUpdatesTo(this);
+        notifyDataSetChanged();
+        // Idk but when there wasn't the notifyDataSetChanged(),
+        // then after deleting an item and inserting the new one,
+        // the adapter was giving it same data as the deleted one
     }
 
     @NonNull
@@ -114,8 +118,10 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
         private FragmentActivity activity;
 
         private Note thisNote = null;
-
-        @ColorInt private int color;
+        private ViewGroup.LayoutParams defaultParams = null;
+        private RelativeLayout.LayoutParams smallParams = null;
+        @ColorInt
+        private int color;
 
         NoteViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
@@ -158,7 +164,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                 PopupMenu popupMenu = new PopupMenu(context, view);
                 popupMenu.inflate(R.menu.note_popup_menu);
 
-                for (int i=0; i<popupMenu.getMenu().size(); i++){
+                for (int i = 0; i < popupMenu.getMenu().size(); i++) {
                     popupMenu.getMenu().getItem(i).getIcon().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
                 }
 
@@ -169,6 +175,8 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                             Intent intent = new Intent(context, AddNoteActivity.class);
                             intent.putExtra("note", thisNote);
                             intent.putExtra("parent", PARENT_NOTE);
+
+                            setRecViewVisible(true);
                             context.startActivity(intent);
                             break;
                         }
@@ -179,6 +187,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                             intent.putExtra("note", thisNote);
                             intent.putExtra("parent", EDITION);
 
+                            setRecViewVisible(true);
                             context.startActivity(intent);
                             break;
                         }
@@ -214,14 +223,33 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
 
                 if (markerType == Markers.NUMBER_MARKER || markerType == Markers.LETTER_MARKER) {
                     drawable = Markers.getLetterMarker(markerType, position, note.getColor());
+                    if (defaultParams == null) {
+                        defaultParams = marker_imgView.getLayoutParams();
+                    }
+                    if (smallParams == null){
+                        smallParams = new RelativeLayout.LayoutParams(defaultParams);
+                    }
+                    marker_imgView.setLayoutParams(defaultParams);
                 } else {
                     drawable = Markers.getSimpleMarker(context, note.getMarkerType(), note.getColor());
-                    // If its simple marker - set its padding left to 5 dp and stylize to 64x64px
-                    ViewGroup.LayoutParams params = marker_imgView.getLayoutParams();
-                    marker_imgView.setPadding(5,0,5,0);
-                    params.width= (int) Math.round(params.height/1.5);
-                    params.height/= 1.8;
-                    marker_imgView.setLayoutParams(params);
+                    // If its simple marker - set its padding and size
+                    if (defaultParams == null && smallParams == null) {
+                        defaultParams = marker_imgView.getLayoutParams();
+                    }
+
+                    if (smallParams == null){
+                        smallParams = new RelativeLayout.LayoutParams(defaultParams);
+
+                        int width = defaultParams.width, height = defaultParams.height;
+                        int size = (int) (Math.min(width, height) / 1.5);
+                        smallParams.width = smallParams.height = size;
+
+                        int sidePadding = Math.abs(width - height) / 2;
+                        marker_imgView.setPadding(sidePadding, 0, sidePadding, 0);
+
+                        smallParams.addRule(RelativeLayout.CENTER_VERTICAL);
+                    }
+                    marker_imgView.setLayoutParams(smallParams);
                 }
                 marker_imgView.setImageDrawable(drawable);
             } catch (IOException e) {
@@ -241,11 +269,11 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
         void expandWithChildren(boolean b) {
             setRecViewVisible(b);
             isRecViewVisibleWithChildren = b;
-            (new Handler()).postDelayed(()->{
+            (new Handler()).postDelayed(() -> {
                 for (NoteViewHolder viewHolder : adapter.getNoteViewHolders()) {
                     viewHolder.expandWithChildren(b);
                 }
-            },1);
+            }, 1);
         }
     }
 }
