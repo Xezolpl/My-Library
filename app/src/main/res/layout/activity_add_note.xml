@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/add_note_imgView"
-        android:layout_width="75dp"
+        android:layout_width="90dp"
         android:layout_height="75dp"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"

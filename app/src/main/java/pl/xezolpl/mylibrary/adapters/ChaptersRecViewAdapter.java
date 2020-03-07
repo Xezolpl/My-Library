@@ -249,7 +249,7 @@ public class ChaptersRecViewAdapter extends RecyclerView.Adapter<ChaptersRecView
                 for (NotesRecViewAdapter.NoteViewHolder viewHolder : adapter.getNoteViewHolders()) {
                     viewHolder.expandWithChildren(b);
                 }
-            },1);
+            },50);
         }
     }
 }

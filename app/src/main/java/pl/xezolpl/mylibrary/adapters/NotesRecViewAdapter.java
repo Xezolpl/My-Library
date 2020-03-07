@@ -241,11 +241,8 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                         smallParams = new RelativeLayout.LayoutParams(defaultParams);
 
                         int width = defaultParams.width, height = defaultParams.height;
-                        int size = (int) (Math.min(width, height) / 1.5);
+                        int size = (int) (Math.min(width, height) / 1.8);
                         smallParams.width = smallParams.height = size;
-
-                        int sidePadding = Math.abs(width - height) / 2;
-                        marker_imgView.setPadding(sidePadding, 0, sidePadding, 0);
 
                         smallParams.addRule(RelativeLayout.CENTER_VERTICAL);
                     }
@@ -257,7 +254,9 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
             }
 
             NoteViewModel noteModel = new ViewModelProvider(activity).get(NoteViewModel.class);
-            noteModel.getNotesByParent(note.getId()).observe(activity, notes -> adapter.setNotes(notes));
+            noteModel.getNotesByParent(note.getId()).observe(activity, notes -> {
+                adapter.setNotes(notes);
+            });
         }
 
         private void setRecViewVisible(boolean b) {
@@ -271,9 +270,11 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
             isRecViewVisibleWithChildren = b;
             (new Handler()).postDelayed(() -> {
                 for (NoteViewHolder viewHolder : adapter.getNoteViewHolders()) {
+                    viewHolder.setRecViewVisible(b);
                     viewHolder.expandWithChildren(b);
                 }
-            }, 1);
+            }, 50);
+            // 50ms is only proposal, it could be less on better devices or even more on very old devices
         }
     }
 }
