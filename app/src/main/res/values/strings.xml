@@ -140,7 +140,7 @@
     <string name="short_title">Too short title.</string>
     <string name="something_went_wrong_try_again">Sorry, something went wrong. Please try again.</string>
     <string name="too_short">Can\'t be that short!</string>
-    <string name="cant_change_not_first_note">You cannot change the markerType because it isn\'t the first note of its parent.</string>
+    <string name="cant_change_not_first_note">You cannot change the marker\'s type because it isn\'t the first note of its parent.</string>
     <string name="need_permissions">Sorry, you cannot use this function without previous grant permissions.</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
@@ -150,7 +150,7 @@
     <string name="intro_title1">Here are your books</string>
     <string name="intro_title2">New book\'s cover</string>
     <string name="intro_title3">Setting book\'s categories</string>
-    <string name="intro_title4">Books filtering</string>
+    <string name="intro_title4">Books searching</string>
     <string name="intro_title5">Open the book</string>
     <string name="intro_title6">Notes and chapters</string>
     <string name="intro_title7">Notes expanding</string>
@@ -160,8 +160,7 @@
 
 
     <string name="intro_desc1">They are divided by the reading status. You can add a new one by the round button.</string>
-    <string name="intro_desc2">To add new book\'s cover image you can use gallery, camera or search for them in Google\'s database
-            (type author or title and press refresh button) </string>
+    <string name="intro_desc2">To add new book\'s cover image you can use gallery, camera or search for them in Google\'s database (type author or title and press refresh button).</string>
     <string name="intro_desc3">When adding book, you can set its categories by just clicking on them.</string>
     <string name="intro_desc4">To perform searching use favourite books filter (star icon) and text searching (loupe icon).</string>
     <string name="intro_desc5">Click the book\'s cover to see its details, notes or to edit it.</string>
