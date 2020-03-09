@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/wholeRelLay"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,25 +11,27 @@
         android:id="@+id/noteLay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="80dp"
-        android:background="?attr/noteBackgroundColor">
+        android:background="?attr/noteBackgroundColor"
+        android:minHeight="80dp">
 
         <ImageView
             android:id="@+id/marker_imgView"
             android:layout_width="40dp"
             android:layout_height="45dp"
             android:layout_centerVertical="true"
+            android:contentDescription="@string/marker_type"
             android:paddingStart="5dp"
-            android:contentDescription="@string/marker_type" />
+            tools:ignore="RtlSymmetry" />
 
         <Button
             android:id="@+id/moreBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="3dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_alignParentEnd="true"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
             android:background="@drawable/ic_more_vert_black_24dp"
-            android:backgroundTint="?colorPrimary"/>
+            android:backgroundTint="?colorPrimary" />
 
         <TextView
             android:id="@+id/textView"
@@ -36,10 +39,10 @@
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_margin="8dp"
-            android:textSize="16sp"
-            android:layout_toEndOf="@+id/marker_imgView"
             android:layout_toStartOf="@id/moreBtn"
-            android:text="@string/very_long_lorem_ipsum"/>
+            android:layout_toEndOf="@+id/marker_imgView"
+            android:text="@string/already_read"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 
@@ -58,5 +61,5 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/noteLay"
         android:layout_marginStart="13dp"
-        android:descendantFocusability="blocksDescendants"/>
+        android:descendantFocusability="blocksDescendants" />
 </RelativeLayout>

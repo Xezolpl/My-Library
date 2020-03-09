@@ -12,4 +12,8 @@
         android:id="@+id/deleteMenuBtn"
         android:icon="@drawable/ic_delete_black_24dp"
         android:title="@string/delete_note_short" />
+    <item
+        android:id="@+id/addBelowMenuBtn"
+        android:icon="@drawable/ic_keyboard_arrow_down_black_24dp"
+        android:title="@string/add_note_below" />
 </menu>

@@ -175,6 +175,7 @@
     <string name="help">Help</string>
     <string name="open_tutorial">Open tutorial</string>
     <string name="too_big_density">You cannot add new note here - the density is too big, and it will look bad.</string>
+    <string name="add_note_below">Add note below</string>
 
 
 </resources>

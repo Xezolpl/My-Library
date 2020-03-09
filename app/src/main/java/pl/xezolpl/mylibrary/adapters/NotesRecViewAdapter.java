@@ -38,9 +38,11 @@ import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.managers.LinearLayoutManagerWrapper;
 import pl.xezolpl.mylibrary.models.Note;
 import pl.xezolpl.mylibrary.utilities.Markers;
+import pl.xezolpl.mylibrary.viewmodels.ChapterViewModel;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 
 import static pl.xezolpl.mylibrary.activities.AddNoteActivity.EDITION;
+import static pl.xezolpl.mylibrary.activities.AddNoteActivity.PARENT_CHAPTER;
 import static pl.xezolpl.mylibrary.activities.AddNoteActivity.PARENT_NOTE;
 
 public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapter.NoteViewHolder> {
@@ -125,6 +127,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
         private RelativeLayout.LayoutParams smallParams = null;
         @ColorInt
         private int color;
+        private boolean blockedAdding = false;
 
         NoteViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
@@ -134,7 +137,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
             initWidgets();
             setOnClickListeners();
 
-            adapter = new NotesRecViewAdapter(context, densityLevel+1);
+            adapter = new NotesRecViewAdapter(context, densityLevel + 1);
             recView.setAdapter(adapter);
             recView.setLayoutManager(new LinearLayoutManagerWrapper(context));
 
@@ -174,18 +177,46 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     switch (menuItem.getItemId()) {
                         case R.id.addMenuBtn: {
-                            if (densityLevel>6){
+                            if (densityLevel > 6) {
                                 Toast.makeText(context, context.getString(R.string.too_big_density), Toast.LENGTH_LONG).show();
-                            }else {
-                            Intent intent = new Intent(context, AddNoteActivity.class);
-                            intent.putExtra("note", thisNote);
-                            intent.putExtra("parent", PARENT_NOTE);
+                            } else {
+                                Intent intent = new Intent(context, AddNoteActivity.class);
+                                intent.putExtra("note", thisNote);
+                                intent.putExtra("parent", PARENT_NOTE);
 
-                            setRecViewVisible(true);
-                            context.startActivity(intent);
+                                setRecViewVisible(true);
+                                context.startActivity(intent);
                             }
                             break;
 
+                        }
+                        case R.id.addBelowMenuBtn: {
+                            blockedAdding = false;
+
+                            if (densityLevel == 1) { // From chapter
+                                ChapterViewModel model = new ViewModelProvider(activity).get(ChapterViewModel.class);
+                                model.getChapter(thisNote.getParentId()).observe(activity, chapter -> {
+                                    if (!blockedAdding) {
+                                        Intent intent = new Intent(context, AddNoteActivity.class);
+                                        intent.putExtra("chapter", chapter);
+                                        intent.putExtra("parent", PARENT_CHAPTER);
+                                        context.startActivity(intent);
+                                        blockedAdding = true;
+                                    }
+                                });
+                            } else { //From note
+                                NoteViewModel model = new ViewModelProvider(activity).get(NoteViewModel.class);
+                                model.getNote(thisNote.getParentId()).observe(activity, note -> {
+                                    if (!blockedAdding) {
+                                        Intent intent = new Intent(context, AddNoteActivity.class);
+                                        intent.putExtra("note", note);
+                                        intent.putExtra("parent", PARENT_NOTE);
+                                        context.startActivity(intent);
+                                        blockedAdding = true;
+                                    }
+                                });
+                            }
+                            break;
                         }
                         case R.id.editMenuBtn: {
 
@@ -233,7 +264,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                     if (defaultParams == null) {
                         defaultParams = marker_imgView.getLayoutParams();
                     }
-                    if (smallParams == null){
+                    if (smallParams == null) {
                         smallParams = new RelativeLayout.LayoutParams(defaultParams);
                     }
                     marker_imgView.setLayoutParams(defaultParams);
@@ -244,7 +275,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
                         defaultParams = marker_imgView.getLayoutParams();
                     }
 
-                    if (smallParams == null){
+                    if (smallParams == null) {
                         smallParams = new RelativeLayout.LayoutParams(defaultParams);
 
                         int width = defaultParams.width, height = defaultParams.height;
@@ -262,7 +293,7 @@ public class NotesRecViewAdapter extends RecyclerView.Adapter<NotesRecViewAdapte
 
             NoteViewModel noteModel = new ViewModelProvider(activity).get(NoteViewModel.class);
             noteModel.getNotesByParent(note.getId()).observe(activity, notes ->
-                adapter.setNotes(notes));
+                    adapter.setNotes(notes));
         }
 
         private void setRecViewVisible(boolean b) {

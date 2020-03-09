@@ -38,6 +38,9 @@ public class NoteViewModel extends AndroidViewModel {
     public LiveData<List<Note>> getNotesByParent(String parentId) {
         return noteDao.getNotesByParent(parentId);
     }
+    public LiveData<Note> getNote(String id) {
+        return noteDao.getNote(id);
+    }
 
     private static class OperationsAsyncTask extends AsyncTask<Note, Void, Void> {
         NoteDao operationDao;

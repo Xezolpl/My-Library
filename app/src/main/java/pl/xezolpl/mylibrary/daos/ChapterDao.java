@@ -25,4 +25,7 @@ public interface ChapterDao {
 
     @Query("SELECT * FROM chapters WHERE bookId=:bookId ORDER BY number")
     LiveData<List<Chapter>> getChaptersByBook(String bookId);
+
+    @Query("SELECT * FROM chapters WHERE id=:id")
+    LiveData<Chapter> getChapter(String id);
 }

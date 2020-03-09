@@ -25,4 +25,7 @@ public interface NoteDao {
 
     @Query("SELECT * FROM notes WHERE parentId=:parentId")
     LiveData<List<Note>> getNotesByParent(String parentId);
+
+    @Query("SELECT * FROM notes WHERE id=:id")
+    LiveData<Note> getNote(String id);
 }
