@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/quotes_status"
+        android:title=""
+        android:icon="@drawable/ic_save_white_24dp"
+        app:showAsAction="always"
+        app:actionViewClass="android.widget.Spinner" />
+
+    <item
         android:id="@+id/quotes_searchView"
         android:title=""
         android:icon="@drawable/ic_search_black_24dp"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         app:actionViewClass="android.widget.SearchView" />
 </menu>

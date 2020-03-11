@@ -3,13 +3,17 @@ package pl.xezolpl.mylibrary.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,9 +25,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
+import pl.xezolpl.mylibrary.adapters.QuoteCategorySpinnerAdapter;
 import pl.xezolpl.mylibrary.adapters.QuotesRecViewAdapter;
 import pl.xezolpl.mylibrary.managers.LinearLayoutManagerWrapper;
 import pl.xezolpl.mylibrary.models.Quote;
+import pl.xezolpl.mylibrary.models.QuoteCategory;
+import pl.xezolpl.mylibrary.utilities.Markers;
+import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 import pl.xezolpl.mylibrary.viewmodels.QuoteViewModel;
 
 public class QuotesTabFragment extends Fragment {
@@ -36,6 +44,8 @@ public class QuotesTabFragment extends Fragment {
 
     private Quote latestQuote = null;
 
+    private QuoteCategorySpinnerAdapter categoriesAdapter;
+
     public QuotesTabFragment(Context context, String bookId) {
         this.context = context;
         this.bookId = bookId;
@@ -44,7 +54,6 @@ public class QuotesTabFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         quotesRecViewAdapter = new QuotesRecViewAdapter(context);
 
         QuoteViewModel quoteViewModel = new ViewModelProvider(this).get(QuoteViewModel.class);
@@ -65,6 +74,22 @@ public class QuotesTabFragment extends Fragment {
                 }
             });
         }
+
+        categoriesAdapter = new QuoteCategorySpinnerAdapter(context);
+        TypedValue typedValue = new TypedValue();
+
+        context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        categoriesAdapter.setItemBackgroundColor(typedValue.data);
+
+        context.getTheme().resolveAttribute(R.attr.textColorOnPrimaryColor, typedValue, true);
+        categoriesAdapter.setItemTextColor(typedValue.data);
+
+        QuoteCategoryViewModel qcvm = new ViewModelProvider(this).get(QuoteCategoryViewModel.class);
+        qcvm.getAllCategories().observe(this, quoteCategories -> {
+            quoteCategories.add(0, new QuoteCategory("",
+                    getString(R.string.all_quote_categories), Markers.BLUE_START_COLOR));
+            categoriesAdapter.setCategories(quoteCategories);
+        });
     }
 
     @Nullable
@@ -109,5 +134,25 @@ public class QuotesTabFragment extends Fragment {
                 return false;
             }
         });
+
+        MenuItem statusItem = menu.findItem(R.id.quotes_status);
+        Spinner spinner = (Spinner) statusItem.getActionView();
+        (new Handler()).postDelayed(()->{
+            spinner.setAdapter(categoriesAdapter);
+            spinner.setSelection(0);
+        }, 200);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                QuoteCategory category = (QuoteCategory)categoriesAdapter.getItem(i);
+                quotesRecViewAdapter.setCategoryFilter(category.getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
     }
 }

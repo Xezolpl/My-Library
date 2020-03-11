@@ -90,9 +90,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         categoryViewModel.getAllCategories().observe(this, quoteCategories -> {
             if (quoteCategories.size() == 0) { // if basic category isn't created
-                String uncategorized = getString(R.string.uncategorized);
-
-                QuoteCategory qc = new QuoteCategory(uncategorized, uncategorized, Markers.BLUE_START_COLOR);
+                QuoteCategory qc = new QuoteCategory("Uncategorized", getString(R.string.uncategorized), Markers.BLUE_START_COLOR);
                 categoryViewModel.insert(qc);
                 quoteCategories.add(qc);
             }
@@ -171,7 +169,7 @@ public class AddQuoteActivity extends AppCompatActivity {
         edit_category_btn.setOnClickListener(view -> {
             QuoteCategory qc = ((QuoteCategory) (spinnerAdapter.getItem(category_spinner.getSelectedItemPosition())));
 
-            if (!qc.getId().equals(getString(R.string.uncategorized))) {
+            if (!qc.getId().equals("Uncategorized")) {
                 startActivityForResult(new Intent(this, AddQuoteCategoryActivity.class)
                         .putExtra("category", qc), Requests.ADD_REQUEST);
             } else {

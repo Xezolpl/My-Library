@@ -27,6 +27,7 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
     private Context context;
 
     private List<Book> books = new ArrayList<>(); // Adapter's operating list
+
     private List<Book> booksFull; // Full list of books because filtering clears the books list
 
     private List<Book> filteredBooks = null; // List of filtered books (correlates with

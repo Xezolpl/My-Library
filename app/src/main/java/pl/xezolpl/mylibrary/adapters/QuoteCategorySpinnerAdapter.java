@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
@@ -19,7 +21,8 @@ public class QuoteCategorySpinnerAdapter extends BaseAdapter {
 
     private int[] colours;
     private String[] names;
-    private List<QuoteCategory> categories;
+    private List<QuoteCategory> categories = new ArrayList<>();
+    private int itemBackgroundColor = 0, itemTextColor = 0;
     private LayoutInflater inflater;
 
     public QuoteCategorySpinnerAdapter(Context context) {
@@ -35,6 +38,14 @@ public class QuoteCategorySpinnerAdapter extends BaseAdapter {
             names[i] = categories.get(i).getName();
             colours[i] = categories.get(i).getColor();
         }
+    }
+
+    public void  setItemBackgroundColor(int color){
+        itemBackgroundColor = color;
+    }
+
+    public void  setItemTextColor(int color){
+        itemTextColor = color;
     }
 
     public int getItemPosition(String s) {
@@ -67,6 +78,13 @@ public class QuoteCategorySpinnerAdapter extends BaseAdapter {
         ImageView imgView = view.findViewById(R.id.spinner_category_imgView);
         TextView txtView = view.findViewById(R.id.spinner_category_txtView);
 
+        if (itemBackgroundColor!=0){
+            RelativeLayout category_lay = view.findViewById(R.id.category_lay);
+            category_lay.setBackgroundColor(itemBackgroundColor);
+        }
+        if (itemTextColor!=0){
+            txtView.setTextColor(itemTextColor);
+        }
         txtView.setText(names[i]);
         GradientDrawable drawable = (GradientDrawable) imgView.getBackground();
         drawable.setColor(colours[i]);

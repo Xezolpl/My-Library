@@ -31,7 +31,7 @@
     <string name="select_color">Select color</string>
     <string name="select_book_cover">Select book\'s cover</string>
     <string name="mateusz_pietras_xezolpl" translatable="false">Mateusz Pietras \'XezolPL\'</string>
-    <string name="app_description">Simple application your books  management, making clear notes and writing  quotes.</string>
+    <string name="app_description">Simple application for your books  management, making clear notes and writing  quotes.</string>
     <string name="category_image">Category image</string>
     <string name="placeholder_quote_title" translatable="false">Very long title placeholder</string>
     <string name="placeholder_quote_author" translatable="false">An author and the second one</string>
@@ -176,6 +176,7 @@
     <string name="open_tutorial">Open tutorial</string>
     <string name="too_big_density">You cannot add new note here - the density is too big, and it will look bad.</string>
     <string name="add_note_below">Add note below</string>
+    <string name="all_quote_categories">All categories</string>
 
 
 </resources>

@@ -37,14 +37,25 @@ import pl.xezolpl.mylibrary.viewmodels.QuoteCategoryViewModel;
 public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdapter.ViewHolder> implements Filterable {
     private Context context;
 
-    private List<Quote> quotes = new ArrayList<>();
-    private List<Quote> quotesFull;
-    private List<Quote> chapterQuotes;
+    private List<Quote> quotes = new ArrayList<>(); // Adapter's operating list
 
-    private List<QuoteCategory> allCategories;
+    private List<Quote> quotesFull;  // Full list of quotes because filtering clears the quotes list
 
-    private boolean inserting = false;
-    private String chapterId = "";
+    private List<Quote> chapterQuotes; // Used only in inserting the quote to a chapter
+
+    private List<Quote> categoryQuotes = new ArrayList<>(); // All quotes with category specified by setCategoryFilter()
+
+    private List<Quote> filteredList = new ArrayList<>(); // All quotes received by filtering
+
+    private List<QuoteCategory> allCategories; // All QuoteCategories used to setting specific category's name to a textView
+
+    private boolean isCategoryFilterEnabled = false; // Flag for filtering with a category
+    private boolean isFiltered = false;
+    private String filteredPattern = "";
+
+    private boolean inserting = false; // Normal mode or inserting mode
+
+    private String chapterId = ""; // Used for inserting the quote to a chapter
 
     public QuotesRecViewAdapter(Context context) {
         this.context = context;
@@ -73,8 +84,34 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         diffResult.dispatchUpdatesTo(this);
     }
 
+    public void setCategoryFilter(String categoryId) {
+        isCategoryFilterEnabled = true;
+        categoryQuotes.clear();
+
+        if (categoryId.isEmpty()) {
+            quotes.clear();
+            quotes.addAll(isFiltered ? filteredList : quotesFull);
+            categoryQuotes.addAll(quotesFull);
+        } else {
+
+            for (Quote quote : quotesFull) {
+                if (quote.getCategoryId().equals(categoryId)) {
+                    categoryQuotes.add(quote);
+                }
+            }
+
+            if (!filteredPattern.isEmpty()){
+                getFilter().filter(filteredPattern);
+            }
+            quotes.clear();
+            quotes.addAll(categoryQuotes);
+        }
+        notifyDataSetChanged();
+    }
+
     /**
      * Used only for inserting quotes to the chapter
+     *
      * @return list of chapters selected in InsertQuoteActivity
      */
     public List<Quote> getChapterQuotes() {
@@ -137,29 +174,30 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     private Filter quotesFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
-            List<Quote> filteredList = new ArrayList<>();
+            filteredList.clear();
             if (charSequence == null || charSequence.length() == 0) {
-                filteredList.addAll(quotesFull);
+                filteredList.addAll(isCategoryFilterEnabled ? categoryQuotes : quotesFull);
+                isFiltered = false;
+                filteredPattern = "";
             } else {
-                String filteredPattern = charSequence.toString().toLowerCase().trim();
+                filteredPattern = charSequence.toString().toLowerCase().trim();
 
                 for (Quote q : quotesFull) {
-                    String thisQuoteCategory = null;
-                    for (QuoteCategory category : allCategories) {
-                        if (category.getId().equals(q.getCategoryId())) {
-                            if (category.getName().toLowerCase().contains(filteredPattern)) {
-                                thisQuoteCategory = category.getName();
-                            }
-                            break;
-                        }
-                    }
                     if (q.getTitle().toLowerCase().contains(filteredPattern) || //pattern contains title
                             q.getQuote().toLowerCase().contains(filteredPattern) || //pattern contains quote
-                            q.getAuthor().toLowerCase().contains(filteredPattern) || //pattern contains author
-                            thisQuoteCategory != null) { // category is not null - pattern contains category
-                        filteredList.add(q);
+                            q.getAuthor().toLowerCase().contains(filteredPattern)) //pattern contains author
+                    {
+                        if (isCategoryFilterEnabled) {
+                            if (categoryQuotes.contains(q)) {
+                                filteredList.add(q);
+                            }
+                        } else {
+                            filteredList.add(q);
+                        }
+
                     }
                 }
+                isFiltered = true;
             }
             FilterResults results = new FilterResults();
             results.values = filteredList;

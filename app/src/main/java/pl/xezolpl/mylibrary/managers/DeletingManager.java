@@ -139,12 +139,11 @@ public class DeletingManager {
      */
     private void deleteQuoteCategory(QuoteCategory quoteCategory) {
         String quoteCategoryId = quoteCategory.getId();
-        final String uncategorized = activity.getString(R.string.uncategorized);
 
         quoteViewModel.getQuotesByCategory(quoteCategoryId).observe(activity, quotes -> {
             for (Quote quote : quotes) {
                 //sets category to uncategorized in every quote where this category was used
-                quote.setCategoryId(uncategorized);
+                quote.setCategoryId("Uncategorized");
                 quoteViewModel.update(quote);
             }
         });

@@ -173,7 +173,7 @@ public class BookDetailsTabFragment extends Fragment {
         if (thisBook.isFavourite()) {
             menu.findItem(R.id.favourite).setTitle(getString(R.string.remove_from_favourites));
             menu.findItem(R.id.favourite).setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star));
-        }else{
+        } else {
             menu.findItem(R.id.favourite).setTitle(getString(R.string.add_to_favourites));
             menu.findItem(R.id.favourite).setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
         }
@@ -208,12 +208,16 @@ public class BookDetailsTabFragment extends Fragment {
     private void loadBookData() {
         bookTitle_text.setText(thisBook.getTitle());
         bookAuthor_text.setText(thisBook.getAuthor());
-        String pages = getString(R.string.pages) +": " + thisBook.getPages();
+        String pages = getString(R.string.pages) + ": " + thisBook.getPages();
         bookPages_text.setText(pages);
         bookDescription_text.setText(thisBook.getDescription());
 
         String imgUrl = thisBook.getImageUrl();
         Glide.with(context).asBitmap().load(imgUrl).into(book_image);
+
+        if (thisBook.getPages() <= 0) {
+            bookPages_text.setVisibility(View.GONE);
+        }
     }
 
     /**
