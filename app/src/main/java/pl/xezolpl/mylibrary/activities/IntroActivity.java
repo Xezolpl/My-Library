@@ -98,7 +98,7 @@ public class IntroActivity extends AppCompatActivity {
         });
     }
 
-    public void addDotsIndicator(int position) {
+    private void addDotsIndicator(int position) {
 
         TextView[] dots = new TextView[adapter.getCount()];
         dotsLayout.removeAllViews();

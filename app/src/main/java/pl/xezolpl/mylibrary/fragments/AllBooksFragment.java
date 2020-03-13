@@ -54,22 +54,22 @@ public class AllBooksFragment extends Fragment {
     }
 
     public void setUpViewPager() {
-            FragmentActivity activity = getActivity();
-            if(activity!=null) {
-                TabFragmentPagerAdapter sectionsPagerAdapter = new TabFragmentPagerAdapter(activity.getSupportFragmentManager());
+        FragmentActivity activity = getActivity();
+        if(activity!=null) {
+            TabFragmentPagerAdapter sectionsPagerAdapter = new TabFragmentPagerAdapter(activity.getSupportFragmentManager());
 
-                Fragment allBooksFragment = new BooksListTabFragment(Book.STATUS_NEUTRAL);
-                Fragment wantBooksFragment = new BooksListTabFragment(Book.STATUS_WANT_TO_READ);
-                Fragment currBooksFragment = new BooksListTabFragment(Book.STATUS_CURRENTLY_READING);
-                Fragment alrBooksFragment = new BooksListTabFragment(Book.STATUS_ALREADY_READ);
+            Fragment allBooksFragment = new BooksListTabFragment(Book.STATUS_NEUTRAL);
+            Fragment wantBooksFragment = new BooksListTabFragment(Book.STATUS_WANT_TO_READ);
+            Fragment currBooksFragment = new BooksListTabFragment(Book.STATUS_CURRENTLY_READING);
+            Fragment alrBooksFragment = new BooksListTabFragment(Book.STATUS_ALREADY_READ);
 
-                sectionsPagerAdapter.addFragment(allBooksFragment, getString(R.string.all_books));
-                sectionsPagerAdapter.addFragment(wantBooksFragment, getString(R.string.want_to_read));
-                sectionsPagerAdapter.addFragment(currBooksFragment, getString(R.string.currently_reading));
-                sectionsPagerAdapter.addFragment(alrBooksFragment, getString(R.string.already_read));
+            sectionsPagerAdapter.addFragment(allBooksFragment, getString(R.string.all_books));
+            sectionsPagerAdapter.addFragment(wantBooksFragment, getString(R.string.want_to_read));
+            sectionsPagerAdapter.addFragment(currBooksFragment, getString(R.string.currently_reading));
+            sectionsPagerAdapter.addFragment(alrBooksFragment, getString(R.string.already_read));
 
-                books_viewPager.setAdapter(sectionsPagerAdapter);
-            }
+            books_viewPager.setAdapter(sectionsPagerAdapter);
+        }
     }
 
 }
