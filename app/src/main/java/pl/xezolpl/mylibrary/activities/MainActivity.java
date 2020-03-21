@@ -26,7 +26,6 @@ import java.util.Objects;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.fragments.AllBooksFragment;
-import pl.xezolpl.mylibrary.fragments.BooksListTabFragment;
 import pl.xezolpl.mylibrary.fragments.CategoriesFragment;
 import pl.xezolpl.mylibrary.fragments.ContactFragment;
 import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
@@ -141,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_books: {
                 fm.beginTransaction().detach(currFragment).attach(allBooksFragment).commit();
                 currFragment = allBooksFragment;
-                allBooksFragment.setUpViewPager(); //because the listItems weren't showing the books
                 break;
             }
             case R.id.nav_categories: {
@@ -179,13 +177,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param category specific category
      */
     public void setSelectedCategory(String category) {
-        BooksListTabFragment booksWithCategoryFragment = new BooksListTabFragment(category);
+        AllBooksFragment fragment = new AllBooksFragment();
 
-        fm.beginTransaction().add(R.id.fragment_container, booksWithCategoryFragment)
+        fm.beginTransaction().add(R.id.fragment_container, fragment)
                 .detach(currFragment).commit();
 
-        currFragment = booksWithCategoryFragment;
+        currFragment = fragment;
         fromCategory = true;
+
+        fragment.getBooksAdapter().setCategoryId(category);
     }
 
     /**

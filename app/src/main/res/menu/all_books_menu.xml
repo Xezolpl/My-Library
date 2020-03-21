@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/filters"
+        android:icon="@drawable/ic_format_quote_black_24dp"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/favourite"
+                android:icon="@mipmap/favourite_star"
+                android:title="@string/add_to_favourites"/>
+
+            <item
+                android:id="@+id/toRead"
+                android:icon="@mipmap/to_read_icon"
+                android:title="@string/want_to_read"
+                app:actionViewClass="android.widget.CheckBox"/>
+
+            <item
+                android:id="@+id/currReading"
+                android:icon="@mipmap/curr_reading_icon"
+                android:title="@string/currently_reading"
+                app:actionViewClass="android.widget.CheckBox"/>
+
+            <item
+                android:id="@+id/alreadyRead"
+                android:icon="@mipmap/already_read_icon"
+                android:title="@string/already_read"
+                app:actionViewClass="android.widget.CheckBox"/>
+
+        </menu>
+    </item>
+
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title=""
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom" />
+</menu>

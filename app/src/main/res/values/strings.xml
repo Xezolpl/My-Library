@@ -177,6 +177,7 @@
     <string name="too_big_density">You cannot add new note here - the density is too big, and it will look bad.</string>
     <string name="add_note_below">Add note below</string>
     <string name="all_quote_categories">All categories</string>
+    <string name="fav_books">Favourite books</string>
 
 
 </resources>

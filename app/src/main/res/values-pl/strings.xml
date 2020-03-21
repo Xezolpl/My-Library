@@ -168,4 +168,6 @@
     <string name="too_big_density">Nie możesz dodać nowej notatki tutaj - zagęszczenie jest zbyt duże (do sześciu).</string>
     <string name="too_short">Nie może być taki krótki!</string>
     <string name="add_note_below">Dodaj notatkę niżej</string>
+    <string name="all_quote_categories">Wszystkie kategorie</string>
+    <string name="fav_books">Ulubione książki</string>
 </resources>

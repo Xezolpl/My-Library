@@ -48,7 +48,7 @@ public class ChaptersTabFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tabfragment_chapters, container, false);
+        View view = inflater.inflate(R.layout.fragment_chapters, container, false);
 
         RecyclerView recView = view.findViewById(R.id.chapters_recView);
         recView.setAdapter(adapter);

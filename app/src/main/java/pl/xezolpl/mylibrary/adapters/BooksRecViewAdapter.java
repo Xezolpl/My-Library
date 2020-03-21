@@ -6,12 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -22,21 +23,19 @@ import java.util.List;
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
 import pl.xezolpl.mylibrary.models.Book;
+import pl.xezolpl.mylibrary.models.CategoryWithBook;
+import pl.xezolpl.mylibrary.viewmodels.CategoriesViewModel;
 
-public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapter.ViewHolder> implements Filterable {
+public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapter.ViewHolder> {
     private Context context;
 
-    private List<Book> books = new ArrayList<>(); // Adapter's operating list
+    private List<Book> books = new ArrayList<>();
+    private List<Book> booksFull = new ArrayList<>();
 
-    private List<Book> booksFull; // Full list of books because filtering clears the books list
-
-    private List<Book> filteredBooks = null; // List of filtered books (correlates with
-    // favouriteBooks because user may want to
-    // get the favourite books of the filtered list
-
-    private List<Book> favouriteBooks; // List of all favourite books
-
-    private boolean isFavourite = false; // Indicates is the favourite mode enabled
+    private int statusMode = 0;
+    private String filterPattern = "";
+    private boolean isFavouriteEnabled = false;
+    private String categoryId = "";
 
 
     public BooksRecViewAdapter(Context context) {
@@ -51,40 +50,8 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
     public void setBooks(List<Book> books) {
         this.books.clear();
         this.books.addAll(books);
+        booksFull = new ArrayList<>(books);
 
-        booksFull = new ArrayList<>(this.books); // Copy of the list (different reference)
-        favouriteBooks = new ArrayList<>();
-
-        for (Book book : books) {
-            if (book.isFavourite()) {
-                favouriteBooks.add(book); // Fill the list
-            }
-        }
-        notifyDataSetChanged(); // Simply, without callbacks
-    }
-
-    /**
-     * Sets the favourite mode which shows only that books which are favourite by the user.
-     *
-     * @param b set on/off the favourite mode
-     */
-    public void setFavouriteFilter(boolean b) {
-        books.clear();
-        isFavourite = b;
-
-        if (b) {
-            if (filteredBooks != null) { // Is the filtering enabled
-                for (Book book : filteredBooks) {
-                    if (favouriteBooks.contains(book)) {
-                        books.add(book);
-                    }
-                }
-            } else { // Only favourites without specific filters
-                books.addAll(favouriteBooks);
-            }
-        } else { // Set favourite filter off
-            books.addAll(filteredBooks != null ? filteredBooks : booksFull);
-        }
         notifyDataSetChanged();
     }
 
@@ -111,69 +78,88 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
         return books.size();
     }
 
-    @Override
-    public Filter getFilter() {
-        return booksFilter;
+
+    public void setStatusMode(int status){
+        statusMode = status;
+        handleAdvancedFiltering();
     }
 
+    public void setFilterPattern(String filter){
+        filterPattern = filter.toLowerCase().trim();
+        handleAdvancedFiltering();
+    }
 
-    private final Filter booksFilter = new Filter() {
+    public void setFavouriteEnabled(boolean b){
+        isFavouriteEnabled = b;
+        handleAdvancedFiltering();
+    }
 
-        /**
-         * Sets the filtering rules, and return the results of filtering
-         */
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-            List<Book> filteredList = new ArrayList<>();
+    public void setCategoryId(String categoryId){
+        this.categoryId = categoryId;
+        handleAdvancedFiltering();
+    }
 
-            if (charSequence == null || charSequence.length() == 0) { // The filter is empty
-                filteredList.addAll(isFavourite ? favouriteBooks : booksFull);
-            } else {
-                String filteredPattern = charSequence.toString().toLowerCase().trim();
+    private void handleAdvancedFiltering() {
+        books.clear();
+        List<Book> operationalList = new ArrayList<>();
 
-                for (Book b : booksFull) {
-                    // Check for books whose title or author contains the filteredPattern
-                    if (b.getTitle().toLowerCase().contains(filteredPattern) ||
-                            b.getAuthor().toLowerCase().contains(filteredPattern)) {
-                        filteredList.add(b);
-                    }
+        //Handle status
+        if (statusMode == 0) books.addAll(booksFull);
+        else {
+            for (Book b : booksFull) {
+                if (b.getStatus() == statusMode) {
+                    books.add(b);
                 }
             }
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-            return results;
         }
 
-        /**
-         * Publishes the results of the filtering, distinguish simple filtering from
-         * filtering with favourite mode enabled
-         * @param charSequence pattern of search
-         * @param filterResults results of the performFiltering method - found results
-         */
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            List<Book> filteredResults = (List) filterResults.values;
+        //Handle favourite
+        if (isFavouriteEnabled) {
+            for (Book b : books) {
+                if (b.isFavourite()) {
+                    operationalList.add(b);
+                }
+            }
             books.clear();
+            books.addAll(operationalList);
+            operationalList.clear();
+        }
 
-            if (isFavourite) {
-                if (charSequence == null || charSequence.length() == 0) { // If the filter was empty
-                    books.addAll(favouriteBooks);
-                    filteredBooks = null;
-                } else { // If the filter was not empty - check for suitable books
-                    for (Book book : filteredResults) {
-                        if (favouriteBooks.contains(book)) {
-                            books.add(book);
+        //Handle filter
+        if (!filterPattern.isEmpty()) {
+            for (Book b : books) {
+                if (b.getTitle().toLowerCase().contains(filterPattern) ||
+                        b.getAuthor().toLowerCase().contains(filterPattern)) {
+                    operationalList.add(b);
+                }
+            }
+            books.clear();
+            books.addAll(operationalList);
+            operationalList.clear();
+        }
+
+        if (!categoryId.isEmpty()) {
+            CategoriesViewModel cvm = new ViewModelProvider((FragmentActivity) context).get(CategoriesViewModel.class);
+            cvm.getBooksByCategory(categoryId).observe((FragmentActivity) context, categories -> {
+
+                for (int i = 0; i < categories.size(); i++) { // Iterating on the List<CategoryWithBook>
+                    for (int j = 0; j < books.size(); j++) { // Iterating on the List<Book>
+                        Book book = books.get(j);
+                        if (categories.get(i).getBookId().equals(book.getId())) {
+                            // If category's bookId is equal to book's id then add it to the list
+                            operationalList.add(book);
+                            break;
                         }
                     }
-                    filteredBooks = new ArrayList<>(books);
                 }
-            } else { // Filtering without favourite mode
-                books.addAll(filteredResults);
-                filteredBooks = new ArrayList<>(books);
-            }
-            notifyDataSetChanged();
+                books.clear();
+                books.addAll(operationalList);
+                operationalList.clear();
+                notifyDataSetChanged();
+            });
         }
-    };
+        notifyDataSetChanged();
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView bookImage;

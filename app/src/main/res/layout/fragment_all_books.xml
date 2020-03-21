@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,36 +7,93 @@
     tools:context=".activities.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/applayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Toolbar">
+        android:theme="@style/Toolbar"
+        android:gravity="center">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/books_tabLayout"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:tabMaxWidth="0dp"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/navTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/all_books"
+                android:textAlignment="center"
+                android:layout_centerHorizontal="true"
+                android:textColor="?textColorOnPrimaryColor"
+                android:textSize="20sp" />
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/nav_underline"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/navTextView"
+                android:layout_alignStart="@id/navTextView"
+                android:layout_alignEnd="@id/navTextView"/>
+        </RelativeLayout>
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/books_viewPager"
+        android:id="@+id/viewPager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/no_books_lay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/no_books_imgView"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/ic_book_black_24dp"
+            android:backgroundTint="?colorAccent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/no_books_imgView"
+            android:layout_centerHorizontal="true"
+            android:maxWidth="260dp"
+            android:text="@string/no_books"
+            android:textAlignment="center"
+            android:textColor="?colorAccent"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/booksRecView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    </androidx.viewpager.widget.ViewPager>
+        android:layout_below="@id/applayout2"
+        android:clipToPadding="false"
+        android:paddingBottom="80dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_book_fab"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_gravity="bottom|end"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="15dp"
         android:src="@drawable/ic_add_black_64dp"
         app:fabCustomSize="64dp" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

@@ -18,7 +18,6 @@
         android:icon="@drawable/ic_more_vert_white_24dp"
         android:title=""
         app:showAsAction="ifRoom" >
-
         <menu>
             <item
                 android:id="@+id/favourite"
@@ -26,14 +25,16 @@
                 android:title="@string/add_to_favourites" />
 
             <item android:id="@+id/toRead"
+                android:icon="@mipmap/to_read_icon"
                 android:title="@string/want_to_read"/>
 
             <item android:id="@+id/currReading"
+                android:icon="@mipmap/curr_reading_icon"
                 android:title="@string/currently_reading"/>
 
             <item android:id="@+id/alreadyRead"
+                android:icon="@mipmap/already_read_icon"
                 android:title="@string/already_read"/>
         </menu>
-
     </item>
 </menu>

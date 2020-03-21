@@ -27,10 +27,6 @@ public class BookViewModel extends AndroidViewModel {
         return bookDao.getAllBooks();
     }
 
-    public LiveData<List<Book>> getBookWithStatus(int status) {
-        return bookDao.getBooksByStatus(status);
-    }
-
     public LiveData<Book> getBook(String id) {
         return bookDao.getBook(id);
     }

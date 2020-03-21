@@ -39,7 +39,7 @@ public class IntroPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        View view = LayoutInflater.from(context).inflate(R.layout.intro_slide, container, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.intro_slide_fragment, container, false);
 
         TextView titleTxtView = view.findViewById(R.id.slide_title);
         TextView descTxtView = view.findViewById(R.id.slide_description);
