@@ -132,7 +132,7 @@
     <string name="restore_db_fail">Unable to restore database. You chose wrong database file or the file is damaged.</string>
     <string name="no_books">No books here</string>
     <string name="db_restore_unknown_error">Something got wrong during importing process.</string>
-    <string name="db_restore_success">Successfully restored database. Application will be restarted.</string>
+    <string name="db_restore_success">Successfully restored the database.</string>
     <string name="export_db_success">Successfully exported the database</string>
     <string name="export_db_fail">Exporting the database failed.</string>
     <string name="chose_directory_db_fail">You\'ve chosen wrong directory to export database. Please try again, maybe by other file manager?</string>

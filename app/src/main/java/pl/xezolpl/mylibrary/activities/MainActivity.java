@@ -70,6 +70,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             BackupManager.downloadCover(imageUrl);
         }
 
+        //If opened after importing the database
+        if (getIntent().hasExtra("imported")){
+            Toast.makeText(this, getString(R.string.db_restore_success), Toast.LENGTH_LONG).show();
+        }
+
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -229,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     File file = new File(Objects.requireNonNull(data.getData()).getPath());
 
                     if (new BackupManager(this).importDatabaseFile(file)) {
-                        startActivity(new Intent(this, MainActivity.class));
+                        startActivity(new Intent(this, MainActivity.class).putExtra("imported", true));
                         finish();
                     } else {
                         Toast.makeText(this, getString(R.string.db_restore_unknown_error), Toast.LENGTH_SHORT).show();

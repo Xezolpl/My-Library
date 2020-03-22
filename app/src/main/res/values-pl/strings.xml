@@ -130,7 +130,7 @@
     <string name="standard">Standardowy</string>
     <string name="mild">Łagodny</string>
     <string name="chose_directory_db_fail">Wybrałeś nieprawidłowe miejsce do exportu bazy danych. Spróbuj ponownie lub przez inny menadżer plików.</string>
-    <string name="db_restore_success">Przywrócono bazę danych. Aplikacja uruchomi się ponownie.</string>
+    <string name="db_restore_success">Poprawnie przywrócono bazę danych.</string>
     <string name="db_restore_unknown_error">Coś poszło nie tak podczas procesu przywracania bazy danych.</string>
     <string name="export_db_fail">Nie udało się wyeksportować bazy danych.</string>
     <string name="export_db_success">Poprawnie wyeksportowano bazę danych.</string>
