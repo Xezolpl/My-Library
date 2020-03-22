@@ -10,27 +10,34 @@
         <menu>
             <item
                 android:id="@+id/favourite"
+                android:checkable="true"
                 android:icon="@mipmap/favourite_star"
-                android:title="@string/add_to_favourites"/>
+                android:title="@string/fav_books" />
 
-            <item
-                android:id="@+id/toRead"
-                android:icon="@mipmap/to_read_icon"
-                android:title="@string/want_to_read"
-                app:actionViewClass="android.widget.CheckBox"/>
+            <group android:checkableBehavior="single"  >
+                <item
+                    android:id="@+id/allBooks"
+                    android:icon="@drawable/ic_book_black_24dp"
+                    android:title="@string/all_books"
+                    app:actionViewClass="android.widget.CheckBox" />
+                <item
+                    android:id="@+id/toRead"
+                    android:icon="@mipmap/to_read_icon"
+                    android:title="@string/want_to_read"
+                    app:actionViewClass="android.widget.CheckBox" />
 
-            <item
-                android:id="@+id/currReading"
-                android:icon="@mipmap/curr_reading_icon"
-                android:title="@string/currently_reading"
-                app:actionViewClass="android.widget.CheckBox"/>
+                <item
+                    android:id="@+id/currReading"
+                    android:icon="@mipmap/curr_reading_icon"
+                    android:title="@string/currently_reading"
+                    app:actionViewClass="android.widget.CheckBox" />
 
-            <item
-                android:id="@+id/alreadyRead"
-                android:icon="@mipmap/already_read_icon"
-                android:title="@string/already_read"
-                app:actionViewClass="android.widget.CheckBox"/>
-
+                <item
+                    android:id="@+id/alreadyRead"
+                    android:icon="@mipmap/already_read_icon"
+                    android:title="@string/already_read"
+                    app:actionViewClass="android.widget.CheckBox" />
+            </group>
         </menu>
     </item>
 

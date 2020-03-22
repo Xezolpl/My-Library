@@ -2,8 +2,6 @@ package pl.xezolpl.mylibrary.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -23,15 +20,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddBookActivity;
 import pl.xezolpl.mylibrary.adapters.BooksRecViewAdapter;
-import pl.xezolpl.mylibrary.adapters.TabFragmentPagerAdapter;
 import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.viewmodels.BookViewModel;
 
@@ -41,7 +35,6 @@ public class AllBooksFragment extends Fragment {
     private BooksRecViewAdapter booksRecViewAdapter;
     private RelativeLayout no_books_lay = null;
     private boolean favourites = false;
-    private int activeStatus = 0;
 
     private TextView navTextView;
 
@@ -78,7 +71,6 @@ public class AllBooksFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.all_books_menu, menu);
-
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
@@ -98,60 +90,53 @@ public class AllBooksFragment extends Fragment {
             }
         });
 
-        // MenuItem favourite - set its icon and text basing on is thisBook favourite or no
+        //FAVOURITE
         MenuItem action_favourite = menu.findItem(R.id.favourite);
+
         action_favourite.setIcon(ContextCompat.getDrawable(context, favourites ? R.mipmap.favourite_star : R.mipmap.favourite_star_off));
+        action_favourite.setChecked(favourites);
+
         action_favourite.setOnMenuItemClickListener(menuItem -> {
-            if (favourites) {
-                action_favourite.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
-                action_favourite.setTitle(getString(R.string.fav_books));
-                booksRecViewAdapter.setFavouriteEnabled(false);
-                favourites = false;
-            } else {
-                action_favourite.setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star));
-                action_favourite.setTitle(getString(R.string.all_books));
-                booksRecViewAdapter.setFavouriteEnabled(true);
-                favourites = true;
-            }
+            favourites = !favourites;
+            action_favourite.setIcon(ContextCompat.getDrawable(context, favourites ? R.mipmap.favourite_star : R.mipmap.favourite_star_off));
+            action_favourite.setChecked(favourites);
+            booksRecViewAdapter.setFavouriteEnabled(favourites);
             return false;
         });
 
+        //ALL BOOKS
+        MenuItem actionAllBooks = menu.findItem(R.id.allBooks);
+        actionAllBooks.setOnMenuItemClickListener(menuItem -> {
+            navTextView.setText(R.string.all_books);
+            actionAllBooks.setChecked(true);
+            booksRecViewAdapter.setStatusMode(Book.STATUS_NEUTRAL);
+            return false;
+        });
+
+        //WANT TO READ BOOKS
         MenuItem actionToRead = menu.findItem(R.id.toRead);
         actionToRead.setOnMenuItemClickListener(menuItem -> {
-            if (activeStatus == Book.STATUS_WANT_TO_READ) {
-                activeStatus = Book.STATUS_NEUTRAL;
-                navTextView.setText(R.string.all_books);
-            } else {
-                activeStatus = Book.STATUS_WANT_TO_READ;
-                navTextView.setText(R.string.want_to_read);
-            }
-            booksRecViewAdapter.setStatusMode(activeStatus);
+            navTextView.setText(R.string.want_to_read);
+            actionToRead.setChecked(true);
+            booksRecViewAdapter.setStatusMode(Book.STATUS_WANT_TO_READ);
             return false;
         });
 
+        //CURRENTLY READING BOOKS
         MenuItem actionCurrReading = menu.findItem(R.id.currReading);
         actionCurrReading.setOnMenuItemClickListener(menuItem -> {
-            if (activeStatus == Book.STATUS_CURRENTLY_READING) {
-                activeStatus = Book.STATUS_NEUTRAL;
-                navTextView.setText(R.string.all_books);
-            } else {
-                activeStatus = Book.STATUS_CURRENTLY_READING;
-                navTextView.setText(R.string.currently_reading);
-            }
-            booksRecViewAdapter.setStatusMode(activeStatus);
+            navTextView.setText(R.string.currently_reading);
+            actionCurrReading.setChecked(true);
+            booksRecViewAdapter.setStatusMode(Book.STATUS_CURRENTLY_READING);
             return false;
         });
 
+        //ALREADY READ BOOKS
         MenuItem actionAlreadyRead = menu.findItem(R.id.alreadyRead);
         actionAlreadyRead.setOnMenuItemClickListener(menuItem -> {
-            if (activeStatus == Book.STATUS_ALREADY_READ) {
-                activeStatus = Book.STATUS_NEUTRAL;
-                navTextView.setText(R.string.all_books);
-            } else {
-                activeStatus = Book.STATUS_ALREADY_READ;
-                navTextView.setText(R.string.already_read);
-            }
-            booksRecViewAdapter.setStatusMode(activeStatus);
+            navTextView.setText(R.string.already_read);
+            actionAlreadyRead.setChecked(true);
+            booksRecViewAdapter.setStatusMode(Book.STATUS_ALREADY_READ);
             return false;
         });
     }

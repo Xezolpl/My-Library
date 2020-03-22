@@ -29,6 +29,8 @@
         <item name="android:textColorSecondary">?attr/textColorOnPrimaryColor</item>
         <item name="actionBarTabTextStyle">?attr/textColorOnPrimaryColor</item>
         <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?attr/textColorOnPrimaryColor</item>
+        <item name="android:itemBackground">?attr/colorPrimary</item>
     </style>
 
     <!-- Spinner -->

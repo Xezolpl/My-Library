@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         currFragment = fragment;
         fromCategory = true;
 
-        (new Handler()).postDelayed(() -> fragment.getBooksAdapter().setCategoryId(category), 30);
+        (new Handler()).postDelayed(() -> fragment.getBooksAdapter().setCategoryId(category), 3);
     }
 
     /**

@@ -130,7 +130,7 @@ public class QuotesTabFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                quotesRecViewAdapter.getFilter().filter(s);
+                quotesRecViewAdapter.setFilterPattern(s);
                 return false;
             }
         });
