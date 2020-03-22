@@ -123,42 +123,27 @@ public class BookDetailsTabFragment extends Fragment {
                 break;
             }
 
-            case R.id.toRead: {
-                if (thisBook.getStatus() == Book.STATUS_WANT_TO_READ) {
-                    builder.setMessage(getString(R.string.onWantToRead))
-                            .setPositiveBtnText(getString(R.string.yes))
+            case R.id.allBooks: {
+                item.setChecked(true);
+                updateBook(Book.STATUS_NEUTRAL);
+                break;
+            }
 
-                            .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
-                            .build();
-                } else {
-                    updateBook(Book.STATUS_WANT_TO_READ);
-                }
+            case R.id.toRead: {
+                item.setChecked(true);
+                updateBook(Book.STATUS_WANT_TO_READ);
                 break;
             }
 
             case R.id.currReading: {
-                if (thisBook.getStatus() == Book.STATUS_CURRENTLY_READING) {
-                    builder.setMessage(getString(R.string.onCurrReading))
-                            .setPositiveBtnText(getString(R.string.yes))
-
-                            .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
-                            .build();
-                } else {
-                    updateBook(Book.STATUS_CURRENTLY_READING);
-                }
+                item.setChecked(true);
+                updateBook(Book.STATUS_CURRENTLY_READING);
                 break;
             }
 
             case R.id.alreadyRead: {
-                if (thisBook.getStatus() == Book.STATUS_ALREADY_READ) {
-                    builder.setMessage(getString(R.string.onAlreadyRead))
-                            .setPositiveBtnText(getString(R.string.yes))
-
-                            .OnPositiveClicked(() -> updateBook(Book.STATUS_NEUTRAL))
-                            .build();
-                } else {
-                    updateBook(Book.STATUS_ALREADY_READ);
-                }
+                item.setChecked(true);
+                updateBook(Book.STATUS_ALREADY_READ);
                 break;
             }
         }
@@ -177,6 +162,26 @@ public class BookDetailsTabFragment extends Fragment {
             menu.findItem(R.id.favourite).setTitle(getString(R.string.add_to_favourites));
             menu.findItem(R.id.favourite).setIcon(ContextCompat.getDrawable(context, R.mipmap.favourite_star_off));
         }
+
+        switch (thisBook.getStatus()){
+            case 1:{
+                menu.findItem(R.id.toRead).setChecked(true);
+                break;
+            }
+            case 2:{
+                menu.findItem(R.id.currReading).setChecked(true);
+                break;
+            }
+            case 3:{
+                menu.findItem(R.id.alreadyRead).setChecked(true);
+                break;
+            }
+            default:{
+                menu.findItem(R.id.allBooks).setChecked(true);
+                break;
+            }
+        }
+
     }
 
     @Override
