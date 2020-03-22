@@ -39,7 +39,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
     private List<Quote> quotes = new ArrayList<>(); // Adapter's operating list
 
-    private List<Quote> quotesFull;  // Full list of quotes because filtering clears the quotes list
+    private List<Quote> quotesFull = new ArrayList<>();  // Full list of quotes because filtering clears the quotes list
 
     private List<Quote> chapterQuotes; // Used only in inserting the quote to a chapter
 

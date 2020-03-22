@@ -60,13 +60,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
 
         //If intro hasn't opened yet (its first usage or the data is cleared) then open IntroActivity
-        if (!manager.isIntroOpenedBefore()){
+        if (!manager.isIntroOpenedBefore()) {
             startActivity(new Intent(this, IntroActivity.class));
         }
 
         //Check does standard book's cover image exists
         String imageUrl = getApplicationInfo().dataDir + "/files/covers/standard_cover.jpg";
-        if (!new File(imageUrl).exists()){
+        if (!new File(imageUrl).exists()) {
             BackupManager.downloadCover(imageUrl);
         }
 
@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * Navigation between the fragments
+     *
      * @param menuItem drawer's tab clicked - corresponding to the specific frame's fragment
      * @return true
      */
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()) {
             case R.id.nav_books: {
                 fm.beginTransaction().detach(currFragment).attach(allBooksFragment).commit();
+                allBooksFragment.getBooksAdapter().setCategoryId("");
                 currFragment = allBooksFragment;
                 break;
             }
@@ -174,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /**
      * Sets currentFragment to booksListTabFragment of categoryFragment - we can
      * se books attributed to the specific category
+     *
      * @param category specific category
      */
     public void setSelectedCategory(String category) {
@@ -185,12 +188,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         currFragment = fragment;
         fromCategory = true;
 
-        fragment.getBooksAdapter().setCategoryId(category);
+        (new Handler()).postDelayed(() -> fragment.getBooksAdapter().setCategoryId(category), 30);
     }
 
     /**
      * If keycode is KEYCODE_BACK -> if we are in category books - we returns to the categoriesFragment
      * else first shows toast, on the second key back click - close the application
+     *
      * @return true if KEYCODE_BACK else super
      */
     @Override
