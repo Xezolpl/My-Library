@@ -53,6 +53,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     //FILTERING
     private String categoryId = "";
     private String filterPattern = "";
+    private boolean isFavouriteEnabled = false;
 
 
     public QuotesRecViewAdapter(Context context) {
@@ -73,6 +74,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         this.quotes.clear();
         this.quotes.addAll(quotes);
         diffResult.dispatchUpdatesTo(this);
+        notifyDataSetChanged();
     }
 
     public void setCategoryFilter(String categoryId) {
@@ -82,6 +84,11 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
 
     public void setFilterPattern(String filter) {
         this.filterPattern = filter.toLowerCase().trim();
+        handleAdvancedFiltering();
+    }
+
+    public void setFavouriteEnabled(boolean b){
+        this.isFavouriteEnabled = b;
         handleAdvancedFiltering();
     }
 
@@ -113,6 +120,18 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
             for (Quote quote : quotes) {
                 if (quote.getCategoryId().equals(categoryId)) {
                     operationalList.add(quote);
+                }
+            }
+            quotes.clear();
+            quotes.addAll(operationalList);
+            operationalList.clear();
+        }
+
+        //Filter by favourite
+        if (isFavouriteEnabled){
+            for(Quote q: quotes){
+                if (q.isFavourite()){
+                    operationalList.add(q);
                 }
             }
             quotes.clear();

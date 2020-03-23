@@ -12,16 +12,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.nikartm.button.FitButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Objects;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddQuoteActivity;
@@ -41,8 +46,11 @@ public class QuotesTabFragment extends Fragment {
 
     private QuotesRecViewAdapter quotesRecViewAdapter;
     private RecyclerView quotes_recView = null;
+    private boolean favourite = false;
 
     private Quote latestQuote = null;
+    private RelativeLayout linlay;
+    private boolean isLinLayVisible = false;
 
     private QuoteCategorySpinnerAdapter categoriesAdapter;
 
@@ -111,6 +119,33 @@ public class QuotesTabFragment extends Fragment {
         setHasOptionsMenu(true);
         if (!bookId.isEmpty()) setMenuVisibility(false);
 
+        linlay = view.findViewById(R.id.linlay);
+
+        Spinner spinner = view.findViewById(R.id.categorySpinner);
+        (new Handler()).postDelayed(() -> {
+            spinner.setAdapter(categoriesAdapter);
+            spinner.setSelection(0);
+        }, 200);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                quotesRecViewAdapter.setCategoryFilter(((QuoteCategory) categoriesAdapter.getItem(i)).getId());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        FitButton favourite_btn = view.findViewById(R.id.favourite_btn);
+        favourite_btn.setOnClickListener(view1 -> {
+            favourite = !favourite;
+            quotesRecViewAdapter.setFavouriteEnabled(favourite);
+            favourite_btn.setIcon(Objects.requireNonNull(
+                    ContextCompat.getDrawable(context, favourite ?
+                            R.mipmap.favourite_star : R.mipmap.favourite_star_off)));
+        });
+
         return view;
     }
 
@@ -119,7 +154,7 @@ public class QuotesTabFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.quotes_menu, menu);
 
-        //Filtering mechanic
+        //Searching mechanic
         MenuItem searchItem = menu.findItem(R.id.quotes_searchView);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -135,23 +170,11 @@ public class QuotesTabFragment extends Fragment {
             }
         });
 
-        MenuItem statusItem = menu.findItem(R.id.quotes_status);
-        Spinner spinner = (Spinner) statusItem.getActionView();
-        (new Handler()).postDelayed(()->{
-            spinner.setAdapter(categoriesAdapter);
-            spinner.setSelection(0);
-        }, 200);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                QuoteCategory category = (QuoteCategory)categoriesAdapter.getItem(i);
-                quotesRecViewAdapter.setCategoryFilter(category.getId());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+        MenuItem filtersItem = menu.findItem(R.id.filters);
+        filtersItem.setOnMenuItemClickListener(menuItem -> {
+            isLinLayVisible = !isLinLayVisible;
+            linlay.setVisibility(isLinLayVisible ? View.VISIBLE : View.GONE);
+            return false;
         });
 
     }

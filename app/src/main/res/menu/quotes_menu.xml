@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/quotes_status"
+        android:id="@+id/quotes_searchView"
+        android:icon="@drawable/ic_search_black_24dp"
         android:title=""
-        android:icon="@drawable/category_24dp"
-        app:showAsAction="ifRoom"
-        app:actionViewClass="android.widget.Spinner" />
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/quotes_searchView"
+        android:id="@+id/filters"
+        android:icon="@drawable/ic_filter_list_black_24dp"
         android:title=""
-        android:icon="@drawable/ic_search_black_24dp"
-        app:showAsAction="ifRoom"
-        app:actionViewClass="android.widget.SearchView" />
+        app:showAsAction="always"/>
+
 </menu>

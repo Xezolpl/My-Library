@@ -23,7 +23,7 @@ public interface QuoteDao {
     @Delete
     void delete(Quote quote);
 
-    @Query("SELECT * FROM quotes ORDER BY page")
+    @Query("SELECT * FROM quotes ORDER BY quote")
     LiveData<List<Quote>> getAllQuotes();
 
     @Query("SELECT * FROM quotes WHERE id=:quoteId")

@@ -178,6 +178,7 @@
     <string name="add_note_below">Add note below</string>
     <string name="all_quote_categories">All categories</string>
     <string name="fav_books">Favourite books</string>
+    <string name="favourite_quotes">Favourite quotes</string>
 
 
 </resources>

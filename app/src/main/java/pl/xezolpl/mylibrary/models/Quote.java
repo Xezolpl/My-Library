@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.io.Serializable;
 
@@ -37,6 +39,10 @@ public class Quote implements Serializable {
     @ColumnInfo(name = "chapterId")
     private String chapterId;
 
+    @ColumnInfo(name = "favourite")
+    @NonNull
+    private boolean favourite;
+
     public Quote(@NonNull String id, @NonNull String quote, String title, String author, String categoryId, int page, String bookId) {
         this.id = id;
         this.quote = quote;
@@ -46,6 +52,7 @@ public class Quote implements Serializable {
         this.page = page;
         this.bookId = bookId;
         this.chapterId = "";
+        this.favourite = false;
     }
 
     @NonNull
@@ -82,11 +89,19 @@ public class Quote implements Serializable {
         return chapterId;
     }
 
+    public boolean isFavourite() {
+        return favourite;
+    }
+
     public void setChapterId(String chapterId) {
         this.chapterId = chapterId;
     }
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
     }
 }

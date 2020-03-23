@@ -1,15 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:id="@+id/quotes_layout">
+
+    <RelativeLayout
+        android:id="@+id/linlay"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="?colorPrimary"
+        android:visibility="gone">
+
+        <Spinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_alignParentStart="true"/>
+
+        <com.github.nikartm.button.FitButton
+            android:id="@+id/favourite_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:gravity="center"
+
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+
+            app:fb_icon="@mipmap/favourite_star_off"
+            app:fb_iconWidth="36dp"
+            app:fb_iconHeight="36dp" />
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/quotes_recView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="50dp"
+        android:layout_below="@id/linlay"
         android:clipToPadding="false"
         android:descendantFocusability="blocksDescendants"/>
 

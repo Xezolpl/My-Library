@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import pl.xezolpl.mylibrary.daos.BookDao;
 import pl.xezolpl.mylibrary.daos.CategoriesDao;
@@ -20,7 +22,7 @@ import pl.xezolpl.mylibrary.models.Quote;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 
 @Database(entities = {Book.class, Quote.class, QuoteCategory.class, Chapter.class, Note.class,
-        CategoryWithBook.class}, version = 1, exportSchema = false)
+        CategoryWithBook.class}, version = 2, exportSchema = false)
 public abstract class LibraryDatabase extends RoomDatabase {
 
     public abstract BookDao BookDao();
@@ -43,12 +45,24 @@ public abstract class LibraryDatabase extends RoomDatabase {
                 if (libraryDatabaseInstance == null) {
                     libraryDatabaseInstance = Room.databaseBuilder(context.getApplicationContext(),
                             LibraryDatabase.class, "library_database.db")
+                            .addMigrations(MIGRATION_1_2)
                             .build();
                 }
             }
         }
         return libraryDatabaseInstance;
     }
+
+
+
+    // Migration from 1 to 2
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL(
+                    "ALTER TABLE quotes ADD COLUMN favourite INTEGER NOT NULL DEFAULT 0");
+        }
+    };
 
     @Override
     public void close() {

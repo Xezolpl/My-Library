@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.github.nikartm.button.FitButton;
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import pl.xezolpl.mylibrary.R;
@@ -50,7 +52,8 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     private EditText title_EditTxt, quote_EditTxt, page_EditTxt, author_EditTxt;
     private Spinner category_spinner;
-    private FitButton ok_btn, cancel_btn, add_category_btn, quote_author_btn, edit_category_btn, delete_category_btn, camera_btn;
+    private FitButton ok_btn, cancel_btn, add_category_btn, quote_author_btn, edit_category_btn,
+            delete_category_btn, camera_btn, favourite_btn;
 
     private Quote thisQuote = null;
     private Quote latestQuote;
@@ -60,6 +63,7 @@ public class AddQuoteActivity extends AppCompatActivity {
     private String chapterId = "";
 
     private boolean inEdition = false;
+    private boolean favourite = false;
 
     private QuoteCategoryViewModel categoryViewModel;
     private QuoteCategorySpinnerAdapter spinnerAdapter;
@@ -138,6 +142,7 @@ public class AddQuoteActivity extends AppCompatActivity {
         add_category_btn = findViewById(R.id.add_quote_add_category_btn);
         edit_category_btn = findViewById(R.id.add_quote_edit_category_btn);
         delete_category_btn = findViewById(R.id.add_quote_delete_category_btn);
+        favourite_btn = findViewById(R.id.favourite_btn);
         ok_btn = findViewById(R.id.add_quote_ok_btn);
         cancel_btn = findViewById(R.id.add_quote_cancel_btn);
         quote_author_btn = findViewById(R.id.quote_author_btn);
@@ -150,6 +155,9 @@ public class AddQuoteActivity extends AppCompatActivity {
         author_EditTxt.setText(quote.getAuthor());
         page_EditTxt.setText(String.valueOf(quote.getPage()));
         chapterId = quote.getChapterId();
+        favourite = quote.isFavourite();
+
+        if (favourite) favourite_btn.setIcon(Objects.requireNonNull(ContextCompat.getDrawable(this, R.mipmap.favourite_star)));
 
         //set spinner selection on thisQuote's category
         for (int i = 0; i < categories.size(); i++) {
@@ -227,6 +235,13 @@ public class AddQuoteActivity extends AppCompatActivity {
                 Log.e(TAG, "setOnClickListeners: camera", exc);
             }
         });
+
+        favourite_btn.setOnClickListener(view -> {
+            favourite = !favourite;
+            favourite_btn.setIcon(Objects.requireNonNull(
+                    ContextCompat.getDrawable(this, favourite ? R.mipmap.favourite_star : R.mipmap.favourite_star_off)));
+
+        });
     }
 
     private boolean areValidOutputs() {
@@ -270,6 +285,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         thisQuote = new Quote(id, quote, title, author, categoryId, page, bookId);
         thisQuote.setChapterId(chapterId);
+        thisQuote.setFavourite(favourite);
 
         return true;
     }
