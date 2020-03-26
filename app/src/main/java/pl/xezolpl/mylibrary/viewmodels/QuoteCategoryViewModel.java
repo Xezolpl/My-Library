@@ -14,6 +14,7 @@ import pl.xezolpl.mylibrary.database.LibraryDatabase;
 import pl.xezolpl.mylibrary.models.QuoteCategory;
 
 public class QuoteCategoryViewModel extends AndroidViewModel {
+
     private QuoteCategoryDao categoryDao;
 
     public QuoteCategoryViewModel(@NonNull Application application) {

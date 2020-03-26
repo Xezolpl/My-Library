@@ -48,7 +48,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
     }
 
     ///CATEGORIES
-    private List<QuoteCategory> allCategories; // All QuoteCategories used to setting specific category's name to a textView
+    private List<QuoteCategory> allCategories = new ArrayList<>(); // All QuoteCategories used to setting specific category's name to a textView
 
     //FILTERING
     private String categoryId = "";
@@ -60,7 +60,10 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         this.context = context;
 
         QuoteCategoryViewModel viewModel = new ViewModelProvider((FragmentActivity) context).get(QuoteCategoryViewModel.class);
-        viewModel.getAllCategories().observe((FragmentActivity) context, quoteCategories -> allCategories = quoteCategories);
+        viewModel.getAllCategories().observe((FragmentActivity) context, quoteCategories -> {
+            allCategories.clear();
+            allCategories.addAll(quoteCategories);
+        });
     }
 
 
@@ -75,6 +78,7 @@ public class QuotesRecViewAdapter extends RecyclerView.Adapter<QuotesRecViewAdap
         this.quotes.addAll(quotes);
         diffResult.dispatchUpdatesTo(this);
         notifyDataSetChanged();
+        handleAdvancedFiltering();
     }
 
     public void setCategoryFilter(String categoryId) {

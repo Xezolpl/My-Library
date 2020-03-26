@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -65,7 +66,6 @@ public class AddQuoteActivity extends AppCompatActivity {
     private boolean inEdition = false;
     private boolean favourite = false;
 
-    private QuoteCategoryViewModel categoryViewModel;
     private QuoteCategorySpinnerAdapter spinnerAdapter;
     private List<QuoteCategory> categories = new ArrayList<>();
 
@@ -90,34 +90,35 @@ public class AddQuoteActivity extends AppCompatActivity {
 
         spinnerAdapter = new QuoteCategorySpinnerAdapter(this);
 
-        categoryViewModel = new ViewModelProvider(this).get(QuoteCategoryViewModel.class);
+        QuoteCategoryViewModel categoryViewModel = new ViewModelProvider(this).get(QuoteCategoryViewModel.class);
 
         categoryViewModel.getAllCategories().observe(this, quoteCategories -> {
-            if (quoteCategories.size() == 0) { // if basic category isn't created
-                QuoteCategory qc = new QuoteCategory("Uncategorized", getString(R.string.uncategorized), Markers.BLUE_START_COLOR);
-                categoryViewModel.insert(qc);
-                quoteCategories.add(qc);
-            }
-            categories = quoteCategories;
-            spinnerAdapter.setCategories(categories);
-            category_spinner.setAdapter(spinnerAdapter);
+                if (quoteCategories.size() == 0) { // if basic category isn't created
+                    QuoteCategory qc = new QuoteCategory("Uncategorized", getString(R.string.uncategorized), Markers.BLUE_START_COLOR);
+                    categoryViewModel.insert(qc);
+                    quoteCategories.add(qc);
+                }
 
-            //set spinner's selection on last used category
-            if (latestQuote != null) {
-                for (int i = 0; i < categories.size(); i++) {
-                    if (categories.get(i).getId().equals(latestQuote.getCategoryId())) {
-                        category_spinner.setSelection(i);
-                        break;
+                categories.clear();
+                categories.addAll(quoteCategories);
+
+                spinnerAdapter.setCategories(categories);
+                category_spinner.setAdapter(spinnerAdapter);
+
+                //set spinner's selection on last used category
+                if (latestQuote != null) {
+                    for (int i = 0; i < categories.size(); i++) {
+                        if (categories.get(i).getId().equals(latestQuote.getCategoryId())) {
+                            category_spinner.setSelection(i);
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (inEdition) loadQuoteData(thisQuote);
-
-            if (selectNewCategory) { // if we created a new QuoteCategory -> select it
-                category_spinner.setSelection(spinnerAdapter.getItemPosition(newCategory.getName()));
-                selectNewCategory = false;
-            }
+                if (selectNewCategory) { // if we created a new QuoteCategory -> select it
+                    category_spinner.setSelection(spinnerAdapter.getItemPosition(newCategory.getName()));
+                    selectNewCategory = false;
+                }
         });
     }
 
@@ -130,6 +131,11 @@ public class AddQuoteActivity extends AppCompatActivity {
             thisQuote = (Quote) getIntent().getSerializableExtra("quote");
             bookId = thisQuote.getBookId();
             inEdition = true;
+            loadQuoteData(thisQuote);
+        }
+
+        if (bookId.isEmpty()) {
+            quote_author_btn.setVisibility(View.GONE);
         }
     }
 
@@ -157,15 +163,21 @@ public class AddQuoteActivity extends AppCompatActivity {
         chapterId = quote.getChapterId();
         favourite = quote.isFavourite();
 
-        if (favourite) favourite_btn.setIcon(Objects.requireNonNull(ContextCompat.getDrawable(this, R.mipmap.favourite_star)));
+        if (favourite)
+            favourite_btn.setIcon(Objects.requireNonNull(ContextCompat.getDrawable(this, R.mipmap.favourite_star)));
 
         //set spinner selection on thisQuote's category
-        for (int i = 0; i < categories.size(); i++) {
-            if (thisQuote.getCategoryId().equals(categories.get(i).getId())) {
-                category_spinner.setSelection(i);
-                break;
+        (new Handler()).postDelayed(() -> {
+            for (int i = 0; i < categories.size(); i++) {
+                System.out.println(thisQuote.getCategoryId());
+                System.out.println(categories.get(i).getId());
+                if (thisQuote.getCategoryId().equals(categories.get(i).getId())) {
+                    category_spinner.setSelection(i);
+                    break;
+                }
             }
-        }
+        }, 500);
+
     }
 
     private void setOnClickListeners() {
@@ -325,7 +337,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
 
                         new File(IntentManager.getRealPath(this, imgUri)).delete();
-                        (new Handler()).postDelayed(()->quote_EditTxt.invalidate(), 1000);
+                        (new Handler()).postDelayed(() -> quote_EditTxt.invalidate(), 1000);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

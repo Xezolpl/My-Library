@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.nikartm.button.FitButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import pl.xezolpl.mylibrary.R;
@@ -65,7 +67,7 @@ public class QuotesTabFragment extends Fragment {
         quotesRecViewAdapter = new QuotesRecViewAdapter(context);
 
         QuoteViewModel quoteViewModel = new ViewModelProvider(this).get(QuoteViewModel.class);
-        if (bookId.isEmpty()) { // Quotes of the specific book (we are inside the book)
+        if (bookId.isEmpty()) { // All quotes
             quoteViewModel.getAllQuotes().observe(this, quotes -> {
                 if (quotes.size() > 0) {
                     quotesRecViewAdapter.setQuotes(quotes);
@@ -73,7 +75,7 @@ public class QuotesTabFragment extends Fragment {
                     if (quotes_recView != null) quotes_recView.invalidate();
                 }
             });
-        } else { // All quotes by the drawer
+        } else { //Quotes of the specific book (we are inside the book)
             quoteViewModel.getQuotesByBook(bookId).observe(this, quotes -> {
                 if (quotes.size() > 0) {
                     quotesRecViewAdapter.setQuotes(quotes);
@@ -94,9 +96,10 @@ public class QuotesTabFragment extends Fragment {
 
         QuoteCategoryViewModel qcvm = new ViewModelProvider(this).get(QuoteCategoryViewModel.class);
         qcvm.getAllCategories().observe(this, quoteCategories -> {
-            quoteCategories.add(0, new QuoteCategory("",
+            List<QuoteCategory> categories = new ArrayList<>(quoteCategories);
+            categories.add(0, new QuoteCategory("",
                     getString(R.string.all_quote_categories), Markers.BLUE_START_COLOR));
-            categoriesAdapter.setCategories(quoteCategories);
+            categoriesAdapter.setCategories(categories);
         });
     }
 

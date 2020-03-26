@@ -30,7 +30,8 @@ public class QuoteCategorySpinnerAdapter extends BaseAdapter {
     }
 
     public void setCategories(List<QuoteCategory> quoteCategories) {
-        categories = quoteCategories;
+        categories.clear();
+        categories.addAll(quoteCategories);
         names = new String[categories.size()];
         colours = new int[categories.size()];
 
@@ -38,6 +39,8 @@ public class QuoteCategorySpinnerAdapter extends BaseAdapter {
             names[i] = categories.get(i).getName();
             colours[i] = categories.get(i).getColor();
         }
+
+        notifyDataSetChanged();
     }
 
     public void  setItemBackgroundColor(int color){
@@ -67,7 +70,7 @@ public class QuoteCategorySpinnerAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return names[i].hashCode();
     }
 
     @SuppressLint("ViewHolder")

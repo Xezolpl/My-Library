@@ -1,6 +1,7 @@
 package pl.xezolpl.mylibrary.models;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -104,4 +105,5 @@ public class Quote implements Serializable {
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
     }
+
 }

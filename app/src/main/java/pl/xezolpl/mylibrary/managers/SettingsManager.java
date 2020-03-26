@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Locale;
@@ -21,6 +22,8 @@ public class SettingsManager {
 
     private Context context;
     private SharedPreferences mPreferences;
+
+    private LiveData<QuoteCategory> categoryLiveData;
 
     public SettingsManager(Context context) {
         this.context = context;
@@ -74,8 +77,10 @@ public class SettingsManager {
 
         //Uncategorized
         QuoteCategoryViewModel qcvm = new ViewModelProvider((AppCompatActivity) context).get(QuoteCategoryViewModel.class);
+        AppCompatActivity activity = (AppCompatActivity) context;
 
-        qcvm.getCategory("Uncategorized").observe((AppCompatActivity) context, quoteCategory -> {
+        categoryLiveData = qcvm.getCategory("Uncategorized");
+        categoryLiveData.observe(activity, quoteCategory -> {
             if(quoteCategory!=null) {
                 quoteCategory.setName(context.getString(R.string.uncategorized));
                 qcvm.update(quoteCategory);
@@ -83,6 +88,7 @@ public class SettingsManager {
                 QuoteCategory uncategorized = new QuoteCategory("Uncategorized", context.getString(R.string.uncategorized), Markers.BLUE_START_COLOR);
                 qcvm.insert(uncategorized);
             }
+            categoryLiveData.removeObservers(activity);
         });
     }
 

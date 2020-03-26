@@ -23,7 +23,7 @@ public interface QuoteCategoryDao {
     @Delete
     void delete(QuoteCategory category);
 
-    @Query("SELECT * FROM quoteCategories ORDER BY name")
+    @Query("SELECT * FROM quoteCategories")
     LiveData<List<QuoteCategory>> getAllQuoteCategories();
 
     @Query("SELECT * FROM quoteCategories WHERE id=:id")
