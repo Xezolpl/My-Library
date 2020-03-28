@@ -76,8 +76,8 @@
     <string name="science_fiction">Fikcja naukowa</string>
     <string name="select_book_cover">Wybierz okładkę książki</string>
     <string name="select_categories">Wybierz kategorie</string>
-    <string name="select_color">Wybierz kolor</string>
-    <string name="select_image">Wybierz zdjęcie</string>
+    <string name="select_color">Wybierz \nkolor</string>
+    <string name="select_image">Wybierz \nzdjęcie</string>
     <string name="self_improvement">Rozwój osobisty</string>
     <string name="status_change">Zmień status</string>
     <string name="successfully_changed_status">Pomyślnie zmieniono status książki.</string>
