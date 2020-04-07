@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import pl.xezolpl.mylibrary.R;
+import pl.xezolpl.mylibrary.activities.MainActivity;
 import pl.xezolpl.mylibrary.adapters.CategoryRecViewAdapter;
 
 public class CategoriesFragment extends Fragment {

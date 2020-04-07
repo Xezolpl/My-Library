@@ -72,16 +72,16 @@ public class QuotesTabFragment extends Fragment {
                 if (quotes.size() > 0) {
                     quotesRecViewAdapter.setQuotes(quotes);
                     latestQuote = quotes.get(quotes.size() - 1);
-                    if (quotes_recView != null) quotes_recView.invalidate();
                 }
+                if (quotes_recView != null) quotes_recView.invalidate();
             });
         } else { //Quotes of the specific book (we are inside the book)
             quoteViewModel.getQuotesByBook(bookId).observe(this, quotes -> {
                 if (quotes.size() > 0) {
                     quotesRecViewAdapter.setQuotes(quotes);
                     latestQuote = quotes.get(quotes.size() - 1);
-                    if (quotes_recView != null) quotes_recView.invalidate();
                 }
+                if (quotes_recView != null) quotes_recView.invalidate();
             });
         }
 

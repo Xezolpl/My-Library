@@ -1,5 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -33,11 +34,13 @@ import pl.xezolpl.mylibrary.fragments.SettingsFragment;
 import pl.xezolpl.mylibrary.managers.BackupManager;
 import pl.xezolpl.mylibrary.managers.IntentManager;
 import pl.xezolpl.mylibrary.managers.SettingsManager;
+import io.doorbell.android.Doorbell;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
 
     private DrawerLayout drawer;
+    private Toolbar toolbar;
 
     private FragmentManager fm;
     private Fragment currFragment;
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int backCounter = 0;
     private boolean fromCategory = false;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Load theme and language
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initWidgets() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
@@ -142,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        toolbar.setTitle(getString(R.string.app_name));
         switch (menuItem.getItemId()) {
             case R.id.nav_books: {
                 fm.beginTransaction().detach(currFragment).attach(allBooksFragment).commit();
@@ -150,24 +155,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             }
             case R.id.nav_categories: {
+                toolbar.setTitle(getString(R.string.categories));
                 fm.beginTransaction().detach(currFragment).attach(categoriesFragment).commit();
                 currFragment = categoriesFragment;
                 break;
             }
             case R.id.nav_quotes: {
+                toolbar.setTitle(getString(R.string.all_quotes));
                 fm.beginTransaction().detach(currFragment).attach(quotesFragment).commit();
                 currFragment = quotesFragment;
                 break;
             }
             case R.id.nav_settings: {
+                toolbar.setTitle(getString(R.string.settings));
                 fm.beginTransaction().detach(currFragment).attach(settingsFragment).commit();
                 currFragment = settingsFragment;
                 break;
             }
             case R.id.nav_contact: {
+                toolbar.setTitle(getString(R.string.contact_and_about));
                 fm.beginTransaction().detach(currFragment).attach(contactFragment).commit();
                 currFragment = contactFragment;
                 break;
+            }
+            case R.id.nav_send: {
+                new Doorbell(this, 11464, "TV7TmegGBfJnw2mMPcXFRR4dxZpTZi8YMqEAfqWhBVN4J3imdu0x3HGzSzlZe121")
+                        .show();
+                //Please don't touch my private key, ty <3
             }
             default: {
                 return false;
@@ -202,6 +216,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      *
      * @return true if KEYCODE_BACK else super
      */
+
+
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && !drawer.isDrawerOpen(GravityCompat.START)) {

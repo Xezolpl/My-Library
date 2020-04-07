@@ -11,26 +11,28 @@
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/war"
-        android:layout_weight="40"
+        android:layout_weight="50"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"/>
 
     <TextView
         android:id="@+id/slide_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:text="@string/common_signin_button_text_long"
+        android:layout_weight="10"
         android:textAlignment="center"
+        android:gravity="center"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_margin="7dp"/>
+        android:layout_margin="7dp" />
 
     <TextView
         android:id="@+id/slide_description"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:text="@string/very_long_lorem_ipsum"
-        android:layout_weight="30"
+        android:layout_weight="35"
         android:textAlignment="center"
         android:textSize="18sp"
         android:layout_margin="7dp"/>

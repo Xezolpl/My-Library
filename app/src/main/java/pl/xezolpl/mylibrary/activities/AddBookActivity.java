@@ -90,7 +90,7 @@ public class AddBookActivity extends AppCompatActivity {
         status_spinner.setSelection(thisBook.getStatus());
         imageUrl = thisBook.getImageUrl();
 
-        if (new File(imageUrl).exists()) {
+        if (new File(imageUrl).exists() || imageUrl.contains("books.google")) {
             Glide.with(this).asBitmap().load(imageUrl).into(add_book_image);
         } else {
             Glide.with(this).asBitmap().load(new BackupManager(this).standardCoverUrl).into(add_book_image);

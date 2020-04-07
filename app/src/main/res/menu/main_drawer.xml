@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single" android:id="@+id/id1">
         <item
             android:id="@+id/nav_books"
             android:icon="@drawable/ic_book_black_24dp"
@@ -16,16 +16,20 @@
             android:id="@+id/nav_quotes"
             android:icon="@drawable/ic_format_quote_black_24dp"
             android:title="@string/quotes" />
-
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/settings" />
-
+    </group>
+    <group android:checkableBehavior="single" android:id="@+id/id2">
         <item
             android:id="@+id/nav_contact"
             android:icon="@drawable/ic_contact_mail_black_24dp"
             android:title="@string/contact_and_about" />
+        <item
+            android:id="@+id/nav_send"
+            android:icon="@drawable/ic_send_black_24dp"
+            android:title="@string/leave_feedback"/>
     </group>
 
 </menu>

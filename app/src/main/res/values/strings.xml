@@ -170,7 +170,7 @@
     <string name="intro_desc8">Every quote has specific category, you can add your quote categories inside adding new quote dialog.</string>
     <string name="intro_desc9">You can insert quote to the only one chapter. Press more button, then insert quote and press wanted quote
             until its background changes.</string>
-    <string name="intro_desc10">That\'s all. I hope you enjoy \"My Library\" application. Have a nice day :)</string>
+    <string name="intro_desc10">I hope you enjoy \"My Library\" application. Have a nice day :)</string>
     <string name="finish">Finish</string>
     <string name="help">Help</string>
     <string name="open_tutorial">Open tutorial</string>
@@ -179,6 +179,10 @@
     <string name="all_quote_categories">All categories</string>
     <string name="fav_books">Favourite books</string>
     <string name="favourite_quotes">Favourite quotes</string>
-
+    <string name="leave_feedback">Leave a feedback</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="private_policy_link" translatable="false">https://mylibrary.flycricket.io/privacy.html</string>
+    <string name="books_categories">Books categories</string>
+    <string name="all_quotes">All quotes</string>
 
 </resources>

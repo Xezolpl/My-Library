@@ -152,7 +152,7 @@
     <string name="intro_title8">Sekcja cytatów</string>
     <string name="intro_title9">Wstawianie cytatu do rozdziału</string>
     <string name="intro_desc3">Kiedy dodajesz książkę, możesz ustawić jej kategorie poprostu klikająć na nie.</string>
-    <string name="intro_desc10">To wszystko, Mam nadzieję, że spodoba ci się Moja Biblioteczka. Miłego dnia :)</string>
+    <string name="intro_desc10">Mam nadzieję, że spodoba ci się Moja Biblioteczka.\n Miłego dnia :)</string>
     <string name="intro_desc4">By przyśpieszyć wyszukiwanie użyj filtru ulubionych książek (gwiazdka) lub wyszukaj po tytule / autorze (lupa).</string>
     <string name="intro_desc5">Naciśnij na okładkę książki by zobaczyć jej szczegóły, notatki lub by ją edytować.</string>
     <string name="intro_desc6">Dodawaj nowe rozdziały przez okrągły przycisk, jeśli chcesz dodać notatkę, użyj przycisku \"więcej\" ( 3 wertykalne kółka).</string>
@@ -170,4 +170,9 @@
     <string name="add_note_below">Dodaj notatkę niżej</string>
     <string name="all_quote_categories">Wszystkie kategorie</string>
     <string name="fav_books">Ulubione książki</string>
+    <string name="favourite_quotes">Ulubione cytaty</string>
+    <string name="leave_feedback">Prześlij opinię</string>
+    <string name="privacy_policy">Polityka Prywatności</string>
+    <string name="books_categories">Kategorie książek</string>
+    <string name="all_quotes">Wszystkie cytaty</string>
 </resources>
