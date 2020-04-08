@@ -1,5 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
@@ -28,6 +29,7 @@ public class InsertQuoteActivity extends AppCompatActivity {
     private QuoteViewModel viewModel;
     private QuotesRecViewAdapter adapter;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         new SettingsManager(this).loadDialogTheme();

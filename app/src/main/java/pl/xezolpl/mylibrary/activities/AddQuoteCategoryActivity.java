@@ -1,5 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.GradientDrawable;
@@ -39,6 +40,7 @@ public class AddQuoteCategoryActivity extends AppCompatActivity {
 
     private int backCounter = 0;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         new SettingsManager(this).loadDialogTheme();

@@ -1,5 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -75,6 +76,7 @@ public class AddQuoteActivity extends AppCompatActivity {
 
     private int backCounter = 0;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         new SettingsManager(this).loadDialogTheme();
@@ -93,32 +95,32 @@ public class AddQuoteActivity extends AppCompatActivity {
         QuoteCategoryViewModel categoryViewModel = new ViewModelProvider(this).get(QuoteCategoryViewModel.class);
 
         categoryViewModel.getAllCategories().observe(this, quoteCategories -> {
-                if (quoteCategories.size() == 0) { // if basic category isn't created
-                    QuoteCategory qc = new QuoteCategory("Uncategorized", getString(R.string.uncategorized), Markers.BLUE_START_COLOR);
-                    categoryViewModel.insert(qc);
-                    quoteCategories.add(qc);
-                }
+            if (quoteCategories.size() == 0) { // if basic category isn't created
+                QuoteCategory qc = new QuoteCategory("Uncategorized", getString(R.string.uncategorized), Markers.BLUE_START_COLOR);
+                categoryViewModel.insert(qc);
+                quoteCategories.add(qc);
+            }
 
-                categories.clear();
-                categories.addAll(quoteCategories);
+            categories.clear();
+            categories.addAll(quoteCategories);
 
-                spinnerAdapter.setCategories(categories);
-                category_spinner.setAdapter(spinnerAdapter);
+            spinnerAdapter.setCategories(categories);
+            category_spinner.setAdapter(spinnerAdapter);
 
-                //set spinner's selection on last used category
-                if (latestQuote != null) {
-                    for (int i = 0; i < categories.size(); i++) {
-                        if (categories.get(i).getId().equals(latestQuote.getCategoryId())) {
-                            category_spinner.setSelection(i);
-                            break;
-                        }
+            //set spinner's selection on last used category
+            if (latestQuote != null) {
+                for (int i = 0; i < categories.size(); i++) {
+                    if (categories.get(i).getId().equals(latestQuote.getCategoryId())) {
+                        category_spinner.setSelection(i);
+                        break;
                     }
                 }
+            }
 
-                if (selectNewCategory) { // if we created a new QuoteCategory -> select it
-                    category_spinner.setSelection(spinnerAdapter.getItemPosition(newCategory.getName()));
-                    selectNewCategory = false;
-                }
+            if (selectNewCategory) { // if we created a new QuoteCategory -> select it
+                category_spinner.setSelection(spinnerAdapter.getItemPosition(newCategory.getName()));
+                selectNewCategory = false;
+            }
         });
     }
 
@@ -332,7 +334,16 @@ public class AddQuoteActivity extends AppCompatActivity {
                         deviceRecognizer.processImage(visionImage)
                                 .addOnSuccessListener(firebaseVisionText ->
                                         quote_EditTxt.setText(firebaseVisionText
-                                                .getText().replace('\n', ' ')))
+                                                .getText()
+                                                .replace('\n', ' ')
+                                                .replace("Č", "Ć")
+                                                .replace("č", "ć")
+                                                .replace("Š", "S")
+                                                .replace("š", "s")
+                                                .replace("Ž", "Ż")
+                                                .replace("ž", "ż")
+                                        )
+                                )
                                 .addOnFailureListener(Throwable::printStackTrace);
 
 

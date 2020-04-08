@@ -1,5 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PorterDuff;
@@ -28,6 +29,7 @@ import pl.xezolpl.mylibrary.models.Note;
 import pl.xezolpl.mylibrary.utilities.Markers;
 import pl.xezolpl.mylibrary.viewmodels.NoteViewModel;
 
+@SuppressLint("SourceLockedOrientationActivity")
 public class AddNoteActivity extends AppCompatActivity {
     private static final String TAG = "AddNoteActivity";
 

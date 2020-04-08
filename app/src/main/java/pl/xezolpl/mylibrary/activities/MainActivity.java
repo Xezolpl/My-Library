@@ -198,14 +198,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      *
      * @param category specific category
      */
-    public void setSelectedCategory(String category) {
+    public void setSelectedCategory(int categoryR) {
         AllBooksFragment fragment = new AllBooksFragment();
 
         fm.beginTransaction().add(R.id.fragment_container, fragment)
                 .detach(currFragment).commit();
 
+        String category = getString(categoryR);
+
+        toolbar.setTitle(category);
+
         currFragment = fragment;
         fromCategory = true;
+
+
 
         (new Handler()).postDelayed(() -> fragment.getBooksAdapter().setCategoryId(category), 3);
     }
@@ -225,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (fromCategory) { //we are in the categoriesFragment
                 fm.beginTransaction().detach(currFragment).attach(categoriesFragment).commit();
                 currFragment = categoriesFragment;
+                toolbar.setTitle(R.string.categories);
                 fromCategory = false;
             } else {
                 if (backCounter == 0) { //first backClick - the second time application will be closed (after 2s counter resets)

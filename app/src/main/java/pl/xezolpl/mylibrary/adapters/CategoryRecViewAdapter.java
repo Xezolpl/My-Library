@@ -118,7 +118,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         holder.relLay.setOnClickListener(view -> { //
             if (mode == NORMAL_MODE) {
                 // Begin transition from the categories view to the books in specific category
-                ((MainActivity) context).setSelectedCategory(context.getString(category.getNameR()));
+                ((MainActivity) context).setSelectedCategory(category.getNameR());
 
             } else if (mode == SELECT_CATEGORIES_MODE) { // Insert or delete CategoryWithBook
                 String categoryName = context.getString(category.getNameR());

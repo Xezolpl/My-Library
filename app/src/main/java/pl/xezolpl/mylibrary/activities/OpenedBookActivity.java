@@ -1,5 +1,6 @@
 package pl.xezolpl.mylibrary.activities;
 
+import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
@@ -26,6 +27,7 @@ public class OpenedBookActivity extends AppCompatActivity {
 
     private Book thisBook = null;
 
+    @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         new SettingsManager(this).loadTheme();
