@@ -184,5 +184,8 @@
     <string name="private_policy_link" translatable="false">https://mylibrary.flycricket.io/privacy.html</string>
     <string name="books_categories">Books categories</string>
     <string name="all_quotes">All quotes</string>
+    <string name="customization">Personalization</string>
+    <string name="randomize_colors">Randomize colors</string>
+    <string name="auto_pick_colors">Automatically pick random color inside the notes</string>
 
 </resources>

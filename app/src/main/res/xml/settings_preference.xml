@@ -25,7 +25,8 @@
             app:entryValues="@array/languages_values"
             app:key="lang"
             app:title="@string/language"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true"
+            android:icon="@drawable/ic_language_black_24dp"/>
 
     </PreferenceCategory>
 
@@ -37,7 +38,19 @@
             app:entryValues="@array/themes_values"
             app:key="theme"
             app:title="@string/theme"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true"
+            android:icon="@drawable/ic_collections_black_24dp"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/customization">
+
+        <CheckBoxPreference
+            android:key="isRandomColorPickingEnabled"
+            android:defaultValue="false"
+            android:title="@string/randomize_colors"
+            android:icon="@drawable/ic_color_lens_black_32dp"
+            android:summary="@string/auto_pick_colors"/>
 
     </PreferenceCategory>
 
@@ -45,10 +58,12 @@
 
         <Preference
             android:key="import"
-            android:title="@string/import_db" />
+            android:title="@string/import_db"
+            android:icon="@drawable/ic_cloud_download_black_24dp"/>
         <Preference
             android:key="export"
-            android:title="@string/export_db" />
+            android:title="@string/export_db"
+            android:icon="@drawable/ic_backup_black_24dp"/>
 
     </PreferenceCategory>
 
@@ -56,7 +71,8 @@
 
         <Preference
             android:key="tutorial"
-            app:title="@string/open_tutorial" />
+            app:title="@string/open_tutorial"
+            android:icon="@drawable/ic_help_black_24dp"/>
 
     </PreferenceCategory>
 

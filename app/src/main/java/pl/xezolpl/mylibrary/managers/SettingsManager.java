@@ -30,7 +30,7 @@ public class SettingsManager {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public void loadTheme() {
+    public SettingsManager loadTheme() {
         String theme = mPreferences.getString("theme", "standard");
         int themeId;
 
@@ -42,9 +42,10 @@ public class SettingsManager {
             themeId = R.style.AppTheme;
         }
         context.setTheme(themeId);
+        return this;
     }
 
-    public void loadDialogTheme() {
+    public SettingsManager loadDialogTheme() {
         String theme = mPreferences.getString("theme", "standard");
         int themeId;
 
@@ -56,9 +57,10 @@ public class SettingsManager {
             themeId = R.style.AppThemeDialog;
         }
         context.setTheme(themeId);
+        return this;
     }
 
-    public void loadLanguage() {
+    public SettingsManager loadLanguage() {
         String language = mPreferences.getString("lang", "english");
         String lang;
 
@@ -90,10 +92,19 @@ public class SettingsManager {
             }
             categoryLiveData.removeObservers(activity);
         });
+
+        return this;
     }
 
     public boolean isIntroOpenedBefore(){
         if (mPreferences==null) return false;
         return mPreferences.getBoolean("isIntroOpenedBefore", false);
     }
+
+    public boolean isRandomColorPickingEnabled(){
+        if (mPreferences==null) return false;
+        return mPreferences.getBoolean("isRandomColorPickingEnabled", false);
+    }
+
+
 }

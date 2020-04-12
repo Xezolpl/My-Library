@@ -3,6 +3,7 @@ package pl.xezolpl.mylibrary.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,11 +15,15 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.github.nikartm.button.FitButton;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import petrov.kristiyan.colorpicker.ColorPicker;
@@ -59,7 +64,8 @@ public class AddNoteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        new SettingsManager(this).loadDialogTheme();
+        SettingsManager manager = new SettingsManager(this);
+        manager.loadDialogTheme();
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_add_note);
@@ -77,7 +83,12 @@ public class AddNoteActivity extends AppCompatActivity {
             Log.e(TAG, "onCreate: cannot read from intent!", exc);
             finish();
         }
-
+        (new Handler()).postDelayed(()->{
+            if(manager.isRandomColorPickingEnabled() && !inEdition){
+                markerColor = randomPickerColor();
+                setImageView(markerColor);
+            }
+        }, 10);
     }
 
     /**
@@ -199,6 +210,7 @@ public class AddNoteActivity extends AppCompatActivity {
 
         add_note_color_btn.setOnClickListener(view -> {
             ColorPicker picker = new ColorPicker(AddNoteActivity.this);
+            picker.setColors(getResources().getIntArray(R.array.default_colors));
             picker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
                 @Override
                 public void onChooseColor(int position, int color) { //sets picked color on the add_note_imgView
@@ -253,6 +265,12 @@ public class AddNoteActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode,event);
+    }
+
+    private int randomPickerColor(){
+        int[] colors = getResources().getIntArray(R.array.default_colors);
+        int random = new Random().nextInt(colors.length);
+        return colors[random];
     }
 
 }

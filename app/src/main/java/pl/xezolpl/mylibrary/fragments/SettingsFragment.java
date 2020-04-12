@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
+import androidx.preference.CheckBoxPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -26,6 +27,7 @@ import pl.xezolpl.mylibrary.managers.IntentManager;
 public class SettingsFragment extends PreferenceFragmentCompat {
     private Preference importPref, exportPref, tutorialPref;
     private ListPreference langListPref, themeListPref;
+    private CheckBoxPreference randomColorCheckboxPref;
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor prefEditor;
@@ -33,7 +35,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @SuppressLint("CommitPrefEdits")
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.settings_preference, null);
+        setPreferencesFromResource(R.xml.settings_preference, rootKey);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(Objects.requireNonNull(getContext()));
         prefEditor = preferences.edit();
@@ -50,6 +52,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         tutorialPref = findPreference("tutorial");
         langListPref = findPreference("lang");
         themeListPref = findPreference("theme");
+        randomColorCheckboxPref = findPreference("isRandomColorPickingEnabled");
     }
 
     private void loadPreferencesState() {
@@ -88,6 +91,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 activity.finish();
                 startActivity(intent);
+                return true;
+            });
+
+            randomColorCheckboxPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                prefEditor.putBoolean("isRandomColorPickingEnabled", randomColorCheckboxPref.isChecked());
                 return true;
             });
         } else {

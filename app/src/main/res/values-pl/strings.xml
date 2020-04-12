@@ -175,4 +175,7 @@
     <string name="privacy_policy">Polityka Prywatności</string>
     <string name="books_categories">Kategorie książek</string>
     <string name="all_quotes">Wszystkie cytaty</string>
+    <string name="customization">Personalizacja</string>
+    <string name="auto_pick_colors">Automatycznie wybierz losowy kolor podczas dodawania notatki</string>
+    <string name="randomize_colors">Losowy kolor</string>
 </resources>
