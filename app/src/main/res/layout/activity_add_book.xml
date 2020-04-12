@@ -116,7 +116,7 @@
             android:theme="@style/MaterialEditText"
 
             android:hint="@string/description_optional"
-            android:maxLength="2000"
+            android:maxLength="20000"
             android:inputType="textMultiLine|textCapSentences"
             android:imeOptions="actionNext"
             android:textAlignment="center"/>
