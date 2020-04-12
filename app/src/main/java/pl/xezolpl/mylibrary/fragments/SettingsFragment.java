@@ -95,7 +95,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             });
 
             randomColorCheckboxPref.setOnPreferenceChangeListener((preference, newValue) -> {
-                prefEditor.putBoolean("isRandomColorPickingEnabled", randomColorCheckboxPref.isChecked());
+                prefEditor.putBoolean("isRandomColorPickingEnabled", randomColorCheckboxPref.isChecked()).commit();
                 return true;
             });
         } else {
