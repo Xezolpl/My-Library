@@ -17,8 +17,9 @@
             <group android:checkableBehavior="single"  >
                 <item
                     android:id="@+id/allBooks"
-                    android:icon="@drawable/ic_book_black_24dp"
+                    android:icon="@mipmap/book_icon"
                     android:title="@string/all_books"
+                    android:checked="true"
                     app:actionViewClass="android.widget.CheckBox" />
                 <item
                     android:id="@+id/toRead"

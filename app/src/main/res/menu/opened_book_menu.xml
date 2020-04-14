@@ -26,7 +26,7 @@
 
             <group android:checkableBehavior="single">
                 <item android:id="@+id/allBooks"
-                    android:icon="@drawable/ic_book_black_24dp"
+                    android:icon="@mipmap/book_icon"
                     android:title="@string/all_books"/>
 
                 <item android:id="@+id/toRead"
