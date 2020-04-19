@@ -3,7 +3,7 @@
     <string name="title_activity_main2" translatable="false">Main2Activity</string>
     <string name="tab_text_1" translatable="false">Tab 1</string>
     <string name="tab_text_2" translatable="false">Tab 2</string>
-    <string name="app_version">Version: 1.0</string>
+    <string name="app_version">Version: 1.0.2</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="nav_header_title" translatable="false">Android Studio</string>
