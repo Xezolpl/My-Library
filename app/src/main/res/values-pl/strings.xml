@@ -178,4 +178,5 @@
     <string name="customization">Personalizacja</string>
     <string name="auto_pick_colors">Automatycznie wybierz losowy kolor podczas dodawania notatki</string>
     <string name="randomize_colors">Losowy kolor</string>
+    <string name="philosophy">Filozofia</string>
 </resources>

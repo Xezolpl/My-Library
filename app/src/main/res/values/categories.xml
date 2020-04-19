@@ -18,6 +18,7 @@
     <string name="journal" translatable="true">Journal</string>
     <string name="mystery" translatable="true">Mystery</string>
     <string name="mythology" translatable="true">Mythology</string>
+    <string name="philosophy" translatable="true">Philosophy</string>
     <string name="poetry" translatable="true">Poetry</string>
     <string name="politic" translatable="true">Political</string>
     <string name="psychology" translatable="true">Psychology</string>
