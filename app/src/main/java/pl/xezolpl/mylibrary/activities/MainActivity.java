@@ -33,6 +33,7 @@ import pl.xezolpl.mylibrary.fragments.QuotesTabFragment;
 import pl.xezolpl.mylibrary.fragments.SettingsFragment;
 import pl.xezolpl.mylibrary.managers.BackupManager;
 import pl.xezolpl.mylibrary.managers.IntentManager;
+import pl.xezolpl.mylibrary.managers.PermissionsManager;
 import pl.xezolpl.mylibrary.managers.SettingsManager;
 import io.doorbell.android.Doorbell;
 
@@ -196,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Sets currentFragment to booksListTabFragment of categoryFragment - we can
      * se books attributed to the specific category
      *
-     * @param category specific category
+     * @param categoryR specific category
      */
     public void setSelectedCategory(int categoryR) {
         AllBooksFragment fragment = new AllBooksFragment();
@@ -290,7 +291,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, getString(R.string.export_db_fail), Toast.LENGTH_SHORT).show();
             }
         }
-
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (PermissionsManager.handlePermissionsResult(this, requestCode, grantResults)) {
+            IntentManager.pickDatabase(this);
+        }else {
+            Toast.makeText(this, getString(R.string.need_permissions), Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -99,7 +99,9 @@ public class BackupManager {
 
         //Check the database exists
         if (!dbOriginal.exists()) {
-            return false;
+            if(!dbOriginal.createNewFile()){
+                return false;
+            }
         }
         if (!importedFile.getName().contains(".db")){
             return false;
