@@ -87,6 +87,7 @@ public class CategoryRecViewAdapter extends RecyclerView.Adapter<CategoryRecView
         categories.add(new Category(R.string.journal, R.drawable.journal));
         categories.add(new Category(R.string.mystery, R.drawable.mystery));
         categories.add(new Category(R.string.mythology, R.drawable.mythology));
+        categories.add(new Category(R.string.philosophy, R.drawable.philosophy));
         categories.add(new Category(R.string.poetry, R.drawable.poetry));
         categories.add(new Category(R.string.politic, R.drawable.politic));
         categories.add(new Category(R.string.psychology, R.drawable.psychology));
