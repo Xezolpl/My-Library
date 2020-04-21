@@ -7,7 +7,7 @@
     </string-array>
 
     <string-array name="languages_values">
-        <item>english</item>
+        <item>@string/english_lang_value</item>
         <item>polish</item>
     </string-array>
 
@@ -21,7 +21,7 @@
     </string-array>
 
     <string-array name="themes_values">
-        <item>standard</item>
+        <item>@string/standard_theme_value</item>
         <item>mild</item>
         <item>dark</item>
     </string-array>
