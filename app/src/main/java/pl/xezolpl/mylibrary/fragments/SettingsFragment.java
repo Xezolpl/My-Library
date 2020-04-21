@@ -22,6 +22,7 @@ import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.IntroActivity;
 import pl.xezolpl.mylibrary.activities.MainActivity;
 import pl.xezolpl.mylibrary.managers.IntentManager;
+import pl.xezolpl.mylibrary.managers.PermissionsManager;
 
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -41,7 +42,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         prefEditor = preferences.edit();
 
         initPreferences();
-        loadPreferencesState();
         setListeners();
         setHasOptionsMenu(true);
     }
@@ -55,16 +55,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         randomColorCheckboxPref = findPreference("isRandomColorPickingEnabled");
     }
 
-    private void loadPreferencesState() {
-        langListPref.setValue(preferences.getString("lang", "english"));
-        themeListPref.setValue(preferences.getString("theme", "standard"));
-    }
-
     private void setListeners() {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             importPref.setOnPreferenceClickListener(preference -> {
-                IntentManager.pickDatabase(activity);
+                if(PermissionsManager.checkStoragePermission(activity)){
+                    IntentManager.pickDatabase(activity);
+                } else {
+                    PermissionsManager.requestStoragePermission(activity);
+                }
                 return false;
             });
 
