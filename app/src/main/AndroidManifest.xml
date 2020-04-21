@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pl.xezolpl.mylibrary">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="pl.xezolpl.mylibrary"
+    android:versionCode="4"
+    android:debuggable="true"
+    tools:ignore="HardcodedDebugMode">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -19,11 +23,12 @@
         android:allowBackup="true"
         android:fullBackupContent="@xml/full_backup_content"
         android:fullBackupOnly="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo_circle"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="LockedOrientationActivity">
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
