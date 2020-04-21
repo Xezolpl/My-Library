@@ -24,9 +24,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
+
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.AddBookActivity;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
+import pl.xezolpl.mylibrary.managers.BackupManager;
 import pl.xezolpl.mylibrary.managers.DeletingManager;
 import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.utilities.Requests;
@@ -218,7 +221,12 @@ public class BookDetailsTabFragment extends Fragment {
         bookDescription_text.setText(thisBook.getDescription());
 
         String imgUrl = thisBook.getImageUrl();
-        Glide.with(context).asBitmap().load(imgUrl).into(book_image);
+
+        if (new File(imgUrl).exists() || imgUrl.contains("books.google")) {
+            Glide.with(context).asBitmap().load(imgUrl).into(book_image);
+        } else {
+            Glide.with(context).asBitmap().load(new BackupManager(context).standardCoverUrl).into(book_image);
+        }
 
         if (thisBook.getPages() <= 0) {
             bookPages_text.setVisibility(View.GONE);

@@ -17,11 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import pl.xezolpl.mylibrary.R;
 import pl.xezolpl.mylibrary.activities.OpenedBookActivity;
+import pl.xezolpl.mylibrary.managers.BackupManager;
 import pl.xezolpl.mylibrary.models.Book;
 import pl.xezolpl.mylibrary.models.CategoryWithBook;
 import pl.xezolpl.mylibrary.viewmodels.CategoriesViewModel;
@@ -181,7 +183,11 @@ public class BooksRecViewAdapter extends RecyclerView.Adapter<BooksRecViewAdapte
          */
         void setData(String title, String imgUrl) {
             bookTitle.setText(title);
-            Glide.with(context).asBitmap().load(imgUrl).into(bookImage);
+            if (new File(imgUrl).exists() || imgUrl.contains("books.google")) {
+                Glide.with(context).asBitmap().load(imgUrl).into(bookImage);
+            } else {
+                Glide.with(context).asBitmap().load(new BackupManager(context).standardCoverUrl).into(bookImage);
+            }
         }
     }
 }
