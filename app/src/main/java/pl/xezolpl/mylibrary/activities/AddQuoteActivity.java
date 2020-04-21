@@ -312,6 +312,8 @@ public class AddQuoteActivity extends AppCompatActivity {
         if (PermissionsManager.handlePermissionsResult(this, requestCode, grantResults)) { //here its always camera permission request
             imgUri = IntentManager.setUpImageOutputUri(this);
             IntentManager.pickCamera(this, imgUri);
+        } else {
+            Toast.makeText(this, getString(R.string.need_permissions), Toast.LENGTH_SHORT).show();
         }
     }
 
