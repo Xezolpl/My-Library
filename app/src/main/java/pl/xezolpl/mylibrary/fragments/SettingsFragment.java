@@ -107,4 +107,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.clear();
     }
+
+    public void setLanguagePref(String languagePref){
+
+    }
 }

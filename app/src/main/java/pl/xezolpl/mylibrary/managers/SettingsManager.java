@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.intellij.lang.annotations.Language;
+
 import java.util.Locale;
 
 import pl.xezolpl.mylibrary.R;
@@ -64,7 +66,14 @@ public class SettingsManager {
         String language = mPreferences.getString("lang", "english");
         String lang;
 
-        if (language != null && language.equals("polish")) {
+        if (language == null || !mPreferences.contains("lang")) {
+            if(Locale.getDefault().getLanguage().equals("pl")){
+                lang = "pl";
+                PreferenceManager.getDefaultSharedPreferences(context).edit().putString("lang", "polish").apply();
+            }else {
+                lang = "en";
+            }
+        } else if (language.equals("polish")) {
             lang = "pl";
         } else {
             lang = "en";
@@ -83,7 +92,7 @@ public class SettingsManager {
 
         categoryLiveData = qcvm.getCategory("Uncategorized");
         categoryLiveData.observe(activity, quoteCategory -> {
-            if(quoteCategory!=null) {
+            if (quoteCategory != null) {
                 quoteCategory.setName(context.getString(R.string.uncategorized));
                 qcvm.update(quoteCategory);
             } else {
@@ -96,13 +105,13 @@ public class SettingsManager {
         return this;
     }
 
-    public boolean isIntroOpenedBefore(){
-        if (mPreferences==null) return false;
+    public boolean isIntroOpenedBefore() {
+        if (mPreferences == null) return false;
         return mPreferences.getBoolean("isIntroOpenedBefore", false);
     }
 
-    public boolean isRandomColorPickingEnabled(){
-        if (mPreferences==null) return false;
+    public boolean isRandomColorPickingEnabled() {
+        if (mPreferences == null) return false;
         return mPreferences.getBoolean("isRandomColorPickingEnabled", false);
     }
 
